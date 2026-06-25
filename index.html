@@ -1,0 +1,2156 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <meta name="theme-color" content="#0f0f1a">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="default">
+    <meta name="apple-mobile-web-app-title" content="Notepad+ Code Storage">
+    <title>📝 Notepad+ Code Storage</title>
+    <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E%3Crect width='100' height='100' rx='20' fill='%230f0f1a'/%3E%3Ctext x='50' y='68' text-anchor='middle' font-size='60' fill='%23ffffff'%3E📝%3C/text%3E%3C/svg%3E">
+    
+    <style>
+        /* ===== CSS RESET ===== */
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+            border: 0;
+            font: inherit;
+            font-size: 100%;
+            vertical-align: baseline;
+            -webkit-tap-highlight-color: transparent;
+        }
+        html {
+            scroll-behavior: smooth;
+            -webkit-text-size-adjust: 100%;
+            font-size: 16px;
+            line-height: 1.6;
+            -webkit-font-smoothing: antialiased;
+        }
+        body {
+            font-family: -apple-system, 'Segoe UI', Roboto, sans-serif;
+            background: var(--bg-primary, #0f0f1a);
+            color: var(--text-primary, #ffffff);
+            min-height: 100vh;
+            min-height: 100dvh;
+            overflow-x: hidden;
+        }
+        
+        /* ===== VARIABLES ===== */
+        :root {
+            --bg-primary: #0f0f1a;
+            --bg-secondary: #1a1a2e;
+            --bg-card: #16213e;
+            --bg-hover: #1a1a3e;
+            --bg-active: #2a2a4e;
+            --text-primary: #ffffff;
+            --text-secondary: #a0a0b0;
+            --text-muted: #6a6a7a;
+            --accent: #6c5ce7;
+            --accent-hover: #5a4bd1;
+            --gradient: linear-gradient(135deg, #6c5ce7, #a29bfe);
+            --success: #00b894;
+            --danger: #ff6b6b;
+            --warning: #fdcb6e;
+            --info: #74b9ff;
+            --border-color: rgba(255,255,255,0.08);
+            --shadow: 0 2px 8px rgba(0,0,0,0.4);
+            --shadow-md: 0 4px 16px rgba(0,0,0,0.5);
+            --shadow-lg: 0 8px 32px rgba(0,0,0,0.6);
+            --radius: 8px;
+            --radius-md: 12px;
+            --radius-lg: 16px;
+            --radius-full: 9999px;
+            --spacing-1: 4px;
+            --spacing-2: 8px;
+            --spacing-3: 12px;
+            --spacing-4: 16px;
+            --spacing-5: 20px;
+            --spacing-6: 24px;
+            --spacing-8: 32px;
+            --spacing-10: 40px;
+            --transition-base: 250ms ease;
+            --z-modal: 40;
+            --z-toast: 50;
+        }
+        
+        .light-theme {
+            --bg-primary: #f5f5f5;
+            --bg-secondary: #ffffff;
+            --bg-card: #f0f0f0;
+            --bg-hover: #e8e8e8;
+            --text-primary: #1a1a2e;
+            --text-secondary: #555555;
+            --text-muted: #888888;
+            --border-color: rgba(0,0,0,0.1);
+        }
+        
+        ::-webkit-scrollbar { width: 4px; }
+        ::-webkit-scrollbar-track { background: var(--bg-primary); }
+        ::-webkit-scrollbar-thumb { background: var(--accent); border-radius: var(--radius-full); }
+        * { scrollbar-width: thin; scrollbar-color: var(--accent) var(--bg-primary); }
+        
+        /* ===== UTILITY ===== */
+        .hidden { display: none !important; }
+        .flex { display: flex; }
+        .flex-center { display: flex; align-items: center; justify-content: center; }
+        .flex-between { display: flex; align-items: center; justify-content: space-between; }
+        .flex-col { flex-direction: column; }
+        .flex-wrap { flex-wrap: wrap; }
+        .flex-1 { flex: 1; }
+        .gap-1 { gap: var(--spacing-1); }
+        .gap-2 { gap: var(--spacing-2); }
+        .gap-3 { gap: var(--spacing-3); }
+        .gap-4 { gap: var(--spacing-4); }
+        .gap-5 { gap: var(--spacing-5); }
+        .gap-6 { gap: var(--spacing-6); }
+        .w-full { width: 100%; }
+        .h-full { height: 100%; }
+        .text-center { text-align: center; }
+        .text-sm { font-size: 0.85rem; }
+        .text-xs { font-size: 0.75rem; }
+        .text-muted { color: var(--text-muted); }
+        .text-secondary { color: var(--text-secondary); }
+        .text-accent { color: var(--accent); }
+        .text-success { color: var(--success); }
+        .text-danger { color: var(--danger); }
+        .text-warning { color: var(--warning); }
+        .bg-card { background: var(--bg-card); }
+        .bg-secondary { background: var(--bg-secondary); }
+        .rounded { border-radius: var(--radius); }
+        .rounded-full { border-radius: var(--radius-full); }
+        .shadow { box-shadow: var(--shadow); }
+        .shadow-md { box-shadow: var(--shadow-md); }
+        .border { border: 1px solid var(--border-color); }
+        .cursor-pointer { cursor: pointer; }
+        .select-none { user-select: none; }
+        .overflow-hidden { overflow: hidden; }
+        .overflow-y-auto { overflow-y: auto; }
+        .truncate { overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+        
+        /* ===== ANIMATIONS ===== */
+        @keyframes fadeIn {
+            from { opacity: 0; }
+            to { opacity: 1; }
+        }
+        @keyframes slideUp {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+        @keyframes spin {
+            to { transform: rotate(360deg); }
+        }
+        .animate-fade { animation: fadeIn var(--transition-base); }
+        .animate-slide-up { animation: slideUp var(--transition-base); }
+        .animate-spin { animation: spin 0.8s linear infinite; }
+        
+        /* ===== BUTTON ===== */
+        .btn {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            gap: var(--spacing-2);
+            padding: 10px 20px;
+            border: none;
+            border-radius: var(--radius);
+            font-weight: 600;
+            cursor: pointer;
+            transition: all var(--transition-base);
+            font-size: 0.95rem;
+            min-height: 40px;
+        }
+        .btn:hover { transform: translateY(-1px); box-shadow: var(--shadow-md); }
+        .btn:disabled { opacity: 0.6; cursor: not-allowed; transform: none !important; }
+        .btn-primary { background: var(--accent); color: #fff; }
+        .btn-primary:hover { background: var(--accent-hover); }
+        .btn-success { background: var(--success); color: #fff; }
+        .btn-success:hover { background: #00a381; }
+        .btn-danger { background: var(--danger); color: #fff; }
+        .btn-danger:hover { background: #e55a5a; }
+        .btn-warning { background: var(--warning); color: #1a1a2e; }
+        .btn-warning:hover { background: #e5b85e; }
+        .btn-gray { background: var(--text-muted); color: #fff; }
+        .btn-gray:hover { background: #7a7a8a; }
+        .btn-sm { padding: 6px 14px; font-size: 0.8rem; min-height: 30px; }
+        .btn-block { width: 100%; display: flex; }
+        .btn-outline { background: transparent; border: 2px solid var(--accent); color: var(--accent); }
+        .btn-outline:hover { background: var(--accent); color: #fff; }
+        
+        .badge {
+            display: inline-flex;
+            align-items: center;
+            gap: var(--spacing-1);
+            padding: 2px 10px;
+            border-radius: var(--radius-full);
+            font-size: 0.7rem;
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 0.3px;
+        }
+        .badge-success { background: var(--success); color: #fff; }
+        .badge-danger { background: var(--danger); color: #fff; }
+        .badge-warning { background: var(--warning); color: #1a1a2e; }
+        .badge-accent { background: var(--accent); color: #fff; }
+        .badge-gray { background: var(--text-muted); color: #fff; }
+        
+        .card {
+            background: var(--bg-secondary);
+            border-radius: var(--radius-md);
+            padding: var(--spacing-4);
+            border: 1px solid var(--border-color);
+            transition: all var(--transition-base);
+        }
+        .card:hover { border-color: var(--accent); }
+        .card-header {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            margin-bottom: var(--spacing-3);
+            padding-bottom: var(--spacing-3);
+            border-bottom: 1px solid var(--border-color);
+        }
+        .card-title { font-size: 1.1rem; font-weight: 600; margin: 0; display: flex; align-items: center; gap: var(--spacing-2); }
+        .card-body { padding: var(--spacing-2) 0; }
+        .card-footer { padding-top: var(--spacing-3); border-top: 1px solid var(--border-color); margin-top: var(--spacing-3); }
+        
+        input, textarea, select {
+            width: 100%;
+            padding: 10px 14px;
+            border: 1px solid var(--border-color);
+            border-radius: var(--radius);
+            font-size: 0.95rem;
+            transition: all var(--transition-base);
+            background: var(--bg-primary);
+            color: var(--text-primary);
+        }
+        input:focus, textarea:focus, select:focus {
+            outline: none;
+            border-color: var(--accent);
+            box-shadow: 0 0 0 3px rgba(108, 92, 231, 0.15);
+        }
+        input::placeholder, textarea::placeholder { color: var(--text-muted); }
+        textarea {
+            resize: vertical;
+            min-height: 80px;
+            font-family: 'Courier New', monospace;
+            font-size: 0.9rem;
+            line-height: 1.8;
+        }
+        select {
+            appearance: none;
+            background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' viewBox='0 0 12 12'%3E%3Cpath fill='%23a0a0b0' d='M6 8L1 3h10z'/%3E%3C/svg%3E");
+            background-repeat: no-repeat;
+            background-position: right 12px center;
+            padding-right: 36px;
+        }
+        .form-group { margin-bottom: var(--spacing-4); }
+        .form-label { display: block; margin-bottom: var(--spacing-2); font-weight: 500; font-size: 0.9rem; color: var(--text-secondary); }
+        .form-hint { font-size: 0.8rem; color: var(--text-muted); margin-top: var(--spacing-1); }
+        
+        .toast-container {
+            position: fixed;
+            bottom: 80px;
+            left: 50%;
+            transform: translateX(-50%);
+            z-index: var(--z-toast);
+            max-width: 90%;
+            width: 100%;
+            pointer-events: none;
+        }
+        .toast {
+            background: var(--bg-secondary);
+            color: var(--text-primary);
+            padding: 10px 18px;
+            border-radius: var(--radius);
+            border: 1px solid var(--border-color);
+            box-shadow: var(--shadow-lg);
+            font-size: 0.9rem;
+            opacity: 0;
+            transform: translateY(20px);
+            transition: all var(--transition-base);
+            pointer-events: auto;
+            text-align: center;
+            margin-bottom: 6px;
+            border-left: 4px solid var(--accent);
+        }
+        .toast.show { opacity: 1; transform: translateY(0); }
+        .toast-success { border-left-color: var(--success); }
+        .toast-error { border-left-color: var(--danger); }
+        .toast-warning { border-left-color: var(--warning); }
+        
+        .loading-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0,0,0,0.6);
+            backdrop-filter: blur(4px);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            z-index: var(--z-modal);
+        }
+        .loading-overlay .spinner {
+            width: 40px;
+            height: 40px;
+            border: 4px solid rgba(255,255,255,0.1);
+            border-top-color: var(--accent);
+            border-radius: var(--radius-full);
+            animation: spin 0.8s linear infinite;
+        }
+        .loading-overlay .loading-text { color: #fff; margin-top: var(--spacing-4); font-size: 0.9rem; }
+        
+        .modal-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0,0,0,0.6);
+            backdrop-filter: blur(8px);
+            display: none;
+            align-items: center;
+            justify-content: center;
+            z-index: var(--z-modal);
+            padding: var(--spacing-4);
+        }
+        .modal-overlay.active { display: flex; }
+        .modal-content {
+            background: var(--bg-secondary);
+            border-radius: var(--radius-lg);
+            max-width: 650px;
+            width: 100%;
+            max-height: 85vh;
+            overflow-y: auto;
+            padding: var(--spacing-6);
+            animation: slideUp 0.3s ease;
+            border: 1px solid var(--border-color);
+            box-shadow: var(--shadow-lg);
+        }
+        .modal-header {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            margin-bottom: var(--spacing-4);
+            padding-bottom: var(--spacing-4);
+            border-bottom: 1px solid var(--border-color);
+        }
+        .modal-header h3 { margin: 0; font-size: 1.25rem; font-weight: 700; }
+        .modal-close {
+            background: transparent;
+            border: none;
+            font-size: 1.5rem;
+            color: var(--text-secondary);
+            cursor: pointer;
+            padding: 0;
+            min-height: 0;
+            width: auto;
+            transition: all var(--transition-base);
+        }
+        .modal-close:hover { color: var(--text-primary); transform: rotate(90deg); }
+        .modal-body { padding: var(--spacing-2) 0; }
+        .modal-footer {
+            display: flex;
+            gap: var(--spacing-3);
+            padding-top: var(--spacing-4);
+            border-top: 1px solid var(--border-color);
+            margin-top: var(--spacing-4);
+            justify-content: flex-end;
+        }
+        
+        /* ===== LAYOUT ===== */
+        .app-container { max-width: 900px; margin: 0 auto; padding: var(--spacing-4); min-height: 100vh; }
+        .app-header {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: var(--spacing-3) var(--spacing-4);
+            background: var(--bg-secondary);
+            border-radius: var(--radius-md);
+            border: 1px solid var(--border-color);
+            margin-bottom: var(--spacing-4);
+            flex-wrap: wrap;
+            gap: var(--spacing-2);
+        }
+        .app-header .logo { font-size: 1.3rem; font-weight: 700; display: flex; align-items: center; gap: var(--spacing-2); }
+        .app-header .logo span { background: var(--gradient); -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text; }
+        .app-header .header-actions { display: flex; gap: var(--spacing-2); align-items: center; flex-wrap: wrap; }
+        .app-header .header-actions button {
+            background: transparent;
+            border: none;
+            color: var(--text-secondary);
+            font-size: 1.2rem;
+            padding: 6px 10px;
+            border-radius: var(--radius);
+            transition: all var(--transition-base);
+            cursor: pointer;
+            min-height: 0;
+        }
+        .app-header .header-actions button:hover { background: var(--bg-hover); color: var(--text-primary); }
+        .app-header .user-badge {
+            display: flex;
+            align-items: center;
+            gap: var(--spacing-2);
+            padding: 4px 12px 4px 8px;
+            background: var(--bg-card);
+            border-radius: var(--radius-full);
+            font-size: 0.85rem;
+        }
+        .app-header .user-badge .avatar {
+            width: 28px;
+            height: 28px;
+            border-radius: var(--radius-full);
+            background: var(--gradient);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 0.8rem;
+            color: #fff;
+        }
+        .link { color: var(--accent); cursor: pointer; transition: color var(--transition-base); }
+        .link:hover { color: var(--accent-hover); text-decoration: underline; }
+        
+        .dashboard-stats {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(150px, 1fr));
+            gap: var(--spacing-3);
+            margin-bottom: var(--spacing-4);
+        }
+        .stat-card {
+            background: var(--bg-secondary);
+            border-radius: var(--radius);
+            padding: var(--spacing-3);
+            border: 1px solid var(--border-color);
+            text-align: center;
+        }
+        .stat-card .stat-number { font-size: 1.8rem; font-weight: 700; color: var(--accent); }
+        .stat-card .stat-label { font-size: 0.8rem; color: var(--text-secondary); margin-top: var(--spacing-1); }
+        
+        .app-list { display: grid; grid-template-columns: 1fr; gap: var(--spacing-3); }
+        .app-item {
+            background: var(--bg-secondary);
+            border-radius: var(--radius-md);
+            border: 1px solid var(--border-color);
+            overflow: hidden;
+            transition: all var(--transition-base);
+        }
+        .app-item:hover { border-color: var(--accent); }
+        .app-item .app-header-item {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: var(--spacing-3) var(--spacing-4);
+            cursor: pointer;
+            transition: all var(--transition-base);
+            flex-wrap: wrap;
+            gap: var(--spacing-2);
+        }
+        .app-item .app-header-item:hover { background: var(--bg-hover); }
+        .app-item .app-header-item .app-name { font-weight: 600; font-size: 1.05rem; display: flex; align-items: center; gap: var(--spacing-2); }
+        .app-item .app-header-item .app-count { font-size: 0.8rem; color: var(--text-muted); background: var(--bg-card); padding: 2px 10px; border-radius: var(--radius-full); }
+        .app-item .app-header-item .app-actions { display: flex; gap: var(--spacing-1); }
+        .app-item .app-header-item .app-actions button {
+            background: transparent;
+            border: none;
+            color: var(--text-secondary);
+            cursor: pointer;
+            padding: 4px 8px;
+            border-radius: var(--radius-sm);
+            font-size: 0.9rem;
+            transition: all var(--transition-base);
+            min-height: 0;
+        }
+        .app-item .app-header-item .app-actions button:hover { background: var(--bg-hover); color: var(--text-primary); }
+        .app-item .app-header-item .app-actions button.danger:hover { color: var(--danger); background: rgba(255,107,107,0.1); }
+        .app-item .app-codes { padding: 0 var(--spacing-4) var(--spacing-3); display: none; }
+        .app-item .app-codes.open { display: block; }
+        
+        .code-item {
+            background: var(--bg-card);
+            border-radius: var(--radius);
+            padding: var(--spacing-3);
+            margin-bottom: var(--spacing-2);
+            border: 1px solid var(--border-color);
+            transition: all var(--transition-base);
+        }
+        .code-item:hover { border-color: var(--accent); }
+        .code-item .code-header {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            margin-bottom: var(--spacing-2);
+            flex-wrap: wrap;
+            gap: var(--spacing-2);
+        }
+        .code-item .code-header .code-title { font-weight: 500; font-size: 0.95rem; }
+        .code-item .code-header .code-actions { display: flex; gap: var(--spacing-1); }
+        .code-item .code-header .code-actions button {
+            background: transparent;
+            border: none;
+            color: var(--text-secondary);
+            cursor: pointer;
+            padding: 2px 6px;
+            border-radius: var(--radius-sm);
+            font-size: 0.8rem;
+            transition: all var(--transition-base);
+            min-height: 0;
+        }
+        .code-item .code-header .code-actions button:hover { background: var(--bg-hover); color: var(--text-primary); }
+        .code-item .code-header .code-actions button.danger:hover { color: var(--danger); background: rgba(255,107,107,0.1); }
+        .code-item .code-content {
+            font-family: 'Courier New', monospace;
+            font-size: 0.85rem;
+            color: var(--text-secondary);
+            white-space: pre-wrap;
+            word-wrap: break-word;
+            max-height: 200px;
+            overflow-y: auto;
+            padding: var(--spacing-2);
+            background: var(--bg-primary);
+            border-radius: var(--radius-sm);
+            border: 1px solid var(--border-color);
+        }
+        .code-item .code-content pre { margin: 0; white-space: pre-wrap; word-wrap: break-word; }
+        
+        .empty-state { text-align: center; padding: var(--spacing-10) var(--spacing-4); color: var(--text-secondary); }
+        .empty-state .icon { font-size: 4rem; margin-bottom: var(--spacing-4); }
+        .empty-state h3 { font-size: 1.2rem; color: var(--text-primary); margin-bottom: var(--spacing-2); }
+        .empty-state p { color: var(--text-muted); max-width: 400px; margin: 0 auto var(--spacing-4); }
+        
+        /* ===== RESPONSIVE ===== */
+        @media (max-width: 640px) {
+            .app-container { padding: var(--spacing-2); }
+            .app-header { flex-direction: column; align-items: stretch; }
+            .app-header .header-actions { justify-content: center; }
+            .dashboard-stats { grid-template-columns: repeat(2, 1fr); }
+            .modal-content { padding: var(--spacing-4); margin: var(--spacing-2); }
+            .code-item .code-header { flex-direction: column; align-items: flex-start; }
+        }
+        @media (min-width: 641px) and (max-width: 768px) {
+            .app-container { padding: var(--spacing-3); }
+        }
+    </style>
+</head>
+<body>
+
+<!-- ===== APP CONTAINER ===== -->
+<div class="app-container" id="appContainer">
+
+    <!-- ===== HEADER ===== -->
+    <header class="app-header" id="appHeader">
+        <div class="logo">📝 <span>Notepad+ Code Storage</span></div>
+        <div class="header-actions">
+            <button onclick="toggleTheme()" id="themeToggle" title="Ganti Tema">🌙</button>
+            <button onclick="showProfile()" id="profileBtn" title="Profil" style="display:none;">👤</button>
+            <div class="user-badge" id="userBadge" style="display:none;">
+                <div class="avatar" id="userAvatar">DB</div>
+                <span id="userName">DedeBintang</span>
+            </div>
+            <button onclick="showLoginModal()" id="loginBtn" title="Login">🔐 Login</button>
+        </div>
+    </header>
+
+    <!-- ===== DASHBOARD STATS ===== -->
+    <div class="dashboard-stats" id="dashboardStats">
+        <div class="stat-card">
+            <div class="stat-number" id="totalApps">0</div>
+            <div class="stat-label">📱 Total Aplikasi</div>
+        </div>
+        <div class="stat-card">
+            <div class="stat-number" id="totalCodes">0</div>
+            <div class="stat-label">📝 Total Code</div>
+        </div>
+        <div class="stat-card">
+            <div class="stat-number" id="totalStorage">0 KB</div>
+            <div class="stat-label">💾 Total Penyimpanan</div>
+        </div>
+    </div>
+
+    <!-- ===== TOOLBAR ===== -->
+    <div style="display:flex;gap:var(--spacing-3);margin-bottom:var(--spacing-4);flex-wrap:wrap;">
+        <button onclick="showAddAppModal()" class="btn btn-success">➕ Tambah Aplikasi</button>
+        <button onclick="showSearch()" class="btn btn-primary">🔍 Cari</button>
+        <button onclick="exportAllData()" class="btn btn-warning">📤 Export Semua</button>
+        <button onclick="document.getElementById('importFileInput').click()" class="btn btn-info" style="background:var(--info);color:#fff;">📥 Import</button>
+        <input type="file" id="importFileInput" accept=".json" style="display:none;" onchange="importAllData(this)">
+        <button onclick="showMergeModal()" class="btn btn-primary" style="background:var(--accent);">🔄 Gabung & Copy</button>
+    </div>
+
+    <!-- ===== SEARCH BAR ===== -->
+    <div id="searchBar" class="hidden" style="margin-bottom:var(--spacing-4);">
+        <div style="display:flex;gap:var(--spacing-2);flex-wrap:wrap;">
+            <input type="text" id="searchInput" placeholder="Cari aplikasi atau kode..." style="flex:2;min-width:200px;" oninput="searchApps()">
+            <button onclick="clearSearch()" class="btn btn-gray btn-sm">✕ Clear</button>
+        </div>
+    </div>
+
+    <!-- ===== APP LIST ===== -->
+    <div id="appListContainer"></div>
+
+    <!-- ===== EMPTY STATE ===== -->
+    <div id="emptyState" class="empty-state">
+        <div class="icon">📝</div>
+        <h3>Belum Ada Aplikasi</h3>
+        <p>Mulai tambahkan aplikasi dan kode-kode HTML yang Anda buat.</p>
+        <button onclick="showAddAppModal()" class="btn btn-success">➕ Tambah Aplikasi</button>
+    </div>
+</div>
+
+<!-- ============================================================ -->
+<!-- MODALS                                                       -->
+<!-- ============================================================ -->
+
+<!-- ===== MODAL LOGIN ===== -->
+<div class="modal-overlay" id="loginModal">
+    <div class="modal-content" style="max-width:400px;">
+        <div class="modal-header">
+            <h3>🔐 Login</h3>
+            <button class="modal-close" onclick="closeModal('loginModal')">✕</button>
+        </div>
+        <div class="modal-body">
+            <div id="loginStatus" style="margin-bottom:12px;"><p style="color:var(--text-secondary);">Masukkan username dan password.</p></div>
+            <input type="text" id="loginUsername" placeholder="Username" value="DedeBintang">
+            <input type="password" id="loginPassword" placeholder="Password" value="MyHand0286">
+            <button onclick="handleLogin()" class="btn btn-success btn-block">🔓 Login</button>
+            <div id="loginError" class="hidden" style="color:var(--danger);margin-top:8px;font-size:13px;"></div>
+            <div style="display:flex;justify-content:space-between;margin-top:12px;font-size:13px;">
+                <span class="link" onclick="closeModal('loginModal');openModal('registerModal')">📝 Daftar</span>
+                <span class="link" onclick="closeModal('loginModal');openModal('forgotPasswordModal')">🔑 Lupa Password</span>
+            </div>
+        </div>
+        <div class="modal-footer">
+            <button onclick="closeModal('loginModal')" class="btn btn-gray">Tutup</button>
+        </div>
+    </div>
+</div>
+
+<!-- ===== MODAL REGISTER ===== -->
+<div class="modal-overlay" id="registerModal">
+    <div class="modal-content" style="max-width:400px;">
+        <div class="modal-header">
+            <h3>📝 Daftar Akun</h3>
+            <button class="modal-close" onclick="closeModal('registerModal')">✕</button>
+        </div>
+        <div class="modal-body">
+            <div id="registerStatus" style="margin-bottom:12px;"><p style="color:var(--text-secondary);">Daftar akun untuk menyimpan kode.</p></div>
+            <input type="text" id="regNama" placeholder="Nama Lengkap *">
+            <input type="email" id="regEmail" placeholder="Email *">
+            <input type="text" id="regHp" placeholder="No HP *">
+            <input type="text" id="regUsername" placeholder="Username *">
+            <input type="password" id="regPassword" placeholder="Password * (min 6 karakter)">
+            <input type="password" id="regConfirmPassword" placeholder="Konfirmasi Password *">
+            <button onclick="handleRegister()" class="btn btn-success btn-block">📝 Daftar</button>
+            <div id="registerError" class="hidden" style="color:var(--danger);margin-top:8px;font-size:13px;"></div>
+            <div id="registerSuccess" class="hidden" style="color:var(--success);margin-top:8px;font-size:13px;"></div>
+            <div style="margin-top:12px;text-align:center;font-size:13px;">
+                <span class="link" onclick="closeModal('registerModal');openModal('loginModal')">🔐 Sudah punya akun? Login</span>
+            </div>
+        </div>
+        <div class="modal-footer">
+            <button onclick="closeModal('registerModal')" class="btn btn-gray">Tutup</button>
+        </div>
+    </div>
+</div>
+
+<!-- ===== MODAL LUPA PASSWORD ===== -->
+<div class="modal-overlay" id="forgotPasswordModal">
+    <div class="modal-content" style="max-width:400px;">
+        <div class="modal-header">
+            <h3>🔑 Lupa Password</h3>
+            <button class="modal-close" onclick="closeModal('forgotPasswordModal')">✕</button>
+        </div>
+        <div class="modal-body">
+            <div id="forgotStatus" style="margin-bottom:12px;"><p style="color:var(--text-secondary);">Masukkan email terdaftar untuk reset password.</p></div>
+            <input type="email" id="forgotEmail" placeholder="Email Terdaftar *">
+            <button onclick="handleForgotPassword()" class="btn btn-warning btn-block">📧 Kirim Link Reset</button>
+            <div id="forgotError" class="hidden" style="color:var(--danger);margin-top:8px;font-size:13px;"></div>
+            <div id="forgotSuccess" class="hidden" style="color:var(--success);margin-top:8px;font-size:13px;"></div>
+            <div style="margin-top:12px;text-align:center;font-size:13px;">
+                <span class="link" onclick="closeModal('forgotPasswordModal');openModal('loginModal')">🔐 Kembali ke Login</span>
+            </div>
+        </div>
+        <div class="modal-footer">
+            <button onclick="closeModal('forgotPasswordModal')" class="btn btn-gray">Tutup</button>
+        </div>
+    </div>
+</div>
+
+<!-- ===== MODAL RESET PASSWORD ===== -->
+<div class="modal-overlay" id="resetPasswordModal">
+    <div class="modal-content" style="max-width:400px;">
+        <div class="modal-header">
+            <h3>🔒 Reset Password</h3>
+            <button class="modal-close" onclick="closeModal('resetPasswordModal')">✕</button>
+        </div>
+        <div class="modal-body">
+            <div id="resetStatus" style="margin-bottom:12px;"><p style="color:var(--text-secondary);">Buat password baru untuk akun Anda.</p></div>
+            <input type="hidden" id="resetToken">
+            <input type="password" id="resetNewPassword" placeholder="Password Baru * (min 6 karakter)">
+            <input type="password" id="resetConfirmPassword" placeholder="Konfirmasi Password Baru *">
+            <button onclick="handleResetPassword()" class="btn btn-success btn-block">💾 Simpan Password</button>
+            <div id="resetError" class="hidden" style="color:var(--danger);margin-top:8px;font-size:13px;"></div>
+            <div id="resetSuccess" class="hidden" style="color:var(--success);margin-top:8px;font-size:13px;"></div>
+        </div>
+        <div class="modal-footer">
+            <button onclick="closeModal('resetPasswordModal')" class="btn btn-gray">Tutup</button>
+        </div>
+    </div>
+</div>
+
+<!-- ===== MODAL PROFIL ===== -->
+<div class="modal-overlay" id="profileModal">
+    <div class="modal-content" style="max-width:450px;">
+        <div class="modal-header">
+            <h3>👤 Profil Saya</h3>
+            <button class="modal-close" onclick="closeModal('profileModal')">✕</button>
+        </div>
+        <div class="modal-body">
+            <div id="profileInfo" style="margin-bottom:16px;">
+                <div style="display:flex;align-items:center;gap:16px;margin-bottom:12px;">
+                    <div style="width:60px;height:60px;border-radius:50%;background:var(--gradient);display:flex;align-items:center;justify-content:center;font-size:1.8rem;color:#fff;flex-shrink:0;" id="profileAvatar">DB</div>
+                    <div>
+                        <h4 id="profileName" style="margin:0;font-size:1.1rem;">DedeBintang</h4>
+                        <p id="profileRole" style="margin:0;font-size:0.85rem;color:var(--text-secondary);">Super Admin</p>
+                    </div>
+                </div>
+            </div>
+            <div class="form-group">
+                <label class="form-label">Nama Lengkap</label>
+                <input type="text" id="editNama" placeholder="Nama Lengkap">
+            </div>
+            <div class="form-group">
+                <label class="form-label">Email</label>
+                <input type="email" id="editEmail" placeholder="Email">
+            </div>
+            <div class="form-group">
+                <label class="form-label">Nomor HP</label>
+                <input type="text" id="editHp" placeholder="Nomor HP">
+            </div>
+            <button onclick="updateProfile()" class="btn btn-success btn-block">💾 Simpan Profil</button>
+            <div id="profileError" class="hidden" style="color:var(--danger);margin-top:8px;font-size:13px;"></div>
+            <div id="profileSuccess" class="hidden" style="color:var(--success);margin-top:8px;font-size:13px;"></div>
+            <div style="margin-top:16px;padding-top:16px;border-top:1px solid var(--border-color);">
+                <button onclick="changePassword()" class="btn btn-warning btn-block">🔑 Ganti Password</button>
+            </div>
+            <div id="passwordChange" class="hidden" style="margin-top:12px;">
+                <input type="password" id="oldPassword" placeholder="Password Lama">
+                <input type="password" id="newPassword" placeholder="Password Baru (min 6 karakter)">
+                <input type="password" id="confirmNewPassword" placeholder="Konfirmasi Password Baru">
+                <button onclick="saveNewPassword()" class="btn btn-success btn-block">💾 Simpan Password</button>
+                <div id="passwordError" class="hidden" style="color:var(--danger);margin-top:8px;font-size:13px;"></div>
+                <div id="passwordSuccess" class="hidden" style="color:var(--success);margin-top:8px;font-size:13px;"></div>
+            </div>
+        </div>
+        <div class="modal-footer">
+            <button onclick="closeModal('profileModal')" class="btn btn-gray">Tutup</button>
+        </div>
+    </div>
+</div>
+
+<!-- ===== MODAL TAMBAH/EDIT APLIKASI ===== -->
+<div class="modal-overlay" id="appModal">
+    <div class="modal-content" style="max-width:500px;">
+        <div class="modal-header">
+            <h3 id="appModalTitle">➕ Tambah Aplikasi</h3>
+            <button class="modal-close" onclick="closeModal('appModal')">✕</button>
+        </div>
+        <div class="modal-body">
+            <input type="hidden" id="editAppId">
+            <div class="form-group">
+                <label class="form-label">Nama Aplikasi *</label>
+                <input type="text" id="appName" placeholder="Contoh: APP TOKO ONLINE">
+            </div>
+            <div class="form-group">
+                <label class="form-label">Deskripsi (Opsional)</label>
+                <textarea id="appDesc" placeholder="Deskripsi singkat tentang aplikasi..." rows="2"></textarea>
+            </div>
+            <div id="appError" class="hidden" style="color:var(--danger);margin-top:8px;font-size:13px;"></div>
+        </div>
+        <div class="modal-footer">
+            <button onclick="closeModal('appModal')" class="btn btn-gray">Batal</button>
+            <button onclick="saveApp()" class="btn btn-success">💾 Simpan</button>
+        </div>
+    </div>
+</div>
+
+<!-- ===== MODAL TAMBAH/EDIT CODE ===== -->
+<div class="modal-overlay" id="codeModal">
+    <div class="modal-content" style="max-width:600px;">
+        <div class="modal-header">
+            <h3 id="codeModalTitle">➕ Tambah Code</h3>
+            <button class="modal-close" onclick="closeModal('codeModal')">✕</button>
+        </div>
+        <div class="modal-body">
+            <input type="hidden" id="editCodeId">
+            <input type="hidden" id="codeAppId">
+            <div class="form-group">
+                <label class="form-label">Nama Code *</label>
+                <input type="text" id="codeName" placeholder="Contoh: Code 1 : Keterangan Code 1">
+            </div>
+            <div class="form-group">
+                <label class="form-label">Kode HTML *</label>
+                <textarea id="codeContent" placeholder="Tempelkan kode HTML di sini..." rows="8"></textarea>
+                <div class="form-hint">💡 Tempelkan kode HTML lengkap yang ingin disimpan.</div>
+            </div>
+            <div id="codeError" class="hidden" style="color:var(--danger);margin-top:8px;font-size:13px;"></div>
+        </div>
+        <div class="modal-footer">
+            <button onclick="closeModal('codeModal')" class="btn btn-gray">Batal</button>
+            <button onclick="saveCode()" class="btn btn-success">💾 Simpan Code</button>
+        </div>
+    </div>
+</div>
+
+<!-- ===== MODAL GABUNG & COPY ===== -->
+<div class="modal-overlay" id="mergeModal">
+    <div class="modal-content" style="max-width:650px;">
+        <div class="modal-header">
+            <h3>🔄 Gabung & Copy Semua Code</h3>
+            <button class="modal-close" onclick="closeModal('mergeModal')">✕</button>
+        </div>
+        <div class="modal-body">
+            <div style="margin-bottom:12px;">
+                <p style="color:var(--text-secondary);">Semua code dari semua aplikasi akan digabung menjadi 1 file <strong>index.html</strong> lengkap.</p>
+            </div>
+            <div class="form-group">
+                <label class="form-label">Pilih Aplikasi yang Digabung</label>
+                <div id="mergeAppList" style="display:flex;flex-wrap:wrap;gap:8px;padding:8px 0;"></div>
+            </div>
+            <button onclick="mergeAndCopy()" class="btn btn-success btn-block" id="mergeBtn">🔄 Gabung & Copy ke Clipboard</button>
+            <div id="mergeResult" class="hidden" style="margin-top:12px;">
+                <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:8px;">
+                    <span style="font-weight:600;">📄 Hasil index.html</span>
+                    <div style="display:flex;gap:6px;">
+                        <button onclick="copyMergeResult()" class="btn btn-sm btn-primary">📋 Copy</button>
+                        <button onclick="downloadMergeResult()" class="btn btn-sm btn-success">📥 Download</button>
+                    </div>
+                </div>
+                <textarea id="mergeResultText" readonly style="font-family:'Courier New',monospace;font-size:0.85rem;min-height:300px;background:var(--bg-primary);color:var(--text-primary);border:1px solid var(--accent);"></textarea>
+                <div style="margin-top:8px;font-size:0.8rem;color:var(--text-muted);">
+                    💡 Total: <span id="mergeTotalCode">0</span> code tergabung
+                </div>
+            </div>
+        </div>
+        <div class="modal-footer">
+            <button onclick="closeModal('mergeModal')" class="btn btn-gray">Tutup</button>
+        </div>
+    </div>
+</div>
+
+<!-- ===== MODAL KONFIRMASI ===== -->
+<div class="modal-overlay" id="confirmModal">
+    <div class="modal-content" style="max-width:380px;">
+        <div class="modal-header">
+            <h3 id="confirmTitle">⚠️ Konfirmasi</h3>
+            <button class="modal-close" onclick="closeModal('confirmModal')">✕</button>
+        </div>
+        <div class="modal-body">
+            <p id="confirmMessage" style="color:var(--text-secondary);">Apakah Anda yakin?</p>
+        </div>
+        <div class="modal-footer">
+            <button onclick="closeModal('confirmModal')" class="btn btn-gray" id="confirmCancelBtn">Batal</button>
+            <button onclick="confirmAction()" class="btn btn-danger" id="confirmOkBtn">Ya, Hapus</button>
+        </div>
+    </div>
+</div>
+
+<!-- ===== TOAST CONTAINER ===== -->
+<div id="toastContainer"></div>
+
+<!-- ===== LOADING OVERLAY ===== -->
+<div id="loadingOverlay" class="loading-overlay hidden">
+    <div style="display:flex;flex-direction:column;align-items:center;">
+        <div class="spinner"></div>
+        <div class="loading-text" id="loadingText">Memuat...</div>
+    </div>
+</div>
+
+<!-- ============================================================ -->
+<!-- JAVASCRIPT                                                    -->
+<!-- ============================================================ -->
+<script>
+    // ============================================================ */
+    // 1. DATA DEFAULT                                              */
+    // ============================================================ */
+    
+    const ADMIN_USER = {
+        username: 'DedeBintang',
+        password: 'MyHand0286',
+        nama: 'Dede Bintang',
+        email: 'dede@notepad.com',
+        hp: '081220285126',
+        role: 'superadmin'
+    };
+    
+    // ============================================================ */
+    // 2. STORAGE FUNCTIONS                                         */
+    // ============================================================ */
+    
+    function getUsers() {
+        try {
+            return JSON.parse(localStorage.getItem('notepad_users') || '[]');
+        } catch (e) {
+            return [];
+        }
+    }
+    
+    function saveUsers(users) {
+        localStorage.setItem('notepad_users', JSON.stringify(users));
+    }
+    
+    function getApps() {
+        try {
+            return JSON.parse(localStorage.getItem('notepad_apps') || '{}');
+        } catch (e) {
+            return {};
+        }
+    }
+    
+    function saveApps(apps) {
+        localStorage.setItem('notepad_apps', JSON.stringify(apps));
+    }
+    
+    function getSession() {
+        try {
+            return JSON.parse(localStorage.getItem('notepad_session') || 'null');
+        } catch (e) {
+            return null;
+        }
+    }
+    
+    function saveSession(session) {
+        localStorage.setItem('notepad_session', JSON.stringify(session));
+    }
+    
+    function clearSession() {
+        localStorage.removeItem('notepad_session');
+    }
+    
+    // ============================================================ */
+    // 3. AUTH FUNCTIONS                                            */
+    // ============================================================ */
+    
+    function handleLogin() {
+        var username = document.getElementById('loginUsername').value.trim();
+        var password = document.getElementById('loginPassword').value.trim();
+        var error = document.getElementById('loginError');
+        error.classList.add('hidden');
+        
+        if (!username || !password) {
+            error.textContent = 'Masukkan username dan password.';
+            error.classList.remove('hidden');
+            return;
+        }
+        
+        if (username === ADMIN_USER.username && password === ADMIN_USER.password) {
+            var session = {
+                username: ADMIN_USER.username,
+                nama: ADMIN_USER.nama,
+                email: ADMIN_USER.email,
+                hp: ADMIN_USER.hp,
+                role: 'superadmin'
+            };
+            saveSession(session);
+            closeModal('loginModal');
+            updateUI();
+            renderApps();
+            showToast('👑 Selamat datang Admin ' + ADMIN_USER.nama + '!', 'success');
+            return;
+        }
+        
+        var users = getUsers();
+        var user = users.find(function(u) {
+            return (u.username === username || u.email === username) && u.password === password;
+        });
+        
+        if (!user) {
+            error.textContent = 'Username/email atau password salah.';
+            error.classList.remove('hidden');
+            return;
+        }
+        
+        if (!user.isVerified) {
+            error.textContent = '⚠️ Akun belum diverifikasi. Cek email untuk verifikasi.';
+            error.classList.remove('hidden');
+            return;
+        }
+        
+        var session = {
+            username: user.username,
+            nama: user.nama,
+            email: user.email,
+            hp: user.hp || '',
+            role: 'user'
+        };
+        saveSession(session);
+        closeModal('loginModal');
+        updateUI();
+        renderApps();
+        showToast('👤 Selamat datang ' + user.nama + '!', 'success');
+    }
+    
+    function handleRegister() {
+        var nama = document.getElementById('regNama').value.trim();
+        var email = document.getElementById('regEmail').value.trim();
+        var hp = document.getElementById('regHp').value.trim();
+        var username = document.getElementById('regUsername').value.trim();
+        var password = document.getElementById('regPassword').value.trim();
+        var confirm = document.getElementById('regConfirmPassword').value.trim();
+        var error = document.getElementById('registerError');
+        var success = document.getElementById('registerSuccess');
+        
+        error.classList.add('hidden');
+        success.classList.add('hidden');
+        
+        if (!nama || !email || !hp || !username || password.length < 6 || password !== confirm) {
+            error.textContent = 'Lengkapi semua data. Password min 6 karakter dan harus sama.';
+            error.classList.remove('hidden');
+            return;
+        }
+        
+        var users = getUsers();
+        var exists = users.find(function(u) { return u.username === username || u.email === email; });
+        if (exists) {
+            error.textContent = 'Username atau email sudah terdaftar.';
+            error.classList.remove('hidden');
+            return;
+        }
+        
+        var newUser = {
+            id: 'user_' + Date.now(),
+            nama: nama,
+            email: email,
+            hp: hp,
+            username: username,
+            password: password,
+            role: 'user',
+            isVerified: false,
+            registeredAt: Date.now()
+        };
+        
+        users.push(newUser);
+        saveUsers(users);
+        
+        success.textContent = '✅ Pendaftaran berhasil! Silakan cek email untuk verifikasi.';
+        success.classList.remove('hidden');
+        
+        document.getElementById('regNama').value = '';
+        document.getElementById('regEmail').value = '';
+        document.getElementById('regHp').value = '';
+        document.getElementById('regUsername').value = '';
+        document.getElementById('regPassword').value = '';
+        document.getElementById('regConfirmPassword').value = '';
+        
+        setTimeout(function() {
+            showToast('📧 Email verifikasi telah dikirim ke ' + email, 'success');
+            closeModal('registerModal');
+            openModal('loginModal');
+        }, 1500);
+    }
+    
+    function handleForgotPassword() {
+        var email = document.getElementById('forgotEmail').value.trim();
+        var error = document.getElementById('forgotError');
+        var success = document.getElementById('forgotSuccess');
+        
+        error.classList.add('hidden');
+        success.classList.add('hidden');
+        
+        if (!email) {
+            error.textContent = 'Masukkan email terdaftar.';
+            error.classList.remove('hidden');
+            return;
+        }
+        
+        var users = getUsers();
+        var user = users.find(function(u) { return u.email === email; });
+        
+        if (!user && email !== ADMIN_USER.email) {
+            error.textContent = 'Email tidak ditemukan.';
+            error.classList.remove('hidden');
+            return;
+        }
+        
+        var resetToken = 'reset_' + Date.now() + '_' + Math.random().toString(36).substr(2, 8);
+        
+        if (email === ADMIN_USER.email) {
+            localStorage.setItem('admin_reset_token', resetToken);
+            localStorage.setItem('admin_reset_expiry', Date.now() + (24 * 60 * 60 * 1000));
+        } else {
+            user.resetToken = resetToken;
+            user.resetExpiry = Date.now() + (24 * 60 * 60 * 1000);
+            saveUsers(users);
+        }
+        
+        success.textContent = '📧 Link reset password telah dikirim ke ' + email;
+        success.classList.remove('hidden');
+        document.getElementById('forgotEmail').value = '';
+        showToast('📧 Cek email untuk link reset password.', 'success');
+    }
+    
+    function handleResetPassword() {
+        var token = document.getElementById('resetToken').value;
+        var newPass = document.getElementById('resetNewPassword').value.trim();
+        var confirm = document.getElementById('resetConfirmPassword').value.trim();
+        var error = document.getElementById('resetError');
+        var success = document.getElementById('resetSuccess');
+        
+        error.classList.add('hidden');
+        success.classList.add('hidden');
+        
+        if (newPass.length < 6 || newPass !== confirm) {
+            error.textContent = 'Password min 6 karakter dan harus sama.';
+            error.classList.remove('hidden');
+            return;
+        }
+        
+        var users = getUsers();
+        var user = users.find(function(u) { return u.resetToken === token; });
+        
+        if (user) {
+            if (user.resetExpiry < Date.now()) {
+                error.textContent = 'Token reset sudah kadaluarsa.';
+                error.classList.remove('hidden');
+                return;
+            }
+            user.password = newPass;
+            user.resetToken = null;
+            user.resetExpiry = null;
+            saveUsers(users);
+        } else {
+            var adminToken = localStorage.getItem('admin_reset_token');
+            var adminExpiry = localStorage.getItem('admin_reset_expiry');
+            if (token === adminToken && adminExpiry && parseInt(adminExpiry) > Date.now()) {
+                ADMIN_USER.password = newPass;
+                localStorage.removeItem('admin_reset_token');
+                localStorage.removeItem('admin_reset_expiry');
+            } else {
+                error.textContent = 'Token reset tidak valid atau sudah kadaluarsa.';
+                error.classList.remove('hidden');
+                return;
+            }
+        }
+        
+        success.textContent = '✅ Password berhasil direset! Silakan login.';
+        success.classList.remove('hidden');
+        setTimeout(function() {
+            closeModal('resetPasswordModal');
+            openModal('loginModal');
+        }, 2000);
+    }
+    
+    // ============================================================ */
+    // 4. PROFILE FUNCTIONS                                         */
+    // ============================================================ */
+    
+    function showProfile() {
+        var session = getSession();
+        if (!session) {
+            showToast('⚠️ Silakan login terlebih dahulu.', 'warning');
+            return;
+        }
+        
+        document.getElementById('profileName').textContent = session.nama || session.username;
+        document.getElementById('profileAvatar').textContent = (session.nama || session.username).charAt(0).toUpperCase();
+        document.getElementById('profileRole').textContent = session.role === 'superadmin' ? '⭐ Super Admin' : '👤 User';
+        document.getElementById('editNama').value = session.nama || '';
+        document.getElementById('editEmail').value = session.email || '';
+        document.getElementById('editHp').value = session.hp || '';
+        document.getElementById('profileError').classList.add('hidden');
+        document.getElementById('profileSuccess').classList.add('hidden');
+        document.getElementById('passwordChange').classList.add('hidden');
+        openModal('profileModal');
+    }
+    
+    function updateProfile() {
+        var session = getSession();
+        if (!session) {
+            showToast('⚠️ Silakan login terlebih dahulu.', 'warning');
+            return;
+        }
+        
+        var nama = document.getElementById('editNama').value.trim();
+        var email = document.getElementById('editEmail').value.trim();
+        var hp = document.getElementById('editHp').value.trim();
+        var error = document.getElementById('profileError');
+        var success = document.getElementById('profileSuccess');
+        
+        error.classList.add('hidden');
+        success.classList.add('hidden');
+        
+        if (!nama || !email || !hp) {
+            error.textContent = 'Lengkapi semua data.';
+            error.classList.remove('hidden');
+            return;
+        }
+        
+        if (session.role === 'superadmin') {
+            ADMIN_USER.nama = nama;
+            ADMIN_USER.email = email;
+            ADMIN_USER.hp = hp;
+            session.nama = nama;
+            session.email = email;
+            session.hp = hp;
+            saveSession(session);
+        } else {
+            var users = getUsers();
+            var user = users.find(function(u) { return u.username === session.username; });
+            if (user) {
+                user.nama = nama;
+                user.email = email;
+                user.hp = hp;
+                saveUsers(users);
+                session.nama = nama;
+                session.email = email;
+                session.hp = hp;
+                saveSession(session);
+            }
+        }
+        
+        success.textContent = '✅ Profil berhasil diupdate!';
+        success.classList.remove('hidden');
+        updateUI();
+        showToast('✅ Profil berhasil diupdate!', 'success');
+    }
+    
+    function changePassword() {
+        var div = document.getElementById('passwordChange');
+        div.classList.toggle('hidden');
+        document.getElementById('passwordError').classList.add('hidden');
+        document.getElementById('passwordSuccess').classList.add('hidden');
+        document.getElementById('oldPassword').value = '';
+        document.getElementById('newPassword').value = '';
+        document.getElementById('confirmNewPassword').value = '';
+    }
+    
+    function saveNewPassword() {
+        var session = getSession();
+        if (!session) {
+            showToast('⚠️ Silakan login terlebih dahulu.', 'warning');
+            return;
+        }
+        
+        var oldPass = document.getElementById('oldPassword').value.trim();
+        var newPass = document.getElementById('newPassword').value.trim();
+        var confirm = document.getElementById('confirmNewPassword').value.trim();
+        var error = document.getElementById('passwordError');
+        var success = document.getElementById('passwordSuccess');
+        
+        error.classList.add('hidden');
+        success.classList.add('hidden');
+        
+        if (session.role === 'superadmin') {
+            if (oldPass !== ADMIN_USER.password) {
+                error.textContent = 'Password lama salah.';
+                error.classList.remove('hidden');
+                return;
+            }
+            if (newPass.length < 6 || newPass !== confirm) {
+                error.textContent = 'Password min 6 karakter dan harus sama.';
+                error.classList.remove('hidden');
+                return;
+            }
+            ADMIN_USER.password = newPass;
+        } else {
+            var users = getUsers();
+            var user = users.find(function(u) { return u.username === session.username; });
+            if (!user) {
+                error.textContent = 'User tidak ditemukan.';
+                error.classList.remove('hidden');
+                return;
+            }
+            if (oldPass !== user.password) {
+                error.textContent = 'Password lama salah.';
+                error.classList.remove('hidden');
+                return;
+            }
+            if (newPass.length < 6 || newPass !== confirm) {
+                error.textContent = 'Password min 6 karakter dan harus sama.';
+                error.classList.remove('hidden');
+                return;
+            }
+            user.password = newPass;
+            saveUsers(users);
+        }
+        
+        success.textContent = '✅ Password berhasil diubah!';
+        success.classList.remove('hidden');
+        document.getElementById('oldPassword').value = '';
+        document.getElementById('newPassword').value = '';
+        document.getElementById('confirmNewPassword').value = '';
+        showToast('✅ Password berhasil diubah!', 'success');
+    }
+    
+    function logout() {
+        if (!confirm('Yakin ingin logout?')) return;
+        clearSession();
+        updateUI();
+        showToast('🚪 Logout berhasil!', 'info');
+        renderApps();
+    }
+    
+    function updateUI() {
+        var session = getSession();
+        var loginBtn = document.getElementById('loginBtn');
+        var userBadge = document.getElementById('userBadge');
+        var userName = document.getElementById('userName');
+        var userAvatar = document.getElementById('userAvatar');
+        var profileBtn = document.getElementById('profileBtn');
+        
+        if (session) {
+            loginBtn.textContent = '🚪 Logout';
+            loginBtn.onclick = function() { logout(); };
+            userBadge.style.display = 'flex';
+            userName.textContent = session.nama || session.username;
+            userAvatar.textContent = (session.nama || session.username).charAt(0).toUpperCase();
+            profileBtn.style.display = 'inline-flex';
+        } else {
+            loginBtn.textContent = '🔐 Login';
+            loginBtn.onclick = function() { showLoginModal(); };
+            userBadge.style.display = 'none';
+            profileBtn.style.display = 'none';
+        }
+    }
+    
+    function showLoginModal() {
+        document.getElementById('loginError').classList.add('hidden');
+        document.getElementById('loginUsername').value = 'DedeBintang';
+        document.getElementById('loginPassword').value = 'MyHand0286';
+        openModal('loginModal');
+    }
+    
+    // ============================================================ */
+    // 5. CRUD APLIKASI                                             */
+    // ============================================================ */
+    
+    function renderApps() {
+        var container = document.getElementById('appListContainer');
+        var emptyState = document.getElementById('emptyState');
+        var stats = document.getElementById('dashboardStats');
+        
+        var session = getSession();
+        if (!session) {
+            container.innerHTML = `
+                <div class="empty-state">
+                    <div class="icon">🔐</div>
+                    <h3>Silakan Login</h3>
+                    <p>Login untuk melihat dan menyimpan kode Anda.</p>
+                    <button onclick="showLoginModal()" class="btn btn-primary">🔐 Login</button>
+                </div>
+            `;
+            emptyState.style.display = 'none';
+            stats.style.display = 'none';
+            return;
+        }
+        
+        stats.style.display = 'grid';
+        
+        var apps = getApps();
+        var appKeys = Object.keys(apps);
+        
+        var totalCodes = 0;
+        appKeys.forEach(function(key) {
+            totalCodes += (apps[key].codes || []).length;
+        });
+        document.getElementById('totalApps').textContent = appKeys.length;
+        document.getElementById('totalCodes').textContent = totalCodes;
+        
+        var storageSize = new Blob([JSON.stringify(apps)]).size;
+        var storageDisplay = storageSize < 1024 ? storageSize + ' B' : 
+                             storageSize < 1048576 ? (storageSize / 1024).toFixed(1) + ' KB' : 
+                             (storageSize / 1048576).toFixed(1) + ' MB';
+        document.getElementById('totalStorage').textContent = storageDisplay;
+        
+        if (appKeys.length === 0) {
+            emptyState.style.display = 'block';
+            container.innerHTML = '';
+            return;
+        }
+        
+        emptyState.style.display = 'none';
+        
+        var html = '<div class="app-list">';
+        appKeys.forEach(function(key) {
+            var app = apps[key];
+            var codeCount = (app.codes || []).length;
+            var isOpen = app.isOpen || false;
+            
+            html += `
+                <div class="app-item" data-app-id="${key}">
+                    <div class="app-header-item" onclick="toggleApp('${key}')">
+                        <div class="app-name">
+                            📱 ${escapeHtml(app.name)}
+                            <span class="app-count">${codeCount} code</span>
+                        </div>
+                        <div style="display:flex;align-items:center;gap:var(--spacing-2);flex-wrap:wrap;">
+                            <button class="btn btn-sm btn-primary" onclick="event.stopPropagation(); addCodeToApp('${key}')">+ Code</button>
+                            <button class="btn btn-sm btn-warning" onclick="event.stopPropagation(); editApp('${key}')">✏️</button>
+                            <button class="btn btn-sm btn-danger" onclick="event.stopPropagation(); deleteApp('${key}')">🗑️</button>
+                        </div>
+                    </div>
+                    <div class="app-codes ${isOpen ? 'open' : ''}" id="appCodes_${key}">
+                        ${renderCodes(key, app.codes || [])}
+                    </div>
+                </div>
+            `;
+        });
+        html += '</div>';
+        container.innerHTML = html;
+    }
+    
+    function renderCodes(appId, codes) {
+        if (!codes || codes.length === 0) {
+            return `
+                <div style="padding:var(--spacing-3);text-align:center;color:var(--text-muted);">
+                    <p>Belum ada code. Klik <strong>+ Code</strong> untuk menambahkan.</p>
+                </div>
+            `;
+        }
+        
+        var html = '';
+        codes.forEach(function(code, index) {
+            var isOpen = code.isOpen || false;
+            var contentPreview = code.content ? code.content.substring(0, 150) + (code.content.length > 150 ? '...' : '') : '';
+            
+            html += `
+                <div class="code-item" data-code-id="${code.id || index}">
+                    <div class="code-header">
+                        <div class="code-title">📝 ${escapeHtml(code.name)}</div>
+                        <div class="code-actions">
+                            <button onclick="copySingleCode('${appId}', '${code.id || index}')" title="Copy Code" style="color:var(--success);">📋</button>
+                            <button onclick="toggleCode('${appId}', '${code.id || index}')" title="Toggle">
+                                ${isOpen ? '📄 Sembunyikan' : '📄 Lihat'}
+                            </button>
+                            <button onclick="editCode('${appId}', '${code.id || index}')" title="Edit">✏️</button>
+                            <button class="danger" onclick="deleteCode('${appId}', '${code.id || index}')" title="Hapus">🗑️</button>
+                        </div>
+                    </div>
+                    ${isOpen ? `
+                        <div class="code-content">
+                            <pre>${escapeHtml(code.content || '')}</pre>
+                        </div>
+                    ` : `
+                        <div style="font-size:0.85rem;color:var(--text-muted);padding:var(--spacing-1) 0;">
+                            ${escapeHtml(contentPreview)}
+                        </div>
+                    `}
+                    <div style="font-size:0.7rem;color:var(--text-muted);margin-top:var(--spacing-1);">
+                        ${code.updatedAt ? '🕐 ' + formatDate(code.updatedAt) : ''}
+                    </div>
+                </div>
+            `;
+        });
+        return html;
+    }
+    
+    function showAddAppModal() {
+        var session = getSession();
+        if (!session) {
+            showToast('⚠️ Silakan login terlebih dahulu.', 'warning');
+            showLoginModal();
+            return;
+        }
+        
+        document.getElementById('appModalTitle').textContent = '➕ Tambah Aplikasi';
+        document.getElementById('editAppId').value = '';
+        document.getElementById('appName').value = '';
+        document.getElementById('appDesc').value = '';
+        document.getElementById('appError').classList.add('hidden');
+        openModal('appModal');
+    }
+    
+    function saveApp() {
+        var id = document.getElementById('editAppId').value;
+        var name = document.getElementById('appName').value.trim();
+        var desc = document.getElementById('appDesc').value.trim();
+        var error = document.getElementById('appError');
+        
+        error.classList.add('hidden');
+        if (!name) {
+            error.textContent = 'Masukkan nama aplikasi.';
+            error.classList.remove('hidden');
+            return;
+        }
+        
+        var apps = getApps();
+        if (id) {
+            if (apps[id]) {
+                apps[id].name = name;
+                apps[id].desc = desc;
+                apps[id].updatedAt = Date.now();
+            }
+        } else {
+            var newId = 'app_' + Date.now() + '_' + Math.random().toString(36).substr(2, 4);
+            apps[newId] = {
+                name: name,
+                desc: desc,
+                codes: [],
+                createdAt: Date.now(),
+                updatedAt: Date.now()
+            };
+        }
+        
+        saveApps(apps);
+        closeModal('appModal');
+        renderApps();
+        showToast('✅ Aplikasi berhasil disimpan!', 'success');
+    }
+    
+    function editApp(id) {
+        var apps = getApps();
+        var app = apps[id];
+        if (!app) {
+            showToast('⚠️ Aplikasi tidak ditemukan.', 'warning');
+            return;
+        }
+        
+        document.getElementById('appModalTitle').textContent = '✏️ Edit Aplikasi';
+        document.getElementById('editAppId').value = id;
+        document.getElementById('appName').value = app.name || '';
+        document.getElementById('appDesc').value = app.desc || '';
+        document.getElementById('appError').classList.add('hidden');
+        openModal('appModal');
+    }
+    
+    function deleteApp(id) {
+        var apps = getApps();
+        var app = apps[id];
+        if (!app) return;
+        
+        confirmAction = function() {
+            delete apps[id];
+            saveApps(apps);
+            closeModal('confirmModal');
+            renderApps();
+            showToast('🗑️ Aplikasi "' + app.name + '" dihapus.', 'info');
+            confirmAction = null;
+        };
+        
+        document.getElementById('confirmTitle').textContent = '⚠️ Hapus Aplikasi';
+        document.getElementById('confirmMessage').textContent = 'Yakin ingin menghapus aplikasi "' + app.name + '" beserta semua codenya?';
+        document.getElementById('confirmOkBtn').textContent = 'Ya, Hapus';
+        openModal('confirmModal');
+    }
+    
+    function toggleApp(id) {
+        var apps = getApps();
+        if (apps[id]) {
+            apps[id].isOpen = !apps[id].isOpen;
+            saveApps(apps);
+            renderApps();
+        }
+    }
+    
+    // ============================================================ */
+    // 6. CRUD CODE                                                 */
+    // ============================================================ */
+    
+    function addCodeToApp(appId) {
+        var apps = getApps();
+        var app = apps[appId];
+        if (!app) return;
+        
+        document.getElementById('codeModalTitle').textContent = '➕ Tambah Code ke ' + app.name;
+        document.getElementById('codeAppId').value = appId;
+        document.getElementById('editCodeId').value = '';
+        document.getElementById('codeName').value = '';
+        document.getElementById('codeContent').value = '';
+        document.getElementById('codeError').classList.add('hidden');
+        openModal('codeModal');
+    }
+    
+    function saveCode() {
+        var appId = document.getElementById('codeAppId').value;
+        var codeId = document.getElementById('editCodeId').value;
+        var name = document.getElementById('codeName').value.trim();
+        var content = document.getElementById('codeContent').value.trim();
+        var error = document.getElementById('codeError');
+        
+        error.classList.add('hidden');
+        if (!appId || !name || !content) {
+            error.textContent = 'Lengkapi semua data.';
+            error.classList.remove('hidden');
+            return;
+        }
+        
+        var apps = getApps();
+        var app = apps[appId];
+        if (!app) {
+            error.textContent = 'Aplikasi tidak ditemukan.';
+            error.classList.remove('hidden');
+            return;
+        }
+        
+        if (!app.codes) app.codes = [];
+        
+        if (codeId) {
+            var index = app.codes.findIndex(function(c) { return c.id === codeId; });
+            if (index !== -1) {
+                app.codes[index].name = name;
+                app.codes[index].content = content;
+                app.codes[index].updatedAt = Date.now();
+            }
+        } else {
+            var newId = 'code_' + Date.now() + '_' + Math.random().toString(36).substr(2, 4);
+            app.codes.push({
+                id: newId,
+                name: name,
+                content: content,
+                createdAt: Date.now(),
+                updatedAt: Date.now()
+            });
+        }
+        
+        saveApps(apps);
+        closeModal('codeModal');
+        renderApps();
+        showToast('✅ Code berhasil disimpan!', 'success');
+    }
+    
+    function editCode(appId, codeId) {
+        var apps = getApps();
+        var app = apps[appId];
+        if (!app) return;
+        
+        var code = app.codes.find(function(c) { return c.id === codeId; });
+        if (!code) return;
+        
+        document.getElementById('codeModalTitle').textContent = '✏️ Edit Code';
+        document.getElementById('codeAppId').value = appId;
+        document.getElementById('editCodeId').value = codeId;
+        document.getElementById('codeName').value = code.name || '';
+        document.getElementById('codeContent').value = code.content || '';
+        document.getElementById('codeError').classList.add('hidden');
+        openModal('codeModal');
+    }
+    
+    function deleteCode(appId, codeId) {
+        var apps = getApps();
+        var app = apps[appId];
+        if (!app) return;
+        
+        var code = app.codes.find(function(c) { return c.id === codeId; });
+        if (!code) return;
+        
+        confirmAction = function() {
+            app.codes = app.codes.filter(function(c) { return c.id !== codeId; });
+            saveApps(apps);
+            closeModal('confirmModal');
+            renderApps();
+            showToast('🗑️ Code "' + code.name + '" dihapus.', 'info');
+            confirmAction = null;
+        };
+        
+        document.getElementById('confirmTitle').textContent = '⚠️ Hapus Code';
+        document.getElementById('confirmMessage').textContent = 'Yakin ingin menghapus code "' + code.name + '"?';
+        document.getElementById('confirmOkBtn').textContent = 'Ya, Hapus';
+        openModal('confirmModal');
+    }
+    
+    function toggleCode(appId, codeId) {
+        var apps = getApps();
+        var app = apps[appId];
+        if (!app) return;
+        
+        var code = app.codes.find(function(c) { return c.id === codeId || c.id === parseInt(codeId) || c.id === codeId.toString(); });
+        if (!code) return;
+        
+        code.isOpen = !code.isOpen;
+        saveApps(apps);
+        renderApps();
+    }
+    
+    function copySingleCode(appId, codeId) {
+        var apps = getApps();
+        var app = apps[appId];
+        if (!app) return;
+        
+        var code = app.codes.find(function(c) { return c.id === codeId || c.id === parseInt(codeId) || c.id === codeId.toString(); });
+        if (!code || !code.content) {
+            showToast('⚠️ Code tidak ditemukan atau kosong.', 'warning');
+            return;
+        }
+        
+        navigator.clipboard.writeText(code.content).then(function() {
+            showToast('✅ Code "' + code.name + '" berhasil dicopy!', 'success');
+        }).catch(function() {
+            var textarea = document.createElement('textarea');
+            textarea.value = code.content;
+            document.body.appendChild(textarea);
+            textarea.select();
+            document.execCommand('copy');
+            document.body.removeChild(textarea);
+            showToast('✅ Code "' + code.name + '" berhasil dicopy!', 'success');
+        });
+    }
+    
+    // ============================================================ */
+    // 7. SEARCH FUNCTIONS                                          */
+    // ============================================================ */
+    
+    var confirmAction = null;
+    
+    function showSearch() {
+        var bar = document.getElementById('searchBar');
+        bar.classList.toggle('hidden');
+        if (!bar.classList.contains('hidden')) {
+            document.getElementById('searchInput').focus();
+        } else {
+            renderApps();
+        }
+    }
+    
+    function searchApps() {
+        var query = document.getElementById('searchInput').value.toLowerCase().trim();
+        var apps = getApps();
+        var container = document.getElementById('appListContainer');
+        var emptyState = document.getElementById('emptyState');
+        
+        if (!query) {
+            renderApps();
+            return;
+        }
+        
+        var found = false;
+        var html = '<div class="app-list">';
+        
+        Object.keys(apps).forEach(function(key) {
+            var app = apps[key];
+            var match = app.name.toLowerCase().includes(query);
+            var codeMatch = false;
+            
+            (app.codes || []).forEach(function(code) {
+                if (code.name.toLowerCase().includes(query) || (code.content && code.content.toLowerCase().includes(query))) {
+                    codeMatch = true;
+                }
+            });
+            
+            if (match || codeMatch) {
+                found = true;
+                var codeCount = (app.codes || []).length;
+                
+                html += `
+                    <div class="app-item" data-app-id="${key}">
+                        <div class="app-header-item" onclick="toggleApp('${key}')">
+                            <div class="app-name">
+                                📱 ${escapeHtml(app.name)}
+                                <span class="app-count">${codeCount} code</span>
+                            </div>
+                            <div style="display:flex;align-items:center;gap:var(--spacing-2);flex-wrap:wrap;">
+                                <button class="btn btn-sm btn-primary" onclick="event.stopPropagation(); addCodeToApp('${key}')">+ Code</button>
+                                <button class="btn btn-sm btn-warning" onclick="event.stopPropagation(); editApp('${key}')">✏️</button>
+                                <button class="btn btn-sm btn-danger" onclick="event.stopPropagation(); deleteApp('${key}')">🗑️</button>
+                            </div>
+                        </div>
+                        <div class="app-codes open" id="appCodes_${key}">
+                            ${renderCodes(key, app.codes || [])}
+                        </div>
+                    </div>
+                `;
+            }
+        });
+        
+        html += '</div>';
+        
+        if (!found) {
+            container.innerHTML = `
+                <div class="empty-state">
+                    <div class="icon">🔍</div>
+                    <h3>Tidak Ditemukan</h3>
+                    <p>Tidak ada aplikasi atau code yang cocok dengan "${query}".</p>
+                </div>
+            `;
+            emptyState.style.display = 'none';
+            return;
+        }
+        
+        emptyState.style.display = 'none';
+        container.innerHTML = html;
+    }
+    
+    function clearSearch() {
+        document.getElementById('searchInput').value = '';
+        document.getElementById('searchBar').classList.add('hidden');
+        renderApps();
+    }
+    
+    // ============================================================ */
+    // 8. EXPORT & IMPORT                                           */
+    // ============================================================ */
+    
+    function exportAllData() {
+        var session = getSession();
+        if (!session) {
+            showToast('⚠️ Silakan login terlebih dahulu.', 'warning');
+            return;
+        }
+        
+        var apps = getApps();
+        var data = {
+            exportedAt: new Date().toISOString(),
+            user: session.username,
+            apps: apps,
+            version: '1.0'
+        };
+        
+        var json = JSON.stringify(data, null, 2);
+        var blob = new Blob([json], { type: 'application/json' });
+        var url = URL.createObjectURL(blob);
+        var a = document.createElement('a');
+        a.href = url;
+        a.download = 'Notepad_Backup_' + new Date().toISOString().slice(0, 10) + '.json';
+        document.body.appendChild(a);
+        a.click();
+        document.body.removeChild(a);
+        URL.revokeObjectURL(url);
+        showToast('📤 Data berhasil diexport!', 'success');
+    }
+    
+    function importAllData(input) {
+        var file = input.files[0];
+        if (!file) return;
+        
+        var session = getSession();
+        if (!session) {
+            showToast('⚠️ Silakan login terlebih dahulu.', 'warning');
+            return;
+        }
+        
+        var reader = new FileReader();
+        reader.onload = function(e) {
+            try {
+                var data = JSON.parse(e.target.result);
+                if (!data.apps || typeof data.apps !== 'object') {
+                    showToast('❌ Format file tidak valid.', 'error');
+                    return;
+                }
+                
+                confirmAction = function() {
+                    saveApps(data.apps);
+                    closeModal('confirmModal');
+                    renderApps();
+                    showToast('📥 Data berhasil diimport!', 'success');
+                    confirmAction = null;
+                };
+                
+                document.getElementById('confirmTitle').textContent = '📥 Import Data';
+                document.getElementById('confirmMessage').textContent = 'Data saat ini akan ditimpa. Yakin ingin melanjutkan?';
+                document.getElementById('confirmOkBtn').textContent = 'Ya, Import';
+                openModal('confirmModal');
+                
+            } catch (err) {
+                showToast('❌ Gagal import: ' + err.message, 'error');
+            }
+        };
+        reader.readAsText(file);
+        input.value = '';
+    }
+    
+    // ============================================================ */
+    // 9. MERGE & COPY FUNCTIONS                                    */
+    // ============================================================ */
+    
+    var selectedMergeApps = [];
+    var mergeResultText = '';
+    
+    function showMergeModal() {
+        var session = getSession();
+        if (!session) {
+            showToast('⚠️ Silakan login terlebih dahulu.', 'warning');
+            return;
+        }
+        
+        var apps = getApps();
+        var appKeys = Object.keys(apps);
+        
+        if (appKeys.length === 0) {
+            showToast('⚠️ Belum ada aplikasi dan code untuk digabung.', 'warning');
+            return;
+        }
+        
+        var container = document.getElementById('mergeAppList');
+        container.innerHTML = '';
+        selectedMergeApps = [];
+        
+        appKeys.forEach(function(key) {
+            var app = apps[key];
+            var codeCount = (app.codes || []).length;
+            
+            var label = document.createElement('label');
+            label.style.cssText = 'display:flex;align-items:center;gap:6px;padding:6px 12px;background:var(--bg-card);border-radius:var(--radius);cursor:pointer;font-size:0.9rem;';
+            label.innerHTML = `
+                <input type="checkbox" class="merge-checkbox" value="${key}" ${codeCount > 0 ? 'checked' : 'disabled'}>
+                📱 ${escapeHtml(app.name)} (${codeCount} code)
+                ${codeCount === 0 ? '<span style="font-size:0.7rem;color:var(--text-muted);">(kosong)</span>' : ''}
+            `;
+            
+            if (codeCount > 0) {
+                selectedMergeApps.push(key);
+            }
+            
+            container.appendChild(label);
+            
+            var checkbox = label.querySelector('.merge-checkbox');
+            checkbox.addEventListener('change', function() {
+                if (this.checked) {
+                    if (!selectedMergeApps.includes(this.value)) {
+                        selectedMergeApps.push(this.value);
+                    }
+                } else {
+                    selectedMergeApps = selectedMergeApps.filter(function(k) { return k !== this.value; });
+                }
+            });
+        });
+        
+        document.getElementById('mergeResult').classList.add('hidden');
+        document.getElementById('mergeResultText').value = '';
+        openModal('mergeModal');
+    }
+    
+    function mergeAndCopy() {
+        if (selectedMergeApps.length === 0) {
+            showToast('⚠️ Pilih minimal satu aplikasi yang memiliki code.', 'warning');
+            return;
+        }
+        
+        var apps = getApps();
+        var allCodes = [];
+        
+        selectedMergeApps.forEach(function(key) {
+            var app = apps[key];
+            if (app && app.codes) {
+                app.codes.forEach(function(code) {
+                    if (code.content && code.content.trim()) {
+                        allCodes.push({
+                            appName: app.name,
+                            codeName: code.name || 'Tanpa Nama',
+                            content: code.content
+                        });
+                    }
+                });
+            }
+        });
+        
+        if (allCodes.length === 0) {
+            showToast('⚠️ Tidak ada code yang bisa digabung.', 'warning');
+            return;
+        }
+        
+        var result = generateIndexHtml(allCodes);
+        
+        document.getElementById('mergeResultText').value = result;
+        document.getElementById('mergeTotalCode').textContent = allCodes.length;
+        document.getElementById('mergeResult').classList.remove('hidden');
+        
+        mergeResultText = result;
+        showToast('✅ ' + allCodes.length + ' code berhasil digabung!', 'success');
+    }
+    
+    function generateIndexHtml(codes) {
+        var html = '<!DOCTYPE html>\n';
+        html += '<html lang="id">\n';
+        html += '<head>\n';
+        html += '    <meta charset="UTF-8">\n';
+        html += '    <meta name="viewport" content="width=device-width, initial-scale=1.0">\n';
+        html += '    <title>Gabungan Code - Notepad+</title>\n';
+        html += '    <style>\n';
+        html += '        body { font-family: monospace; padding: 20px; background: #0f0f1a; color: #fff; }\n';
+        html += '        .code-block { margin-bottom: 20px; border: 1px solid #333; border-radius: 8px; overflow: hidden; }\n';
+        html += '        .code-block .header { background: #1a1a2e; padding: 10px 16px; border-bottom: 1px solid #333; font-weight: bold; display: flex; justify-content: space-between; }\n';
+        html += '        .code-block .header .app { color: #6c5ce7; }\n';
+        html += '        .code-block .header .name { color: #a0a0b0; }\n';
+        html += '        .code-block pre { margin: 0; padding: 16px; overflow-x: auto; font-size: 13px; line-height: 1.6; }\n';
+        html += '        .footer { text-align: center; padding: 20px; color: #6a6a7a; font-size: 12px; border-top: 1px solid #333; margin-top: 20px; }\n';
+        html += '    </style>\n';
+        html += '</head>\n';
+        html += '<body>\n';
+        html += '    <h1>📝 Gabungan Code - Notepad+</h1>\n';
+        html += '    <p style="color:#a0a0b0;margin-bottom:20px;">Total ' + codes.length + ' code</p>\n';
+        
+        codes.forEach(function(code, index) {
+            html += '    <div class="code-block">\n';
+            html += '        <div class="header">\n';
+            html += '            <span><span class="app">📱 ' + escapeHtml(code.appName) + '</span></span>\n';
+            html += '            <span class="name">📝 ' + escapeHtml(code.codeName) + '</span>\n';
+            html += '        </div>\n';
+            html += '        <pre>' + escapeHtml(code.content) + '</pre>\n';
+            html += '    </div>\n';
+        });
+        
+        html += '    <div class="footer">\n';
+        html += '        Generated by Notepad+ Code Storage v1.0<br>\n';
+        html += '        ' + new Date().toLocaleString('id-ID') + '\n';
+        html += '    </div>\n';
+        html += '</body>\n';
+        html += '</html>';
+        
+        return html;
+    }
+    
+    function copyMergeResult() {
+        var text = document.getElementById('mergeResultText').value;
+        if (!text) {
+            showToast('⚠️ Tidak ada hasil untuk dicopy.', 'warning');
+            return;
+        }
+        
+        navigator.clipboard.writeText(text).then(function() {
+            showToast('✅ ' + text.length + ' karakter berhasil dicopy ke clipboard!', 'success');
+        }).catch(function() {
+            var textarea = document.getElementById('mergeResultText');
+            textarea.select();
+            document.execCommand('copy');
+            showToast('✅ Berhasil dicopy!', 'success');
+        });
+    }
+    
+    function downloadMergeResult() {
+        var text = document.getElementById('mergeResultText').value;
+        if (!text) {
+            showToast('⚠️ Tidak ada hasil untuk didownload.', 'warning');
+            return;
+        }
+        
+        var blob = new Blob([text], { type: 'text/html' });
+        var url = URL.createObjectURL(blob);
+        var a = document.createElement('a');
+        a.href = url;
+        a.download = 'index_' + new Date().toISOString().slice(0, 10) + '.html';
+        document.body.appendChild(a);
+        a.click();
+        document.body.removeChild(a);
+        URL.revokeObjectURL(url);
+        showToast('📥 index.html berhasil didownload!', 'success');
+    }
+    
+    // ============================================================ */
+    // 10. TOAST & LOADING FUNCTIONS                                */
+    // ============================================================ */
+    
+    function showToast(message, type) {
+        var container = document.getElementById('toastContainer');
+        if (!container) {
+            container = document.createElement('div');
+            container.id = 'toastContainer';
+            container.className = 'toast-container';
+            document.body.appendChild(container);
+        }
+        
+        var toast = document.createElement('div');
+        toast.className = 'toast toast-' + (type || 'info');
+        toast.textContent = message;
+        container.appendChild(toast);
+        
+        setTimeout(function() {
+            toast.classList.add('show');
+        }, 10);
+        
+        setTimeout(function() {
+            toast.classList.remove('show');
+            setTimeout(function() {
+                toast.remove();
+            }, 300);
+        }, 3000);
+    }
+    
+    function showLoading(text) {
+        var overlay = document.getElementById('loadingOverlay');
+        var textEl = document.getElementById('loadingText');
+        if (textEl) textEl.textContent = text || 'Memuat...';
+        overlay.classList.remove('hidden');
+    }
+    
+    function hideLoading() {
+        var overlay = document.getElementById('loadingOverlay');
+        overlay.classList.add('hidden');
+    }
+    
+    // ============================================================ */
+    // 11. MODAL FUNCTIONS                                          */
+    // ============================================================ */
+    
+    function openModal(id) {
+        var modal = document.getElementById(id);
+        if (modal) {
+            modal.classList.add('active');
+            modal.style.display = 'flex';
+            document.body.style.overflow = 'hidden';
+        }
+    }
+    
+    function closeModal(id) {
+        var modal = document.getElementById(id);
+        if (modal) {
+            modal.classList.remove('active');
+            modal.style.display = 'none';
+            document.body.style.overflow = '';
+        }
+    }
+    
+    // Close modals on overlay click
+    document.addEventListener('click', function(e) {
+        if (e.target.classList.contains('modal-overlay') && e.target.style.display === 'flex') {
+            e.target.classList.remove('active');
+            e.target.style.display = 'none';
+            document.body.style.overflow = '';
+        }
+    });
+    
+    // ============================================================ */
+    // 12. UTILITY FUNCTIONS                                        */
+    // ============================================================ */
+    
+    function escapeHtml(text) {
+        if (!text) return '';
+        var div = document.createElement('div');
+        div.textContent = text;
+        return div.innerHTML;
+    }
+    
+    function formatDate(timestamp) {
+        if (!timestamp) return '-';
+        var date = new Date(timestamp);
+        return date.toLocaleDateString('id-ID', {
+            day: '2-digit',
+            month: 'short',
+            year: 'numeric',
+            hour: '2-digit',
+            minute: '2-digit'
+        });
+    }
+    
+    function toggleTheme() {
+        var body = document.body;
+        body.classList.toggle('light-theme');
+        var btn = document.getElementById('themeToggle');
+        btn.textContent = body.classList.contains('light-theme') ? '☀️' : '🌙';
+    }
+    
+    // ============================================================ */
+    // 13. INITIALIZATION                                           */
+    // ============================================================ */
+    
+    function initApp() {
+        var session = getSession();
+        updateUI();
+        renderApps();
+        
+        var body = document.body;
+        if (body.classList.contains('light-theme')) {
+            document.getElementById('themeToggle').textContent = '☀️';
+        }
+        
+        console.log('✅ Notepad+ Code Storage v1.0 initialized!');
+        console.log('📊 Session:', session ? 'Logged in as ' + session.username : 'Guest');
+    }
+    
+    // DOM Ready
+    document.addEventListener('DOMContentLoaded', function() {
+        initApp();
+    });
+</script>
+</body>
+</html>
