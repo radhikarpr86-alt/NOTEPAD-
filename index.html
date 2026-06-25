@@ -10,18 +10,14 @@
     <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E%3Crect width='100' height='100' rx='20' fill='%230a0a1a'/%3E%3Ctext x='50' y='68' text-anchor='middle' font-size='60' fill='%23ffffff'%3E📝%3C/text%3E%3C/svg%3E">
     
     <style>
-        /* ========== RESET & BASE ========== */
         *,*::before,*::after{box-sizing:border-box;margin:0;padding:0;border:0;font:inherit;vertical-align:baseline}
         html{scroll-behavior:smooth;-webkit-text-size-adjust:100%;font-size:16px;line-height:1.5;-webkit-font-smoothing:antialiased}
         body{
-            font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,'Helvetica Neue',Arial,sans-serif;
-            background:var(--bg);
-            color:var(--text);
-            min-height:100vh;min-height:100dvh;overflow-x:hidden;
+            font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,Arial,sans-serif;
+            background:var(--bg);color:var(--text);min-height:100vh;overflow-x:hidden;
             transition:background .3s,color .3s;
         }
         
-        /* ========== CSS VARIABLES ========== */
         :root{
             --bg:#0a0a1a;--bg2:#12122a;--bg3:#1a1a35;--bg4:#222240;
             --text:#e8e8f0;--text2:#a0a0b8;--text3:#6a6a80;
@@ -29,65 +25,48 @@
             --green:#10b981;--green2:#059669;
             --red:#ef4444;--red2:#dc2626;
             --yellow:#f59e0b;--yellow2:#d97706;
-            --blue:#3b82f6;--blue2:#2563eb;
+            --blue:#3b82f6;
             --border:rgba(255,255,255,0.06);--border2:rgba(255,255,255,0.1);
             --shadow:0 2px 8px rgba(0,0,0,0.4);--shadow2:0 4px 20px rgba(0,0,0,0.5);
             --radius:8px;--radius2:12px;--radius3:16px;--radius4:9999px;
-            --g1:4px;--g2:8px;--g3:12px;--g4:16px;--g5:20px;--g6:24px;--g8:32px;--g10:40px;
-            --z1:10;--z2:20;--z3:30;--z4:40;--z5:50;
+            --g1:4px;--g2:8px;--g3:12px;--g4:16px;--g5:20px;--g6:24px;
             --tr:200ms ease;
         }
         
         .light{
-            --bg:#f5f5f8;--bg2:#ffffff;--bg3:#f0f0f5;--bg4:#e5e5ea;
-            --text:#1a1a2e;--text2:#555570;--text3:#8888a0;
+            --bg:#f5f5f8;--bg2:#fff;--bg3:#f0f0f5;--bg4:#e5e5ea;
+            --text:#1a1a2e;--text2:#555;--text3:#888;
             --border:rgba(0,0,0,0.08);--border2:rgba(0,0,0,0.12);
         }
         
-        /* ========== SCROLLBAR ========== */
-        ::-webkit-scrollbar{width:4px;height:4px}
+        ::-webkit-scrollbar{width:4px}
         ::-webkit-scrollbar-track{background:transparent}
         ::-webkit-scrollbar-thumb{background:var(--accent);border-radius:var(--radius4)}
-        *{scrollbar-width:thin;scrollbar-color:var(--accent) transparent}
         
-        /* ========== UTILITIES ========== */
         .hidden{display:none!important}
-        .flex{display:flex}.iflex{display:inline-flex}
-        .fcenter{display:flex;align-items:center;justify-content:center}
+        .flex{display:flex}.fcenter{display:flex;align-items:center;justify-content:center}
         .fbetween{display:flex;align-items:center;justify-content:space-between}
         .fcol{flex-direction:column}.fwrap{flex-wrap:wrap}.f1{flex:1}
-        .gap1{gap:var(--g1)}.gap2{gap:var(--g2)}.gap3{gap:var(--g3)}.gap4{gap:var(--g4)}.gap5{gap:var(--g5)}.gap6{gap:var(--g6)}
-        .wfull{width:100%}.hfull{height:100%}
-        .tcenter{text-align:center}.tright{text-align:right}
-        .tsm{font-size:.85rem}.txs{font-size:.75rem}.tlg{font-size:1.1rem}.txl{font-size:1.3rem}.t2xl{font-size:1.8rem}
-        .tbold{font-weight:700}.tsemibold{font-weight:600}
+        .gap1{gap:var(--g1)}.gap2{gap:var(--g2)}.gap3{gap:var(--g3)}.gap4{gap:var(--g4)}.gap5{gap:var(--g5)}
+        .wfull{width:100%}.tcenter{text-align:center}
+        .tsm{font-size:.85rem}.txs{font-size:.75rem}.tbold{font-weight:700}
         .tmuted{color:var(--text3)}.t2{color:var(--text2)}.taccent{color:var(--accent3)}
         .tgreen{color:var(--green)}.tred{color:var(--red)}.tyellow{color:var(--yellow)}
-        .bg2{background:var(--bg2)}.bg3{background:var(--bg3)}.bg4{background:var(--bg4)}
+        .bg2{background:var(--bg2)}.bg3{background:var(--bg3)}
         .rounded{border-radius:var(--radius)}.rounded2{border-radius:var(--radius2)}.rounded3{border-radius:var(--radius3)}.rounded4{border-radius:var(--radius4)}
-        .shadow{box-shadow:var(--shadow)}.shadow2{box-shadow:var(--shadow2)}
-        .border{border:1px solid var(--border)}.border2{border:1px solid var(--border2)}
-        .pointer{cursor:pointer}.noselect{user-select:none}
+        .border{border:1px solid var(--border)}.pointer{cursor:pointer}
         .overflow-h{overflow:hidden}.overflow-a{overflow-y:auto}
         .truncate{overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
-        .relative{position:relative}.absolute{position:absolute}
         
-        /* ========== ANIMATIONS ========== */
         @keyframes fadeIn{from{opacity:0}to{opacity:1}}
         @keyframes slideUp{from{opacity:0;transform:translateY(20px)}to{opacity:1;transform:translateY(0)}}
-        @keyframes slideDown{from{opacity:0;transform:translateY(-20px)}to{opacity:1;transform:translateY(0)}}
         @keyframes spin{to{transform:rotate(360deg)}}
-        @keyframes pulse{0%,100%{opacity:1}50%{opacity:.5}}
-        @keyframes shake{0%,100%{transform:translateX(0)}25%{transform:translateX(-5px)}75%{transform:translateX(5px)}}
         @keyframes glow{0%,100%{box-shadow:0 0 20px rgba(124,58,237,0.2)}50%{box-shadow:0 0 40px rgba(124,58,237,0.5)}}
         .afade{animation:fadeIn .3s ease}
         .aslideup{animation:slideUp .3s ease}
         .aspin{animation:spin .8s linear infinite}
-        .apulse{animation:pulse 2s ease-in-out infinite}
-        .ashake{animation:shake .4s ease}
         .aglow{animation:glow 2s ease-in-out infinite}
         
-        /* ========== BUTTONS ========== */
         .btn{
             display:inline-flex;align-items:center;justify-content:center;gap:6px;
             padding:10px 20px;border:none;border-radius:var(--radius);font-weight:600;
@@ -102,29 +81,21 @@
         .btns{background:var(--green);color:#fff}.btns:hover{background:var(--green2)}
         .btnd{background:var(--red);color:#fff}.btnd:hover{background:var(--red2)}
         .btnw{background:var(--yellow);color:#000}.btnw:hover{background:var(--yellow2)}
-        .btnb{background:var(--blue);color:#fff}.btnb:hover{background:var(--blue2)}
-        .btng{background:var(--text3);color:#fff}.btng:hover{background:#7a7a8a}
+        .btnb{background:var(--blue);color:#fff}
+        .btng{background:var(--text3);color:#fff}
         .btno{background:transparent;border:2px solid var(--accent);color:var(--accent3)}
         .btno:hover{background:var(--accent);color:#fff}
         
         .btnsm{padding:6px 14px;font-size:.8rem;min-height:30px}
         .btnlg{padding:14px 28px;font-size:1.05rem;min-height:48px}
-        .btnxl{padding:18px 36px;font-size:1.15rem;min-height:56px}
         .btnblock{width:100%;display:flex}
         
-        /* ========== BADGES ========== */
-        .badge{
-            display:inline-flex;align-items:center;gap:4px;padding:3px 10px;
-            border-radius:var(--radius4);font-size:.7rem;font-weight:600;
-            text-transform:uppercase;letter-spacing:.5px;
-        }
+        .badge{display:inline-flex;align-items:center;gap:4px;padding:3px 10px;border-radius:var(--radius4);font-size:.7rem;font-weight:600;text-transform:uppercase}
         .badges{background:var(--green);color:#fff}
         .badged{background:var(--red);color:#fff}
         .badgew{background:var(--yellow);color:#000}
         .badgep{background:var(--accent);color:#fff}
-        .badgeb{background:var(--blue);color:#fff}
         
-        /* ========== FORMS ========== */
         input,textarea,select{
             width:100%;padding:10px 14px;border:1px solid var(--border2);border-radius:var(--radius);
             font-size:.9rem;transition:all var(--tr);background:var(--bg3);color:var(--text);
@@ -133,39 +104,32 @@
         input:focus,textarea:focus,select:focus{outline:none;border-color:var(--accent);box-shadow:0 0 0 3px rgba(124,58,237,0.15)}
         input::placeholder,textarea::placeholder{color:var(--text3)}
         textarea{resize:vertical;min-height:80px;font-family:'Courier New',monospace;font-size:.85rem;line-height:1.7}
-        select{appearance:none;background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' viewBox='0 0 12 12'%3E%3Cpath fill='%23a0a0b8' d='M6 8L1 3h10z'/%3E%3C/svg%3E");background-repeat:no-repeat;background-position:right 12px center;padding-right:36px}
+        select{appearance:none;background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12'%3E%3Cpath fill='%23a0a0b8' d='M6 8L1 3h10z'/%3E%3C/svg%3E");background-repeat:no-repeat;background-position:right 12px center;padding-right:36px}
         
         .formg{margin-bottom:var(--g4)}
         .forml{display:block;margin-bottom:var(--g2);font-weight:500;font-size:.85rem;color:var(--text2)}
-        .formh{font-size:.75rem;color:var(--text3);margin-top:var(--g1)}
         .formerr{color:var(--red);font-size:.8rem;margin-top:var(--g1);display:none}
         .formerr.show{display:block}
         .formsuc{color:var(--green);font-size:.8rem;margin-top:var(--g1);display:none}
         .formsuc.show{display:block}
         
-        /* ========== TOAST ========== */
-        .toastc{
-            position:fixed;bottom:80px;left:50%;transform:translateX(-50%);
-            z-index:var(--z5);max-width:90%;width:100%;pointer-events:none;
-        }
+        .toastc{position:fixed;bottom:80px;left:50%;transform:translateX(-50%);z-index:999;max-width:90%;pointer-events:none}
         .toast{
-            background:var(--bg2);color:var(--text);padding:12px 20px;
-            border-radius:var(--radius);border:1px solid var(--border);box-shadow:var(--shadow2);
-            font-size:.9rem;opacity:0;transform:translateY(20px);transition:all var(--tr);
-            pointer-events:auto;text-align:center;margin-bottom:8px;
-            border-left:4px solid var(--accent);
+            background:var(--bg2);color:var(--text);padding:12px 20px;border-radius:var(--radius);
+            border:1px solid var(--border);box-shadow:var(--shadow2);font-size:.9rem;
+            opacity:0;transform:translateY(20px);transition:all var(--tr);pointer-events:auto;
+            text-align:center;margin-bottom:8px;border-left:4px solid var(--accent);
         }
         .toast.show{opacity:1;transform:translateY(0)}
         .toast.s{border-left-color:var(--green)}
         .toast.e{border-left-color:var(--red)}
         .toast.w{border-left-color:var(--yellow)}
         
-        /* ========== MODAL ========== */
         .modal{
             position:fixed;top:0;left:0;width:100%;height:100%;
             background:rgba(0,0,0,0.7);backdrop-filter:blur(8px);
             display:none;align-items:center;justify-content:center;
-            z-index:var(--z4);padding:var(--g4);
+            z-index:998;padding:var(--g4);
         }
         .modal.show{display:flex}
         .modalc{
@@ -179,52 +143,41 @@
         .modalclose:hover{color:var(--red);transform:rotate(90deg)}
         .modalf{display:flex;gap:var(--g3);padding-top:var(--g5);border-top:1px solid var(--border);margin-top:var(--g5);justify-content:flex-end}
         
-        /* ========== CARD ========== */
-        .card{background:var(--bg2);border-radius:var(--radius2);padding:var(--g5);border:1px solid var(--border);transition:all var(--tr)}
-        .card:hover{border-color:var(--accent)}
-        
-        /* ========== LAYOUT ========== */
         .container{max-width:1000px;margin:0 auto;padding:var(--g4);min-height:100vh}
         
-        /* ========== HEADER ========== */
         .header{
             display:flex;align-items:center;justify-content:space-between;
-            padding:var(--g3) var(--g5);background:var(--bg2);
-            border-radius:var(--radius2);border:1px solid var(--border);
-            margin-bottom:var(--g5);flex-wrap:wrap;gap:var(--g2);
+            padding:var(--g3) var(--g5);background:var(--bg2);border-radius:var(--radius2);
+            border:1px solid var(--border);margin-bottom:var(--g5);flex-wrap:wrap;gap:var(--g2);
         }
         .logo{font-size:1.2rem;font-weight:700;display:flex;align-items:center;gap:var(--g2)}
         .logo span{background:linear-gradient(135deg,var(--accent3),#c4b5fd);-webkit-background-clip:text;-webkit-text-fill-color:transparent}
         
-        /* ========== HERO ========== */
         .hero{
-            text-align:center;padding:var(--g10) var(--g5);background:var(--bg2);
-            border-radius:var(--radius3);border:1px solid var(--border);margin-bottom:var(--g6);
+            text-align:center;padding:var(--g6) var(--g5);background:var(--bg2);
+            border-radius:var(--radius3);border:1px solid var(--border);margin-bottom:var(--g5);
         }
-        .hero h1{font-size:2.2rem;font-weight:800;margin-bottom:var(--g2)}
-        .hero p{font-size:1.05rem;color:var(--text2);max-width:600px;margin:0 auto var(--g6)}
+        .hero h1{font-size:2rem;font-weight:800;margin-bottom:var(--g2)}
+        .hero p{font-size:1rem;color:var(--text2);max-width:600px;margin:0 auto var(--g5)}
         .hero .gradient-text{background:linear-gradient(135deg,var(--accent3),#c4b5fd);-webkit-background-clip:text;-webkit-text-fill-color:transparent}
         
-        /* ========== STATS ========== */
         .stats{display:grid;grid-template-columns:repeat(auto-fill,minmax(130px,1fr));gap:var(--g3);margin-bottom:var(--g5)}
         .statc{background:var(--bg2);border-radius:var(--radius);padding:var(--g4);border:1px solid var(--border);text-align:center}
         .statv{font-size:1.5rem;font-weight:700;color:var(--accent3)}
         .statl{font-size:.78rem;color:var(--text2);margin-top:var(--g1)}
         
-        /* ========== FEATURES ========== */
-        .features{display:grid;grid-template-columns:repeat(auto-fill,minmax(220px,1fr));gap:var(--g4);margin-bottom:var(--g6)}
+        .features{display:grid;grid-template-columns:repeat(auto-fill,minmax(200px,1fr));gap:var(--g4);margin-bottom:var(--g5)}
         .featc{background:var(--bg2);border-radius:var(--radius2);padding:var(--g5);border:1px solid var(--border);text-align:center;transition:all var(--tr)}
-        .featc:hover{border-color:var(--accent);transform:translateY(-3px);box-shadow:var(--shadow2)}
-        .featicon{font-size:2.2rem;margin-bottom:var(--g2)}
+        .featc:hover{border-color:var(--accent);transform:translateY(-3px)}
+        .featicon{font-size:2rem;margin-bottom:var(--g2)}
         .featc h4{font-size:1rem;margin-bottom:var(--g1)}
         .featc p{font-size:.85rem;color:var(--text2);margin:0}
         
-        /* ========== PRICE ========== */
-        .prices{display:grid;grid-template-columns:repeat(auto-fill,minmax(260px,1fr));gap:var(--g4);margin-bottom:var(--g6)}
+        .prices{display:grid;grid-template-columns:repeat(auto-fill,minmax(240px,1fr));gap:var(--g4);margin-bottom:var(--g5)}
         .pricec{background:var(--bg2);border-radius:var(--radius3);padding:var(--g6);border:2px solid var(--border);text-align:center;transition:all var(--tr);position:relative}
-        .pricec:hover{border-color:var(--accent);transform:translateY(-4px);box-shadow:var(--shadow2)}
+        .pricec:hover{border-color:var(--accent);transform:translateY(-4px)}
         .pricec.featured{border-color:var(--accent);background:var(--bg3)}
-        .pricec.featured .fbadge{position:absolute;top:-12px;left:50%;transform:translateX(-50%);background:var(--accent);color:#fff;padding:3px 16px;border-radius:var(--radius4);font-size:.7rem;font-weight:700}
+        .fbadge{position:absolute;top:-12px;left:50%;transform:translateX(-50%);background:var(--accent);color:#fff;padding:3px 16px;border-radius:var(--radius4);font-size:.7rem;font-weight:700}
         .priceicon{font-size:2.5rem;margin-bottom:var(--g2)}
         .pricename{font-size:1.2rem;font-weight:700}
         .priceval{font-size:2rem;font-weight:800;color:var(--green);margin:var(--g2) 0}
@@ -233,55 +186,39 @@
         .pricelist li{list-style:none;padding:3px 0;font-size:.85rem;color:var(--text2);display:flex;align-items:center;gap:var(--g2)}
         .pricelist li .c{color:var(--green)}
         
-        /* ========== APP LIST ========== */
         .applist{display:grid;grid-template-columns:1fr;gap:var(--g3)}
-        .appitem{background:var(--bg2);border-radius:var(--radius2);border:1px solid var(--border);overflow:hidden;transition:all var(--tr)}
+        .appitem{background:var(--bg2);border-radius:var(--radius2);border:1px solid var(--border);overflow:hidden}
         .appitem:hover{border-color:var(--accent)}
-        .apphead{display:flex;align-items:center;justify-content:space-between;padding:var(--g3) var(--g4);cursor:pointer;transition:all var(--tr);flex-wrap:wrap;gap:var(--g2)}
+        .apphead{display:flex;align-items:center;justify-content:space-between;padding:var(--g3) var(--g4);cursor:pointer;flex-wrap:wrap;gap:var(--g2)}
         .apphead:hover{background:var(--bg3)}
         .appname{font-weight:600;font-size:1rem;display:flex;align-items:center;gap:var(--g2)}
         .appcount{font-size:.75rem;color:var(--text3);background:var(--bg4);padding:2px 10px;border-radius:var(--radius4)}
         .appcodes{padding:0 var(--g4) var(--g3);display:none}
         .appcodes.open{display:block}
         
-        .codeitem{background:var(--bg3);border-radius:var(--radius);padding:var(--g3);margin-bottom:var(--g2);border:1px solid var(--border);transition:all var(--tr)}
-        .codeitem:hover{border-color:var(--accent)}
+        .codeitem{background:var(--bg3);border-radius:var(--radius);padding:var(--g3);margin-bottom:var(--g2);border:1px solid var(--border)}
         .codehead{display:flex;align-items:center;justify-content:space-between;margin-bottom:var(--g2);flex-wrap:wrap;gap:var(--g2)}
         .codename{font-weight:500;font-size:.9rem}
         .codecontent{font-family:'Courier New',monospace;font-size:.8rem;color:var(--text2);white-space:pre-wrap;word-wrap:break-word;max-height:180px;overflow-y:auto;padding:var(--g2);background:var(--bg);border-radius:6px;border:1px solid var(--border);display:none}
         .codecontent.show{display:block}
         .codecontent pre{margin:0;white-space:pre-wrap;word-wrap:break-word}
         
-        /* ========== EMPTY STATE ========== */
-        .empty{text-align:center;padding:var(--g10) var(--g4);color:var(--text2)}
-        .empty .icon{font-size:4rem;margin-bottom:var(--g4)}
+        .empty{text-align:center;padding:var(--g6) var(--g4);color:var(--text2)}
+        .empty .icon{font-size:3rem;margin-bottom:var(--g3)}
         .empty h3{font-size:1.2rem;color:var(--text);margin-bottom:var(--g2)}
         
-        /* ========== WA BANNER ========== */
         .wabanner{
             background:linear-gradient(135deg,#25D366,#128C7E);color:#fff;
-            padding:var(--g4) var(--g5);border-radius:var(--radius2);
+            padding:var(--g4) var(--g5);border-radius:var(--radius2);margin-bottom:var(--g5);
             display:flex;align-items:center;justify-content:space-between;
-            flex-wrap:wrap;gap:var(--g3);margin-bottom:var(--g5);cursor:pointer;
-            transition:all var(--tr);border:2px solid transparent;
+            flex-wrap:wrap;gap:var(--g3);cursor:pointer;transition:all var(--tr);
         }
-        .wabanner:hover{transform:translateY(-2px);box-shadow:var(--shadow2);border-color:rgba(255,255,255,0.3)}
+        .wabanner:hover{transform:translateY(-2px);box-shadow:var(--shadow2)}
         
-        /* ========== SECURITY ALERT ========== */
-        .security-alert{
-            background:var(--red);color:#fff;padding:var(--g3) var(--g5);
-            border-radius:var(--radius);margin-bottom:var(--g4);
-            display:none;align-items:center;justify-content:space-between;
-            flex-wrap:wrap;gap:var(--g2);font-weight:600;
-        }
-        .security-alert.show{display:flex}
-        .security-alert .safebtn{background:#fff;color:var(--red);border:none;padding:6px 16px;border-radius:var(--radius4);font-weight:700;cursor:pointer;transition:all var(--tr)}
-        .security-alert .safebtn:hover{background:#fee2e2}
-        
-        /* ========== RESPONSIVE ========== */
         @media(max-width:640px){
-            .hero h1{font-size:1.6rem}.hero{padding:var(--g6) var(--g3)}
-            .prices{grid-template-columns:1fr}.features{grid-template-columns:1fr}
+            .hero h1{font-size:1.5rem}
+            .prices{grid-template-columns:1fr}
+            .features{grid-template-columns:1fr}
             .header{flex-direction:column;align-items:stretch}
             .stats{grid-template-columns:repeat(2,1fr)}
             .modalc{padding:var(--g4)}
@@ -290,26 +227,10 @@
 </head>
 <body>
 
-<!-- ===== SECURITY ALERT ===== -->
-<div class="security-alert" id="securityAlert">
-    <span>🚨 <strong>Peringatan Keamanan!</strong> Aktivitas mencurigakan terdeteksi.</span>
-    <div class="flex gap2">
-        <button class="safebtn" onclick="lockSystem()">🔒 Kunci Sistem</button>
-        <button class="safebtn" onclick="dismissAlert()">✕</button>
-    </div>
-</div>
-
-<!-- ===== CONNECTION STATUS ===== -->
-<div id="connectionBadge" style="position:fixed;top:10px;right:10px;z-index:999;padding:6px 14px;border-radius:20px;font-size:11px;font-weight:700;transition:all .3s;opacity:.85;">🟢 ONLINE</div>
-
-<!-- ===== INSTALL BANNER ===== -->
-<div id="installBanner" style="display:none;background:linear-gradient(135deg,var(--accent),#a78bfa);color:#fff;padding:12px 20px;border-radius:var(--radius2);margin-bottom:var(--g4);align-items:center;justify-content:space-between;cursor:pointer;flex-wrap:wrap;gap:var(--g2);" onclick="installApp()">
-    <span>📥 <strong>Install sebagai Aplikasi Desktop!</strong></span>
-    <span style="font-size:1.2rem;">👉</span>
-</div>
+<div id="connectionBadge" style="position:fixed;top:10px;right:10px;z-index:997;padding:6px 14px;border-radius:20px;font-size:11px;font-weight:700;background:#10b981;color:#fff;opacity:.85;">🟢 ONLINE</div>
 
 <!-- ============================================================ -->
-<!-- LANDING PAGE                                                  -->
+<!-- LANDING PAGE -->
 <!-- ============================================================ -->
 <div class="container" id="landingPage">
     <header class="header">
@@ -323,9 +244,9 @@
     </header>
 
     <section class="hero aslideup">
-        <div style="font-size:4rem;margin-bottom:var(--g3);">📝</div>
+        <div style="font-size:3rem;">📝</div>
         <h1 class="gradient-text">Notepad+ Code Storage</h1>
-        <p>Simpan, kelola, dan gabungkan semua kode HTML Anda. Multi-user, aktivasi premium, dan keamanan terjamin.</p>
+        <p>Simpan, kelola, dan gabungkan semua kode HTML Anda. Multi-user, aktivasi premium, keamanan terjamin.</p>
         <div class="flex gap3 fwrap fcenter">
             <button onclick="openApp()" class="btn btnp btnlg">🚀 Mulai Sekarang</button>
             <button onclick="showLoginModal()" class="btn btno btnlg">🔐 Login</button>
@@ -333,18 +254,18 @@
         </div>
     </section>
 
-    <div class="wabanner" id="waBannerLanding" onclick="openWA()">
-        <div class="flex gap3" style="align-items:center;"><span style="font-size:1.5rem;">💬</span><div><strong>Hubungi Admin:</strong><br><span id="waLanding">081220285226</span></div></div>
+    <div class="wabanner" onclick="openWA()">
+        <div><strong>💬 Hubungi Admin:</strong> <span id="waLanding">081220285226</span></div>
         <span>📱 Chat WhatsApp 👉</span>
     </div>
 
     <h3 style="text-align:center;margin-bottom:var(--g4);">✨ Fitur Unggulan</h3>
     <div class="features">
-        <div class="featc"><div class="featicon">📁</div><h4>Penyimpanan Tak Terbatas</h4><p>Simpan aplikasi dan kode HTML tanpa batas.</p></div>
-        <div class="featc"><div class="featicon">🔄</div><h4>Gabung Otomatis</h4><p>Gabungkan semua kode jadi 1 file index.html.</p></div>
-        <div class="featc"><div class="featicon">🔐</div><h4>Aktivasi Premium</h4><p>Sistem aktivasi kode oleh Super Admin.</p></div>
-        <div class="featc"><div class="featicon">👥</div><h4>Multi User</h4><p>Daftar & login dengan akun pribadi.</p></div>
-        <div class="featc"><div class="featicon">🛡️</div><h4>Keamanan Ganda</h4><p>Proteksi dari aktivitas mencurigakan.</p></div>
+        <div class="featc"><div class="featicon">📁</div><h4>Penyimpanan Tak Terbatas</h4><p>Simpan aplikasi & kode HTML tanpa batas.</p></div>
+        <div class="featc"><div class="featicon">🔄</div><h4>Gabung Otomatis</h4><p>Gabung semua kode jadi 1 file index.html.</p></div>
+        <div class="featc"><div class="featicon">🔐</div><h4>Aktivasi Premium</h4><p>Sistem kode aktivasi oleh Super Admin.</p></div>
+        <div class="featc"><div class="featicon">👥</div><h4>Multi User</h4><p>Daftar & login akun pribadi.</p></div>
+        <div class="featc"><div class="featicon">🛡️</div><h4>Keamanan</h4><p>Anti-hack & proteksi berlapis.</p></div>
         <div class="featc"><div class="featicon">📱</div><h4>PWA Support</h4><p>Install sebagai aplikasi desktop.</p></div>
     </div>
 
@@ -355,8 +276,9 @@
         <div class="pricec"><div class="priceicon">👑</div><div class="pricename">Enterprise</div><div class="priceval">Rp 75K</div><div class="pricedur">6 Bulan</div><ul class="pricelist"><li><span class="c">✅</span> Semua Premium</li><li><span class="c">✅</span> VIP Support</li><li><span class="c">✅</span> Update Lifetime</li></ul></div>
     </div>
 </div>
+
 <!-- ============================================================ -->
-<!-- DASHBOARD / APP PAGE                                          -->
+<!-- APP PAGE -->
 <!-- ============================================================ -->
 <div class="container hidden" id="appPage">
     <header class="header">
@@ -365,17 +287,17 @@
             <button onclick="toggleTheme()" id="themeBtn2" class="btn btng btnsm">🌙</button>
             <button onclick="showProfileModal()" id="profilBtn" class="btn btno btnsm hidden">👤 Profil</button>
             <button onclick="showSuperAdminPanel()" id="adminBtn" class="btn btnw btnsm hidden">⚙️ Admin</button>
-            <div class="flex gap2" style="align-items:center;background:var(--bg3);padding:4px 12px 4px 8px;border-radius:var(--radius4);" id="userBadge" style="display:none;">
+            <div class="flex gap2" style="align-items:center;background:var(--bg3);padding:4px 12px;border-radius:var(--radius4);" id="userBadge" style="display:none;">
                 <div id="userAvatar" style="width:28px;height:28px;border-radius:50%;background:var(--accent);display:flex;align-items:center;justify-content:center;font-size:.75rem;color:#fff;">U</div>
                 <span id="userNameDisplay" style="font-size:.85rem;font-weight:500;">User</span>
             </div>
-            <button onclick="handleLogout()" id="logoutBtn" class="btn btnd btnsm">🚪 Logout</button>
+            <button onclick="handleLogout()" id="logoutBtn" class="btn btnd btnsm hidden">🚪 Logout</button>
             <button onclick="goToLanding()" class="btn btng btnsm">🏠 Home</button>
         </div>
     </header>
 
-    <div class="wabanner" id="waBannerApp" onclick="openWA()">
-        <div class="flex gap3" style="align-items:center;"><span style="font-size:1.5rem;">💬</span><div><strong>Aktivasi & Bantuan:</strong><br><span id="waApp">081220285226</span></div></div>
+    <div class="wabanner" onclick="openWA()">
+        <div><strong>💬 Aktivasi & Bantuan:</strong> <span id="waApp">081220285226</span></div>
         <span>📱 Chat Admin 👉</span>
     </div>
 
@@ -411,20 +333,21 @@
         <button onclick="showAddAppModal()" class="btn btns">➕ Tambah Aplikasi</button>
     </div>
 </div>
-    
+
 <!-- ============================================================ -->
-<!-- MODAL: LOGIN                                                  -->
+<!-- ALL MODALS -->
 <!-- ============================================================ -->
+
+<!-- LOGIN -->
 <div class="modal" id="loginModal">
     <div class="modalc" style="max-width:420px;">
         <div class="modalh"><h3>🔐 Login</h3><button class="modalclose" onclick="closeModal('loginModal')">✕</button></div>
-        <div style="padding:var(--g2) 0;">
+        <div>
             <div class="formg"><input type="text" id="loginUser" placeholder="Username atau Email"></div>
             <div class="formg"><input type="password" id="loginPass" placeholder="Password"></div>
             <button onclick="doLogin()" class="btn btns btnblock">🔓 Masuk</button>
             <div class="formerr" id="loginErr"></div>
             
-            <!-- ACTIVATION CODE SECTION -->
             <div style="margin-top:var(--g5);padding-top:var(--g4);border-top:1px solid var(--border);">
                 <p style="font-size:.85rem;color:var(--text2);margin-bottom:var(--g2);">💎 <strong>Aktivasi Premium</strong></p>
                 <div class="flex gap2">
@@ -436,7 +359,7 @@
             </div>
             
             <div class="fbetween" style="margin-top:var(--g4);font-size:.8rem;">
-                <span class="pointer" style="color:var(--accent3);" onclick="closeModal('loginModal');openModal('registerModal')">📝 Daftar Akun</span>
+                <span class="pointer" style="color:var(--accent3);" onclick="closeModal('loginModal');showRegisterModal()">📝 Daftar</span>
                 <span class="pointer" style="color:var(--text2);" onclick="closeModal('loginModal');openModal('forgotModal')">🔑 Lupa Password?</span>
             </div>
         </div>
@@ -444,38 +367,31 @@
     </div>
 </div>
 
-<!-- ============================================================ -->
-<!-- MODAL: REGISTER                                               -->
-<!-- ============================================================ -->
+<!-- REGISTER -->
 <div class="modal" id="registerModal">
     <div class="modalc" style="max-width:420px;">
-        <div class="modalh"><h3>📝 Daftar Akun Baru</h3><button class="modalclose" onclick="closeModal('registerModal')">✕</button></div>
-        <div style="padding:var(--g2) 0;">
+        <div class="modalh"><h3>📝 Daftar Akun</h3><button class="modalclose" onclick="closeModal('registerModal')">✕</button></div>
+        <div>
             <div class="formg"><input type="text" id="regNama" placeholder="Nama Lengkap *"></div>
             <div class="formg"><input type="email" id="regEmail" placeholder="Email *"></div>
             <div class="formg"><input type="text" id="regHp" placeholder="No HP/WA * (08xxx)"></div>
             <div class="formg"><input type="text" id="regUser" placeholder="Username *"></div>
             <div class="formg"><input type="password" id="regPass" placeholder="Password * (min 6 karakter)"></div>
             <div class="formg"><input type="password" id="regPass2" placeholder="Konfirmasi Password *"></div>
-            <button onclick="doRegister()" class="btn btnp btnblock">📝 Daftar Sekarang</button>
+            <button onclick="doRegister()" class="btn btnp btnblock">📝 Daftar</button>
             <div class="formerr" id="regErr"></div>
             <div class="formsuc" id="regSuc"></div>
-            <p style="text-align:center;margin-top:var(--g4);font-size:.8rem;color:var(--text2);">
-                Sudah punya akun? <span class="pointer" style="color:var(--accent3);" onclick="closeModal('registerModal');openModal('loginModal')">Login di sini</span>
-            </p>
+            <p style="text-align:center;margin-top:var(--g4);font-size:.8rem;">Sudah punya akun? <span class="pointer" style="color:var(--accent3);" onclick="closeModal('registerModal');showLoginModal()">Login</span></p>
         </div>
         <div class="modalf"><button onclick="closeModal('registerModal')" class="btn btng">Tutup</button></div>
     </div>
 </div>
 
-<!-- ============================================================ -->
-<!-- MODAL: LUPA PASSWORD                                          -->
-<!-- ============================================================ -->
+<!-- FORGOT PASSWORD -->
 <div class="modal" id="forgotModal">
     <div class="modalc" style="max-width:420px;">
         <div class="modalh"><h3>🔑 Lupa Password</h3><button class="modalclose" onclick="closeModal('forgotModal')">✕</button></div>
-        <div style="padding:var(--g2) 0;">
-            <p style="font-size:.85rem;color:var(--text2);margin-bottom:var(--g3);">Masukkan data untuk verifikasi dan reset password.</p>
+        <div>
             <div class="formg"><input type="text" id="forgotNama" placeholder="Nama Lengkap *"></div>
             <div class="formg"><input type="email" id="forgotEmail" placeholder="Email *"></div>
             <div class="formg"><input type="text" id="forgotHp" placeholder="No HP *"></div>
@@ -487,21 +403,19 @@
     </div>
 </div>
 
-<!-- ============================================================ -->
-<!-- MODAL: PROFIL USER                                            -->
-<!-- ============================================================ -->
+<!-- PROFILE -->
 <div class="modal" id="profileModal">
     <div class="modalc" style="max-width:450px;">
-        <div class="modalh"><h3>👤 Profil Saya</h3><button class="modalclose" onclick="closeModal('profileModal')">✕</button></div>
-        <div style="padding:var(--g2) 0;">
+        <div class="modalh"><h3>👤 Profil</h3><button class="modalclose" onclick="closeModal('profileModal')">✕</button></div>
+        <div>
             <div class="flex gap4" style="align-items:center;margin-bottom:var(--g4);">
                 <div id="profAvatar" style="width:60px;height:60px;border-radius:50%;background:var(--accent);display:flex;align-items:center;justify-content:center;font-size:1.5rem;color:#fff;">U</div>
-                <div><h4 id="profName" style="margin:0;">User</h4><p id="profRole" style="margin:0;font-size:.8rem;color:var(--text2);">User Biasa</p></div>
+                <div><h4 id="profName" style="margin:0;">User</h4><p id="profRole" style="margin:0;font-size:.8rem;color:var(--text2);">User</p></div>
             </div>
             <div class="formg"><label class="forml">Nama</label><input type="text" id="editNama"></div>
             <div class="formg"><label class="forml">Email</label><input type="email" id="editEmail"></div>
             <div class="formg"><label class="forml">No HP</label><input type="text" id="editHp"></div>
-            <button onclick="saveProfile()" class="btn btns btnblock">💾 Simpan Profil</button>
+            <button onclick="saveProfile()" class="btn btns btnblock">💾 Simpan</button>
             <div class="formerr" id="profErr"></div>
             <div class="formsuc" id="profSuc"></div>
         </div>
@@ -509,63 +423,48 @@
     </div>
 </div>
 
-<!-- ============================================================ -->
-<!-- MODAL: SUPER ADMIN PANEL                                      -->
-<!-- ============================================================ -->
+<!-- SUPER ADMIN -->
 <div class="modal" id="superAdminModal">
     <div class="modalc" style="max-width:650px;">
         <div class="modalh"><h3>⚙️ Panel Super Admin</h3><button class="modalclose" onclick="closeModal('superAdminModal')">✕</button></div>
-        <div style="padding:var(--g2) 0;">
-            
-            <!-- TAB NAVIGATION -->
+        <div>
             <div class="flex gap2 fwrap" style="margin-bottom:var(--g4);border-bottom:1px solid var(--border);padding-bottom:var(--g3);">
-                <button class="btn btnsm btnp" onclick="switchAdminTab('codes')" id="tabCodes">🎫 Kode Aktivasi</button>
+                <button class="btn btnsm btnp" onclick="switchAdminTab('codes')" id="tabCodes">🎫 Kode</button>
                 <button class="btn btnsm btno" onclick="switchAdminTab('users')" id="tabUsers">👥 User</button>
-                <button class="btn btnsm btno" onclick="switchAdminTab('security')" id="tabSecurity">🛡️ Keamanan</button>
-                <button class="btn btnsm btno" onclick="switchAdminTab('settings')" id="tabSettings">⚙️ Pengaturan</button>
+                <button class="btn btnsm btno" onclick="switchAdminTab('security')" id="tabSecurity">🛡️ Log</button>
+                <button class="btn btnsm btno" onclick="switchAdminTab('settings')" id="tabSettings">⚙️ Set</button>
             </div>
             
-            <!-- TAB: CODES -->
             <div id="adminTabCodes">
-                <h4 style="margin-bottom:var(--g3);">🎫 Buat Kode Aktivasi</h4>
-                <div class="formg"><label class="forml">Username/Email User</label><input type="text" id="adminActUser" placeholder="Username atau email user"></div>
-                <div class="formg"><label class="forml">Pilih Paket</label>
-                    <select id="adminActPackage">
-                        <option value="1bulan">1 Bulan - Rp 25.000</option>
-                        <option value="3bulan">3 Bulan - Rp 50.000</option>
-                        <option value="6bulan">6 Bulan - Rp 75.000</option>
-                    </select>
-                </div>
-                <button onclick="adminCreateCode()" class="btn btns btnblock">🎫 Buat Kode Aktivasi</button>
+                <h4>🎫 Buat Kode Aktivasi</h4>
+                <div class="formg"><input type="text" id="adminActUser" placeholder="Username/email user"></div>
+                <div class="formg"><select id="adminActPackage"><option value="1bulan">1 Bulan - Rp 25K</option><option value="3bulan">3 Bulan - Rp 50K</option><option value="6bulan">6 Bulan - Rp 75K</option></select></div>
+                <button onclick="adminCreateCode()" class="btn btns btnblock">🎫 Buat Kode</button>
                 <div id="adminCodeResult" style="margin-top:var(--g3);"></div>
-                
-                <h4 style="margin-top:var(--g5);margin-bottom:var(--g2);">📋 Kode Aktif</h4>
+                <h4 style="margin-top:var(--g5);">📋 Kode Aktif</h4>
                 <div id="activeCodesList" style="max-height:200px;overflow-y:auto;font-size:.8rem;"></div>
             </div>
             
-            <!-- TAB: USERS -->
             <div id="adminTabUsers" class="hidden">
-                <h4 style="margin-bottom:var(--g3);">👥 Daftar User Terdaftar</h4>
+                <h4>👥 Daftar User</h4>
                 <div id="adminUserList" style="max-height:350px;overflow-y:auto;"></div>
             </div>
             
-            <!-- TAB: SECURITY -->
             <div id="adminTabSecurity" class="hidden">
-                <h4 style="margin-bottom:var(--g3);">🛡️ Keamanan Sistem</h4>
+                <h4>🛡️ Log Keamanan</h4>
                 <div id="securityLog" style="max-height:300px;overflow-y:auto;font-size:.8rem;"></div>
-                <div style="margin-top:var(--g4);display:flex;gap:var(--g2);fwrap;">
-                    <button onclick="clearSecurityLogs()" class="btn btnw btnsm">🧹 Bersihkan Log</button>
-                    <button onclick="lockAllUsers()" class="btn btnd btnsm">🔒 Kunci Semua User</button>
-                    <button onclick="unlockAllUsers()" class="btn btns btnsm">🔓 Buka Semua User</button>
+                <div class="flex gap2 fwrap" style="margin-top:var(--g4);">
+                    <button onclick="clearSecurityLogs()" class="btn btnw btnsm">🧹 Bersihkan</button>
+                    <button onclick="lockAllUsers()" class="btn btnd btnsm">🔒 Kunci Semua</button>
+                    <button onclick="unlockAllUsers()" class="btn btns btnsm">🔓 Buka Semua</button>
                 </div>
             </div>
             
-            <!-- TAB: SETTINGS -->
             <div id="adminTabSettings" class="hidden">
-                <h4 style="margin-bottom:var(--g3);">⚙️ Pengaturan</h4>
-                <div class="formg"><label class="forml">Nomor WA Admin</label><div class="flex gap2"><input type="text" id="adminWaInput" placeholder="08xxx"><button onclick="saveAdminWA()" class="btn btns btnsm">💾 Simpan</button></div></div>
-                <div class="formg"><label class="forml">Password Super Admin</label><div class="flex gap2"><input type="password" id="adminNewPass" placeholder="Password baru"><button onclick="changeAdminPass()" class="btn btnw btnsm">🔑 Ganti</button></div></div>
-                <div class="formg"><label class="forml">Nama Super Admin</label><div class="flex gap2"><input type="text" id="adminNewName" placeholder="Nama baru"><button onclick="changeAdminName()" class="btn btnp btnsm">✏️ Ganti</button></div></div>
+                <h4>⚙️ Pengaturan</h4>
+                <div class="formg"><label class="forml">Nomor WA</label><div class="flex gap2"><input type="text" id="adminWaInput"><button onclick="saveAdminWA()" class="btn btns btnsm">💾 Simpan</button></div></div>
+                <div class="formg"><label class="forml">Password Admin</label><div class="flex gap2"><input type="password" id="adminNewPass" placeholder="Password baru"><button onclick="changeAdminPass()" class="btn btnw btnsm">🔑 Ganti</button></div></div>
+                <div class="formg"><label class="forml">Nama Admin</label><div class="flex gap2"><input type="text" id="adminNewName"><button onclick="changeAdminName()" class="btn btnp btnsm">✏️ Ganti</button></div></div>
                 <hr style="border-color:var(--border);margin:var(--g4) 0;">
                 <button onclick="resetAllData()" class="btn btnd btnblock">⚠️ Reset Semua Data</button>
             </div>
@@ -574,50 +473,44 @@
     </div>
 </div>
 
-<!-- ============================================================ -->
-<!-- MODAL: TAMBAH/EDIT APLIKASI                                   -->
-<!-- ============================================================ -->
+<!-- APP MODAL -->
 <div class="modal" id="appModal">
     <div class="modalc" style="max-width:500px;">
         <div class="modalh"><h3 id="appModalTitle">➕ Tambah Aplikasi</h3><button class="modalclose" onclick="closeModal('appModal')">✕</button></div>
-        <div style="padding:var(--g2) 0;">
+        <div>
             <input type="hidden" id="editAppId">
-            <div class="formg"><label class="forml">Nama Aplikasi *</label><input type="text" id="appName" placeholder="Contoh: APP TOKO ONLINE"></div>
-            <div class="formg"><label class="forml">Deskripsi</label><textarea id="appDesc" rows="2" placeholder="Deskripsi singkat..."></textarea></div>
+            <div class="formg"><label class="forml">Nama *</label><input type="text" id="appName" placeholder="Nama aplikasi"></div>
+            <div class="formg"><label class="forml">Deskripsi</label><textarea id="appDesc" rows="2"></textarea></div>
             <div class="formerr" id="appErr"></div>
         </div>
         <div class="modalf"><button onclick="closeModal('appModal')" class="btn btng">Batal</button><button onclick="saveApp()" class="btn btns">💾 Simpan</button></div>
     </div>
 </div>
 
-<!-- ============================================================ -->
-<!-- MODAL: TAMBAH/EDIT CODE                                       -->
-<!-- ============================================================ -->
+<!-- CODE MODAL -->
 <div class="modal" id="codeModal">
     <div class="modalc" style="max-width:600px;">
         <div class="modalh"><h3 id="codeModalTitle">➕ Tambah Code</h3><button class="modalclose" onclick="closeModal('codeModal')">✕</button></div>
-        <div style="padding:var(--g2) 0;">
+        <div>
             <input type="hidden" id="editCodeId"><input type="hidden" id="codeAppId">
-            <div class="formg"><label class="forml">Nama Code *</label><input type="text" id="codeName" placeholder="Contoh: Code 1 : Header"></div>
-            <div class="formg"><label class="forml">Kode HTML *</label><textarea id="codeContent" rows="10" placeholder="Tempelkan kode HTML di sini..."></textarea></div>
+            <div class="formg"><label class="forml">Nama Code *</label><input type="text" id="codeName" placeholder="Nama code"></div>
+            <div class="formg"><label class="forml">Kode HTML *</label><textarea id="codeContent" rows="10" placeholder="Tempelkan kode di sini..."></textarea></div>
             <div class="formerr" id="codeErr"></div>
         </div>
         <div class="modalf"><button onclick="closeModal('codeModal')" class="btn btng">Batal</button><button onclick="saveCode()" class="btn btns">💾 Simpan</button></div>
     </div>
 </div>
 
-<!-- ============================================================ -->
-<!-- MODAL: GABUNG & COPY                                          -->
-<!-- ============================================================ -->
+<!-- MERGE MODAL -->
 <div class="modal" id="mergeModal">
     <div class="modalc" style="max-width:650px;">
-        <div class="modalh"><h3>🔄 Gabung & Copy Semua Code</h3><button class="modalclose" onclick="closeModal('mergeModal')">✕</button></div>
-        <div style="padding:var(--g2) 0;">
-            <p style="color:var(--text2);margin-bottom:var(--g3);">🔒 <strong>Fitur Premium.</strong> Semua code digabung jadi 1 file index.html.</p>
+        <div class="modalh"><h3>🔄 Gabung & Copy</h3><button class="modalclose" onclick="closeModal('mergeModal')">✕</button></div>
+        <div>
+            <p style="color:var(--text2);">🔒 <strong>Fitur Premium.</strong> Gabung semua code jadi 1 index.html.</p>
             <div id="mergeAppList" class="flex fwrap gap2" style="padding:var(--g2) 0;"></div>
             <button onclick="doMerge()" class="btn btns btnblock">🔄 Gabung & Copy</button>
             <div id="mergeResult" class="hidden" style="margin-top:var(--g4);">
-                <div class="fbetween" style="margin-bottom:var(--g2);"><strong>📄 Hasil index.html</strong><div class="flex gap1"><button onclick="copyMergeResult()" class="btn btnp btnsm">📋 Copy</button><button onclick="downloadMergeResult()" class="btn btns btnsm">📥 Download</button></div></div>
+                <div class="fbetween" style="margin-bottom:var(--g2);"><strong>📄 Hasil</strong><div class="flex gap1"><button onclick="copyMergeResult()" class="btn btnp btnsm">📋 Copy</button><button onclick="downloadMergeResult()" class="btn btns btnsm">📥 Download</button></div></div>
                 <textarea id="mergeOutput" readonly style="font-family:'Courier New',monospace;font-size:.8rem;min-height:250px;background:var(--bg);color:var(--text);border:1px solid var(--accent);"></textarea>
             </div>
         </div>
@@ -625,1769 +518,470 @@
     </div>
 </div>
 
-<!-- ============================================================ -->
-<!-- MODAL: KONFIRMASI                                             -->
-<!-- ============================================================ -->
+<!-- CONFIRM MODAL -->
 <div class="modal" id="confirmModal">
     <div class="modalc" style="max-width:380px;">
         <div class="modalh"><h3 id="confirmTitle">⚠️ Konfirmasi</h3><button class="modalclose" onclick="closeModal('confirmModal')">✕</button></div>
-        <div style="padding:var(--g2) 0;"><p id="confirmMsg">Apakah Anda yakin?</p></div>
+        <div><p id="confirmMsg">Apakah Anda yakin?</p></div>
         <div class="modalf"><button onclick="closeModal('confirmModal')" class="btn btng">Batal</button><button onclick="execConfirm()" class="btn btnd" id="confirmBtn">Ya</button></div>
     </div>
 </div>
 
-<!-- ===== TOAST ===== -->
 <div id="toastContainer"></div>
+
+<!-- ============================================================ -->
+<!-- ALL JAVASCRIPT -->
+<!-- ============================================================ -->
 <script>
-// ============================================================
-// NOTEPAD+ v3.0 - CORE SYSTEM
-// ============================================================
-
-// ===== SECURITY CONFIG =====
-const SECURITY = {
-    maxLoginAttempts: 5,
-    lockDuration: 30 * 60 * 1000, // 30 menit
-    suspiciousPatterns: ['<script>','eval(','document.cookie','union select','<iframe','onerror='],
-    adminAlertThreshold: 3
-};
-
-// ===== DEFAULT DATA =====
-let SUPER_ADMIN = {
-    username: 'superadmin',
-    password: 'admin123',
-    nama: 'Super Admin',
-    email: 'admin@notepad.com',
-    hp: '081220285226',
-    role: 'superadmin'
-};
-
-const DEFAULT_WA = '081220285226';
-const DEFAULT_PACKAGES = [
-    { id:'1bulan', name:'Basic', price:25000, duration:'1 Bulan' },
-    { id:'3bulan', name:'Premium', price:50000, duration:'3 Bulan' },
-    { id:'6bulan', name:'Enterprise', price:75000, duration:'6 Bulan' }
+// ===== DATA DEFAULT =====
+var SUPER_ADMIN = {username:'superadmin',password:'admin123',nama:'Super Admin',email:'admin@notepad.com',hp:'081220285226',role:'superadmin'};
+var DEFAULT_WA = '081220285226';
+var DEFAULT_PACKAGES = [
+    {id:'1bulan',name:'Basic',price:25000,duration:'1 Bulan'},
+    {id:'3bulan',name:'Premium',price:50000,duration:'3 Bulan'},
+    {id:'6bulan',name:'Enterprise',price:75000,duration:'6 Bulan'}
 ];
 
-// ===== LOCAL STORAGE HELPERS =====
-function LSget(key, def) {
-    try { const v = localStorage.getItem('np3_'+key); return v ? JSON.parse(v) : def; }
-    catch(e) { return def; }
+// ===== STORAGE =====
+function g(k,d){try{var v=localStorage.getItem('np3_'+k);return v?JSON.parse(v):d}catch(e){return d}}
+function s(k,v){try{localStorage.setItem('np3_'+k,JSON.stringify(v))}catch(e){}}
+function d(k){localStorage.removeItem('np3_'+k)}
+
+function getUsers(){return g('users',[])}
+function saveUsers(u){s('users',u)}
+function getApps(){return g('apps',{})}
+function saveApps(a){s('apps',a)}
+function getSession(){return g('session',null)}
+function saveSession(ss){s('session',ss)}
+function clearSession(){d('session')}
+function getPackages(){return g('packages',DEFAULT_PACKAGES)}
+function savePackages(p){s('packages',p)}
+function getWA(){return g('wa',DEFAULT_WA)}
+function saveWA(n){s('wa',n)}
+function getValidCodes(){return g('vc',{})}
+function saveValidCodes(c){s('vc',c)}
+function getSecLogs(){return g('seclog',[])}
+function saveSecLogs(l){s('seclog',l)}
+function getLoginAttempts(){return g('la',{})}
+function saveLoginAttempts(a){s('la',a)}
+
+// ===== SECURITY =====
+function logSec(ev,dt){
+    var l=getSecLogs();l.push({time:Date.now(),event:ev,detail:dt||{}});
+    if(l.length>200)l.shift();saveSecLogs(l);
 }
-function LSset(key, val) { localStorage.setItem('np3_'+key, JSON.stringify(val)); }
-function LSdel(key) { localStorage.removeItem('np3_'+key); }
-
-// ===== DATA ACCESS =====
-function getUsers() { return LSget('users', []); }
-function saveUsers(u) { LSset('users', u); }
-function getApps() { return LSget('apps', {}); }
-function saveApps(a) { LSset('apps', a); }
-function getSession() { return LSget('session', null); }
-function saveSession(s) { LSset('session', s); }
-function clearSession() { LSdel('session'); }
-function getPackages() { return LSget('packages', DEFAULT_PACKAGES); }
-function savePackages(p) { LSset('packages', p); }
-function getWA() { return LSget('wa', DEFAULT_WA); }
-function saveWA(n) { LSset('wa', n); }
-function getValidCodes() { return LSget('validCodes', {}); }
-function saveValidCodes(c) { LSset('validCodes', c); }
-function getSecurityLogs() { return LSget('secLogs', []); }
-function saveSecurityLogs(l) { LSset('secLogs', l); }
-function getLoginAttempts() { return LSget('loginAttempts', {}); }
-function saveLoginAttempts(a) { LSset('loginAttempts', a); }
-
-// ===== SECURITY FUNCTIONS =====
-function logSecurity(event, detail) {
-    const logs = getSecurityLogs();
-    logs.push({
-        time: Date.now(),
-        event: event,
-        detail: detail,
-        ip: 'client',
-        userAgent: navigator.userAgent.substring(0, 100)
-    });
-    if (logs.length > 200) logs.shift();
-    saveSecurityLogs(logs);
-    
-    // Check for suspicious patterns
-    const detailStr = JSON.stringify(detail).toLowerCase();
-    let threatLevel = 0;
-    SECURITY.suspiciousPatterns.forEach(pattern => {
-        if (detailStr.includes(pattern)) threatLevel++;
-    });
-    
-    if (threatLevel >= SECURITY.adminAlertThreshold) {
-        showSecurityAlert('🚨 Ancaman tingkat tinggi terdeteksi! Sistem mungkin diserang.');
-    }
+function checkAttempts(un){
+    var a=getLoginAttempts(),k=un.toLowerCase(),n=Date.now();
+    if(a[k]&&a[k].locked&&(n-a[k].lockedAt)<1800000)return{blocked:true,remaining:Math.ceil((1800000-(n-a[k].lockedAt))/60000)};
+    return{blocked:false,remaining:0};
+}
+function recordAttempt(un,ok){
+    var a=getLoginAttempts(),k=un.toLowerCase();
+    if(!a[k])a[k]={count:0,locked:false,lockedAt:null};
+    if(ok){a[k].count=0;a[k].locked=false;}
+    else{a[k].count++;if(a[k].count>=5){a[k].locked=true;a[k].lockedAt=Date.now();logSec('LOCKED',{user:un});}}
+    saveLoginAttempts(a);
 }
 
-function showSecurityAlert(msg) {
-    const alert = document.getElementById('securityAlert');
-    if (alert) {
-        alert.querySelector('span').innerHTML = msg;
-        alert.classList.add('show');
-        setTimeout(() => alert.classList.remove('show'), 10000);
-    }
-    // Log keamanan
-    logSecurity('SECURITY_ALERT', { message: msg, time: Date.now() });
+// ===== PWA =====
+var dp=null;
+window.addEventListener('beforeinstallprompt',function(e){e.preventDefault();dp=e;var b=document.getElementById('heroInstall');if(b)b.style.display='inline-flex';});
+function installApp(){
+    if(dp){dp.prompt();dp.userChoice.then(function(r){if(r.outcome==='accepted')showToast('✅ Terinstall!','s');dp=null;});}
+    else{alert('📱 Buka Chrome/Edge > klik ⋮ > "Install Notepad+"');}
 }
 
-function lockSystem() {
-    // Kunci semua user non-admin
-    const users = getUsers();
-    users.forEach(u => {
-        if (u.role !== 'superadmin') {
-            u.locked = true;
-            u.lockedAt = Date.now();
-        }
-    });
-    saveUsers(users);
-    
-    // Clear all sessions
-    clearSession();
-    
-    logSecurity('SYSTEM_LOCKED', { by: 'admin', time: Date.now() });
-    showToast('🔒 Sistem dikunci! Semua user non-admin diblokir.', 'warning');
-    
-    document.getElementById('securityAlert').classList.remove('show');
-    updateUI();
-    renderApps();
-}
-
-function dismissAlert() {
-    document.getElementById('securityAlert').classList.remove('show');
-    logSecurity('ALERT_DISMISSED', { time: Date.now() });
-}
-
-function checkLoginAttempts(username) {
-    const attempts = getLoginAttempts();
-    const now = Date.now();
-    const key = username.toLowerCase();
-    
-    if (attempts[key]) {
-        // Check if locked
-        if (attempts[key].locked && (now - attempts[key].lockedAt) < SECURITY.lockDuration) {
-            const remaining = Math.ceil((SECURITY.lockDuration - (now - attempts[key].lockedAt)) / 60000);
-            return { blocked: true, remaining: remaining };
-        }
-        
-        // Reset if lock expired
-        if (attempts[key].locked && (now - attempts[key].lockedAt) >= SECURITY.lockDuration) {
-            attempts[key] = { count: 0, locked: false, lockedAt: null };
-            saveLoginAttempts(attempts);
-        }
-    }
-    
-    return { blocked: false, remaining: 0 };
-}
-
-function recordLoginAttempt(username, success) {
-    const attempts = getLoginAttempts();
-    const key = username.toLowerCase();
-    
-    if (!attempts[key]) {
-        attempts[key] = { count: 0, locked: false, lockedAt: null };
-    }
-    
-    if (success) {
-        attempts[key].count = 0;
-        attempts[key].locked = false;
-        attempts[key].lockedAt = null;
-    } else {
-        attempts[key].count = (attempts[key].count || 0) + 1;
-        
-        if (attempts[key].count >= SECURITY.maxLoginAttempts) {
-            attempts[key].locked = true;
-            attempts[key].lockedAt = Date.now();
-            
-            logSecurity('ACCOUNT_LOCKED', {
-                username: username,
-                attempts: attempts[key].count,
-                time: Date.now()
-            });
-            
-            showSecurityAlert('🔒 Akun ' + username + ' dikunci setelah ' + SECURITY.maxLoginAttempts + 'x percobaan gagal!');
-        }
-    }
-    
-    saveLoginAttempts(attempts);
-}
-
-// ===== INIT SECURITY MONITORING =====
-function initSecurity() {
-    // Monitor console abuse
-    const originalConsole = { ...console };
-    let consoleAbuse = 0;
-    
-    ['log', 'warn', 'error', 'debug'].forEach(method => {
-        console[method] = function(...args) {
-            const str = args.join(' ').toLowerCase();
-            SECURITY.suspiciousPatterns.forEach(pattern => {
-                if (str.includes(pattern)) consoleAbuse++;
-            });
-            if (consoleAbuse > 10) {
-                showSecurityAlert('⚠️ Aktivitas console mencurigakan terdeteksi!');
-                consoleAbuse = 0;
-            }
-            originalConsole[method](...args);
-        };
-    });
-    
-    // Monitor localStorage changes
-    const originalSetItem = localStorage.setItem;
-    localStorage.setItem = function(key, value) {
-        if (key.startsWith('np3_')) {
-            // Internal - allowed
-        } else {
-            logSecurity('LOCALSTORAGE_WRITE', { key: key, size: value.length });
-        }
-        originalSetItem.call(localStorage, key, value);
-    };
-    
-    logSecurity('SECURITY_INIT', { time: Date.now(), version: '3.0' });
-}
-<script>
-// ============================================================
-// NOTEPAD+ v3.0 - APPLICATION LOGIC (FIXED)
-// ============================================================
-
-// ===== PWA INSTALL =====
-var deferredPrompt = null;
-window.addEventListener('beforeinstallprompt', function(e) {
-    e.preventDefault();
-    deferredPrompt = e;
-    var banner = document.getElementById('installBanner');
-    var heroBtn = document.getElementById('heroInstall');
-    if (banner) banner.style.display = 'flex';
-    if (heroBtn) heroBtn.style.display = 'inline-flex';
-});
-
-function installApp() {
-    if (deferredPrompt) {
-        deferredPrompt.prompt();
-        deferredPrompt.userChoice.then(function(result) {
-            if (result.outcome === 'accepted') {
-                showToast('✅ Notepad+ terinstall! Cek desktop Anda.', 'success');
-                var banner = document.getElementById('installBanner');
-                if (banner) banner.style.display = 'none';
-            }
-            deferredPrompt = null;
-        });
-    } else {
-        alert('📱 Cara Install:\n\n1. Buka Chrome/Edge\n2. Klik ⋮ > "Install Notepad+"\n3. Atau klik ikon ⊕ di address bar\n\nSetelah terinstall, buka seperti aplikasi biasa!');
-    }
-}
-
-// ===== NAVIGATION =====
-function openApp() {
-    var session = getSession();
-    if (!session) { 
-        showToast('⚠️ Silakan login terlebih dahulu.', 'warning');
-        showLoginModal(); 
-        return; 
-    }
+// ===== NAV =====
+function openApp(){
+    var ss=getSession();if(!ss){showLoginModal();return;}
     document.getElementById('landingPage').classList.add('hidden');
     document.getElementById('appPage').classList.remove('hidden');
-    updateUI();
-    renderApps();
+    updateUI();renderApps();
 }
-
-function goToLanding() {
+function goToLanding(){
     document.getElementById('appPage').classList.add('hidden');
     document.getElementById('landingPage').classList.remove('hidden');
-    updateWADisplay();
+    updateWA();
 }
 
-// ===== ONLINE/OFFLINE =====
-function updateOnlineStatus() {
-    var badge = document.getElementById('connectionBadge');
-    if (!badge) {
-        badge = document.createElement('div');
-        badge.id = 'connectionBadge';
-        badge.style.cssText = 'position:fixed;top:10px;right:10px;z-index:999;padding:6px 14px;border-radius:20px;font-size:11px;font-weight:700;transition:all .3s;opacity:.85;';
-        document.body.appendChild(badge);
-    }
-    
-    if (navigator.onLine) {
-        badge.textContent = '🟢 ONLINE';
-        badge.style.background = '#10b981';
-        badge.style.color = '#fff';
-        checkActivationStatus();
-    } else {
-        badge.textContent = '🔴 OFFLINE';
-        badge.style.background = '#ef4444';
-        badge.style.color = '#fff';
-    }
+// ===== ONLINE =====
+function updOnline(){
+    var b=document.getElementById('connectionBadge');
+    if(navigator.onLine){b.textContent='🟢 ONLINE';b.style.background='#10b981';}
+    else{b.textContent='🔴 OFFLINE';b.style.background='#ef4444';}
 }
-window.addEventListener('online', updateOnlineStatus);
-window.addEventListener('offline', updateOnlineStatus);
+window.addEventListener('online',updOnline);window.addEventListener('offline',updOnline);
 
-// ===== ACTIVATION CHECK =====
-function checkActivationStatus() {
-    if (!navigator.onLine) return;
-    var session = getSession();
-    if (!session || session.role === 'superadmin') return;
-    
-    var users = getUsers();
-    var user = users.find(function(u) { return u.username === session.username; });
-    if (!user) return;
-    
-    // Check expiry
-    if (user.isActivated && user.activationExpiry && Date.now() > user.activationExpiry) {
-        user.isActivated = false;
-        user.activationExpiry = null;
-        user.activationCode = null;
-        saveUsers(users);
-        session.isPremium = false;
-        saveSession(session);
-        updateUI();
-        showToast('⚠️ Masa premium Anda telah berakhir!', 'warning');
-    }
-    
-    // Auto-activate if valid code exists
-    if (user.activationCode && !user.isActivated) {
-        var validCodes = getValidCodes();
-        if (validCodes[user.activationCode]) {
-            var pkg = validCodes[user.activationCode];
-            var durations = { '1bulan': 30, '3bulan': 90, '6bulan': 180 };
-            user.isActivated = true;
-            user.activationExpiry = Date.now() + (durations[pkg.package] || 30) * 24 * 60 * 60 * 1000;
-            saveUsers(users);
-            delete validCodes[user.activationCode];
-            saveValidCodes(validCodes);
-            session.isPremium = true;
-            saveSession(session);
-            updateUI();
-            showToast('🎉 Premium otomatis aktif! Selamat menikmati fitur premium.', 'success');
-        }
-    }
-}
-
-// ===== WA FUNCTIONS =====
-function openWA() {
-    var number = getWA().replace(/[^0-9]/g, '');
-    window.open('https://wa.me/' + number, '_blank');
-}
-
-function updateWADisplay() {
-    var n = getWA();
-    var ids = ['waLanding', 'waApp'];
-    ids.forEach(function(id) {
-        var el = document.getElementById(id);
-        if (el) el.textContent = n;
-    });
-}
+// ===== WA =====
+function openWA(){window.open('https://wa.me/'+getWA().replace(/[^0-9]/g,''),'_blank');}
+function updateWA(){var n=getWA();['waLanding','waApp'].forEach(function(id){var e=document.getElementById(id);if(e)e.textContent=n;});}
 
 // ===== AUTH =====
-function showLoginModal() {
-    document.getElementById('loginUser').value = '';
-    document.getElementById('loginPass').value = '';
-    document.getElementById('activationCodeInput').value = '';
+function showLoginModal(){
+    document.getElementById('loginUser').value='';document.getElementById('loginPass').value='';
+    document.getElementById('activationCodeInput').value='';
     document.getElementById('loginErr').classList.remove('show');
     document.getElementById('activationErr').classList.remove('show');
     document.getElementById('activationSuc').classList.remove('show');
     openModal('loginModal');
 }
-
-function doLogin() {
-    var username = document.getElementById('loginUser').value.trim();
-    var password = document.getElementById('loginPass').value.trim();
-    var errEl = document.getElementById('loginErr');
-    errEl.classList.remove('show');
-    
-    if (!username || !password) {
-        errEl.textContent = 'Masukkan username/email dan password.';
-        errEl.classList.add('show');
-        return;
+function doLogin(){
+    var u=document.getElementById('loginUser').value.trim();
+    var p=document.getElementById('loginPass').value.trim();
+    var e=document.getElementById('loginErr');e.classList.remove('show');
+    if(!u||!p){e.textContent='Isi username dan password.';e.classList.add('show');return;}
+    var ch=checkAttempts(u);if(ch.blocked){e.textContent='⚠️ Akun dikunci '+ch.remaining+' menit.';e.classList.add('show');return;}
+    if(u===SUPER_ADMIN.username&&p===SUPER_ADMIN.password){
+        recordAttempt(u,true);
+        saveSession({username:SUPER_ADMIN.username,nama:SUPER_ADMIN.nama,email:SUPER_ADMIN.email,hp:SUPER_ADMIN.hp,role:'superadmin',isPremium:true});
+        closeModal('loginModal');document.getElementById('landingPage').classList.add('hidden');document.getElementById('appPage').classList.remove('hidden');
+        updateUI();renderApps();showToast('👑 Welcome Super Admin!','s');return;
     }
-    
-    // Check login attempts
-    var attemptCheck = checkLoginAttempts(username);
-    if (attemptCheck.blocked) {
-        errEl.textContent = '⚠️ Akun dikunci selama ' + attemptCheck.remaining + ' menit. Coba lagi nanti atau hubungi Admin.';
-        errEl.classList.add('show');
-        return;
-    }
-    
-    // Super admin login
-    if (username === SUPER_ADMIN.username && password === SUPER_ADMIN.password) {
-        recordLoginAttempt(username, true);
-        var session = {
-            username: SUPER_ADMIN.username,
-            nama: SUPER_ADMIN.nama,
-            email: SUPER_ADMIN.email,
-            hp: SUPER_ADMIN.hp,
-            role: 'superadmin',
-            isPremium: true
-        };
-        saveSession(session);
-        closeModal('loginModal');
-        document.getElementById('landingPage').classList.add('hidden');
-        document.getElementById('appPage').classList.remove('hidden');
-        updateUI();
-        renderApps();
-        showToast('👑 Selamat datang Super Admin!', 'success');
-        logSecurity('LOGIN_SUPERADMIN', { time: Date.now() });
-        return;
-    }
-    
-    // Regular user login
-    var users = getUsers();
-    var user = users.find(function(u) { 
-        return (u.username === username || u.email === username) && u.password === password; 
-    });
-    
-    if (!user) {
-        recordLoginAttempt(username, false);
-        errEl.textContent = 'Username/email atau password salah.';
-        errEl.classList.add('show');
-        return;
-    }
-    
-    if (user.locked) {
-        errEl.textContent = '⚠️ Akun Anda dikunci oleh Admin. Hubungi WhatsApp: ' + getWA();
-        errEl.classList.add('show');
-        return;
-    }
-    
-    recordLoginAttempt(username, true);
-    var userSession = {
-        username: user.username,
-        nama: user.nama,
-        email: user.email,
-        hp: user.hp || '',
-        role: 'user',
-        isPremium: user.isActivated || false
-    };
-    saveSession(userSession);
-    
-    closeModal('loginModal');
-    document.getElementById('landingPage').classList.add('hidden');
-    document.getElementById('appPage').classList.remove('hidden');
-    updateUI();
-    renderApps();
-    showToast('👤 Selamat datang ' + user.nama + '!', 'success');
+    var users=getUsers();
+    var user=users.find(function(x){return(x.username===u||x.email===u)&&x.password===p;});
+    if(!user){recordAttempt(u,false);e.textContent='Username/password salah.';e.classList.add('show');return;}
+    if(user.locked){e.textContent='⚠️ Akun dikunci Admin.';e.classList.add('show');return;}
+    recordAttempt(u,true);
+    saveSession({username:user.username,nama:user.nama,email:user.email,hp:user.hp||'',role:'user',isPremium:user.isActivated||false});
+    closeModal('loginModal');document.getElementById('landingPage').classList.add('hidden');document.getElementById('appPage').classList.remove('hidden');
+    updateUI();renderApps();showToast('👤 Welcome '+user.nama+'!','s');
 }
-
-// ===== FIXED: Aktivasi dari halaman login (untuk user yang SUDAH login) =====
-function activateFromLogin() {
-    var code = document.getElementById('activationCodeInput').value.trim();
-    var errEl = document.getElementById('activationErr');
-    var sucEl = document.getElementById('activationSuc');
-    errEl.classList.remove('show');
-    sucEl.classList.remove('show');
-    
-    if (!code) {
-        errEl.textContent = 'Masukkan kode aktivasi terlebih dahulu.';
-        errEl.classList.add('show');
-        return;
+function activateFromLogin(){
+    var code=document.getElementById('activationCodeInput').value.trim();
+    var ee=document.getElementById('activationErr'),se=document.getElementById('activationSuc');
+    ee.classList.remove('show');se.classList.remove('show');
+    if(!code){ee.textContent='Masukkan kode.';ee.classList.add('show');return;}
+    var ss=getSession(),users=getUsers();
+    var tu=users.find(function(x){return x.activationCode===code;});
+    if(!tu){ee.textContent='❌ Kode tidak valid.';ee.classList.add('show');return;}
+    var vc=getValidCodes();if(!vc[code]){ee.textContent='❌ Kode kadaluarsa.';ee.classList.add('show');return;}
+    if(ss&&ss.username===tu.username){
+        var pk=vc[code],dr={};dr['1bulan']=30;dr['3bulan']=90;dr['6bulan']=180;
+        tu.isActivated=true;tu.activationExpiry=Date.now()+(dr[pk.package]||30)*86400000;
+        saveUsers(users);delete vc[code];saveValidCodes(vc);
+        ss.isPremium=true;saveSession(ss);updateUI();
+        se.textContent='🎉 Premium aktif!';se.classList.add('show');showToast('🎉 Berhasil!','s');
+        document.getElementById('activationCodeInput').value='';return;
     }
-    
-    var session = getSession();
-    
-    // Jika user sudah login, langsung verifikasi
-    if (session) {
-        var users = getUsers();
-        var user = users.find(function(u) { return u.username === session.username; });
-        
-        if (!user) {
-            errEl.textContent = 'User tidak ditemukan.';
-            errEl.classList.add('show');
-            return;
-        }
-        
-        var validCodes = getValidCodes();
-        if (validCodes[code]) {
-            var pkg = validCodes[code];
-            var durations = { '1bulan': 30, '3bulan': 90, '6bulan': 180 };
-            
-            user.isActivated = true;
-            user.activationCode = code;
-            user.activationPackage = pkg.package;
-            user.activationExpiry = Date.now() + (durations[pkg.package] || 30) * 24 * 60 * 60 * 1000;
-            saveUsers(users);
-            
-            delete validCodes[code];
-            saveValidCodes(validCodes);
-            
-            session.isPremium = true;
-            saveSession(session);
-            updateUI();
-            
-            sucEl.textContent = '🎉 Premium aktif! Paket: ' + pkg.package + '. Silakan refresh jika perlu.';
-            sucEl.classList.add('show');
-            showToast('🎉 Aktivasi berhasil!', 'success');
-            
-            document.getElementById('activationCodeInput').value = '';
-        } else {
-            errEl.textContent = '❌ Kode aktivasi tidak valid atau sudah digunakan.';
-            errEl.classList.add('show');
-        }
-        return;
-    }
-    
-    // Jika user BELUM login, cari user yang punya kode ini
-    var users = getUsers();
-    var targetUser = users.find(function(u) { return u.activationCode === code; });
-    
-    if (!targetUser) {
-        errEl.textContent = '❌ Kode tidak valid. Pastikan Anda sudah login atau kode benar.';
-        errEl.classList.add('show');
-        return;
-    }
-    
-    var validCodes = getValidCodes();
-    if (!validCodes[code]) {
-        errEl.textContent = '❌ Kode sudah kadaluarsa atau sudah digunakan.';
-        errEl.classList.add('show');
-        return;
-    }
-    
-    // Minta user login dulu
-    errEl.textContent = '⚠️ Silakan LOGIN terlebih dahulu dengan akun: ' + targetUser.username;
-    errEl.classList.add('show');
-    
-    // Auto-fill username
-    document.getElementById('loginUser').value = targetUser.username;
+    if(!ss){ee.textContent='⚠️ Login dulu dengan akun: '+tu.username;ee.classList.add('show');document.getElementById('loginUser').value=tu.username;}
+    else{ee.textContent='⚠️ Kode untuk akun: '+tu.username;ee.classList.add('show');}
 }
-
-function showRegisterModal() {
-    ['regNama','regEmail','regHp','regUser','regPass','regPass2'].forEach(function(id) {
-        document.getElementById(id).value = '';
-    });
-    document.getElementById('regErr').classList.remove('show');
-    document.getElementById('regSuc').classList.remove('show');
+function showRegisterModal(){
+    ['regNama','regEmail','regHp','regUser','regPass','regPass2'].forEach(function(id){document.getElementById(id).value='';});
+    document.getElementById('regErr').classList.remove('show');document.getElementById('regSuc').classList.remove('show');
     openModal('registerModal');
 }
-
-function doRegister() {
-    var nama = document.getElementById('regNama').value.trim();
-    var email = document.getElementById('regEmail').value.trim();
-    var hp = document.getElementById('regHp').value.trim();
-    var username = document.getElementById('regUser').value.trim();
-    var pass = document.getElementById('regPass').value.trim();
-    var pass2 = document.getElementById('regPass2').value.trim();
-    var errEl = document.getElementById('regErr');
-    var sucEl = document.getElementById('regSuc');
-    
-    errEl.classList.remove('show');
-    sucEl.classList.remove('show');
-    
-    // Validasi
-    if (!nama || !email || !hp || !username) {
-        errEl.textContent = 'Semua field wajib diisi.';
-        errEl.classList.add('show');
-        return;
-    }
-    
-    if (pass.length < 6) {
-        errEl.textContent = 'Password minimal 6 karakter.';
-        errEl.classList.add('show');
-        return;
-    }
-    
-    if (pass !== pass2) {
-        errEl.textContent = 'Konfirmasi password tidak sama.';
-        errEl.classList.add('show');
-        return;
-    }
-    
-    if (!hp.match(/^08[0-9]{8,}$/)) {
-        errEl.textContent = 'Nomor HP tidak valid (harus 08xx).';
-        errEl.classList.add('show');
-        return;
-    }
-    
-    var users = getUsers();
-    
-    // Cek username sudah dipakai
-    if (users.find(function(u) { return u.username.toLowerCase() === username.toLowerCase(); })) {
-        errEl.textContent = 'Username sudah terdaftar. Gunakan username lain.';
-        errEl.classList.add('show');
-        return;
-    }
-    
-    // Cek email sudah dipakai
-    if (users.find(function(u) { return u.email.toLowerCase() === email.toLowerCase(); })) {
-        errEl.textContent = 'Email sudah terdaftar. Gunakan email lain atau login.';
-        errEl.classList.add('show');
-        return;
-    }
-    
-    // Tambah user baru
-    var newUser = {
-        id: 'u_' + Date.now(),
-        nama: nama,
-        email: email,
-        hp: hp,
-        username: username,
-        password: pass,
-        role: 'user',
-        isActivated: false,
-        locked: false,
-        registeredAt: Date.now()
-    };
-    
-    users.push(newUser);
+function doRegister(){
+    var n=document.getElementById('regNama').value.trim();
+    var em=document.getElementById('regEmail').value.trim();
+    var hp=document.getElementById('regHp').value.trim();
+    var un=document.getElementById('regUser').value.trim();
+    var pw=document.getElementById('regPass').value.trim();
+    var pw2=document.getElementById('regPass2').value.trim();
+    var ee=document.getElementById('regErr'),se=document.getElementById('regSuc');
+    ee.classList.remove('show');se.classList.remove('show');
+    if(!n||!em||!hp||!un){ee.textContent='Semua field wajib diisi.';ee.classList.add('show');return;}
+    if(pw.length<6||pw!==pw2){ee.textContent='Password min 6 dan harus sama.';ee.classList.add('show');return;}
+    var users=getUsers();
+    if(users.find(function(x){return x.username.toLowerCase()===un.toLowerCase();})){ee.textContent='Username sudah dipakai.';ee.classList.add('show');return;}
+    if(users.find(function(x){return x.email.toLowerCase()===em.toLowerCase();})){ee.textContent='Email sudah dipakai.';ee.classList.add('show');return;}
+    users.push({id:'u_'+Date.now(),nama:n,email:em,hp:hp,username:un,password:pw,role:'user',isActivated:false,locked:false,registeredAt:Date.now()});
     saveUsers(users);
-    
-    sucEl.textContent = '✅ Pendaftaran berhasil! Silakan login dengan username: ' + username;
-    sucEl.classList.add('show');
-    
-    logSecurity('USER_REGISTERED', { username: username, email: email });
-    
-    // Clear form
-    ['regNama','regEmail','regHp','regUser','regPass','regPass2'].forEach(function(id) {
-        document.getElementById(id).value = '';
-    });
-    
-    // Auto redirect ke login setelah 2 detik
-    setTimeout(function() {
-        closeModal('registerModal');
-        openModal('loginModal');
-        document.getElementById('loginUser').value = username;
-    }, 2000);
+    se.textContent='✅ Berhasil! Silakan login.';se.classList.add('show');
+    logSec('REGISTER',{user:un});
+    setTimeout(function(){closeModal('registerModal');showLoginModal();document.getElementById('loginUser').value=un;},2000);
+}
+function doForgot(){
+    var n=document.getElementById('forgotNama').value.trim();
+    var em=document.getElementById('forgotEmail').value.trim();
+    var hp=document.getElementById('forgotHp').value.trim();
+    var ee=document.getElementById('forgotErr'),se=document.getElementById('forgotSuc');
+    ee.classList.remove('show');se.classList.remove('show');
+    if(!n||!em||!hp){ee.textContent='Lengkapi semua data.';ee.classList.add('show');return;}
+    if(n===SUPER_ADMIN.nama&&em===SUPER_ADMIN.email&&hp===SUPER_ADMIN.hp){se.textContent='📧 Link reset dikirim ke '+em;se.classList.add('show');return;}
+    var users=getUsers();
+    var u=users.find(function(x){return x.nama.toLowerCase()===n.toLowerCase()&&x.email.toLowerCase()===em.toLowerCase()&&x.hp===hp;});
+    if(!u){ee.textContent='Data tidak cocok.';ee.classList.add('show');return;}
+    u.resetToken='rst_'+Date.now();u.resetExpiry=Date.now()+86400000;saveUsers(users);
+    se.textContent='📧 Link reset dikirim ke '+em;se.classList.add('show');
+}
+function handleLogout(){
+    var ss=getSession();if(!ss){showToast('⚠️ Belum login.','w');return;}
+    if(!confirm('Logout?'))return;
+    logSec('LOGOUT',{user:ss.username});clearSession();updateUI();renderApps();
+    document.getElementById('appPage').classList.add('hidden');document.getElementById('landingPage').classList.remove('hidden');
+    showToast('🚪 Logout!','s');
 }
 
-function doForgot() {
-    var nama = document.getElementById('forgotNama').value.trim();
-    var email = document.getElementById('forgotEmail').value.trim();
-    var hp = document.getElementById('forgotHp').value.trim();
-    var errEl = document.getElementById('forgotErr');
-    var sucEl = document.getElementById('forgotSuc');
-    
-    errEl.classList.remove('show');
-    sucEl.classList.remove('show');
-    
-    if (!nama || !email || !hp) {
-        errEl.textContent = 'Lengkapi semua data (Nama, Email, No HP).';
-        errEl.classList.add('show');
-        return;
+// ===== UI =====
+function updateUI(){
+    var ss=getSession();
+    var ub=document.getElementById('userBadge'),un=document.getElementById('userNameDisplay');
+    var ua=document.getElementById('userAvatar'),pb=document.getElementById('profilBtn');
+    var ab=document.getElementById('adminBtn'),lb=document.getElementById('logoutBtn');
+    var sp=document.getElementById('statPremium'),su=document.getElementById('statUsers');
+    if(ss){
+        if(ub)ub.style.display='flex';if(un)un.textContent=ss.nama||ss.username;
+        if(ua)ua.textContent=(ss.nama||ss.username).charAt(0).toUpperCase();
+        if(pb)pb.classList.remove('hidden');if(lb)lb.classList.remove('hidden');
+        if(ss.role==='superadmin'){if(ab)ab.classList.remove('hidden');if(sp){sp.textContent='👑 Admin';sp.style.color='var(--accent3)';}}
+        else{if(ab)ab.classList.add('hidden');if(sp){sp.textContent=ss.isPremium?'💎 Premium':'🆓 Free';sp.style.color=ss.isPremium?'var(--green)':'var(--text3)';}}
+    }else{
+        if(ub)ub.style.display='none';if(pb)pb.classList.add('hidden');
+        if(ab)ab.classList.add('hidden');if(lb)lb.classList.add('hidden');
+        if(sp){sp.textContent='🆓';sp.style.color='var(--text3)';}
     }
-    
-    // Cek super admin
-    if (nama.toLowerCase() === SUPER_ADMIN.nama.toLowerCase() && 
-        email.toLowerCase() === SUPER_ADMIN.email.toLowerCase() && 
-        hp === SUPER_ADMIN.hp) {
-        var token = 'admin_' + Date.now();
-        localStorage.setItem('np3_reset_token', token);
-        sucEl.textContent = '📧 Link reset password Super Admin telah dikirim ke ' + email;
-        sucEl.classList.add('show');
-        showToast('📧 Cek email untuk reset password.', 'success');
-        return;
-    }
-    
-    // Cek user biasa
-    var users = getUsers();
-    var user = users.find(function(u) {
-        return u.nama.toLowerCase() === nama.toLowerCase() && 
-               u.email.toLowerCase() === email.toLowerCase() && 
-               u.hp === hp;
-    });
-    
-    if (!user) {
-        errEl.textContent = 'Data tidak cocok dengan akun manapun. Periksa kembali.';
-        errEl.classList.add('show');
-        return;
-    }
-    
-    // Set reset token
-    user.resetToken = 'rst_' + Date.now();
-    user.resetExpiry = Date.now() + (24 * 60 * 60 * 1000);
-    saveUsers(users);
-    
-    sucEl.textContent = '📧 Link reset password telah dikirim ke ' + email;
-    sucEl.classList.add('show');
-    
-    // Clear form
-    ['forgotNama','forgotEmail','forgotHp'].forEach(function(id) {
-        document.getElementById(id).value = '';
-    });
-    
-    showToast('📧 Cek email Anda untuk link reset password.', 'success');
-}
-
-function handleLogout() {
-    var session = getSession();
-    if (!session) {
-        showToast('⚠️ Anda belum login.', 'warning');
-        return;
-    }
-    
-    if (!confirm('Yakin ingin logout dari ' + session.nama + '?')) return;
-    
-    logSecurity('LOGOUT', { username: session.username });
-    clearSession();
-    updateUI();
-    renderApps();
-    document.getElementById('appPage').classList.add('hidden');
-    document.getElementById('landingPage').classList.remove('hidden');
-    showToast('🚪 Logout berhasil! Sampai jumpa lagi.', 'info');
-}
-
-// ===== UI UPDATE (FIXED) =====
-function updateUI() {
-    var session = getSession();
-    var userBadge = document.getElementById('userBadge');
-    var userNameDisplay = document.getElementById('userNameDisplay');
-    var userAvatar = document.getElementById('userAvatar');
-    var profilBtn = document.getElementById('profilBtn');
-    var adminBtn = document.getElementById('adminBtn');
-    var logoutBtn = document.getElementById('logoutBtn');
-    var statPremium = document.getElementById('statPremium');
-    var statUsers = document.getElementById('statUsers');
-    
-    if (session) {
-        // Show user badge
-        if (userBadge) userBadge.style.display = 'flex';
-        if (userNameDisplay) userNameDisplay.textContent = session.nama || session.username;
-        if (userAvatar) userAvatar.textContent = (session.nama || session.username).charAt(0).toUpperCase();
-        
-        // Show buttons
-        if (profilBtn) profilBtn.classList.remove('hidden');
-        if (logoutBtn) logoutBtn.classList.remove('hidden');
-        
-        // Admin button
-        if (session.role === 'superadmin') {
-            if (adminBtn) adminBtn.classList.remove('hidden');
-            if (statPremium) {
-                statPremium.textContent = '👑 Admin';
-                statPremium.style.color = 'var(--accent3)';
-            }
-        } else {
-            if (adminBtn) adminBtn.classList.add('hidden');
-            if (statPremium) {
-                statPremium.textContent = session.isPremium ? '💎 Premium' : '🆓 Free';
-                statPremium.style.color = session.isPremium ? 'var(--green)' : 'var(--text3)';
-            }
-        }
-    } else {
-        // Hide all
-        if (userBadge) userBadge.style.display = 'none';
-        if (profilBtn) profilBtn.classList.add('hidden');
-        if (adminBtn) adminBtn.classList.add('hidden');
-        if (logoutBtn) logoutBtn.classList.add('hidden');
-        if (statPremium) {
-            statPremium.textContent = '🆓';
-            statPremium.style.color = 'var(--text3)';
-        }
-    }
-    
-    // Update total users
-    var users = getUsers();
-    if (statUsers) statUsers.textContent = users.length;
+    if(su)su.textContent=getUsers().length;
 }
 
 // ===== PROFILE =====
-function showProfileModal() {
-    var s = getSession();
-    if (!s) { 
-        showToast('⚠️ Silakan login terlebih dahulu.', 'warning');
-        showLoginModal();
-        return; 
-    }
-    
-    document.getElementById('profName').textContent = s.nama || s.username;
-    document.getElementById('profAvatar').textContent = (s.nama || s.username).charAt(0).toUpperCase();
-    document.getElementById('profRole').textContent = s.role === 'superadmin' ? '⭐ Super Admin' : (s.isPremium ? '💎 User Premium' : '👤 User Biasa');
-    document.getElementById('editNama').value = s.nama || '';
-    document.getElementById('editEmail').value = s.email || '';
-    document.getElementById('editHp').value = s.hp || '';
-    document.getElementById('profErr').classList.remove('show');
-    document.getElementById('profSuc').classList.remove('show');
+function showProfileModal(){
+    var ss=getSession();if(!ss){showToast('⚠️ Login dulu.','w');return;}
+    document.getElementById('profName').textContent=ss.nama||ss.username;
+    document.getElementById('profAvatar').textContent=(ss.nama||ss.username).charAt(0).toUpperCase();
+    document.getElementById('profRole').textContent=ss.role==='superadmin'?'⭐ Super Admin':(ss.isPremium?'💎 Premium':'👤 User');
+    document.getElementById('editNama').value=ss.nama||'';document.getElementById('editEmail').value=ss.email||'';document.getElementById('editHp').value=ss.hp||'';
+    document.getElementById('profErr').classList.remove('show');document.getElementById('profSuc').classList.remove('show');
     openModal('profileModal');
 }
-
-function saveProfile() {
-    var s = getSession();
-    if (!s) return;
-    
-    var nama = document.getElementById('editNama').value.trim();
-    var email = document.getElementById('editEmail').value.trim();
-    var hp = document.getElementById('editHp').value.trim();
-    var errEl = document.getElementById('profErr');
-    var sucEl = document.getElementById('profSuc');
-    
-    errEl.classList.remove('show');
-    sucEl.classList.remove('show');
-    
-    if (!nama || !email || !hp) {
-        errEl.textContent = 'Semua field wajib diisi.';
-        errEl.classList.add('show');
-        return;
-    }
-    
-    if (s.role === 'superadmin') {
-        SUPER_ADMIN.nama = nama;
-        SUPER_ADMIN.email = email;
-        SUPER_ADMIN.hp = hp;
-    } else {
-        var users = getUsers();
-        var u = users.find(function(x) { return x.username === s.username; });
-        if (u) { 
-            u.nama = nama; 
-            u.email = email; 
-            u.hp = hp; 
-            saveUsers(users); 
-        }
-    }
-    
-    s.nama = nama;
-    s.email = email;
-    s.hp = hp;
-    saveSession(s);
-    updateUI();
-    
-    sucEl.textContent = '✅ Profil berhasil disimpan!';
-    sucEl.classList.add('show');
-    showToast('✅ Profil berhasil diupdate!', 'success');
+function saveProfile(){
+    var ss=getSession();if(!ss)return;
+    var n=document.getElementById('editNama').value.trim(),em=document.getElementById('editEmail').value.trim(),hp=document.getElementById('editHp').value.trim();
+    if(!n||!em||!hp){document.getElementById('profErr').textContent='Lengkapi data.';document.getElementById('profErr').classList.add('show');return;}
+    if(ss.role==='superadmin'){SUPER_ADMIN.nama=n;SUPER_ADMIN.email=em;SUPER_ADMIN.hp=hp;}
+    else{var users=getUsers();var u=users.find(function(x){return x.username===ss.username;});if(u){u.nama=n;u.email=em;u.hp=hp;saveUsers(users);}}
+    ss.nama=n;ss.email=em;ss.hp=hp;saveSession(ss);updateUI();
+    document.getElementById('profSuc').textContent='✅ Disimpan!';document.getElementById('profSuc').classList.add('show');
+    showToast('✅ Profil diupdate!','s');
 }
 
-// ===== SUPER ADMIN PANEL (FIXED) =====
-function showSuperAdminPanel() {
-    var s = getSession();
-    if (!s || s.role !== 'superadmin') {
-        showToast('⚠️ Akses ditolak! Hanya Super Admin.', 'warning');
-        logSecurity('UNAUTHORIZED_ADMIN_ACCESS', { user: s ? s.username : 'unknown' });
-        return;
-    }
-    
-    document.getElementById('adminActUser').value = '';
-    document.getElementById('adminCodeResult').innerHTML = '';
-    document.getElementById('adminWaInput').value = getWA();
-    document.getElementById('adminNewPass').value = '';
-    document.getElementById('adminNewName').value = SUPER_ADMIN.nama;
-    
-    openModal('superAdminModal');
-    
-    // Default tab
-    switchAdminTab('codes');
+// ===== SUPER ADMIN =====
+function showSuperAdminPanel(){
+    var ss=getSession();if(!ss||ss.role!=='superadmin'){showToast('⚠️ Akses ditolak.','w');return;}
+    document.getElementById('adminActUser').value='';document.getElementById('adminCodeResult').innerHTML='';
+    document.getElementById('adminWaInput').value=getWA();document.getElementById('adminNewPass').value='';
+    document.getElementById('adminNewName').value=SUPER_ADMIN.nama;
+    openModal('superAdminModal');switchAdminTab('codes');
 }
-
-function switchAdminTab(tab) {
-    // Sembunyikan semua tab
-    var tabs = ['codes', 'users', 'security', 'settings'];
-    tabs.forEach(function(t) {
-        var content = document.getElementById('adminTab' + t.charAt(0).toUpperCase() + t.slice(1));
-        var button = document.getElementById('tab' + t.charAt(0).toUpperCase() + t.slice(1));
-        
-        if (content) content.classList.add('hidden');
-        if (button) {
-            button.classList.remove('btnp');
-            button.classList.add('btno');
-        }
+function switchAdminTab(t){
+    ['codes','users','security','settings'].forEach(function(x){
+        var c=document.getElementById('adminTab'+x.charAt(0).toUpperCase()+x.slice(1));
+        var b=document.getElementById('tab'+x.charAt(0).toUpperCase()+x.slice(1));
+        if(c)c.classList.add('hidden');if(b){b.classList.remove('btnp');b.classList.add('btno');}
     });
-    
-    // Tampilkan tab yang dipilih
-    var activeContent = document.getElementById('adminTab' + tab.charAt(0).toUpperCase() + tab.slice(1));
-    var activeButton = document.getElementById('tab' + tab.charAt(0).toUpperCase() + tab.slice(1));
-    
-    if (activeContent) activeContent.classList.remove('hidden');
-    if (activeButton) {
-        activeButton.classList.add('btnp');
-        activeButton.classList.remove('btno');
-    }
-    
-    // Render konten sesuai tab
-    if (tab === 'codes') renderActiveCodes();
-    if (tab === 'users') renderUserListAdmin();
-    if (tab === 'security') renderSecurityLogs();
+    var ac=document.getElementById('adminTab'+t.charAt(0).toUpperCase()+t.slice(1));
+    var ab=document.getElementById('tab'+t.charAt(0).toUpperCase()+t.slice(1));
+    if(ac)ac.classList.remove('hidden');if(ab){ab.classList.add('btnp');ab.classList.remove('btno');}
+    if(t==='codes')renderActiveCodes();if(t==='users')renderUserListAdmin();if(t==='security')renderSecLogs();
 }
-
-function adminCreateCode() {
-    var userInput = document.getElementById('adminActUser').value.trim();
-    var pkg = document.getElementById('adminActPackage').value;
-    var result = document.getElementById('adminCodeResult');
-    
-    if (!userInput) {
-        result.innerHTML = '<p style="color:var(--red);">⚠️ Masukkan username atau email user.</p>';
-        return;
-    }
-    
-    var users = getUsers();
-    var user = users.find(function(u) { 
-        return u.username.toLowerCase() === userInput.toLowerCase() || 
-               u.email.toLowerCase() === userInput.toLowerCase(); 
-    });
-    
-    if (!user) {
-        result.innerHTML = '<p style="color:var(--red);">❌ User tidak ditemukan. Periksa username/email.</p>';
-        return;
-    }
-    
-    if (user.role === 'superadmin') {
-        result.innerHTML = '<p style="color:var(--red);">❌ Tidak bisa membuat kode untuk Super Admin.</p>';
-        return;
-    }
-    
-    var pkgs = getPackages();
-    var pkgData = pkgs.find(function(p) { return p.id === pkg; }) || {};
-    var code = 'NP3-' + user.id.substring(0, 5).toUpperCase() + '-' + Date.now().toString(36).toUpperCase();
-    
-    // Simpan kode ke user
-    user.activationCode = code;
-    user.activationPackage = pkg;
-    saveUsers(users);
-    
-    // Simpan ke valid codes
-    var validCodes = getValidCodes();
-    validCodes[code] = { 
-        package: pkg, 
-        created: Date.now(), 
-        forUser: user.username,
-        userName: user.nama
-    };
-    saveValidCodes(validCodes);
-    
-    result.innerHTML = 
-        '<div style="background:var(--bg3);padding:16px;border-radius:var(--radius);border:2px solid var(--green);">' +
-        '<p style="color:var(--green);font-size:1.1rem;"><strong>✅ Kode Aktivasi Berhasil Dibuat!</strong></p>' +
-        '<p><strong>User:</strong> ' + escapeHtml(user.nama) + ' (@' + escapeHtml(user.username) + ')</p>' +
-        '<p><strong>Paket:</strong> ' + escapeHtml(pkgData.name || pkg) + ' - Rp ' + (pkgData.price || 0).toLocaleString('id-ID') + '</p>' +
-        '<p><strong>Kode:</strong> <code style="background:var(--bg);padding:6px 12px;border-radius:4px;font-size:1.1rem;display:inline-block;margin:8px 0;">' + code + '</code></p>' +
-        '<button onclick="copyText(\'' + code + '\')" class="btn btnp btnsm">📋 Copy Kode</button> ' +
-        '<button onclick="shareCodeWA(\'' + code + '\',\'' + escapeHtml(user.nama) + '\',\'' + escapeHtml(pkgData.name || pkg) + '\')" class="btn btns btnsm">📱 Kirim via WA</button>' +
-        '</div>';
-    
-    document.getElementById('adminActUser').value = '';
-    renderActiveCodes();
-    logSecurity('CODE_CREATED', { forUser: user.username, package: pkg, code: code });
-    showToast('🎫 Kode aktivasi untuk ' + user.nama + ' berhasil dibuat!', 'success');
+function adminCreateCode(){
+    var ui=document.getElementById('adminActUser').value.trim(),pk=document.getElementById('adminActPackage').value;
+    var rs=document.getElementById('adminCodeResult');
+    if(!ui){rs.innerHTML='<p style="color:var(--red);">⚠️ Masukkan username/email.</p>';return;}
+    var users=getUsers();
+    var u=users.find(function(x){return x.username.toLowerCase()===ui.toLowerCase()||x.email.toLowerCase()===ui.toLowerCase();});
+    if(!u){rs.innerHTML='<p style="color:var(--red);">❌ User tidak ditemukan.</p>';return;}
+    var pks=getPackages(),pd=pks.find(function(x){return x.id===pk;})||{};
+    var code='NP3-'+Date.now().toString(36).toUpperCase();
+    u.activationCode=code;u.activationPackage=pk;saveUsers(users);
+    var vc=getValidCodes();vc[code]={package:pk,created:Date.now(),forUser:u.username,userName:u.nama};saveValidCodes(vc);
+    rs.innerHTML='<div style="background:var(--bg3);padding:16px;border-radius:var(--radius);border:2px solid var(--green);"><p style="color:var(--green);"><strong>✅ Kode Dibuat!</strong></p><p>User: <strong>'+esc(u.nama)+'</strong></p><p>Paket: <strong>'+esc(pd.name||pk)+'</strong></p><p>Kode: <code style="background:var(--bg);padding:6px 12px;border-radius:4px;font-size:1.1rem;">'+code+'</code></p><button onclick="copyText(\''+code+'\')" class="btn btnp btnsm">📋 Copy</button></div>';
+    document.getElementById('adminActUser').value='';renderActiveCodes();logSec('CODE_CREATED',{user:u.username,pkg:pk});
+    showToast('🎫 Kode dibuat!','s');
 }
-
-function shareCodeWA(code, nama, paket) {
-    var wa = getWA().replace(/[^0-9]/g, '');
-    var msg = 'Halo ' + nama + '!%0A%0A' +
-              'Ini kode aktivasi Notepad+ Anda:%0A' +
-              '📝 Kode: *' + code + '*%0A' +
-              '💎 Paket: ' + paket + '%0A%0A' +
-              'Cara aktivasi:%0A' +
-              '1. Login ke aplikasi%0A' +
-              '2. Masukkan kode di halaman login%0A' +
-              '3. Premium langsung aktif!%0A%0A' +
-              'Terima kasih! 🙏';
-    window.open('https://wa.me/' + wa + '?text=' + msg, '_blank');
+function renderActiveCodes(){
+    var vc=getValidCodes(),ks=Object.keys(vc),c=document.getElementById('activeCodesList');if(!c)return;
+    if(!ks.length){c.innerHTML='<p style="color:var(--text3);text-align:center;padding:20px;">📭 Belum ada kode.</p>';return;}
+    c.innerHTML=ks.map(function(k){return'<div style="display:flex;justify-content:space-between;padding:10px;background:var(--bg3);border-radius:6px;margin-bottom:4px;font-size:.8rem;"><div><code>'+k+'</code><br><span style="color:var(--text2);">'+vc[k].package+' | '+(vc[k].userName||vc[k].forUser||'-')+'</span></div><button onclick="delVC(\''+k+'\')" class="btn btnd" style="padding:2px 8px;min-height:0;font-size:.7rem;">🗑️</button></div>';}).join('');
 }
-
-function renderActiveCodes() {
-    var codes = getValidCodes();
-    var keys = Object.keys(codes);
-    var container = document.getElementById('activeCodesList');
-    
-    if (!container) return;
-    
-    if (keys.length === 0) {
-        container.innerHTML = '<p style="color:var(--text3);text-align:center;padding:20px;">📭 Belum ada kode aktivasi aktif.</p>';
-        return;
-    }
-    
-    container.innerHTML = keys.map(function(k) {
-        return '<div style="display:flex;justify-content:space-between;align-items:center;padding:10px;background:var(--bg3);border-radius:6px;margin-bottom:6px;font-size:.8rem;flex-wrap:wrap;gap:4px;">' +
-            '<div><code style="font-size:.85rem;">' + k + '</code><br><span style="color:var(--text2);">' + codes[k].package + ' | User: ' + (codes[k].userName || codes[k].forUser || '-') + '</span></div>' +
-            '<button onclick="deleteValidCode(\'' + k + '\')" class="btn btnd" style="padding:4px 10px;min-height:0;font-size:.7rem;">🗑️ Hapus</button>' +
-            '</div>';
-    }).join('');
+function delVC(code){if(!confirm('Hapus?'))return;var vc=getValidCodes();delete vc[code];saveValidCodes(vc);renderActiveCodes();showToast('🗑️ Dihapus.','s');}
+function renderUserListAdmin(){
+    var users=getUsers(),c=document.getElementById('adminUserList');if(!c)return;
+    if(!users.length){c.innerHTML='<p style="color:var(--text3);text-align:center;padding:20px;">👥 Belum ada user.</p>';return;}
+    c.innerHTML=users.map(function(u){return'<div style="background:var(--bg3);padding:12px;border-radius:var(--radius);margin-bottom:8px;border:1px solid var(--border);"><div class="fbetween fwrap gap2" style="margin-bottom:8px;"><div><strong>'+esc(u.nama)+'</strong> (@'+esc(u.username)+')<br><span style="font-size:.8rem;color:var(--text2);">📧 '+esc(u.email)+' | 📱 '+esc(u.hp||'-')+'</span></div><div class="flex gap1 fwrap"><span class="badge '+(u.isActivated?'badges':'badgew')+'">'+(u.isActivated?'💎 Premium':'🆓 Free')+'</span><span class="badge '+(u.locked?'badged':'badges')+'">'+(u.locked?'🔒 Locked':'🔓 Active')+'</span></div></div>'+(u.role!=='superadmin'?'<div class="flex gap2 fwrap"><button onclick="toggleSuspend(\''+u.username+'\')" class="btn '+(u.locked?'btns':'btnd')+' btnsm">'+(u.locked?'🔓 Buka':'🔒 Suspend')+'</button><button onclick="givePrem(\''+u.username+'\')" class="btn btnw btnsm">💎 Premium</button><button onclick="delUser(\''+u.username+'\')" class="btn btnd btnsm">🗑️ Hapus</button></div>':'<span style="font-size:.8rem;color:var(--accent3);">👑 Super Admin</span>')+'</div>';}).join('');
 }
-
-function deleteValidCode(code) {
-    if (!confirm('Hapus kode ini? User tidak bisa menggunakannya lagi.')) return;
-    var codes = getValidCodes();
-    delete codes[code];
-    saveValidCodes(codes);
-    renderActiveCodes();
-    showToast('🗑️ Kode aktivasi dihapus.', 'info');
+function toggleSuspend(un){
+    var users=getUsers(),u=users.find(function(x){return x.username===un;});if(!u||u.role==='superadmin')return;
+    u.locked=!u.locked;u.lockedAt=u.locked?Date.now():null;saveUsers(users);
+    if(u.locked){var ss=getSession();if(ss&&ss.username===un){clearSession();updateUI();renderApps();document.getElementById('appPage').classList.add('hidden');document.getElementById('landingPage').classList.remove('hidden');}}
+    renderUserListAdmin();updateUI();renderApps();logSec(u.locked?'SUSPEND':'UNSUSPEND',{user:un});
+    showToast(u.locked?'🔒 Disuspend.':'🔓 Dibuka.','s');
 }
-
-function renderUserListAdmin() {
-    var users = getUsers();
-    var container = document.getElementById('adminUserList');
-    
-    if (!container) return;
-    
-    if (users.length === 0) {
-        container.innerHTML = '<p style="color:var(--text3);text-align:center;padding:20px;">👥 Belum ada user terdaftar.</p>';
-        return;
-    }
-    
-    container.innerHTML = users.map(function(u) {
-        var statusBadge = u.isActivated ? '<span class="badge badges">💎 Premium</span>' : '<span class="badge badgew">🆓 Free</span>';
-        var lockBadge = u.locked ? '<span class="badge badged">🔒 Dikunci</span>' : '<span class="badge badges">🔓 Aktif</span>';
-        var roleBadge = u.role === 'superadmin' ? '<span class="badge badgep">👑 Admin</span>' : '';
-        
-        return '<div style="background:var(--bg3);padding:12px;border-radius:var(--radius);margin-bottom:8px;border:1px solid var(--border);">' +
-            '<div class="fbetween fwrap gap2" style="margin-bottom:8px;">' +
-            '<div>' +
-            '<strong>' + escapeHtml(u.nama) + '</strong> (@' + escapeHtml(u.username) + ')' +
-            '<br><span style="font-size:.8rem;color:var(--text2);">📧 ' + escapeHtml(u.email) + ' | 📱 ' + escapeHtml(u.hp || '-') + '</span>' +
-            '</div>' +
-            '<div class="flex gap1 fwrap">' + statusBadge + lockBadge + roleBadge + '</div>' +
-            '</div>' +
-            '<div class="flex gap2 fwrap">' +
-            (u.role !== 'superadmin' ? 
-                '<button onclick="toggleSuspendUser(\'' + u.username + '\')" class="btn ' + (u.locked ? 'btns' : 'btnd') + ' btnsm">' + (u.locked ? '🔓 Buka' : '🔒 Suspend') + '</button>' +
-                '<button onclick="givePremiumToUser(\'' + u.username + '\')" class="btn btnw btnsm">💎 Beri Premium</button>' +
-                '<button onclick="deleteUserAdmin(\'' + u.username + '\')" class="btn btnd btnsm">🗑️ Hapus</button>'
-            : '<span style="font-size:.8rem;color:var(--accent3);">👑 Super Admin</span>') +
-            '</div>' +
-            '</div>';
-    }).join('');
+function givePrem(un){
+    var users=getUsers(),u=users.find(function(x){return x.username===un;});if(!u||u.role==='superadmin')return;
+    var p=prompt('Pilih durasi:\n1 = 1 Bulan\n3 = 3 Bulan\n6 = 6 Bulan','3');var d=parseInt(p);
+    if(![1,3,6].includes(d)){showToast('⚠️ Tidak valid.','w');return;}
+    u.isActivated=true;u.activationExpiry=Date.now()+(d*30*86400000);u.activationPackage=d+'bulan';saveUsers(users);
+    var ss=getSession();if(ss&&ss.username===un){ss.isPremium=true;saveSession(ss);updateUI();}
+    renderUserListAdmin();logSec('PREMIUM_GIVEN',{user:un,dur:d});showToast('💎 Premium diberikan!','s');
 }
-
-function toggleSuspendUser(username) {
-    var users = getUsers();
-    var user = users.find(function(u) { return u.username === username; });
-    if (!user || user.role === 'superadmin') {
-        showToast('⚠️ Tidak bisa mengubah Super Admin.', 'warning');
-        return;
-    }
-    
-    user.locked = !user.locked;
-    user.lockedAt = user.locked ? Date.now() : null;
-    saveUsers(users);
-    
-    // Force logout if suspended
-    if (user.locked) {
-        var session = getSession();
-        if (session && session.username === username) {
-            clearSession();
-            updateUI();
-            renderApps();
-            document.getElementById('appPage').classList.add('hidden');
-            document.getElementById('landingPage').classList.remove('hidden');
-        }
-    }
-    
-    renderUserListAdmin();
-    updateUI();
-    renderApps();
-    
-    logSecurity(user.locked ? 'USER_SUSPENDED' : 'USER_UNSUSPENDED', { username: username });
-    showToast(user.locked ? '🔒 ' + user.nama + ' telah disuspend.' : '🔓 ' + user.nama + ' telah dibuka.', 'info');
+function delUser(un){
+    var users=getUsers(),u=users.find(function(x){return x.username===un;});if(!u||u.role==='superadmin')return;
+    if(!confirm('⚠️ Hapus '+u.nama+'?'))return;
+    users=users.filter(function(x){return x.username!==un;});saveUsers(users);
+    var ss=getSession();if(ss&&ss.username===un){clearSession();updateUI();renderApps();}
+    renderUserListAdmin();updateUI();renderApps();logSec('USER_DELETED',{user:un});showToast('🗑️ Dihapus.','s');
 }
-
-function givePremiumToUser(username) {
-    var users = getUsers();
-    var user = users.find(function(u) { return u.username === username; });
-    if (!user || user.role === 'superadmin') {
-        showToast('⚠️ Tidak bisa untuk Super Admin.', 'warning');
-        return;
-    }
-    
-    var pilihan = prompt('Pilih durasi premium:\n\n1 = 1 Bulan (Rp 25K)\n3 = 3 Bulan (Rp 50K)\n6 = 6 Bulan (Rp 75K)\n\nKetik angka (1/3/6):', '3');
-    
-    var durasi = parseInt(pilihan);
-    if (![1, 3, 6].includes(durasi)) {
-        showToast('⚠️ Pilihan tidak valid. Gunakan 1, 3, atau 6.', 'warning');
-        return;
-    }
-    
-    var hari = durasi * 30;
-    user.isActivated = true;
-    user.activationExpiry = Date.now() + (hari * 24 * 60 * 60 * 1000);
-    user.activationPackage = durasi + 'bulan';
-    user.activationCode = 'ADMIN-' + Date.now().toString(36).toUpperCase();
-    saveUsers(users);
-    
-    // Update session jika user yang sama
-    var session = getSession();
-    if (session && session.username === username) {
-        session.isPremium = true;
-        saveSession(session);
-        updateUI();
-    }
-    
-    renderUserListAdmin();
-    logSecurity('PREMIUM_GIVEN', { username: username, duration: durasi + 'bulan' });
-    showToast('💎 Premium ' + durasi + ' bulan diberikan ke ' + user.nama + '!', 'success');
+function renderSecLogs(){
+    var l=getSecLogs(),c=document.getElementById('securityLog');if(!c)return;
+    if(!l.length){c.innerHTML='<p style="color:var(--text3);text-align:center;padding:20px;">📊 Log kosong.</p>';return;}
+    c.innerHTML=l.slice(-50).reverse().map(function(x){return'<div style="font-size:.75rem;padding:4px 0;border-bottom:1px solid var(--border);color:var(--text2);"><span style="color:var(--text3);">['+new Date(x.time).toLocaleString('id-ID')+']</span> <strong>'+esc(x.event)+'</strong></div>';}).join('');
 }
-
-function deleteUserAdmin(username) {
-    var users = getUsers();
-    var user = users.find(function(u) { return u.username === username; });
-    if (!user) return;
-    
-    if (user.role === 'superadmin') {
-        showToast('⚠️ Tidak bisa menghapus Super Admin!', 'warning');
-        return;
-    }
-    
-    if (!confirm('⚠️ Yakin hapus user "' + user.nama + '" (@' + username + ')?\n\nSemua data user ini akan hilang permanen!')) return;
-    if (!confirm('KONFIRMASI ULANG: Hapus ' + user.nama + '?')) return;
-    
-    users = users.filter(function(u) { return u.username !== username; });
-    saveUsers(users);
-    
-    // Force logout
-    var session = getSession();
-    if (session && session.username === username) {
-        clearSession();
-        updateUI();
-        renderApps();
-    }
-    
-    renderUserListAdmin();
-    updateUI();
-    renderApps();
-    
-    logSecurity('USER_DELETED', { username: username });
-    showToast('🗑️ User ' + user.nama + ' telah dihapus permanen.', 'info');
+function clearSecurityLogs(){if(!confirm('Bersihkan?'))return;saveSecLogs([]);renderSecLogs();showToast('🧹 Dibersihkan.','s');}
+function lockAllUsers(){
+    if(!confirm('🔒 Kunci semua user?'))return;
+    var users=getUsers();users.forEach(function(u){if(u.role!=='superadmin'){u.locked=true;u.lockedAt=Date.now();}});saveUsers(users);
+    clearSession();updateUI();renderApps();renderUserListAdmin();logSec('ALL_LOCKED',{});showToast('🔒 Semua dikunci!','w');
 }
-
-function renderSecurityLogs() {
-    var logs = getSecurityLogs();
-    var container = document.getElementById('securityLog');
-    
-    if (!container) return;
-    
-    if (logs.length === 0) {
-        container.innerHTML = '<p style="color:var(--text3);text-align:center;padding:20px;">📊 Belum ada log keamanan.</p>';
-        return;
-    }
-    
-    container.innerHTML = logs.slice(-50).reverse().map(function(l) {
-        return '<div style="font-size:.75rem;padding:6px 0;border-bottom:1px solid var(--border);color:var(--text2);">' +
-            '<span style="color:var(--text3);">[' + new Date(l.time).toLocaleString('id-ID') + ']</span> ' +
-            '<strong>' + escapeHtml(l.event) + '</strong> ' +
-            '<span style="font-size:.7rem;color:var(--text3);">' + escapeHtml(JSON.stringify(l.detail || {}).substring(0, 100)) + '</span>' +
-            '</div>';
-    }).join('');
+function unlockAllUsers(){
+    if(!confirm('🔓 Buka semua?'))return;
+    var users=getUsers();users.forEach(function(u){u.locked=false;u.lockedAt=null;});saveUsers(users);
+    renderUserListAdmin();logSec('ALL_UNLOCKED',{});showToast('🔓 Semua dibuka!','s');
 }
-
-function clearSecurityLogs() {
-    if (!confirm('Bersihkan semua log keamanan? Data tidak bisa dikembalikan.')) return;
-    saveSecurityLogs([]);
-    renderSecurityLogs();
-    showToast('🧹 Log keamanan dibersihkan.', 'info');
-}
-
-function lockAllUsers() {
-    if (!confirm('🔒 KUNCI SEMUA USER?\n\nMereka tidak akan bisa login sampai dibuka kembali.')) return;
-    
-    var users = getUsers();
-    users.forEach(function(u) {
-        if (u.role !== 'superadmin') {
-            u.locked = true;
-            u.lockedAt = Date.now();
-        }
-    });
-    saveUsers(users);
-    
-    // Clear all non-admin sessions
-    var session = getSession();
-    if (session && session.role !== 'superadmin') {
-        clearSession();
-        updateUI();
-        renderApps();
-    }
-    
-    renderUserListAdmin();
-    logSecurity('ALL_USERS_LOCKED', { time: Date.now() });
-    showToast('🔒 Semua user non-admin telah dikunci!', 'warning');
-}
-
-function unlockAllUsers() {
-    if (!confirm('🔓 BUKA SEMUA USER?\n\nMereka akan bisa login kembali.')) return;
-    
-    var users = getUsers();
-    users.forEach(function(u) {
-        u.locked = false;
-        u.lockedAt = null;
-    });
-    saveUsers(users);
-    
-    renderUserListAdmin();
-    logSecurity('ALL_USERS_UNLOCKED', { time: Date.now() });
-    showToast('🔓 Semua user telah dibuka!', 'success');
-}
-
-function saveAdminWA() {
-    var n = document.getElementById('adminWaInput').value.replace(/[^0-9]/g, '');
-    if (n.length < 10) { 
-        showToast('⚠️ Nomor WA minimal 10 digit.', 'warning'); 
-        return; 
-    }
-    saveWA(n);
-    updateWADisplay();
-    showToast('✅ Nomor WA Admin disimpan!', 'success');
-}
-
-function changeAdminPass() {
-    var np = document.getElementById('adminNewPass').value.trim();
-    if (np.length < 6) { 
-        showToast('⚠️ Password minimal 6 karakter.', 'warning'); 
-        return; 
-    }
-    SUPER_ADMIN.password = np;
-    document.getElementById('adminNewPass').value = '';
-    showToast('🔑 Password Super Admin berhasil diubah!', 'success');
-    logSecurity('ADMIN_PASSWORD_CHANGED', {});
-}
-
-function changeAdminName() {
-    var nn = document.getElementById('adminNewName').value.trim();
-    if (!nn) { 
-        showToast('⚠️ Nama tidak boleh kosong.', 'warning'); 
-        return; 
-    }
-    SUPER_ADMIN.nama = nn;
-    var s = getSession();
-    if (s && s.role === 'superadmin') { 
-        s.nama = nn; 
-        saveSession(s); 
-    }
-    updateUI();
-    document.getElementById('adminNewName').value = nn;
-    showToast('✏️ Nama Super Admin diubah!', 'success');
-}
-
-function resetAllData() {
-    if (!confirm('⚠️ PERINGATAN BESAR!\n\nIni akan menghapus SEMUA:\n- User\n- Aplikasi\n- Code\n- Log\n- Pengaturan\n\nData TIDAK BISA dikembalikan!')) return;
-    if (!confirm('KETIK "YA" UNTUK KONFIRMASI:') && !confirm('YAKIN BANGET?')) return;
-    
-    ['users','apps','packages','validCodes','secLogs','loginAttempts','session','wa'].forEach(function(k) {
-        LSdel(k);
-    });
-    localStorage.removeItem('np3_reset_token');
-    
-    logSecurity('ALL_DATA_RESET', { time: Date.now(), by: 'superadmin' });
-    closeModal('superAdminModal');
-    clearSession();
-    updateUI();
-    renderApps();
-    showToast('⚠️ Semua data telah direset!', 'warning');
-    
-    setTimeout(function() { location.reload(); }, 1500);
+function saveAdminWA(){var n=document.getElementById('adminWaInput').value.replace(/[^0-9]/g,'');if(n.length<10){showToast('⚠️ Tidak valid.','w');return;}saveWA(n);updateWA();showToast('✅ WA disimpan!','s');}
+function changeAdminPass(){var np=document.getElementById('adminNewPass').value.trim();if(np.length<6){showToast('⚠️ Min 6 karakter.','w');return;}SUPER_ADMIN.password=np;document.getElementById('adminNewPass').value='';showToast('🔑 Password diubah!','s');}
+function changeAdminName(){var nn=document.getElementById('adminNewName').value.trim();if(!nn){showToast('⚠️ Tidak boleh kosong.','w');return;}SUPER_ADMIN.nama=nn;var ss=getSession();if(ss&&ss.role==='superadmin'){ss.nama=nn;saveSession(ss);}updateUI();showToast('✏️ Nama diubah!','s');}
+function resetAllData(){
+    if(!confirm('⚠️ HAPUS SEMUA DATA?\\n\\nIni tidak bisa dibatalkan!'))return;
+    ['users','apps','packages','vc','seclog','la','session','wa'].forEach(function(k){d(k);});
+    closeModal('superAdminModal');clearSession();updateUI();renderApps();showToast('⚠️ Semua data direset!','w');
+    setTimeout(function(){location.reload();},1500);
 }
 
 // ===== CRUD APPS =====
-function renderApps() {
-    var session = getSession();
-    var container = document.getElementById('appListContainer');
-    var empty = document.getElementById('emptyState');
-    var stats = document.getElementById('dashboardStats');
-    
-    if (!session) {
-        if (container) container.innerHTML = '<div class="empty"><div class="icon">🔐</div><h3>Silakan Login</h3><p>Login untuk mengakses aplikasi Anda.</p><button onclick="showLoginModal()" class="btn btnp">🔐 Login</button></div>';
-        if (empty) empty.style.display = 'none';
-        if (stats) stats.style.display = 'none';
-        return;
-    }
-    
-    if (stats) stats.style.display = 'grid';
-    
-    var apps = getApps();
-    var keys = Object.keys(apps);
-    var totalCodes = 0;
-    keys.forEach(function(k) { totalCodes += (apps[k].codes || []).length; });
-    
-    if (document.getElementById('statApps')) document.getElementById('statApps').textContent = keys.length;
-    if (document.getElementById('statCodes')) document.getElementById('statCodes').textContent = totalCodes;
-    if (document.getElementById('statStorage')) document.getElementById('statStorage').textContent = (new Blob([JSON.stringify(apps)]).size / 1024).toFixed(1) + ' KB';
-    
-    if (keys.length === 0) { 
-        if (empty) empty.style.display = 'block'; 
-        if (container) container.innerHTML = ''; 
-        return; 
-    }
-    
-    if (empty) empty.style.display = 'none';
-    
-    var html = '<div class="applist">';
-    keys.forEach(function(k) {
-        var a = apps[k];
-        var n = (a.codes || []).length;
-        html += '<div class="appitem">' +
-            '<div class="apphead" onclick="toggleApp(\'' + k + '\')">' +
-            '<div class="appname">📱 ' + escapeHtml(a.name) + ' <span class="appcount">' + n + ' code</span></div>' +
-            '<div class="flex gap1 fwrap">' +
-            '<button class="btn btnp btnsm" onclick="event.stopPropagation();addCode(\'' + k + '\')">+ Code</button>' +
-            '<button class="btn btnw btnsm" onclick="event.stopPropagation();editApp(\'' + k + '\')">✏️</button>' +
-            '<button class="btn btnd btnsm" onclick="event.stopPropagation();deleteApp(\'' + k + '\')">🗑️</button>' +
-            '</div></div>' +
-            '<div class="appcodes ' + (a.isOpen ? 'open' : '') + '" id="ac_' + k + '">' + renderCodes(k, a.codes || []) + '</div>' +
-            '</div>';
-    });
-    html += '</div>';
-    
-    if (container) container.innerHTML = html;
+function renderApps(){
+    var ss=getSession(),c=document.getElementById('appListContainer'),em=document.getElementById('emptyState'),st=document.getElementById('dashboardStats');
+    if(!ss){if(c)c.innerHTML='<div class="empty"><div class="icon">🔐</div><h3>Silakan Login</h3><button onclick="showLoginModal()" class="btn btnp">🔐 Login</button></div>';if(em)em.style.display='none';if(st)st.style.display='none';return;}
+    if(st)st.style.display='grid';
+    var apps=getApps(),ks=Object.keys(apps),tc=0;ks.forEach(function(k){tc+=(apps[k].codes||[]).length;});
+    document.getElementById('statApps').textContent=ks.length;document.getElementById('statCodes').textContent=tc;
+    document.getElementById('statStorage').textContent=(new Blob([JSON.stringify(apps)]).size/1024).toFixed(1)+' KB';
+    if(!ks.length){if(em)em.style.display='block';if(c)c.innerHTML='';return;}
+    if(em)em.style.display='none';
+    var h='<div class="applist">';ks.forEach(function(k){var a=apps[k];h+='<div class="appitem"><div class="apphead" onclick="toggleApp(\''+k+'\')"><div class="appname">📱 '+esc(a.name)+' <span class="appcount">'+(a.codes||[]).length+' code</span></div><div class="flex gap1 fwrap"><button class="btn btnp btnsm" onclick="event.stopPropagation();addCode(\''+k+'\')">+ Code</button><button class="btn btnw btnsm" onclick="event.stopPropagation();editApp(\''+k+'\')">✏️</button><button class="btn btnd btnsm" onclick="event.stopPropagation();deleteApp(\''+k+'\')">🗑️</button></div></div><div class="appcodes '+(a.isOpen?'open':'')+'" id="ac_'+k+'">'+renderCodes(k,a.codes||[])+'</div></div>';});h+='</div>';
+    if(c)c.innerHTML=h;
 }
-
-function renderCodes(appId, codes) {
-    if (!codes || !codes.length) {
-        return '<div style="padding:16px;text-align:center;color:var(--text3);">Belum ada code. Klik <strong>+ Code</strong> untuk menambahkan.</div>';
-    }
-    
-    return codes.map(function(c) {
-        var preview = (c.content || '').substring(0, 100);
-        return '<div class="codeitem">' +
-            '<div class="codehead">' +
-            '<div class="codename">📝 ' + escapeHtml(c.name) + '</div>' +
-            '<div class="flex gap1">' +
-            '<button class="btn btnsm" style="color:var(--green);" onclick="copySingleCode(\'' + appId + '\',\'' + c.id + '\')" title="Copy">📋</button>' +
-            '<button class="btn btnsm" onclick="toggleCode(\'' + appId + '\',\'' + c.id + '\')">' + (c.isOpen ? '📄 Tutup' : '👁️ Lihat') + '</button>' +
-            '<button class="btn btnw btnsm" onclick="editCode(\'' + appId + '\',\'' + c.id + '\')">✏️</button>' +
-            '<button class="btn btnd btnsm" onclick="deleteCodeItem(\'' + appId + '\',\'' + c.id + '\')">🗑️</button>' +
-            '</div></div>' +
-            '<div class="codecontent ' + (c.isOpen ? 'show' : '') + '"><pre>' + escapeHtml(c.content || '') + '</pre></div>' +
-            (c.isOpen ? '' : '<div style="font-size:.8rem;color:var(--text3);padding:4px 0;">' + escapeHtml(preview) + '...</div>') +
-            '</div>';
-    }).join('');
+function renderCodes(aid,cds){
+    if(!cds.length)return'<p style="padding:12px;text-align:center;color:var(--text3);">Belum ada code.</p>';
+    return cds.map(function(c){var pv=(c.content||'').substring(0,80);return'<div class="codeitem"><div class="codehead"><div class="codename">📝 '+esc(c.name)+'</div><div class="flex gap1"><button class="btn btnsm" style="color:var(--green);" onclick="copySC(\''+aid+'\',\''+c.id+'\')">📋</button><button class="btn btnsm" onclick="toggleCode(\''+aid+'\',\''+c.id+'\')">'+(c.isOpen?'📄':'👁️')+'</button><button class="btn btnw btnsm" onclick="editCode(\''+aid+'\',\''+c.id+'\')">✏️</button><button class="btn btnd btnsm" onclick="deleteCodeItem(\''+aid+'\',\''+c.id+'\')">🗑️</button></div></div><div class="codecontent '+(c.isOpen?'show':'')+'"><pre>'+esc(c.content||'')+'</pre></div>'+(c.isOpen?'':'<div style="font-size:.8rem;color:var(--text3);">'+esc(pv)+'...</div>')+'</div>';}).join('');
 }
-
-function showAddAppModal() {
-    if (!getSession()) { showToast('⚠️ Login dulu.', 'warning'); showLoginModal(); return; }
-    document.getElementById('appModalTitle').textContent = '➕ Tambah Aplikasi';
-    document.getElementById('editAppId').value = '';
-    document.getElementById('appName').value = '';
-    document.getElementById('appDesc').value = '';
-    document.getElementById('appErr').classList.remove('show');
-    openModal('appModal');
+function showAddAppModal(){document.getElementById('appModalTitle').textContent='➕ Tambah Aplikasi';document.getElementById('editAppId').value='';document.getElementById('appName').value='';document.getElementById('appDesc').value='';document.getElementById('appErr').classList.remove('show');openModal('appModal');}
+function saveApp(){
+    var id=document.getElementById('editAppId').value,n=document.getElementById('appName').value.trim(),d=document.getElementById('appDesc').value.trim();
+    if(!n){document.getElementById('appErr').textContent='Nama wajib diisi.';document.getElementById('appErr').classList.add('show');return;}
+    var apps=getApps();
+    if(id&&apps[id]){apps[id].name=n;apps[id].desc=d;apps[id].updatedAt=Date.now();}
+    else{apps['app_'+Date.now()]={name:n,desc:d,codes:[],createdAt:Date.now(),updatedAt:Date.now()};}
+    saveApps(apps);closeModal('appModal');renderApps();showToast('✅ Disimpan!','s');
 }
-
-function saveApp() {
-    var id = document.getElementById('editAppId').value;
-    var name = document.getElementById('appName').value.trim();
-    var desc = document.getElementById('appDesc').value.trim();
-    var errEl = document.getElementById('appErr');
-    
-    errEl.classList.remove('show');
-    if (!name) {
-        errEl.textContent = 'Nama aplikasi wajib diisi.';
-        errEl.classList.add('show');
-        return;
-    }
-    
-    var apps = getApps();
-    if (id && apps[id]) {
-        apps[id].name = name;
-        apps[id].desc = desc;
-        apps[id].updatedAt = Date.now();
-    } else {
-        apps['app_' + Date.now() + '_' + Math.random().toString(36).substr(2, 4)] = {
-            name: name, desc: desc, codes: [],
-            createdAt: Date.now(), updatedAt: Date.now()
-        };
-    }
-    
-    saveApps(apps);
-    closeModal('appModal');
-    renderApps();
-    showToast('✅ Aplikasi berhasil disimpan!', 'success');
+function editApp(id){var a=getApps()[id];if(!a)return;document.getElementById('appModalTitle').textContent='✏️ Edit Aplikasi';document.getElementById('editAppId').value=id;document.getElementById('appName').value=a.name;document.getElementById('appDesc').value=a.desc||'';openModal('appModal');}
+function deleteApp(id){
+    var a=getApps()[id];if(!a)return;
+    window._cf=function(){var apps=getApps();delete apps[id];saveApps(apps);closeModal('confirmModal');renderApps();showToast('🗑️ Dihapus.','s');};
+    document.getElementById('confirmTitle').textContent='⚠️ Hapus?';document.getElementById('confirmMsg').textContent='Hapus "'+a.name+'"?';openModal('confirmModal');
 }
-
-function editApp(id) {
-    var a = getApps()[id];
-    if (!a) { showToast('⚠️ Aplikasi tidak ditemukan.', 'warning'); return; }
-    document.getElementById('appModalTitle').textContent = '✏️ Edit Aplikasi';
-    document.getElementById('editAppId').value = id;
-    document.getElementById('appName').value = a.name || '';
-    document.getElementById('appDesc').value = a.desc || '';
-    openModal('appModal');
+function toggleApp(id){var apps=getApps();if(apps[id]){apps[id].isOpen=!apps[id].isOpen;saveApps(apps);renderApps();}}
+function addCode(aid){document.getElementById('codeModalTitle').textContent='➕ Tambah Code';document.getElementById('codeAppId').value=aid;document.getElementById('editCodeId').value='';document.getElementById('codeName').value='';document.getElementById('codeContent').value='';document.getElementById('codeErr').classList.remove('show');openModal('codeModal');}
+function saveCode(){
+    var aid=document.getElementById('codeAppId').value,cid=document.getElementById('editCodeId').value;
+    var n=document.getElementById('codeName').value.trim(),ct=document.getElementById('codeContent').value.trim();
+    if(!n||!ct){document.getElementById('codeErr').textContent='Lengkapi data.';document.getElementById('codeErr').classList.add('show');return;}
+    var apps=getApps();if(!apps[aid])return;if(!apps[aid].codes)apps[aid].codes=[];
+    if(cid){var c=apps[aid].codes.find(function(x){return x.id===cid;});if(c){c.name=n;c.content=ct;c.updatedAt=Date.now();}}
+    else{apps[aid].codes.push({id:'c_'+Date.now(),name:n,content:ct,createdAt:Date.now(),updatedAt:Date.now()});}
+    saveApps(apps);closeModal('codeModal');renderApps();showToast('✅ Code disimpan!','s');
 }
-
-function deleteApp(id) {
-    var a = getApps()[id];
-    if (!a) return;
-    window._confirm = function() {
-        var apps = getApps();
-        delete apps[id];
-        saveApps(apps);
-        closeModal('confirmModal');
-        renderApps();
-        showToast('🗑️ Aplikasi "' + a.name + '" dihapus.', 'info');
-        window._confirm = null;
-    };
-    document.getElementById('confirmTitle').textContent = '⚠️ Hapus Aplikasi?';
-    document.getElementById('confirmMsg').textContent = 'Yakin hapus "' + a.name + '" beserta semua codenya?';
-    document.getElementById('confirmBtn').textContent = 'Ya, Hapus';
-    openModal('confirmModal');
+function editCode(aid,cid){var a=getApps()[aid];if(!a)return;var c=a.codes.find(function(x){return x.id===cid;});if(!c)return;document.getElementById('codeModalTitle').textContent='✏️ Edit Code';document.getElementById('codeAppId').value=aid;document.getElementById('editCodeId').value=cid;document.getElementById('codeName').value=c.name;document.getElementById('codeContent').value=c.content;openModal('codeModal');}
+function deleteCodeItem(aid,cid){
+    var a=getApps()[aid];if(!a)return;var c=a.codes.find(function(x){return x.id===cid;});if(!c)return;
+    window._cf=function(){a.codes=a.codes.filter(function(x){return x.id!==cid;});saveApps(getApps());closeModal('confirmModal');renderApps();showToast('🗑️ Dihapus.','s');};
+    document.getElementById('confirmTitle').textContent='⚠️ Hapus?';document.getElementById('confirmMsg').textContent='Hapus "'+c.name+'"?';openModal('confirmModal');
 }
-
-function toggleApp(id) {
-    var apps = getApps();
-    if (apps[id]) {
-        apps[id].isOpen = !apps[id].isOpen;
-        saveApps(apps);
-        renderApps();
-    }
-}
-
-function addCode(appId) {
-    document.getElementById('codeModalTitle').textContent = '➕ Tambah Code';
-    document.getElementById('codeAppId').value = appId;
-    document.getElementById('editCodeId').value = '';
-    document.getElementById('codeName').value = '';
-    document.getElementById('codeContent').value = '';
-    document.getElementById('codeErr').classList.remove('show');
-    openModal('codeModal');
-}
-
-function saveCode() {
-    var appId = document.getElementById('codeAppId').value;
-    var codeId = document.getElementById('editCodeId').value;
-    var name = document.getElementById('codeName').value.trim();
-    var content = document.getElementById('codeContent').value.trim();
-    var errEl = document.getElementById('codeErr');
-    
-    errEl.classList.remove('show');
-    if (!name || !content) {
-        errEl.textContent = 'Nama code dan konten wajib diisi.';
-        errEl.classList.add('show');
-        return;
-    }
-    
-    var apps = getApps();
-    if (!apps[appId]) return;
-    if (!apps[appId].codes) apps[appId].codes = [];
-    
-    if (codeId) {
-        var c = apps[appId].codes.find(function(x) { return x.id === codeId; });
-        if (c) { c.name = name; c.content = content; c.updatedAt = Date.now(); }
-    } else {
-        apps[appId].codes.push({
-            id: 'c_' + Date.now() + '_' + Math.random().toString(36).substr(2, 4),
-            name: name, content: content,
-            createdAt: Date.now(), updatedAt: Date.now()
-        });
-    }
-    
-    saveApps(apps);
-    closeModal('codeModal');
-    renderApps();
-    showToast('✅ Code berhasil disimpan!', 'success');
-}
-
-function editCode(appId, codeId) {
-    var a = getApps()[appId];
-    if (!a) return;
-    var c = a.codes.find(function(x) { return x.id === codeId; });
-    if (!c) return;
-    document.getElementById('codeModalTitle').textContent = '✏️ Edit Code';
-    document.getElementById('codeAppId').value = appId;
-    document.getElementById('editCodeId').value = codeId;
-    document.getElementById('codeName').value = c.name || '';
-    document.getElementById('codeContent').value = c.content || '';
-    openModal('codeModal');
-}
-
-function deleteCodeItem(appId, codeId) {
-    var a = getApps()[appId];
-    if (!a) return;
-    var c = a.codes.find(function(x) { return x.id === codeId; });
-    if (!c) return;
-    window._confirm = function() {
-        a.codes = a.codes.filter(function(x) { return x.id !== codeId; });
-        saveApps(getApps());
-        closeModal('confirmModal');
-        renderApps();
-        showToast('🗑️ Code "' + c.name + '" dihapus.', 'info');
-        window._confirm = null;
-    };
-    document.getElementById('confirmTitle').textContent = '⚠️ Hapus Code?';
-    document.getElementById('confirmMsg').textContent = 'Yakin hapus "' + c.name + '"?';
-    document.getElementById('confirmBtn').textContent = 'Ya, Hapus';
-    openModal('confirmModal');
-}
-
-function toggleCode(appId, codeId) {
-    var apps = getApps();
-    var c = apps[appId] && apps[appId].codes ? apps[appId].codes.find(function(x) { return x.id === codeId; }) : null;
-    if (c) { c.isOpen = !c.isOpen; saveApps(apps); renderApps(); }
-}
-
-function copySingleCode(appId, codeId) {
-    var c = getApps()[appId] && getApps()[appId].codes ? getApps()[appId].codes.find(function(x) { return x.id === codeId; }) : null;
-    if (!c || !c.content) { showToast('⚠️ Code kosong.', 'warning'); return; }
-    copyText(c.content);
-    showToast('✅ Code "' + c.name + '" dicopy!', 'success');
-}
+function toggleCode(aid,cid){var apps=getApps();var c=apps[aid]&&apps[aid].codes?apps[aid].codes.find(function(x){return x.id===cid;}):null;if(c){c.isOpen=!c.isOpen;saveApps(apps);renderApps();}}
+function copySC(aid,cid){var c=getApps()[aid]&&getApps()[aid].codes?getApps()[aid].codes.find(function(x){return x.id===cid;}):null;if(!c||!c.content){showToast('⚠️ Kosong.','w');return;}copyText(c.content);showToast('✅ Dicopy!','s');}
 
 // ===== SEARCH =====
-function toggleSearch() {
-    var bar = document.getElementById('searchBar');
-    bar.classList.toggle('hidden');
-    if (!bar.classList.contains('hidden')) {
-        document.getElementById('searchInput').focus();
-    } else {
-        renderApps();
-    }
+function toggleSearch(){var b=document.getElementById('searchBar');b.classList.toggle('hidden');if(!b.classList.contains('hidden'))document.getElementById('searchInput').focus();else renderApps();}
+function doSearch(){
+    var q=document.getElementById('searchInput').value.toLowerCase().trim();if(!q){renderApps();return;}
+    var apps=getApps(),c=document.getElementById('appListContainer'),h='<div class="applist">',f=false;
+    Object.keys(apps).forEach(function(k){var a=apps[k];if(a.name.toLowerCase().includes(q)||(a.codes||[]).some(function(x){return x.name.toLowerCase().includes(q)||(x.content||'').toLowerCase().includes(q);})){f=true;h+='<div class="appitem"><div class="apphead" onclick="toggleApp(\''+k+'\')"><div class="appname">📱 '+esc(a.name)+'</div></div><div class="appcodes open">'+renderCodes(k,a.codes||[])+'</div></div>';}});h+='</div>';
+    if(c)c.innerHTML=f?h:'<div class="empty"><div class="icon">🔍</div><h3>Tidak Ditemukan</h3></div>';
+    document.getElementById('emptyState').style.display='none';
 }
+function clearSearch(){document.getElementById('searchInput').value='';document.getElementById('searchBar').classList.add('hidden');renderApps();}
 
-function doSearch() {
-    var q = document.getElementById('searchInput').value.toLowerCase().trim();
-    if (!q) { renderApps(); return; }
-    
-    var apps = getApps();
-    var container = document.getElementById('appListContainer');
-    var html = '<div class="applist">';
-    var found = false;
-    
-    Object.keys(apps).forEach(function(k) {
-        var a = apps[k];
-        if (a.name.toLowerCase().includes(q) || (a.codes || []).some(function(c) {
-            return c.name.toLowerCase().includes(q) || (c.content || '').toLowerCase().includes(q);
-        })) {
-            found = true;
-            html += '<div class="appitem"><div class="apphead" onclick="toggleApp(\'' + k + '\')"><div class="appname">📱 ' + escapeHtml(a.name) + '</div></div><div class="appcodes open">' + renderCodes(k, a.codes || []) + '</div></div>';
-        }
-    });
-    
-    html += '</div>';
-    if (container) container.innerHTML = found ? html : '<div class="empty"><div class="icon">🔍</div><h3>Tidak Ditemukan</h3><p>Coba kata kunci lain.</p></div>';
-    document.getElementById('emptyState').style.display = 'none';
+// ===== EXPORT/IMPORT =====
+function exportAll(){
+    var d={exportedAt:new Date().toISOString(),apps:getApps(),packages:getPackages(),wa:getWA(),version:'3.0'};
+    var b=new Blob([JSON.stringify(d,null,2)],{type:'application/json'});
+    var a=document.createElement('a');a.href=URL.createObjectURL(b);a.download='Notepad_Backup_'+new Date().toISOString().slice(0,10)+'.json';a.click();
+    showToast('📤 Diexport!','s');
 }
-
-function clearSearch() {
-    document.getElementById('searchInput').value = '';
-    document.getElementById('searchBar').classList.add('hidden');
-    renderApps();
-}
-
-// ===== EXPORT / IMPORT =====
-function exportAll() {
-    if (!getSession()) { showToast('⚠️ Login dulu.', 'warning'); return; }
-    var data = {
-        exportedAt: new Date().toISOString(),
-        apps: getApps(),
-        packages: getPackages(),
-        wa: getWA(),
-        users: getUsers().map(function(u) { return { nama: u.nama, username: u.username, email: u.email, isActivated: u.isActivated }; }),
-        version: '3.0'
-    };
-    var blob = new Blob([JSON.stringify(data, null, 2)], { type: 'application/json' });
-    var a = document.createElement('a');
-    a.href = URL.createObjectURL(blob);
-    a.download = 'Notepad_Backup_' + new Date().toISOString().slice(0, 10) + '.json';
-    a.click();
-    URL.revokeObjectURL(a.href);
-    showToast('📤 Data berhasil diexport!', 'success');
-}
-
-function importAll(input) {
-    if (!getSession()) { showToast('⚠️ Login dulu.', 'warning'); return; }
-    var file = input.files[0];
-    if (!file) return;
-    
-    var reader = new FileReader();
-    reader.onload = function(e) {
-        try {
-            var data = JSON.parse(e.target.result);
-            if (!data.apps) { showToast('❌ Format file tidak valid.', 'error'); return; }
-            
-            window._confirm = function() {
-                saveApps(data.apps);
-                if (data.packages) savePackages(data.packages);
-                if (data.wa) saveWA(data.wa);
-                closeModal('confirmModal');
-                renderApps();
-                updateWADisplay();
-                showToast('📥 Data berhasil diimport!', 'success');
-                window._confirm = null;
-            };
-            
-            document.getElementById('confirmTitle').textContent = '📥 Import Data';
-            document.getElementById('confirmMsg').textContent = 'Data aplikasi saat ini akan digabung/ditimpa. Lanjutkan?';
-            document.getElementById('confirmBtn').textContent = 'Ya, Import';
-            openModal('confirmModal');
-        } catch(err) {
-            showToast('❌ Error: ' + err.message, 'error');
-        }
-    };
-    reader.readAsText(file);
-    input.value = '';
+function importAll(inp){
+    var f=inp.files[0];if(!f)return;var r=new FileReader();
+    r.onload=function(e){try{var d=JSON.parse(e.target.result);if(!d.apps){showToast('❌ Format salah.','e');return;}
+        window._cf=function(){saveApps(d.apps);if(d.packages)savePackages(d.packages);if(d.wa)saveWA(d.wa);closeModal('confirmModal');renderApps();updateWA();showToast('📥 Diimport!','s');};
+        document.getElementById('confirmTitle').textContent='📥 Import?';document.getElementById('confirmMsg').textContent='Data akan ditimpa.';openModal('confirmModal');
+    }catch(err){showToast('❌ Error.','e');}};r.readAsText(f);inp.value='';
 }
 
 // ===== MERGE =====
-var selectedMerge = [];
-
-function showMergeModal() {
-    var s = getSession();
-    if (!s) { showToast('⚠️ Login dulu.', 'warning'); showLoginModal(); return; }
-    if (!s.isPremium && s.role !== 'superadmin') {
-        showToast('🔒 Fitur Premium! Silakan aktivasi.', 'warning');
-        showLoginModal();
-        return;
-    }
-    
-    var apps = getApps();
-    var keys = Object.keys(apps);
-    if (!keys.length) { showToast('⚠️ Belum ada aplikasi.', 'warning'); return; }
-    
-    var container = document.getElementById('mergeAppList');
-    container.innerHTML = '';
-    selectedMerge = [];
-    
-    keys.forEach(function(k) {
-        var a = apps[k];
-        var n = (a.codes || []).length;
-        if (n > 0) selectedMerge.push(k);
-        
-        var label = document.createElement('label');
-        label.style.cssText = 'display:flex;align-items:center;gap:6px;padding:6px 12px;background:var(--bg3);border-radius:6px;cursor:pointer;font-size:.9rem;';
-        label.innerHTML = '<input type="checkbox" class="mc" value="' + k + '" ' + (n > 0 ? 'checked' : 'disabled') + '> 📱 ' + escapeHtml(a.name) + ' (' + n + ' code)';
-        container.appendChild(label);
-        
-        var cb = label.querySelector('.mc');
-        cb.addEventListener('change', function() {
-            if (this.checked) { if (selectedMerge.indexOf(this.value) === -1) selectedMerge.push(this.value); }
-            else { selectedMerge = selectedMerge.filter(function(x) { return x !== this.value; }); }
-        });
+var sm=[];
+function showMergeModal(){
+    var ss=getSession();if(!ss){showToast('⚠️ Login dulu.','w');return;}if(!ss.isPremium&&ss.role!=='superadmin'){showToast('🔒 Premium only!','w');return;}
+    var apps=getApps(),ks=Object.keys(apps);if(!ks.length){showToast('⚠️ Belum ada aplikasi.','w');return;}
+    var c=document.getElementById('mergeAppList');c.innerHTML='';sm=[];
+    ks.forEach(function(k){var a=apps[k],n=(a.codes||[]).length;if(n>0)sm.push(k);
+        var l=document.createElement('label');l.style.cssText='display:flex;align-items:center;gap:6px;padding:6px 12px;background:var(--bg3);border-radius:6px;cursor:pointer;font-size:.9rem;';
+        l.innerHTML='<input type="checkbox" class="mc" value="'+k+'" '+(n>0?'checked':'')+'> 📱 '+esc(a.name)+' ('+n+' code)';c.appendChild(l);
+        l.querySelector('.mc').addEventListener('change',function(){if(this.checked){if(sm.indexOf(this.value)===-1)sm.push(this.value);}else{sm=sm.filter(function(x){return x!==this.value;});}});
     });
-    
-    document.getElementById('mergeResult').classList.add('hidden');
-    document.getElementById('mergeOutput').value = '';
-    openModal('mergeModal');
+    document.getElementById('mergeResult').classList.add('hidden');openModal('mergeModal');
 }
-
-function doMerge() {
-    if (!selectedMerge.length) { showToast('⚠️ Pilih minimal satu aplikasi.', 'warning'); return; }
-    
-    var apps = getApps();
-    var allCodes = [];
-    selectedMerge.forEach(function(k) {
-        (apps[k] && apps[k].codes || []).forEach(function(c) {
-            if (c.content && c.content.trim()) {
-                allCodes.push({ app: apps[k].name, name: c.name, content: c.content });
-            }
-        });
-    });
-    
-    if (!allCodes.length) { showToast('⚠️ Tidak ada code untuk digabung.', 'warning'); return; }
-    
-    var html = '<!DOCTYPE html>\n<html lang="id">\n<head>\n<meta charset="UTF-8">\n<meta name="viewport" content="width=device-width,initial-scale=1.0">\n<title>Gabungan Code - Notepad+</title>\n<style>body{font-family:monospace;padding:20px;background:#0a0a1a;color:#e8e8f0;}.b{margin-bottom:20px;border:1px solid #333;border-radius:8px;overflow:hidden;}.bh{background:#1a1a35;padding:12px 16px;border-bottom:1px solid #333;font-weight:bold;display:flex;justify-content:space-between;}.bh .a{color:#8b5cf6;}.bh .n{color:#a0a0b8;}pre{margin:0;padding:16px;overflow-x:auto;font-size:13px;line-height:1.6;background:#0f0f20;}.f{text-align:center;padding:20px;color:#6a6a80;font-size:12px;border-top:1px solid #333;margin-top:20px;}</style>\n</head>\n<body>\n<h1>📝 Gabungan Code - Notepad+</h1>\n<p style="color:#a0a0b8;margin-bottom:20px;">Total ' + allCodes.length + ' code</p>\n';
-    
-    allCodes.forEach(function(c) {
-        html += '<div class="b"><div class="bh"><span class="a">📱 ' + escapeHtml(c.app) + '</span><span class="n">📝 ' + escapeHtml(c.name) + '</span></div><pre>' + escapeHtml(c.content) + '</pre></div>\n';
-    });
-    
-    html += '<div class="f">Generated by Notepad+ v3.0<br>' + new Date().toLocaleString('id-ID') + '</div>\n</body>\n</html>';
-    
-    document.getElementById('mergeOutput').value = html;
-    document.getElementById('mergeResult').classList.remove('hidden');
-    showToast('✅ ' + allCodes.length + ' code berhasil digabung!', 'success');
+function doMerge(){
+    if(!sm.length){showToast('⚠️ Pilih aplikasi.','w');return;}
+    var apps=getApps(),ac=[];sm.forEach(function(k){(apps[k]&&apps[k].codes||[]).forEach(function(c){if(c.content&&c.content.trim())ac.push({app:apps[k].name,name:c.name,content:c.content});});});
+    if(!ac.length){showToast('⚠️ Tidak ada code.','w');return;}
+    var h='<!DOCTYPE html>\n<html lang="id">\n<head>\n<meta charset="UTF-8">\n<title>Gabungan Code</title>\n<style>body{font-family:monospace;padding:20px;background:#0a0a1a;color:#e8e8f0;}.b{margin-bottom:20px;border:1px solid #333;border-radius:8px;}.bh{background:#1a1a35;padding:12px 16px;border-bottom:1px solid #333;}pre{margin:0;padding:16px;overflow-x:auto;font-size:13px;}</style>\n</head>\n<body>\n<h1>📝 Gabungan Code</h1>\n';
+    ac.forEach(function(c){h+='<div class="b"><div class="bh">📱 '+esc(c.app)+' | 📝 '+esc(c.name)+'</div><pre>'+esc(c.content)+'</pre></div>\n';});
+    h+='</body>\n</html>';document.getElementById('mergeOutput').value=h;document.getElementById('mergeResult').classList.remove('hidden');
+    showToast('✅ '+ac.length+' code digabung!','s');
 }
-
-function copyMergeResult() {
-    var t = document.getElementById('mergeOutput').value;
-    if (!t) { showToast('⚠️ Tidak ada hasil.', 'warning'); return; }
-    copyText(t);
-    showToast('✅ Hasil gabungan dicopy!', 'success');
-}
-
-function downloadMergeResult() {
-    var t = document.getElementById('mergeOutput').value;
-    if (!t) { showToast('⚠️ Tidak ada hasil.', 'warning'); return; }
-    var blob = new Blob([t], { type: 'text/html' });
-    var a = document.createElement('a');
-    a.href = URL.createObjectURL(blob);
-    a.download = 'index_gabungan_' + new Date().toISOString().slice(0, 10) + '.html';
-    a.click();
-    URL.revokeObjectURL(a.href);
-    showToast('📥 index.html didownload!', 'success');
-}
+function copyMergeResult(){var t=document.getElementById('mergeOutput').value;if(!t)return;copyText(t);showToast('✅ Dicopy!','s');}
+function downloadMergeResult(){var t=document.getElementById('mergeOutput').value;if(!t)return;var b=new Blob([t],{type:'text/html'});var a=document.createElement('a');a.href=URL.createObjectURL(b);a.download='index.html';a.click();showToast('📥 Didownload!','s');}
 
 // ===== CONFIRM =====
-function execConfirm() {
-    if (typeof window._confirm === 'function') {
-        window._confirm();
-        window._confirm = null;
-    }
-    closeModal('confirmModal');
-}
+function execConfirm(){if(typeof window._cf==='function'){window._cf();window._cf=null;}closeModal('confirmModal');}
 
 // ===== MODAL =====
-function openModal(id) {
-    var m = document.getElementById(id);
-    if (m) { m.classList.add('show'); m.style.display = 'flex'; document.body.style.overflow = 'hidden'; }
-}
-
-function closeModal(id) {
-    var m = document.getElementById(id);
-    if (m) { m.classList.remove('show'); m.style.display = 'none'; document.body.style.overflow = ''; }
-}
-
-document.addEventListener('click', function(e) {
-    if (e.target.classList.contains('modal') && e.target.classList.contains('show')) {
-        e.target.classList.remove('show');
-        e.target.style.display = 'none';
-        document.body.style.overflow = '';
-    }
-});
-
-document.addEventListener('keydown', function(e) {
-    if (e.key === 'Escape') {
-        var modals = document.querySelectorAll('.modal.show');
-        modals.forEach(function(m) {
-            m.classList.remove('show');
-            m.style.display = 'none';
-        });
-        document.body.style.overflow = '';
-    }
-});
+function openModal(id){var m=document.getElementById(id);if(m){m.classList.add('show');m.style.display='flex';document.body.style.overflow='hidden';}}
+function closeModal(id){var m=document.getElementById(id);if(m){m.classList.remove('show');m.style.display='none';document.body.style.overflow='';}}
+document.addEventListener('click',function(e){if(e.target.classList.contains('modal')&&e.target.classList.contains('show')){e.target.classList.remove('show');e.target.style.display='none';document.body.style.overflow='';}});
+document.addEventListener('keydown',function(e){if(e.key==='Escape'){document.querySelectorAll('.modal.show').forEach(function(m){m.classList.remove('show');m.style.display='none';});document.body.style.overflow='';}});
 
 // ===== TOAST =====
-function showToast(msg, type) {
-    var container = document.getElementById('toastContainer');
-    if (!container) {
-        container = document.createElement('div');
-        container.id = 'toastContainer';
-        container.className = 'toastc';
-        document.body.appendChild(container);
-    }
-    var toast = document.createElement('div');
-    toast.className = 'toast ' + (type || '');
-    toast.textContent = msg;
-    container.appendChild(toast);
-    setTimeout(function() { toast.classList.add('show'); }, 10);
-    setTimeout(function() { toast.classList.remove('show'); setTimeout(function() { toast.remove(); }, 300); }, 3500);
+function showToast(msg,tp){
+    var c=document.getElementById('toastContainer');if(!c){c=document.createElement('div');c.id='toastContainer';c.className='toastc';document.body.appendChild(c);}
+    var t=document.createElement('div');t.className='toast '+(tp||'');t.textContent=msg;c.appendChild(t);
+    setTimeout(function(){t.classList.add('show');},10);
+    setTimeout(function(){t.classList.remove('show');setTimeout(function(){t.remove();},300);},3500);
 }
 
 // ===== UTILS =====
-function escapeHtml(t) { if (!t) return ''; var d = document.createElement('div'); d.textContent = t; return d.innerHTML; }
-function copyText(t) { 
-    if (navigator.clipboard) {
-        navigator.clipboard.writeText(t).then(function() {}).catch(function() {});
-    }
-    // Fallback
-    var ta = document.createElement('textarea');
-    ta.value = t;
-    ta.style.position = 'fixed';
-    ta.style.opacity = '0';
-    document.body.appendChild(ta);
-    ta.select();
-    document.execCommand('copy');
-    document.body.removeChild(ta);
-}
-function toggleTheme() {
-    document.body.classList.toggle('light');
-    var icon = document.body.classList.contains('light') ? '☀️' : '🌙';
-    var btns = document.querySelectorAll('#themeBtn1, #themeBtn2');
-    btns.forEach(function(b) { b.textContent = icon; });
-}
+function esc(t){if(!t)return'';var d=document.createElement('div');d.textContent=t;return d.innerHTML;}
+function copyText(t){try{navigator.clipboard.writeText(t);}catch(e){var ta=document.createElement('textarea');ta.value=t;ta.style.position='fixed';ta.style.opacity='0';document.body.appendChild(ta);ta.select();document.execCommand('copy');document.body.removeChild(ta);}}
+function toggleTheme(){document.body.classList.toggle('light');var ic=document.body.classList.contains('light')?'☀️':'🌙';document.querySelectorAll('#themeBtn1,#themeBtn2').forEach(function(b){b.textContent=ic;});}
 
 // ===== INIT =====
-function init() {
-    initSecurity();
-    updateOnlineStatus();
-    updateUI();
-    renderApps();
-    updateWADisplay();
-    
-    var session = getSession();
-    if (session) {
-        document.getElementById('landingPage').classList.add('hidden');
-        document.getElementById('appPage').classList.remove('hidden');
-    } else {
-        document.getElementById('landingPage').classList.remove('hidden');
-        document.getElementById('appPage').classList.add('hidden');
-    }
-    
-    console.log('✅ Notepad+ v3.0 Ready | 🔒 Security Active | 👥 Multi-User System');
+function init(){
+    updOnline();updateUI();renderApps();updateWA();
+    var ss=getSession();
+    if(ss){document.getElementById('landingPage').classList.add('hidden');document.getElementById('appPage').classList.remove('hidden');}
+    console.log('✅ Notepad+ v3.0 Ready!');
     console.log('👑 Super Admin: superadmin / admin123');
-    console.log('💡 Tips: Register user baru, lalu Super Admin buatkan kode aktivasi');
 }
-
-document.addEventListener('DOMContentLoaded', init);
+document.addEventListener('DOMContentLoaded',init);
 </script>
 </body>
 </html>
-    
