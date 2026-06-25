@@ -8,1027 +8,504 @@
     <meta name="apple-mobile-web-app-status-bar-style" content="default">
     <title>Notepad+ Code Storage v3.3</title>
     <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E%3Crect width='100' height='100' rx='20' fill='%230a0a1a'/%3E%3Ctext x='50' y='68' text-anchor='middle' font-size='60' fill='%23ffffff'%3E📝%3C/text%3E%3C/svg%3E">
-    <link rel="stylesheet" href="style.css">
+    <style>
+        /* ========== RESET & BASE ========== */
+        *,*::before,*::after{box-sizing:border-box;margin:0;padding:0;border:0;font:inherit;vertical-align:baseline}
+        html{scroll-behavior:smooth;-webkit-text-size-adjust:100%;font-size:16px;line-height:1.5;-webkit-font-smoothing:antialiased;-moz-osx-font-smoothing:grayscale}
+        body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,'Helvetica Neue',Arial,sans-serif;background:var(--bg-primary);color:var(--text-primary);min-height:100vh;min-height:100dvh;overflow-x:hidden;transition:background 0.3s ease,color 0.3s ease}
+        :root{--bg-primary:#0a0a1a;--bg-secondary:#12122a;--bg-tertiary:#1a1a35;--bg-hover:#222240;--text-primary:#e8e8f0;--text-secondary:#a0a0b8;--text-muted:#6a6a80;--accent-primary:#7c3aed;--accent-hover:#6d28d9;--accent-light:#8b5cf6;--color-success:#10b981;--color-success-hover:#059669;--color-danger:#ef4444;--color-danger-hover:#dc2626;--color-warning:#f59e0b;--color-warning-hover:#d97706;--color-info:#3b82f6;--color-info-hover:#2563eb;--color-orange:#f97316;--border-color:rgba(255,255,255,0.06);--border-color-strong:rgba(255,255,255,0.1);--shadow-sm:0 2px 8px rgba(0,0,0,0.4);--shadow-md:0 4px 20px rgba(0,0,0,0.5);--shadow-lg:0 8px 32px rgba(0,0,0,0.6);--radius-sm:8px;--radius-md:12px;--radius-lg:16px;--radius-full:9999px;--spacing-xs:4px;--spacing-sm:8px;--spacing-md:12px;--spacing-lg:16px;--spacing-xl:20px;--spacing-2xl:24px;--spacing-3xl:32px;--spacing-4xl:40px;--transition-base:200ms ease;--transition-slow:300ms ease;--z-modal:998;--z-toast:9999}
+        body.light-theme{--bg-primary:#f5f5f8;--bg-secondary:#ffffff;--bg-tertiary:#f0f0f5;--bg-hover:#e5e5ea;--text-primary:#1a1a2e;--text-secondary:#555570;--text-muted:#8888a0;--border-color:rgba(0,0,0,0.08);--border-color-strong:rgba(0,0,0,0.12)}
+        ::-webkit-scrollbar{width:4px;height:4px}
+        ::-webkit-scrollbar-track{background:transparent}
+        ::-webkit-scrollbar-thumb{background:var(--accent-primary);border-radius:var(--radius-full)}
+        *{scrollbar-width:thin;scrollbar-color:var(--accent-primary) transparent}
+        @keyframes fadeIn{from{opacity:0}to{opacity:1}}
+        @keyframes slideUp{from{opacity:0;transform:translateY(20px)}to{opacity:1;transform:translateY(0)}}
+        @keyframes spin{to{transform:rotate(360deg)}}
+        .hidden{display:none!important}
+        .btn{display:inline-flex;align-items:center;justify-content:center;gap:6px;padding:10px 20px;border:none;border-radius:var(--radius-sm);font-weight:600;cursor:pointer;transition:all var(--transition-base);font-size:0.9rem;min-height:40px;text-decoration:none;line-height:1.2;font-family:inherit}
+        .btn:hover{transform:translateY(-1px);box-shadow:var(--shadow-md)}
+        .btn:active{transform:translateY(0)}
+        .btn:disabled{opacity:0.5;cursor:not-allowed;transform:none!important;box-shadow:none!important}
+        .btn-primary{background:var(--accent-primary);color:#fff}
+        .btn-primary:hover{background:var(--accent-hover)}
+        .btn-success{background:var(--color-success);color:#fff}
+        .btn-success:hover{background:var(--color-success-hover)}
+        .btn-danger{background:var(--color-danger);color:#fff}
+        .btn-danger:hover{background:var(--color-danger-hover)}
+        .btn-warning{background:var(--color-warning);color:#000}
+        .btn-warning:hover{background:var(--color-warning-hover)}
+        .btn-blue{background:var(--color-info);color:#fff}
+        .btn-blue:hover{background:var(--color-info-hover)}
+        .btn-gray{background:var(--text-muted);color:#fff}
+        .btn-gray:hover{background:#7a7a8a}
+        .btn-outline{background:transparent;border:2px solid var(--accent-primary);color:var(--accent-light)}
+        .btn-outline:hover{background:var(--accent-primary);color:#fff}
+        .btn-sm{padding:6px 14px;font-size:0.8rem;min-height:30px}
+        .btn-lg{padding:14px 28px;font-size:1.05rem;min-height:48px}
+        .btn-block{width:100%;display:flex}
+        .badge{display:inline-flex;align-items:center;gap:4px;padding:3px 10px;border-radius:var(--radius-full);font-size:0.7rem;font-weight:600;text-transform:uppercase;letter-spacing:0.5px}
+        .badge-purple{background:var(--accent-primary);color:#fff}
+        input,textarea,select{width:100%;padding:10px 14px;border:1px solid var(--border-color-strong);border-radius:var(--radius-sm);font-size:0.9rem;transition:all var(--transition-base);background:var(--bg-tertiary);color:var(--text-primary);font-family:inherit}
+        input:focus,textarea:focus,select:focus{outline:none;border-color:var(--accent-primary);box-shadow:0 0 0 3px rgba(124,58,237,0.15)}
+        input::placeholder,textarea::placeholder{color:var(--text-muted)}
+        textarea{resize:vertical;min-height:80px;font-family:'Courier New',monospace;font-size:0.85rem;line-height:1.7}
+        select{appearance:none;background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' viewBox='0 0 12 12'%3E%3Cpath fill='%23a0a0b8' d='M6 8L1 3h10z'/%3E%3C/svg%3E");background-repeat:no-repeat;background-position:right 12px center;padding-right:36px;cursor:pointer}
+        .form-group{margin-bottom:var(--spacing-lg)}
+        .form-label{display:block;margin-bottom:var(--spacing-sm);font-weight:500;font-size:0.85rem;color:var(--text-secondary)}
+        .form-hint{font-size:0.75rem;color:var(--text-muted);margin-top:var(--spacing-xs)}
+        .form-error{color:var(--color-danger);font-size:0.8rem;margin-top:var(--spacing-xs);display:none}
+        .form-error.show{display:block}
+        .form-success{color:var(--color-success);font-size:0.8rem;margin-top:var(--spacing-xs);display:none}
+        .form-success.show{display:block}
+        .link-text{color:var(--accent-light);cursor:pointer;transition:color var(--transition-base)}
+        .link-text:hover{color:var(--accent-primary);text-decoration:underline}
+        .toast-container{position:fixed;bottom:80px;left:50%;transform:translateX(-50%);z-index:var(--z-toast);max-width:90%;pointer-events:none}
+        .toast{background:var(--bg-secondary);color:var(--text-primary);padding:12px 20px;border-radius:var(--radius-sm);border:1px solid var(--border-color);box-shadow:var(--shadow-lg);font-size:0.9rem;opacity:0;transform:translateY(20px);transition:all var(--transition-base);pointer-events:auto;text-align:center;margin-bottom:8px;border-left:4px solid var(--accent-primary)}
+        .toast.show{opacity:1;transform:translateY(0)}
+        .toast.toast-success{border-left-color:var(--color-success)}
+        .toast.toast-error{border-left-color:var(--color-danger)}
+        .toast.toast-warning{border-left-color:var(--color-warning)}
+        .modal-overlay{position:fixed;top:0;left:0;width:100%;height:100%;background:rgba(0,0,0,0.7);backdrop-filter:blur(8px);-webkit-backdrop-filter:blur(8px);display:none;align-items:center;justify-content:center;z-index:var(--z-modal);padding:var(--spacing-lg)}
+        .modal-overlay.show{display:flex}
+        .modal-content{background:var(--bg-secondary);border-radius:var(--radius-lg);max-width:600px;width:100%;max-height:85vh;overflow-y:auto;padding:var(--spacing-2xl);animation:slideUp 0.3s ease;border:1px solid var(--border-color);box-shadow:var(--shadow-lg)}
+        .modal-header{display:flex;align-items:center;justify-content:space-between;margin-bottom:var(--spacing-xl);padding-bottom:var(--spacing-lg);border-bottom:1px solid var(--border-color)}
+        .modal-header h3{margin:0;font-size:1.2rem;font-weight:700}
+        .modal-close{background:none;border:none;font-size:1.5rem;color:var(--text-secondary);cursor:pointer;padding:4px;transition:all var(--transition-base);line-height:1}
+        .modal-close:hover{color:var(--color-danger);transform:rotate(90deg)}
+        .modal-body{padding:var(--spacing-sm) 0}
+        .modal-footer{display:flex;gap:var(--spacing-md);padding-top:var(--spacing-xl);border-top:1px solid var(--border-color);margin-top:var(--spacing-xl);justify-content:flex-end}
+        .container{max-width:1000px;margin:0 auto;padding:var(--spacing-lg);min-height:100vh}
+        .header{display:flex;align-items:center;justify-content:space-between;padding:var(--spacing-md) var(--spacing-xl);background:var(--bg-secondary);border-radius:var(--radius-md);border:1px solid var(--border-color);margin-bottom:var(--spacing-xl);flex-wrap:wrap;gap:var(--spacing-sm)}
+        .logo{font-size:1.2rem;font-weight:700;display:flex;align-items:center;gap:var(--spacing-sm)}
+        .logo-icon{font-size:1.3rem}
+        .logo-text{background:linear-gradient(135deg,var(--accent-light),#c4b5fd);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text}
+        .header-buttons{display:flex;gap:var(--spacing-sm);align-items:center;flex-wrap:wrap}
+        .user-badge{display:flex;align-items:center;gap:var(--spacing-sm);padding:4px 12px 4px 8px;background:var(--bg-tertiary);border-radius:var(--radius-full);font-size:0.85rem}
+        .user-avatar{width:28px;height:28px;border-radius:50%;background:var(--accent-primary);display:flex;align-items:center;justify-content:center;font-size:0.75rem;color:#fff;font-weight:600}
+        .user-name{font-size:0.85rem;font-weight:500}
+        .hero{text-align:center;padding:var(--spacing-3xl) var(--spacing-xl);background:var(--bg-secondary);border-radius:var(--radius-lg);border:1px solid var(--border-color);margin-bottom:var(--spacing-xl)}
+        .hero-icon{font-size:3rem;margin-bottom:var(--spacing-md)}
+        .hero h1{font-size:2rem;font-weight:800;margin-bottom:var(--spacing-sm)}
+        .gradient-text{background:linear-gradient(135deg,var(--accent-light),#c4b5fd);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text}
+        .hero-description{font-size:1rem;color:var(--text-secondary);max-width:600px;margin:0 auto var(--spacing-xl);line-height:1.6}
+        .hero-buttons{display:flex;gap:var(--spacing-md);justify-content:center;flex-wrap:wrap}
+        .whatsapp-banner{background:linear-gradient(135deg,#25D366,#128C7E);color:#fff;padding:var(--spacing-lg) var(--spacing-xl);border-radius:var(--radius-md);margin-bottom:var(--spacing-xl);display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:var(--spacing-md);cursor:pointer;transition:all var(--transition-base);border:2px solid transparent}
+        .whatsapp-banner:hover{transform:translateY(-2px);box-shadow:var(--shadow-md);border-color:rgba(255,255,255,0.3)}
+        .whatsapp-banner-left{display:flex;align-items:center;gap:var(--spacing-md)}
+        .whatsapp-banner-icon{font-size:1.5rem}
+        .whatsapp-banner-right{display:flex;align-items:center;gap:var(--spacing-sm)}
+        .offline-banner{background:var(--color-orange);color:#fff;padding:var(--spacing-md) var(--spacing-xl);border-radius:var(--radius-md);margin-bottom:var(--spacing-xl);display:none;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:var(--spacing-md)}
+        .offline-banner.show{display:flex}
+        .expiry-warning{background:var(--color-danger);color:#fff;padding:var(--spacing-md) var(--spacing-xl);border-radius:var(--radius-md);margin-bottom:var(--spacing-xl);display:none;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:var(--spacing-md)}
+        .expiry-warning.show{display:flex}
+        .section-title{text-align:center;font-size:1.3rem;font-weight:700;margin-bottom:var(--spacing-lg);margin-top:var(--spacing-sm)}
+        .features-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(200px,1fr));gap:var(--spacing-lg);margin-bottom:var(--spacing-2xl)}
+        .feature-card{background:var(--bg-secondary);border-radius:var(--radius-md);padding:var(--spacing-xl);border:1px solid var(--border-color);text-align:center;transition:all var(--transition-base)}
+        .feature-card:hover{border-color:var(--accent-primary);transform:translateY(-3px);box-shadow:var(--shadow-md)}
+        .feature-icon{font-size:2rem;margin-bottom:var(--spacing-sm)}
+        .feature-card h4{font-size:1rem;font-weight:600;margin-bottom:var(--spacing-xs)}
+        .feature-card p{font-size:0.85rem;color:var(--text-secondary);margin:0;line-height:1.5}
+        .price-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(240px,1fr));gap:var(--spacing-lg);margin-bottom:var(--spacing-2xl)}
+        .price-card{background:var(--bg-secondary);border-radius:var(--radius-lg);padding:var(--spacing-2xl);border:2px solid var(--border-color);text-align:center;transition:all var(--transition-base);position:relative}
+        .price-card:hover{border-color:var(--accent-primary);transform:translateY(-4px);box-shadow:var(--shadow-md)}
+        .price-card.featured{border-color:var(--accent-primary);background:var(--bg-tertiary)}
+        .featured-badge{position:absolute;top:-12px;left:50%;transform:translateX(-50%);background:var(--accent-primary);color:#fff;padding:3px 16px;border-radius:var(--radius-full);font-size:0.7rem;font-weight:700;white-space:nowrap}
+        .price-icon{font-size:2.5rem;margin-bottom:var(--spacing-sm)}
+        .price-name{font-size:1.2rem;font-weight:700}
+        .price-value{font-size:2rem;font-weight:800;color:var(--color-success);margin:var(--spacing-sm) 0}
+        .price-duration{font-size:0.85rem;color:var(--text-secondary)}
+        .stats-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(130px,1fr));gap:var(--spacing-md);margin-bottom:var(--spacing-xl)}
+        .stat-card{background:var(--bg-secondary);border-radius:var(--radius-sm);padding:var(--spacing-lg);border:1px solid var(--border-color);text-align:center}
+        .stat-value{font-size:1.5rem;font-weight:700;color:var(--accent-light)}
+        .stat-label{font-size:0.78rem;color:var(--text-secondary);margin-top:var(--spacing-xs)}
+        .toolbar{display:flex;gap:var(--spacing-md);flex-wrap:wrap;margin-bottom:var(--spacing-xl)}
+        .app-list{display:grid;grid-template-columns:1fr;gap:var(--spacing-md)}
+        .app-item{background:var(--bg-secondary);border-radius:var(--radius-md);border:1px solid var(--border-color);overflow:hidden;transition:all var(--transition-base)}
+        .app-item:hover{border-color:var(--accent-primary)}
+        .app-header{display:flex;align-items:center;justify-content:space-between;padding:var(--spacing-md) var(--spacing-lg);cursor:pointer;transition:all var(--transition-base);flex-wrap:wrap;gap:var(--spacing-sm)}
+        .app-header:hover{background:var(--bg-hover)}
+        .app-name{font-weight:600;font-size:1rem;display:flex;align-items:center;gap:var(--spacing-sm)}
+        .app-code-count{font-size:0.75rem;color:var(--text-muted);background:var(--bg-tertiary);padding:2px 10px;border-radius:var(--radius-full)}
+        .app-codes-container{padding:0 var(--spacing-lg) var(--spacing-md);display:none}
+        .app-codes-container.open{display:block}
+        .code-item{background:var(--bg-tertiary);border-radius:var(--radius-sm);padding:var(--spacing-md);margin-bottom:var(--spacing-sm);border:1px solid var(--border-color);transition:all var(--transition-base)}
+        .code-item:hover{border-color:var(--accent-primary)}
+        .code-header{display:flex;align-items:center;justify-content:space-between;margin-bottom:var(--spacing-sm);flex-wrap:wrap;gap:var(--spacing-sm)}
+        .code-name{font-weight:500;font-size:0.9rem}
+        .code-content-preview{font-family:'Courier New',monospace;font-size:0.8rem;color:var(--text-secondary);white-space:pre-wrap;word-wrap:break-word;max-height:180px;overflow-y:auto;padding:var(--spacing-sm);background:var(--bg-primary);border-radius:6px;border:1px solid var(--border-color);display:none}
+        .code-content-preview.show{display:block}
+        .empty-state{text-align:center;padding:var(--spacing-3xl) var(--spacing-lg);color:var(--text-secondary)}
+        .empty-state-icon{font-size:3rem;margin-bottom:var(--spacing-md)}
+        .empty-state h3{font-size:1.2rem;color:var(--text-primary);margin-bottom:var(--spacing-sm)}
+        .empty-state p{color:var(--text-muted);margin-bottom:var(--spacing-lg)}
+        .admin-tabs{display:flex;gap:var(--spacing-sm);flex-wrap:wrap;margin-bottom:var(--spacing-lg);border-bottom:1px solid var(--border-color);padding-bottom:var(--spacing-md)}
+        .admin-tab{padding:8px 16px;border:2px solid var(--accent-primary);background:transparent;color:var(--accent-light);border-radius:var(--radius-sm);cursor:pointer;font-weight:600;font-size:0.85rem;transition:all var(--transition-base)}
+        .admin-tab:hover,.admin-tab.active{background:var(--accent-primary);color:#fff}
+        .admin-tab-content{animation:fadeIn 0.3s ease}
+        .admin-table{width:100%;border-collapse:collapse;font-size:0.8rem}
+        .admin-table th,.admin-table td{padding:8px 10px;border:1px solid var(--border-color);text-align:left}
+        .admin-table th{background:var(--bg-hover);font-weight:600;text-transform:uppercase;letter-spacing:0.5px;font-size:0.75rem}
+        @media(max-width:640px){.hero h1{font-size:1.5rem}.hero{padding:var(--spacing-2xl) var(--spacing-md)}.price-grid,.features-grid{grid-template-columns:1fr}.header{flex-direction:column;align-items:stretch}.header-buttons{justify-content:center}.stats-grid{grid-template-columns:repeat(2,1fr)}.modal-content{padding:var(--spacing-lg)}.hero-buttons{flex-direction:column}.hero-buttons .btn{width:100%}}
+    </style>
 </head>
 <body>
 
-    <!-- CONNECTION STATUS BADGE -->
-    <div id="connectionBadge" style="position:fixed;top:10px;right:10px;z-index:997;padding:6px 14px;border-radius:20px;font-size:11px;font-weight:700;background:#10b981;color:#fff;opacity:0.85;">
-        ONLINE
+<!-- CONNECTION BADGE -->
+<div id="connectionBadge" style="position:fixed;top:10px;right:10px;z-index:997;padding:6px 14px;border-radius:20px;font-size:11px;font-weight:700;background:#10b981;color:#fff;opacity:0.85;">ONLINE</div>
+
+<!-- OFFLINE BANNER -->
+<div class="offline-banner" id="offlineBanner">
+    <span><strong>Mode Offline</strong> - Data disimpan di browser.</span>
+    <button onclick="downloadForOffline()" class="btn btn-warning btn-sm">Download Untuk Offline</button>
+</div>
+
+<!-- EXPIRY WARNING -->
+<div class="expiry-warning" id="expiryWarning">
+    <span id="expiryWarningText">Premium akan segera berakhir!</span>
+    <button onclick="showLoginModal()" class="btn btn-warning btn-sm">Perpanjang Premium</button>
+</div>
+
+<!-- INSTALL BANNER -->
+<div id="installBanner" style="display:none;background:linear-gradient(135deg,#7c3aed,#a78bfa);color:#fff;padding:12px 20px;border-radius:12px;margin-bottom:20px;align-items:center;justify-content:space-between;cursor:pointer;" onclick="installApplication()">
+    <span><strong>Install Notepad+ sebagai Aplikasi Desktop!</strong></span>
+    <span style="font-size:1.2rem;">Klik Disini</span>
+</div>
+
+<!-- ========== LANDING PAGE ========== -->
+<div class="container" id="landingPage">
+    <header class="header">
+        <div class="logo"><span class="logo-icon">📝</span><span class="logo-text">Notepad+ v3.3</span></div>
+        <div class="header-buttons">
+            <button onclick="showLoginModal()" class="btn btn-outline btn-sm">Login</button>
+            <button onclick="showRegisterModal()" class="btn btn-primary btn-sm">Daftar</button>
+            <button onclick="toggleTheme()" id="themeButton1" class="btn btn-gray btn-sm">🌙 Dark Mode</button>
+            <button onclick="openApplication()" class="btn btn-success btn-sm">Buka Aplikasi</button>
+            <button onclick="downloadForOffline()" class="btn btn-blue btn-sm">Download Offline</button>
+        </div>
+    </header>
+
+    <section class="hero">
+        <div class="hero-icon">📝</div>
+        <h1 class="gradient-text">Notepad+ Code Storage</h1>
+        <p class="hero-description">Simpan, kelola, dan gabungkan semua kode HTML Anda dalam satu tempat. Multi-user, aktivasi premium, keamanan terjamin, dan bisa digunakan secara offline.</p>
+        <div class="hero-buttons">
+            <button onclick="openApplication()" class="btn btn-primary btn-lg">Mulai Sekarang</button>
+            <button onclick="showLoginModal()" class="btn btn-outline btn-lg">Login</button>
+            <button onclick="installApplication()" class="btn btn-success btn-lg" id="heroInstallButton">Install Desktop</button>
+        </div>
+    </section>
+
+    <div class="whatsapp-banner" onclick="openWhatsApp()">
+        <div class="whatsapp-banner-left"><span class="whatsapp-banner-icon">💬</span><div><strong>Hubungi Admin untuk Aktivasi:</strong><br><span id="whatsappNumberLanding">+6281220285226</span></div></div>
+        <div class="whatsapp-banner-right"><span>Chat WhatsApp</span><span style="font-size:1.2rem;">👉</span></div>
     </div>
 
-    <!-- OFFLINE BANNER -->
-    <div class="offline-banner" id="offlineBanner">
-        <span><strong>Mode Offline</strong> - Data disimpan di browser. Beberapa fitur terbatas.</span>
-        <button onclick="downloadForOffline()" class="btn btn-warning btn-sm">Download Untuk Offline</button>
+    <h3 class="section-title">Fitur Unggulan</h3>
+    <div class="features-grid">
+        <div class="feature-card"><div class="feature-icon">📁</div><h4>Penyimpanan Tak Terbatas</h4><p>Simpan aplikasi dan kode HTML tanpa batasan jumlah.</p></div>
+        <div class="feature-card"><div class="feature-icon">🔄</div><h4>Gabung Otomatis</h4><p>Gabungkan semua kode menjadi 1 file index.html siap pakai.</p></div>
+        <div class="feature-card"><div class="feature-icon">🔐</div><h4>Aktivasi Premium</h4><p>Sistem kode aktivasi yang dikelola oleh Super Admin.</p></div>
+        <div class="feature-card"><div class="feature-icon">👥</div><h4>Multi User</h4><p>Setiap pengguna memiliki akun dan data masing-masing.</p></div>
+        <div class="feature-card"><div class="feature-icon">📡</div><h4>Online & Offline</h4><p>Aplikasi tetap berfungsi tanpa koneksi internet.</p></div>
+        <div class="feature-card"><div class="feature-icon">📱</div><h4>Install Desktop</h4><p>Install sebagai aplikasi desktop di Windows, Mac, atau Linux.</p></div>
     </div>
 
-    <!-- EXPIRY WARNING BANNER -->
-    <div class="expiry-warning" id="expiryWarning">
-        <span id="expiryWarningText">Premium akan segera berakhir!</span>
-        <button onclick="showLoginModal()" class="btn btn-warning btn-sm">Perpanjang Premium</button>
+    <h3 class="section-title">Paket Aktivasi Premium</h3>
+    <div class="price-grid" id="landingPriceGrid"></div>
+</div>
+
+<!-- ========== APPLICATION PAGE ========== -->
+<div class="container hidden" id="applicationPage">
+    <header class="header">
+        <div class="logo"><span class="logo-icon">📝</span><span class="logo-text">Notepad+ v3.3</span></div>
+        <div class="header-buttons">
+            <button onclick="toggleTheme()" id="themeButton2" class="btn btn-gray btn-sm">🌙 Dark Mode</button>
+            <button onclick="showProfileModal()" id="profileButton" class="btn btn-outline btn-sm hidden">Profil</button>
+            <button onclick="showSuperAdminPanel()" id="adminButton" class="btn btn-warning btn-sm hidden">Panel Admin</button>
+            <div class="user-badge" id="userBadge" style="display:none;"><div class="user-avatar" id="userAvatar">U</div><span class="user-name" id="userNameDisplay">User</span></div>
+            <button onclick="handleLogout()" id="logoutButton" class="btn btn-danger btn-sm hidden">Logout</button>
+            <button onclick="goToLandingPage()" class="btn btn-gray btn-sm">Halaman Utama</button>
+            <button onclick="downloadForOffline()" class="btn btn-blue btn-sm">Download Offline</button>
+        </div>
+    </header>
+
+    <div class="whatsapp-banner" onclick="openWhatsApp()">
+        <div class="whatsapp-banner-left"><span class="whatsapp-banner-icon">💬</span><div><strong>Aktivasi & Bantuan:</strong><br><span id="whatsappNumberApp">+6281220285226</span></div></div>
+        <div class="whatsapp-banner-right"><span>Chat Admin</span><span style="font-size:1.2rem;">👉</span></div>
     </div>
 
-    <!-- INSTALL BANNER -->
-    <div id="installBanner" style="display:none;background:linear-gradient(135deg,#7c3aed,#a78bfa);color:#fff;padding:12px 20px;border-radius:12px;margin-bottom:20px;align-items:center;justify-content:space-between;cursor:pointer;" onclick="installApplication()">
-        <span><strong>Install Notepad+ sebagai Aplikasi Desktop!</strong></span>
-        <span style="font-size:1.2rem;">Klik Disini</span>
+    <div class="stats-grid" id="dashboardStats">
+        <div class="stat-card"><div class="stat-value" id="statTotalApps">0</div><div class="stat-label">Total Aplikasi</div></div>
+        <div class="stat-card"><div class="stat-value" id="statTotalCodes">0</div><div class="stat-label">Total Code</div></div>
+        <div class="stat-card"><div class="stat-value" id="statStorage">0 KB</div><div class="stat-label">Penyimpanan</div></div>
+        <div class="stat-card"><div class="stat-value" id="statTotalUsers">0</div><div class="stat-label">Total User</div></div>
+        <div class="stat-card" style="border-color:#7c3aed;"><div class="stat-value" id="statPremiumStatus">Free</div><div class="stat-label">Status Premium</div></div>
     </div>
 
-    <!-- ============================================================ -->
-    <!-- LANDING PAGE                                                  -->
-    <!-- ============================================================ -->
-    <div class="container" id="landingPage">
-        
-        <!-- HEADER -->
-        <header class="header">
-            <div class="logo">
-                <span class="logo-icon">📝</span>
-                <span class="logo-text">Notepad+ v3.3</span>
-            </div>
-            <div class="header-buttons">
-                <button onclick="showLoginModal()" class="btn btn-outline btn-sm">Login</button>
-                <button onclick="showRegisterModal()" class="btn btn-primary btn-sm">Daftar</button>
-                <button onclick="toggleTheme()" id="themeButton1" class="btn btn-gray btn-sm">🌙 Dark Mode</button>
-                <button onclick="openApplication()" class="btn btn-success btn-sm">Buka Aplikasi</button>
-                <button onclick="downloadForOffline()" class="btn btn-blue btn-sm">Download Offline</button>
-            </div>
-        </header>
-
-        <!-- HERO SECTION -->
-        <section class="hero">
-            <div class="hero-icon">📝</div>
-            <h1 class="gradient-text">Notepad+ Code Storage</h1>
-            <p class="hero-description">
-                Simpan, kelola, dan gabungkan semua kode HTML Anda dalam satu tempat.
-                Multi-user, aktivasi premium, keamanan terjamin, dan bisa digunakan secara offline.
-            </p>
-            <div class="hero-buttons">
-                <button onclick="openApplication()" class="btn btn-primary btn-lg">Mulai Sekarang</button>
-                <button onclick="showLoginModal()" class="btn btn-outline btn-lg">Login</button>
-                <button onclick="installApplication()" class="btn btn-success btn-lg" id="heroInstallButton">Install Desktop</button>
-            </div>
-        </section>
-
-        <!-- WHATSAPP BANNER -->
-        <div class="whatsapp-banner" onclick="openWhatsApp()">
-            <div class="whatsapp-banner-left">
-                <span class="whatsapp-banner-icon">💬</span>
-                <div>
-                    <strong>Hubungi Admin untuk Aktivasi:</strong>
-                    <br>
-                    <span id="whatsappNumberLanding">+6281220285226</span>
-                </div>
-            </div>
-            <div class="whatsapp-banner-right">
-                <span>Chat WhatsApp</span>
-                <span style="font-size:1.2rem;">👉</span>
-            </div>
-        </div>
-
-        <!-- FEATURES SECTION -->
-        <h3 class="section-title">Fitur Unggulan</h3>
-        <div class="features-grid">
-            <div class="feature-card">
-                <div class="feature-icon">📁</div>
-                <h4>Penyimpanan Tak Terbatas</h4>
-                <p>Simpan aplikasi dan kode HTML tanpa batasan jumlah.</p>
-            </div>
-            <div class="feature-card">
-                <div class="feature-icon">🔄</div>
-                <h4>Gabung Otomatis</h4>
-                <p>Gabungkan semua kode menjadi 1 file index.html siap pakai.</p>
-            </div>
-            <div class="feature-card">
-                <div class="feature-icon">🔐</div>
-                <h4>Aktivasi Premium</h4>
-                <p>Sistem kode aktivasi yang dikelola oleh Super Admin.</p>
-            </div>
-            <div class="feature-card">
-                <div class="feature-icon">👥</div>
-                <h4>Multi User</h4>
-                <p>Setiap pengguna memiliki akun dan data masing-masing.</p>
-            </div>
-            <div class="feature-card">
-                <div class="feature-icon">📡</div>
-                <h4>Online & Offline</h4>
-                <p>Aplikasi tetap berfungsi tanpa koneksi internet.</p>
-            </div>
-            <div class="feature-card">
-                <div class="feature-icon">📱</div>
-                <h4>Install Desktop</h4>
-                <p>Install sebagai aplikasi desktop di Windows, Mac, atau Linux.</p>
-            </div>
-        </div>
-
-        <!-- PRICE SECTION -->
-        <h3 class="section-title">Paket Aktivasi Premium</h3>
-        <div class="price-grid" id="landingPriceGrid">
-            <!-- Diisi oleh JavaScript -->
-        </div>
-
+    <div class="toolbar">
+        <button onclick="showAddAppModal()" class="btn btn-success">Tambah Aplikasi</button>
+        <button onclick="toggleSearch()" class="btn btn-primary">Cari</button>
+        <button onclick="exportAllData()" class="btn btn-warning">Export Data</button>
+        <button onclick="document.getElementById('importFileInput').click()" class="btn btn-blue">Import Data</button>
+        <input type="file" id="importFileInput" accept=".json" class="hidden" onchange="importAllData(this)">
+        <button onclick="showMergeModal()" class="btn btn-primary" id="mergeButton">Gabung & Copy <span class="badge badge-purple">Premium</span></button>
     </div>
 
-    <!-- ============================================================ -->
-    <!-- APPLICATION PAGE                                              -->
-    <!-- ============================================================ -->
-    <div class="container hidden" id="applicationPage">
-        
-        <!-- HEADER -->
-        <header class="header">
-            <div class="logo">
-                <span class="logo-icon">📝</span>
-                <span class="logo-text">Notepad+ v3.3</span>
-            </div>
-            <div class="header-buttons">
-                <button onclick="toggleTheme()" id="themeButton2" class="btn btn-gray btn-sm">🌙 Dark Mode</button>
-                <button onclick="showProfileModal()" id="profileButton" class="btn btn-outline btn-sm hidden">Profil</button>
-                <button onclick="showSuperAdminPanel()" id="adminButton" class="btn btn-warning btn-sm hidden">Panel Admin</button>
-                <div class="user-badge" id="userBadge" style="display:none;">
-                    <div class="user-avatar" id="userAvatar">U</div>
-                    <span class="user-name" id="userNameDisplay">User</span>
-                </div>
-                <button onclick="handleLogout()" id="logoutButton" class="btn btn-danger btn-sm hidden">Logout</button>
-                <button onclick="goToLandingPage()" class="btn btn-gray btn-sm">Halaman Utama</button>
-                <button onclick="downloadForOffline()" class="btn btn-blue btn-sm">Download Offline</button>
-            </div>
-        </header>
-
-        <!-- WHATSAPP BANNER -->
-        <div class="whatsapp-banner" onclick="openWhatsApp()">
-            <div class="whatsapp-banner-left">
-                <span class="whatsapp-banner-icon">💬</span>
-                <div>
-                    <strong>Aktivasi & Bantuan:</strong>
-                    <br>
-                    <span id="whatsappNumberApp">+6281220285226</span>
-                </div>
-            </div>
-            <div class="whatsapp-banner-right">
-                <span>Chat Admin</span>
-                <span style="font-size:1.2rem;">👉</span>
-            </div>
-        </div>
-
-        <!-- STATISTICS -->
-        <div class="stats-grid" id="dashboardStats">
-            <div class="stat-card">
-                <div class="stat-value" id="statTotalApps">0</div>
-                <div class="stat-label">Total Aplikasi</div>
-            </div>
-            <div class="stat-card">
-                <div class="stat-value" id="statTotalCodes">0</div>
-                <div class="stat-label">Total Code</div>
-            </div>
-            <div class="stat-card">
-                <div class="stat-value" id="statStorage">0 KB</div>
-                <div class="stat-label">Penyimpanan</div>
-            </div>
-            <div class="stat-card">
-                <div class="stat-value" id="statTotalUsers">0</div>
-                <div class="stat-label">Total User</div>
-            </div>
-            <div class="stat-card" style="border-color:#7c3aed;">
-                <div class="stat-value" id="statPremiumStatus">Free</div>
-                <div class="stat-label">Status Premium</div>
-            </div>
-        </div>
-
-        <!-- TOOLBAR -->
-        <div class="toolbar">
-            <button onclick="showAddAppModal()" class="btn btn-success">Tambah Aplikasi</button>
-            <button onclick="toggleSearch()" class="btn btn-primary">Cari</button>
-            <button onclick="exportAllData()" class="btn btn-warning">Export Data</button>
-            <button onclick="document.getElementById('importFileInput').click()" class="btn btn-blue">Import Data</button>
-            <input type="file" id="importFileInput" accept=".json" class="hidden" onchange="importAllData(this)">
-            <button onclick="showMergeModal()" class="btn btn-primary" id="mergeButton">
-                Gabung & Copy <span class="badge badge-purple">Premium</span>
-            </button>
-        </div>
-
-        <!-- SEARCH BAR -->
-        <div id="searchBar" class="hidden" style="margin-bottom:20px;">
-            <div style="display:flex;gap:8px;">
-                <input type="text" id="searchInput" placeholder="Cari aplikasi atau kode..." style="flex:2;" oninput="performSearch()">
-                <button onclick="clearSearch()" class="btn btn-gray btn-sm">Clear</button>
-            </div>
-        </div>
-
-        <!-- APP LIST -->
-        <div id="appListContainer"></div>
-
-        <!-- EMPTY STATE -->
-        <div id="emptyState" class="empty-state">
-            <div class="empty-state-icon">📝</div>
-            <h3>Belum Ada Aplikasi</h3>
-            <p>Mulai tambahkan aplikasi dan kode HTML Anda sekarang.</p>
-            <button onclick="showAddAppModal()" class="btn btn-success">Tambah Aplikasi Pertama</button>
-        </div>
-
-    </div>
-
-    <!-- ============================================================ -->
-    <!-- ALL MODALS                                                    -->
-    <!-- ============================================================ -->
-
-    <!-- LOGIN MODAL -->
-    <div class="modal-overlay" id="loginModal">
-        <div class="modal-content" style="max-width:420px;">
-            <div class="modal-header">
-                <h3>Login</h3>
-                <button class="modal-close" onclick="closeModal('loginModal')">✕</button>
-            </div>
-            <div class="modal-body">
-                <div class="form-group">
-                    <input type="text" id="loginUsername" placeholder="Username atau Email">
-                </div>
-                <div class="form-group">
-                    <input type="password" id="loginPassword" placeholder="Password">
-                </div>
-                <button onclick="handleLogin()" class="btn btn-success btn-block">Masuk</button>
-                <div class="form-error" id="loginError"></div>
-
-                <div style="margin-top:20px;padding-top:16px;border-top:1px solid var(--border-color);">
-                    <p style="font-size:0.85rem;color:var(--text-secondary);margin-bottom:8px;"><strong>Aktivasi Premium</strong></p>
-                    <div style="display:flex;gap:8px;">
-                        <input type="text" id="activationCodeInput" placeholder="Masukkan kode aktivasi" style="flex:1;">
-                        <button onclick="activateFromLogin()" class="btn btn-primary btn-sm">Aktifkan</button>
-                    </div>
-                    <div class="form-error" id="activationError"></div>
-                    <div class="form-success" id="activationSuccess"></div>
-                </div>
-
-                <div style="display:flex;justify-content:space-between;margin-top:16px;font-size:0.8rem;">
-                    <span class="link-text" onclick="closeModal('loginModal');showRegisterModal()">Daftar Akun Baru</span>
-                    <span class="link-text" onclick="closeModal('loginModal');openModal('forgotPasswordModal')">Lupa Password?</span>
-                </div>
-            </div>
-            <div class="modal-footer">
-                <button onclick="closeModal('loginModal')" class="btn btn-gray">Tutup</button>
-            </div>
+    <div id="searchBar" class="hidden" style="margin-bottom:20px;">
+        <div style="display:flex;gap:8px;">
+            <input type="text" id="searchInput" placeholder="Cari aplikasi atau kode..." style="flex:2;" oninput="performSearch()">
+            <button onclick="clearSearch()" class="btn btn-gray btn-sm">Clear</button>
         </div>
     </div>
 
-    <!-- REGISTER MODAL -->
-    <div class="modal-overlay" id="registerModal">
-        <div class="modal-content" style="max-width:420px;">
-            <div class="modal-header">
-                <h3>Daftar Akun Baru</h3>
-                <button class="modal-close" onclick="closeModal('registerModal')">✕</button>
+    <div id="appListContainer"></div>
+    <div id="emptyState" class="empty-state">
+        <div class="empty-state-icon">📝</div><h3>Belum Ada Aplikasi</h3><p>Mulai tambahkan aplikasi dan kode HTML Anda sekarang.</p>
+        <button onclick="showAddAppModal()" class="btn btn-success">Tambah Aplikasi Pertama</button>
+    </div>
+</div>
+
+<!-- ========== MODALS ========== -->
+<!-- LOGIN MODAL -->
+<div class="modal-overlay" id="loginModal">
+    <div class="modal-content" style="max-width:420px;">
+        <div class="modal-header"><h3>Login</h3><button class="modal-close" onclick="closeModal('loginModal')">✕</button></div>
+        <div class="modal-body">
+            <div class="form-group"><input type="text" id="loginUsername" placeholder="Username atau Email"></div>
+            <div class="form-group"><input type="password" id="loginPassword" placeholder="Password"></div>
+            <button onclick="handleLogin()" class="btn btn-success btn-block">Masuk</button>
+            <div class="form-error" id="loginError"></div>
+            <div style="margin-top:20px;padding-top:16px;border-top:1px solid var(--border-color);">
+                <p style="font-size:0.85rem;color:var(--text-secondary);margin-bottom:8px;"><strong>Aktivasi Premium</strong></p>
+                <div style="display:flex;gap:8px;">
+                    <input type="text" id="activationCodeInput" placeholder="Masukkan kode aktivasi" style="flex:1;">
+                    <button onclick="activateFromLogin()" class="btn btn-primary btn-sm">Aktifkan</button>
+                </div>
+                <div class="form-error" id="activationError"></div>
+                <div class="form-success" id="activationSuccess"></div>
             </div>
-            <div class="modal-body">
-                <div class="form-group">
-                    <input type="text" id="registerNama" placeholder="Nama Lengkap *">
-                </div>
-                <div class="form-group">
-                    <input type="email" id="registerEmail" placeholder="Email *">
-                </div>
-                <div class="form-group">
-                    <input type="text" id="registerHp" placeholder="Nomor HP * (contoh: 081234567890)">
-                </div>
-                <div class="form-group">
-                    <input type="text" id="registerUsername" placeholder="Username *">
-                </div>
-                <div class="form-group">
-                    <input type="password" id="registerPassword" placeholder="Password * (minimal 6 karakter)">
-                </div>
-                <div class="form-group">
-                    <input type="password" id="registerPasswordConfirm" placeholder="Konfirmasi Password *">
-                </div>
-                <button onclick="handleRegister()" class="btn btn-primary btn-block">Daftar Sekarang</button>
-                <div class="form-error" id="registerError"></div>
-                <div class="form-success" id="registerSuccess"></div>
-                <p style="text-align:center;margin-top:16px;font-size:0.8rem;color:var(--text-secondary);">
-                    Sudah punya akun?
-                    <span class="link-text" onclick="closeModal('registerModal');showLoginModal()">Login disini</span>
-                </p>
-            </div>
-            <div class="modal-footer">
-                <button onclick="closeModal('registerModal')" class="btn btn-gray">Tutup</button>
+            <div style="display:flex;justify-content:space-between;margin-top:16px;font-size:0.8rem;">
+                <span class="link-text" onclick="closeModal('loginModal');showRegisterModal()">Daftar Akun Baru</span>
+                <span class="link-text" onclick="closeModal('loginModal');openModal('forgotPasswordModal')">Lupa Password?</span>
             </div>
         </div>
+        <div class="modal-footer"><button onclick="closeModal('loginModal')" class="btn btn-gray">Tutup</button></div>
     </div>
+</div>
 
-    <!-- FORGOT PASSWORD MODAL -->
-    <div class="modal-overlay" id="forgotPasswordModal">
-        <div class="modal-content" style="max-width:420px;">
-            <div class="modal-header">
-                <h3>Lupa Password</h3>
-                <button class="modal-close" onclick="closeModal('forgotPasswordModal')">✕</button>
+<!-- REGISTER MODAL -->
+<div class="modal-overlay" id="registerModal">
+    <div class="modal-content" style="max-width:420px;">
+        <div class="modal-header"><h3>Daftar Akun Baru</h3><button class="modal-close" onclick="closeModal('registerModal')">✕</button></div>
+        <div class="modal-body">
+            <div class="form-group"><input type="text" id="registerNama" placeholder="Nama Lengkap *"></div>
+            <div class="form-group"><input type="email" id="registerEmail" placeholder="Email *"></div>
+            <div class="form-group"><input type="text" id="registerHp" placeholder="Nomor HP * (contoh: 081234567890)"></div>
+            <div class="form-group"><input type="text" id="registerUsername" placeholder="Username *"></div>
+            <div class="form-group"><input type="password" id="registerPassword" placeholder="Password * (minimal 6 karakter)"></div>
+            <div class="form-group"><input type="password" id="registerPasswordConfirm" placeholder="Konfirmasi Password *"></div>
+            <button onclick="handleRegister()" class="btn btn-primary btn-block">Daftar Sekarang</button>
+            <div class="form-error" id="registerError"></div>
+            <div class="form-success" id="registerSuccess"></div>
+            <p style="text-align:center;margin-top:16px;font-size:0.8rem;color:var(--text-secondary);">Sudah punya akun? <span class="link-text" onclick="closeModal('registerModal');showLoginModal()">Login disini</span></p>
+        </div>
+        <div class="modal-footer"><button onclick="closeModal('registerModal')" class="btn btn-gray">Tutup</button></div>
+    </div>
+</div>
+
+<!-- FORGOT PASSWORD MODAL -->
+<div class="modal-overlay" id="forgotPasswordModal">
+    <div class="modal-content" style="max-width:420px;">
+        <div class="modal-header"><h3>Lupa Password</h3><button class="modal-close" onclick="closeModal('forgotPasswordModal')">✕</button></div>
+        <div class="modal-body">
+            <p style="font-size:0.85rem;color:var(--text-secondary);margin-bottom:12px;">Masukkan data Anda untuk mereset password.</p>
+            <div class="form-group"><input type="text" id="forgotNama" placeholder="Nama Lengkap *"></div>
+            <div class="form-group"><input type="email" id="forgotEmail" placeholder="Email *"></div>
+            <div class="form-group"><input type="text" id="forgotHp" placeholder="Nomor HP *"></div>
+            <button onclick="handleForgotPassword()" class="btn btn-warning btn-block">Kirim Link Reset Password</button>
+            <div class="form-error" id="forgotError"></div>
+            <div class="form-success" id="forgotSuccess"></div>
+        </div>
+        <div class="modal-footer"><button onclick="closeModal('forgotPasswordModal')" class="btn btn-gray">Tutup</button></div>
+    </div>
+</div>
+
+<!-- PROFILE MODAL -->
+<div class="modal-overlay" id="profileModal">
+    <div class="modal-content" style="max-width:450px;">
+        <div class="modal-header"><h3>Profil Saya</h3><button class="modal-close" onclick="closeModal('profileModal')">✕</button></div>
+        <div class="modal-body">
+            <div style="display:flex;align-items:center;gap:16px;margin-bottom:20px;">
+                <div id="profileAvatar" style="width:60px;height:60px;border-radius:50%;background:#7c3aed;display:flex;align-items:center;justify-content:center;font-size:1.5rem;color:#fff;">U</div>
+                <div><h4 id="profileName" style="margin:0;">User</h4><p id="profileRole" style="margin:0;font-size:0.8rem;color:var(--text-secondary);">User Biasa</p></div>
             </div>
-            <div class="modal-body">
-                <p style="font-size:0.85rem;color:var(--text-secondary);margin-bottom:12px;">
-                    Masukkan data Anda untuk mereset password.
-                </p>
-                <div class="form-group">
-                    <input type="text" id="forgotNama" placeholder="Nama Lengkap *">
-                </div>
-                <div class="form-group">
-                    <input type="email" id="forgotEmail" placeholder="Email *">
-                </div>
-                <div class="form-group">
-                    <input type="text" id="forgotHp" placeholder="Nomor HP *">
-                </div>
-                <button onclick="handleForgotPassword()" class="btn btn-warning btn-block">Kirim Link Reset Password</button>
-                <div class="form-error" id="forgotError"></div>
-                <div class="form-success" id="forgotSuccess"></div>
+            <div class="form-group"><label class="form-label">Nama Lengkap</label><input type="text" id="editProfileNama"></div>
+            <div class="form-group"><label class="form-label">Email</label><input type="email" id="editProfileEmail"></div>
+            <div class="form-group"><label class="form-label">Nomor HP</label><input type="text" id="editProfileHp"></div>
+            <button onclick="saveProfile()" class="btn btn-success btn-block">Simpan Profil</button>
+            <div class="form-error" id="profileError"></div>
+            <div class="form-success" id="profileSuccess"></div>
+        </div>
+        <div class="modal-footer"><button onclick="closeModal('profileModal')" class="btn btn-gray">Tutup</button></div>
+    </div>
+</div>
+
+<!-- SUPER ADMIN PANEL MODAL -->
+<div class="modal-overlay" id="superAdminModal">
+    <div class="modal-content" style="max-width:750px;">
+        <div class="modal-header"><h3>Panel Super Admin</h3><button class="modal-close" onclick="closeModal('superAdminModal')">✕</button></div>
+        <div class="modal-body">
+            <div class="admin-tabs">
+                <button class="admin-tab active" onclick="switchAdminTab('codes')" id="tabCodes">Kode Aktivasi</button>
+                <button class="admin-tab" onclick="switchAdminTab('users')" id="tabUsers">Daftar User</button>
+                <button class="admin-tab" onclick="switchAdminTab('packages')" id="tabPackages">Paket & Harga</button>
+                <button class="admin-tab" onclick="switchAdminTab('security')" id="tabSecurity">Log Keamanan</button>
+                <button class="admin-tab" onclick="switchAdminTab('settings')" id="tabSettings">Pengaturan</button>
             </div>
-            <div class="modal-footer">
-                <button onclick="closeModal('forgotPasswordModal')" class="btn btn-gray">Tutup</button>
+            <div class="admin-tab-content" id="adminTabCodes">
+                <h4 style="margin-bottom:12px;">Buat Kode Aktivasi Baru</h4>
+                <div class="form-group"><input type="text" id="adminActivationUser" placeholder="Username atau email user"></div>
+                <div class="form-group"><select id="adminActivationPackage"><option value="">-- Pilih Paket --</option></select></div>
+                <button onclick="adminCreateActivationCode()" class="btn btn-success btn-block">Buat Kode Aktivasi</button>
+                <div id="adminCodeResult" style="margin-top:12px;"></div>
+                <h4 style="margin-top:24px;margin-bottom:8px;">Kode Aktivasi Aktif</h4>
+                <div id="activeCodesList" style="max-height:200px;overflow-y:auto;font-size:0.8rem;"></div>
+            </div>
+            <div class="admin-tab-content hidden" id="adminTabUsers">
+                <h4 style="margin-bottom:12px;">Daftar Semua User</h4>
+                <div id="adminUserList" style="max-height:400px;overflow-y:auto;"></div>
+            </div>
+            <div class="admin-tab-content hidden" id="adminTabPackages">
+                <h4 style="margin-bottom:12px;">Edit Paket dan Harga</h4>
+                <p style="font-size:0.85rem;color:var(--text-secondary);margin-bottom:16px;">Ubah nama, harga, dan durasi paket premium.</p>
+                <div id="packageEditList"></div>
+            </div>
+            <div class="admin-tab-content hidden" id="adminTabSecurity">
+                <h4 style="margin-bottom:12px;">Log Keamanan</h4>
+                <div id="securityLogList" style="max-height:250px;overflow-y:auto;font-size:0.8rem;"></div>
+                <div style="display:flex;gap:8px;margin-top:16px;flex-wrap:wrap;">
+                    <button onclick="clearAllSecurityLogs()" class="btn btn-warning btn-sm">Bersihkan Log</button>
+                    <button onclick="lockAllUsers()" class="btn btn-danger btn-sm">Kunci Semua User</button>
+                    <button onclick="unlockAllUsers()" class="btn btn-success btn-sm">Buka Semua User</button>
+                </div>
+            </div>
+            <div class="admin-tab-content hidden" id="adminTabSettings">
+                <h4 style="margin-bottom:12px;">Pengaturan Super Admin</h4>
+                <div class="form-group"><label class="form-label">Nomor WhatsApp Admin</label><div style="display:flex;gap:8px;"><input type="text" id="adminWhatsappInput" placeholder="081220285226"><button onclick="saveAdminWhatsapp()" class="btn btn-success btn-sm">Simpan</button></div><div class="form-hint">Masukkan tanpa +62, cukup 08xxx. Sistem akan otomatis mengubah ke format +62.</div></div>
+                <div class="form-group"><label class="form-label">Password Baru Super Admin</label><div style="display:flex;gap:8px;"><input type="password" id="adminNewPassword" placeholder="Password baru"><button onclick="changeAdminPassword()" class="btn btn-warning btn-sm">Ganti Password</button></div></div>
+                <div class="form-group"><label class="form-label">Nama Super Admin</label><div style="display:flex;gap:8px;"><input type="text" id="adminNewName" placeholder="Nama baru"><button onclick="changeAdminName()" class="btn btn-primary btn-sm">Ganti Nama</button></div></div>
+                <hr style="border-color:var(--border-color);margin:20px 0;">
+                <button onclick="resetAllApplicationData()" class="btn btn-danger btn-block">Reset Semua Data Aplikasi</button>
+                <p style="font-size:0.75rem;color:var(--text-muted);margin-top:8px;text-align:center;">Perhatian: Semua data user, aplikasi, dan pengaturan akan dihapus permanen!</p>
             </div>
         </div>
+        <div class="modal-footer"><button onclick="closeModal('superAdminModal')" class="btn btn-gray">Tutup</button></div>
     </div>
+</div>
 
-    <!-- PROFILE MODAL -->
-    <div class="modal-overlay" id="profileModal">
-        <div class="modal-content" style="max-width:450px;">
-            <div class="modal-header">
-                <h3>Profil Saya</h3>
-                <button class="modal-close" onclick="closeModal('profileModal')">✕</button>
-            </div>
-            <div class="modal-body">
-                <div style="display:flex;align-items:center;gap:16px;margin-bottom:20px;">
-                    <div id="profileAvatar" style="width:60px;height:60px;border-radius:50%;background:#7c3aed;display:flex;align-items:center;justify-content:center;font-size:1.5rem;color:#fff;">U</div>
-                    <div>
-                        <h4 id="profileName" style="margin:0;">User</h4>
-                        <p id="profileRole" style="margin:0;font-size:0.8rem;color:var(--text-secondary);">User Biasa</p>
-                    </div>
-                </div>
-                <div class="form-group">
-                    <label class="form-label">Nama Lengkap</label>
-                    <input type="text" id="editProfileNama">
-                </div>
-                <div class="form-group">
-                    <label class="form-label">Email</label>
-                    <input type="email" id="editProfileEmail">
-                </div>
-                <div class="form-group">
-                    <label class="form-label">Nomor HP</label>
-                    <input type="text" id="editProfileHp">
-                </div>
-                <button onclick="saveProfile()" class="btn btn-success btn-block">Simpan Profil</button>
-                <div class="form-error" id="profileError"></div>
-                <div class="form-success" id="profileSuccess"></div>
-            </div>
-            <div class="modal-footer">
-                <button onclick="closeModal('profileModal')" class="btn btn-gray">Tutup</button>
+<!-- ADD/EDIT APP MODAL -->
+<div class="modal-overlay" id="appModal">
+    <div class="modal-content" style="max-width:500px;">
+        <div class="modal-header"><h3 id="appModalTitle">Tambah Aplikasi</h3><button class="modal-close" onclick="closeModal('appModal')">✕</button></div>
+        <div class="modal-body">
+            <input type="hidden" id="editAppId">
+            <div class="form-group"><label class="form-label">Nama Aplikasi *</label><input type="text" id="appNameInput" placeholder="Contoh: Aplikasi Toko Online"></div>
+            <div class="form-group"><label class="form-label">Deskripsi (opsional)</label><textarea id="appDescInput" rows="2" placeholder="Deskripsi singkat..."></textarea></div>
+            <div class="form-error" id="appError"></div>
+        </div>
+        <div class="modal-footer"><button onclick="closeModal('appModal')" class="btn btn-gray">Batal</button><button onclick="saveApplication()" class="btn btn-success">Simpan</button></div>
+    </div>
+</div>
+
+<!-- ADD/EDIT CODE MODAL -->
+<div class="modal-overlay" id="codeModal">
+    <div class="modal-content" style="max-width:600px;">
+        <div class="modal-header"><h3 id="codeModalTitle">Tambah Code</h3><button class="modal-close" onclick="closeModal('codeModal')">✕</button></div>
+        <div class="modal-body">
+            <input type="hidden" id="editCodeId"><input type="hidden" id="codeAppId">
+            <div class="form-group"><label class="form-label">Nama Code *</label><input type="text" id="codeNameInput" placeholder="Contoh: Code 1 - Header"></div>
+            <div class="form-group"><label class="form-label">Kode HTML *</label><textarea id="codeContentInput" rows="10" placeholder="Tempelkan kode HTML disini..."></textarea></div>
+            <div class="form-error" id="codeError"></div>
+        </div>
+        <div class="modal-footer"><button onclick="closeModal('codeModal')" class="btn btn-gray">Batal</button><button onclick="saveCode()" class="btn btn-success">Simpan Code</button></div>
+    </div>
+</div>
+
+<!-- MERGE MODAL -->
+<div class="modal-overlay" id="mergeModal">
+    <div class="modal-content" style="max-width:650px;">
+        <div class="modal-header"><h3>Gabung & Copy Semua Code</h3><button class="modal-close" onclick="closeModal('mergeModal')">✕</button></div>
+        <div class="modal-body">
+            <p style="color:var(--text-secondary);margin-bottom:12px;">Fitur ini khusus untuk pengguna <strong>Premium</strong>. Semua code yang dipilih akan digabung menjadi 1 file index.html.</p>
+            <div id="mergeAppList" style="display:flex;flex-wrap:wrap;gap:8px;padding:8px 0;"></div>
+            <button onclick="performMerge()" class="btn btn-success btn-block">Gabung Semua Code</button>
+            <div id="mergeResult" class="hidden" style="margin-top:16px;">
+                <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:8px;"><strong>Hasil Gabungan (index.html)</strong><div style="display:flex;gap:4px;"><button onclick="copyMergeResult()" class="btn btn-primary btn-sm">Copy</button><button onclick="downloadMergeResult()" class="btn btn-success btn-sm">Download</button></div></div>
+                <textarea id="mergeOutput" readonly style="font-family:'Courier New',monospace;font-size:0.8rem;min-height:250px;background:var(--bg-primary);color:var(--text-primary);border:1px solid #7c3aed;"></textarea>
             </div>
         </div>
+        <div class="modal-footer"><button onclick="closeModal('mergeModal')" class="btn btn-gray">Tutup</button></div>
     </div>
+</div>
 
-    <!-- SUPER ADMIN PANEL MODAL -->
-    <div class="modal-overlay" id="superAdminModal">
-        <div class="modal-content" style="max-width:750px;">
-            <div class="modal-header">
-                <h3>Panel Super Admin</h3>
-                <button class="modal-close" onclick="closeModal('superAdminModal')">✕</button>
-            </div>
-            <div class="modal-body">
-                <!-- TABS -->
-                <div class="admin-tabs">
-                    <button class="admin-tab active" onclick="switchAdminTab('codes')" id="tabCodes">Kode Aktivasi</button>
-                    <button class="admin-tab" onclick="switchAdminTab('users')" id="tabUsers">Daftar User</button>
-                    <button class="admin-tab" onclick="switchAdminTab('packages')" id="tabPackages">Paket & Harga</button>
-                    <button class="admin-tab" onclick="switchAdminTab('security')" id="tabSecurity">Log Keamanan</button>
-                    <button class="admin-tab" onclick="switchAdminTab('settings')" id="tabSettings">Pengaturan</button>
-                </div>
+<!-- CONFIRM MODAL -->
+<div class="modal-overlay" id="confirmModal">
+    <div class="modal-content" style="max-width:380px;">
+        <div class="modal-header"><h3 id="confirmTitle">Konfirmasi</h3><button class="modal-close" onclick="closeModal('confirmModal')">✕</button></div>
+        <div class="modal-body"><p id="confirmMessage">Apakah Anda yakin?</p></div>
+        <div class="modal-footer"><button onclick="closeModal('confirmModal')" class="btn btn-gray">Batal</button><button onclick="executeConfirmAction()" class="btn btn-danger" id="confirmButton">Ya, Lanjutkan</button></div>
+    </div>
+</div>
 
-                <!-- TAB: KODE AKTIVASI -->
-                <div class="admin-tab-content" id="adminTabCodes">
-                    <h4 style="margin-bottom:12px;">Buat Kode Aktivasi Baru</h4>
-                    <div class="form-group">
-                        <input type="text" id="adminActivationUser" placeholder="Username atau email user">
-                    </div>
-                    <div class="form-group">
-                        <select id="adminActivationPackage">
-                            <option value="">-- Pilih Paket --</option>
-                        </select>
-                    </div>
-                    <button onclick="adminCreateActivationCode()" class="btn btn-success btn-block">Buat Kode Aktivasi</button>
-                    <div id="adminCodeResult" style="margin-top:12px;"></div>
-
-                    <h4 style="margin-top:24px;margin-bottom:8px;">Kode Aktivasi Aktif</h4>
-                    <div id="activeCodesList" style="max-height:200px;overflow-y:auto;font-size:0.8rem;"></div>
-                </div>
-
-                <!-- TAB: DAFTAR USER -->
-                <div class="admin-tab-content hidden" id="adminTabUsers">
-                    <h4 style="margin-bottom:12px;">Daftar Semua User</h4>
-                    <div id="adminUserList" style="max-height:400px;overflow-y:auto;"></div>
-                </div>
-
-                <!-- TAB: PAKET & HARGA -->
-                <div class="admin-tab-content hidden" id="adminTabPackages">
-                    <h4 style="margin-bottom:12px;">Edit Paket dan Harga</h4>
-                    <p style="font-size:0.85rem;color:var(--text-secondary);margin-bottom:16px;">
-                        Ubah nama, harga, dan durasi paket premium.
-                    </p>
-                    <div id="packageEditList"></div>
-                </div>
-
-                <!-- TAB: LOG KEAMANAN -->
-                <div class="admin-tab-content hidden" id="adminTabSecurity">
-                    <h4 style="margin-bottom:12px;">Log Keamanan</h4>
-                    <div id="securityLogList" style="max-height:250px;overflow-y:auto;font-size:0.8rem;"></div>
-                    <div style="display:flex;gap:8px;margin-top:16px;flex-wrap:wrap;">
-                        <button onclick="clearAllSecurityLogs()" class="btn btn-warning btn-sm">Bersihkan Log</button>
-                        <button onclick="lockAllUsers()" class="btn btn-danger btn-sm">Kunci Semua User</button>
-                        <button onclick="unlockAllUsers()" class="btn btn-success btn-sm">Buka Semua User</button>
-                    </div>
-                </div>
-
-                <!-- TAB: PENGATURAN -->
-                <div class="admin-tab-content hidden" id="adminTabSettings">
-                    <h4 style="margin-bottom:12px;">Pengaturan Super Admin</h4>
-
-                    <div class="form-group">
-                        <label class="form-label">Nomor WhatsApp Admin</label>
-                        <div style="display:flex;gap:8px;">
-                            <input type="text" id="adminWhatsappInput" placeholder="081220285226">
-                            <button onclick="saveAdminWhatsapp()" class="btn btn-success btn-sm">Simpan</button>
-                        </div>
-                        <div class="form-hint">Masukkan tanpa +62, cukup 08xxx. Sistem akan otomatis mengubah ke format +62.</div>
-                    </div>
-
-                    <div class="form-group">
-                        <label class="form-label">Password Baru Super Admin</label>
-                        <div style="display:flex;gap:8px;">
-                            <input type="password" id="adminNewPassword" placeholder="Password baru">
-                            <button onclick="changeAdminPassword()" class="btn btn-warning btn-sm">Ganti Password</button>
-                        </div>
-                    </div>
-
-                    <div class="form-group">
-                        <label class="form-label">Nama Super Admin</label>
-                        <div style="display:flex;gap:8px;">
-                            <input type="text" id="adminNewName" placeholder="Nama baru">
-                            <button onclick="changeAdminName()" class="btn btn-primary btn-sm">Ganti Nama</button>
-                        </div>
-                    </div>
-
-                    <hr style="border-color:var(--border-color);margin:20px 0;">
-
-                    <button onclick="resetAllApplicationData()" class="btn btn-danger btn-block">
-                        Reset Semua Data Aplikasi
-                    </button>
-                    <p style="font-size:0.75rem;color:var(--text-muted);margin-top:8px;text-align:center;">
-                        Perhatian: Semua data user, aplikasi, dan pengaturan akan dihapus permanen!
-                    </p>
-                </div>
-            </div>
-            <div class="modal-footer">
-                <button onclick="closeModal('superAdminModal')" class="btn btn-gray">Tutup</button>
-            </div>
+<!-- EDIT PACKAGE MODAL -->
+<div class="modal-overlay" id="editPackageModal">
+    <div class="modal-content" style="max-width:420px;">
+        <div class="modal-header"><h3 id="editPackageTitle">Edit Paket</h3><button class="modal-close" onclick="closeModal('editPackageModal')">✕</button></div>
+        <div class="modal-body">
+            <input type="hidden" id="editPackageId">
+            <div class="form-group"><label class="form-label">Nama Paket</label><input type="text" id="editPackageName" placeholder="Contoh: Basic"></div>
+            <div class="form-group"><label class="form-label">Harga (Rupiah)</label><input type="number" id="editPackagePrice" placeholder="25000"></div>
+            <div class="form-group"><label class="form-label">Durasi (hari)</label><input type="number" id="editPackageDays" placeholder="30"></div>
+            <div class="form-group"><label class="form-label">Label Durasi</label><input type="text" id="editPackageLabel" placeholder="Contoh: 1 Bulan"></div>
+            <div class="form-error" id="editPackageError"></div>
         </div>
+        <div class="modal-footer"><button onclick="closeModal('editPackageModal')" class="btn btn-gray">Batal</button><button onclick="savePackageChanges()" class="btn btn-success">Simpan Perubahan</button></div>
     </div>
+</div>
 
-    <!-- ADD/EDIT APP MODAL -->
-    <div class="modal-overlay" id="appModal">
-        <div class="modal-content" style="max-width:500px;">
-            <div class="modal-header">
-                <h3 id="appModalTitle">Tambah Aplikasi</h3>
-                <button class="modal-close" onclick="closeModal('appModal')">✕</button>
-            </div>
-            <div class="modal-body">
-                <input type="hidden" id="editAppId">
-                <div class="form-group">
-                    <label class="form-label">Nama Aplikasi *</label>
-                    <input type="text" id="appNameInput" placeholder="Contoh: Aplikasi Toko Online">
-                </div>
-                <div class="form-group">
-                    <label class="form-label">Deskripsi (opsional)</label>
-                    <textarea id="appDescInput" rows="2" placeholder="Deskripsi singkat tentang aplikasi..."></textarea>
-                </div>
-                <div class="form-error" id="appError"></div>
-            </div>
-            <div class="modal-footer">
-                <button onclick="closeModal('appModal')" class="btn btn-gray">Batal</button>
-                <button onclick="saveApplication()" class="btn btn-success">Simpan</button>
-            </div>
-        </div>
-    </div>
+<div id="toastContainer"></div>
+<div id="loadingOverlay" class="hidden" style="position:fixed;top:0;left:0;width:100%;height:100%;background:rgba(0,0,0,0.6);z-index:9999;display:none;align-items:center;justify-content:center;">
+    <div style="text-align:center;"><div style="width:40px;height:40px;border:4px solid rgba(255,255,255,0.1);border-top-color:#7c3aed;border-radius:50%;animation:spin 0.8s linear infinite;margin:0 auto;"></div><p style="color:#fff;margin-top:16px;" id="loadingText">Memproses...</p></div>
+</div>
 
-    <!-- ADD/EDIT CODE MODAL -->
-    <div class="modal-overlay" id="codeModal">
-        <div class="modal-content" style="max-width:600px;">
-            <div class="modal-header">
-                <h3 id="codeModalTitle">Tambah Code</h3>
-                <button class="modal-close" onclick="closeModal('codeModal')">✕</button>
-            </div>
-            <div class="modal-body">
-                <input type="hidden" id="editCodeId">
-                <input type="hidden" id="codeAppId">
-                <div class="form-group">
-                    <label class="form-label">Nama Code *</label>
-                    <input type="text" id="codeNameInput" placeholder="Contoh: Code 1 - Header">
-                </div>
-                <div class="form-group">
-                    <label class="form-label">Kode HTML *</label>
-                    <textarea id="codeContentInput" rows="10" placeholder="Tempelkan kode HTML disini..."></textarea>
-                </div>
-                <div class="form-error" id="codeError"></div>
-            </div>
-            <div class="modal-footer">
-                <button onclick="closeModal('codeModal')" class="btn btn-gray">Batal</button>
-                <button onclick="saveCode()" class="btn btn-success">Simpan Code</button>
-            </div>
-        </div>
-    </div>
-
-    <!-- MERGE MODAL -->
-    <div class="modal-overlay" id="mergeModal">
-        <div class="modal-content" style="max-width:650px;">
-            <div class="modal-header">
-                <h3>Gabung & Copy Semua Code</h3>
-                <button class="modal-close" onclick="closeModal('mergeModal')">✕</button>
-            </div>
-            <div class="modal-body">
-                <p style="color:var(--text-secondary);margin-bottom:12px;">
-                    Fitur ini khusus untuk pengguna <strong>Premium</strong>.
-                    Semua code yang dipilih akan digabung menjadi 1 file index.html.
-                </p>
-                <div id="mergeAppList" style="display:flex;flex-wrap:wrap;gap:8px;padding:8px 0;"></div>
-                <button onclick="performMerge()" class="btn btn-success btn-block">Gabung Semua Code</button>
-                <div id="mergeResult" class="hidden" style="margin-top:16px;">
-                    <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:8px;">
-                        <strong>Hasil Gabungan (index.html)</strong>
-                        <div style="display:flex;gap:4px;">
-                            <button onclick="copyMergeResult()" class="btn btn-primary btn-sm">Copy</button>
-                            <button onclick="downloadMergeResult()" class="btn btn-success btn-sm">Download</button>
-                        </div>
-                    </div>
-                    <textarea id="mergeOutput" readonly style="font-family:'Courier New',monospace;font-size:0.8rem;min-height:250px;background:var(--bg-primary);color:var(--text-primary);border:1px solid #7c3aed;"></textarea>
-                </div>
-            </div>
-            <div class="modal-footer">
-                <button onclick="closeModal('mergeModal')" class="btn btn-gray">Tutup</button>
-            </div>
-        </div>
-    </div>
-
-    <!-- CONFIRM MODAL -->
-    <div class="modal-overlay" id="confirmModal">
-        <div class="modal-content" style="max-width:380px;">
-            <div class="modal-header">
-                <h3 id="confirmTitle">Konfirmasi</h3>
-                <button class="modal-close" onclick="closeModal('confirmModal')">✕</button>
-            </div>
-            <div class="modal-body">
-                <p id="confirmMessage">Apakah Anda yakin ingin melanjutkan?</p>
-            </div>
-            <div class="modal-footer">
-                <button onclick="closeModal('confirmModal')" class="btn btn-gray">Batal</button>
-                <button onclick="executeConfirmAction()" class="btn btn-danger" id="confirmButton">Ya, Lanjutkan</button>
-            </div>
-        </div>
-    </div>
-
-    <!-- EDIT PACKAGE MODAL -->
-    <div class="modal-overlay" id="editPackageModal">
-        <div class="modal-content" style="max-width:420px;">
-            <div class="modal-header">
-                <h3 id="editPackageTitle">Edit Paket</h3>
-                <button class="modal-close" onclick="closeModal('editPackageModal')">✕</button>
-            </div>
-            <div class="modal-body">
-                <input type="hidden" id="editPackageId">
-                <div class="form-group">
-                    <label class="form-label">Nama Paket</label>
-                    <input type="text" id="editPackageName" placeholder="Contoh: Basic">
-                </div>
-                <div class="form-group">
-                    <label class="form-label">Harga (Rupiah)</label>
-                    <input type="number" id="editPackagePrice" placeholder="25000">
-                </div>
-                <div class="form-group">
-                    <label class="form-label">Durasi (hari)</label>
-                    <input type="number" id="editPackageDays" placeholder="30">
-                </div>
-                <div class="form-group">
-                    <label class="form-label">Label Durasi</label>
-                    <input type="text" id="editPackageLabel" placeholder="Contoh: 1 Bulan">
-                </div>
-                <div class="form-error" id="editPackageError"></div>
-            </div>
-            <div class="modal-footer">
-                <button onclick="closeModal('editPackageModal')" class="btn btn-gray">Batal</button>
-                <button onclick="savePackageChanges()" class="btn btn-success">Simpan Perubahan</button>
-            </div>
-        </div>
-    </div>
-
-    <!-- TOAST CONTAINER -->
-    <div id="toastContainer"></div>
-
-    <!-- LOADING OVERLAY -->
-    <div id="loadingOverlay" class="hidden" style="position:fixed;top:0;left:0;width:100%;height:100%;background:rgba(0,0,0,0.6);z-index:9999;display:none;align-items:center;justify-content:center;">
-        <div style="text-align:center;">
-            <div style="width:40px;height:40px;border:4px solid rgba(255,255,255,0.1);border-top-color:#7c3aed;border-radius:50%;animation:spin 0.8s linear infinite;margin:0 auto;"></div>
-            <p style="color:#fff;margin-top:16px;" id="loadingText">Memproses...</p>
-        </div>
-    </div>
-
-    <!-- JAVASCRIPT -->
-    <script src="script.js"></script>
-/* ============================================================ */
-/* NOTEPAD+ CODE STORAGE v3.3 - STYLE.CSS                       */
-/* ============================================================ */
-
-/* ========== RESET & BASE ========== */
-*,
-*::before,
-*::after {
-    box-sizing: border-box;
-    margin: 0;
-    padding: 0;
-    border: 0;
-    font: inherit;
-    vertical-align: baseline;
-}
-
-html {
-    scroll-behavior: smooth;
-    -webkit-text-size-adjust: 100%;
-    font-size: 16px;
-    line-height: 1.5;
-    -webkit-font-smoothing: antialiased;
-    -moz-osx-font-smoothing: grayscale;
-}
-
-body {
-    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
-    background: var(--bg-primary);
-    color: var(--text-primary);
-    min-height: 100vh;
-    min-height: 100dvh;
-    overflow-x: hidden;
-    transition: background 0.3s ease, color 0.3s ease;
-}
-
-/* ========== CSS VARIABLES ========== */
-:root {
-    --bg-primary: #0a0a1a;
-    --bg-secondary: #12122a;
-    --bg-tertiary: #1a1a35;
-    --bg-hover: #222240;
-    --text-primary: #e8e8f0;
-    --text-secondary: #a0a0b8;
-    --text-muted: #6a6a80;
-    --accent-primary: #7c3aed;
-    --accent-hover: #6d28d9;
-    --accent-light: #8b5cf6;
-    --color-success: #10b981;
-    --color-success-hover: #059669;
-    --color-danger: #ef4444;
-    --color-danger-hover: #dc2626;
-    --color-warning: #f59e0b;
-    --color-warning-hover: #d97706;
-    --color-info: #3b82f6;
-    --color-info-hover: #2563eb;
-    --color-orange: #f97316;
-    --border-color: rgba(255, 255, 255, 0.06);
-    --border-color-strong: rgba(255, 255, 255, 0.1);
-    --shadow-sm: 0 2px 8px rgba(0, 0, 0, 0.4);
-    --shadow-md: 0 4px 20px rgba(0, 0, 0, 0.5);
-    --shadow-lg: 0 8px 32px rgba(0, 0, 0, 0.6);
-    --radius-sm: 8px;
-    --radius-md: 12px;
-    --radius-lg: 16px;
-    --radius-full: 9999px;
-    --spacing-xs: 4px;
-    --spacing-sm: 8px;
-    --spacing-md: 12px;
-    --spacing-lg: 16px;
-    --spacing-xl: 20px;
-    --spacing-2xl: 24px;
-    --spacing-3xl: 32px;
-    --spacing-4xl: 40px;
-    --transition-base: 200ms ease;
-    --transition-slow: 300ms ease;
-    --z-modal: 998;
-    --z-toast: 9999;
-}
-
-body.light-theme {
-    --bg-primary: #f5f5f8;
-    --bg-secondary: #ffffff;
-    --bg-tertiary: #f0f0f5;
-    --bg-hover: #e5e5ea;
-    --text-primary: #1a1a2e;
-    --text-secondary: #555570;
-    --text-muted: #8888a0;
-    --border-color: rgba(0, 0, 0, 0.08);
-    --border-color-strong: rgba(0, 0, 0, 0.12);
-}
-
-/* ========== SCROLLBAR ========== */
-::-webkit-scrollbar { width: 4px; height: 4px; }
-::-webkit-scrollbar-track { background: transparent; }
-::-webkit-scrollbar-thumb { background: var(--accent-primary); border-radius: var(--radius-full); }
-* { scrollbar-width: thin; scrollbar-color: var(--accent-primary) transparent; }
-
-/* ========== ANIMATIONS ========== */
-@keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
-@keyframes slideUp { from { opacity: 0; transform: translateY(20px); } to { opacity: 1; transform: translateY(0); } }
-@keyframes slideDown { from { opacity: 0; transform: translateY(-20px); } to { opacity: 1; transform: translateY(0); } }
-@keyframes spin { to { transform: rotate(360deg); } }
-@keyframes pulse { 0%, 100% { opacity: 1; } 50% { opacity: 0.5; } }
-@keyframes glow { 0%, 100% { box-shadow: 0 0 20px rgba(124, 58, 237, 0.2); } 50% { box-shadow: 0 0 40px rgba(124, 58, 237, 0.5); } }
-
-/* ========== UTILITY CLASSES ========== */
-.hidden { display: none !important; }
-.flex { display: flex; }
-.flex-center { display: flex; align-items: center; justify-content: center; }
-.flex-between { display: flex; align-items: center; justify-content: space-between; }
-.flex-col { flex-direction: column; }
-.flex-wrap { flex-wrap: wrap; }
-.gap-xs { gap: var(--spacing-xs); }
-.gap-sm { gap: var(--spacing-sm); }
-.gap-md { gap: var(--spacing-md); }
-.gap-lg { gap: var(--spacing-lg); }
-.gap-xl { gap: var(--spacing-xl); }
-.w-full { width: 100%; }
-.text-center { text-align: center; }
-.text-sm { font-size: 0.85rem; }
-.text-xs { font-size: 0.75rem; }
-.text-lg { font-size: 1.1rem; }
-.text-xl { font-size: 1.3rem; }
-.text-2xl { font-size: 1.8rem; }
-.font-bold { font-weight: 700; }
-.font-semibold { font-weight: 600; }
-.text-muted { color: var(--text-muted); }
-.text-secondary { color: var(--text-secondary); }
-.text-accent { color: var(--accent-light); }
-.text-success { color: var(--color-success); }
-.text-danger { color: var(--color-danger); }
-.text-warning { color: var(--color-warning); }
-.bg-secondary { background: var(--bg-secondary); }
-.bg-tertiary { background: var(--bg-tertiary); }
-.rounded-sm { border-radius: var(--radius-sm); }
-.rounded-md { border-radius: var(--radius-md); }
-.rounded-lg { border-radius: var(--radius-lg); }
-.rounded-full { border-radius: var(--radius-full); }
-.shadow { box-shadow: var(--shadow-sm); }
-.shadow-md { box-shadow: var(--shadow-md); }
-.border { border: 1px solid var(--border-color); }
-.cursor-pointer { cursor: pointer; }
-.overflow-hidden { overflow: hidden; }
-.overflow-auto { overflow-y: auto; }
-.truncate { overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
-
-/* ========== BUTTONS ========== */
-.btn {
-    display: inline-flex; align-items: center; justify-content: center; gap: 6px;
-    padding: 10px 20px; border: none; border-radius: var(--radius-sm); font-weight: 600;
-    cursor: pointer; transition: all var(--transition-base); font-size: 0.9rem;
-    min-height: 40px; text-decoration: none; line-height: 1.2; font-family: inherit;
-}
-.btn:hover { transform: translateY(-1px); box-shadow: var(--shadow-md); }
-.btn:active { transform: translateY(0); }
-.btn:disabled { opacity: 0.5; cursor: not-allowed; transform: none !important; box-shadow: none !important; }
-.btn-primary { background: var(--accent-primary); color: #ffffff; }
-.btn-primary:hover { background: var(--accent-hover); }
-.btn-success { background: var(--color-success); color: #ffffff; }
-.btn-success:hover { background: var(--color-success-hover); }
-.btn-danger { background: var(--color-danger); color: #ffffff; }
-.btn-danger:hover { background: var(--color-danger-hover); }
-.btn-warning { background: var(--color-warning); color: #000000; }
-.btn-warning:hover { background: var(--color-warning-hover); }
-.btn-blue { background: var(--color-info); color: #ffffff; }
-.btn-blue:hover { background: var(--color-info-hover); }
-.btn-gray { background: var(--text-muted); color: #ffffff; }
-.btn-gray:hover { background: #7a7a8a; }
-.btn-orange { background: var(--color-orange); color: #ffffff; }
-.btn-orange:hover { background: #e0650f; }
-.btn-outline { background: transparent; border: 2px solid var(--accent-primary); color: var(--accent-light); }
-.btn-outline:hover { background: var(--accent-primary); color: #ffffff; }
-.btn-sm { padding: 6px 14px; font-size: 0.8rem; min-height: 30px; }
-.btn-lg { padding: 14px 28px; font-size: 1.05rem; min-height: 48px; }
-.btn-xl { padding: 18px 36px; font-size: 1.15rem; min-height: 56px; }
-.btn-block { width: 100%; display: flex; }
-
-/* ========== BADGES ========== */
-.badge {
-    display: inline-flex; align-items: center; gap: 4px; padding: 3px 10px;
-    border-radius: var(--radius-full); font-size: 0.7rem; font-weight: 600;
-    text-transform: uppercase; letter-spacing: 0.5px;
-}
-.badge-success { background: var(--color-success); color: #ffffff; }
-.badge-danger { background: var(--color-danger); color: #ffffff; }
-.badge-warning { background: var(--color-warning); color: #000000; }
-.badge-purple { background: var(--accent-primary); color: #ffffff; }
-
-/* ========== FORMS ========== */
-input, textarea, select {
-    width: 100%; padding: 10px 14px; border: 1px solid var(--border-color-strong);
-    border-radius: var(--radius-sm); font-size: 0.9rem; transition: all var(--transition-base);
-    background: var(--bg-tertiary); color: var(--text-primary); font-family: inherit;
-}
-input:focus, textarea:focus, select:focus { outline: none; border-color: var(--accent-primary); box-shadow: 0 0 0 3px rgba(124, 58, 237, 0.15); }
-input::placeholder, textarea::placeholder { color: var(--text-muted); }
-textarea { resize: vertical; min-height: 80px; font-family: 'Courier New', monospace; font-size: 0.85rem; line-height: 1.7; }
-select { appearance: none; background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' viewBox='0 0 12 12'%3E%3Cpath fill='%23a0a0b8' d='M6 8L1 3h10z'/%3E%3C/svg%3E"); background-repeat: no-repeat; background-position: right 12px center; padding-right: 36px; cursor: pointer; }
-.form-group { margin-bottom: var(--spacing-lg); }
-.form-label { display: block; margin-bottom: var(--spacing-sm); font-weight: 500; font-size: 0.85rem; color: var(--text-secondary); }
-.form-hint { font-size: 0.75rem; color: var(--text-muted); margin-top: var(--spacing-xs); }
-.form-error { color: var(--color-danger); font-size: 0.8rem; margin-top: var(--spacing-xs); display: none; }
-.form-error.show { display: block; }
-.form-success { color: var(--color-success); font-size: 0.8rem; margin-top: var(--spacing-xs); display: none; }
-.form-success.show { display: block; }
-.link-text { color: var(--accent-light); cursor: pointer; transition: color var(--transition-base); }
-.link-text:hover { color: var(--accent-primary); text-decoration: underline; }
-
-/* ========== TOAST ========== */
-.toast-container { position: fixed; bottom: 80px; left: 50%; transform: translateX(-50%); z-index: var(--z-toast); max-width: 90%; pointer-events: none; }
-.toast { background: var(--bg-secondary); color: var(--text-primary); padding: 12px 20px; border-radius: var(--radius-sm); border: 1px solid var(--border-color); box-shadow: var(--shadow-lg); font-size: 0.9rem; opacity: 0; transform: translateY(20px); transition: all var(--transition-base); pointer-events: auto; text-align: center; margin-bottom: 8px; border-left: 4px solid var(--accent-primary); }
-.toast.show { opacity: 1; transform: translateY(0); }
-.toast.toast-success { border-left-color: var(--color-success); }
-.toast.toast-error { border-left-color: var(--color-danger); }
-.toast.toast-warning { border-left-color: var(--color-warning); }
-
-/* ========== MODAL ========== */
-.modal-overlay { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0, 0, 0, 0.7); backdrop-filter: blur(8px); -webkit-backdrop-filter: blur(8px); display: none; align-items: center; justify-content: center; z-index: var(--z-modal); padding: var(--spacing-lg); }
-.modal-overlay.show { display: flex; }
-.modal-content { background: var(--bg-secondary); border-radius: var(--radius-lg); max-width: 600px; width: 100%; max-height: 85vh; overflow-y: auto; padding: var(--spacing-2xl); animation: slideUp 0.3s ease; border: 1px solid var(--border-color); box-shadow: var(--shadow-lg); }
-.modal-header { display: flex; align-items: center; justify-content: space-between; margin-bottom: var(--spacing-xl); padding-bottom: var(--spacing-lg); border-bottom: 1px solid var(--border-color); }
-.modal-header h3 { margin: 0; font-size: 1.2rem; font-weight: 700; }
-.modal-close { background: none; border: none; font-size: 1.5rem; color: var(--text-secondary); cursor: pointer; padding: 4px; transition: all var(--transition-base); line-height: 1; }
-.modal-close:hover { color: var(--color-danger); transform: rotate(90deg); }
-.modal-body { padding: var(--spacing-sm) 0; }
-.modal-footer { display: flex; gap: var(--spacing-md); padding-top: var(--spacing-xl); border-top: 1px solid var(--border-color); margin-top: var(--spacing-xl); justify-content: flex-end; }
-
-/* ========== LAYOUT ========== */
-.container { max-width: 1000px; margin: 0 auto; padding: var(--spacing-lg); min-height: 100vh; }
-
-/* ========== HEADER ========== */
-.header { display: flex; align-items: center; justify-content: space-between; padding: var(--spacing-md) var(--spacing-xl); background: var(--bg-secondary); border-radius: var(--radius-md); border: 1px solid var(--border-color); margin-bottom: var(--spacing-xl); flex-wrap: wrap; gap: var(--spacing-sm); }
-.logo { font-size: 1.2rem; font-weight: 700; display: flex; align-items: center; gap: var(--spacing-sm); }
-.logo-icon { font-size: 1.3rem; }
-.logo-text { background: linear-gradient(135deg, var(--accent-light), #c4b5fd); -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text; }
-.header-buttons { display: flex; gap: var(--spacing-sm); align-items: center; flex-wrap: wrap; }
-.user-badge { display: flex; align-items: center; gap: var(--spacing-sm); padding: 4px 12px 4px 8px; background: var(--bg-tertiary); border-radius: var(--radius-full); font-size: 0.85rem; }
-.user-avatar { width: 28px; height: 28px; border-radius: 50%; background: var(--accent-primary); display: flex; align-items: center; justify-content: center; font-size: 0.75rem; color: #ffffff; font-weight: 600; }
-.user-name { font-size: 0.85rem; font-weight: 500; }
-
-/* ========== HERO ========== */
-.hero { text-align: center; padding: var(--spacing-3xl) var(--spacing-xl); background: var(--bg-secondary); border-radius: var(--radius-lg); border: 1px solid var(--border-color); margin-bottom: var(--spacing-xl); }
-.hero-icon { font-size: 3rem; margin-bottom: var(--spacing-md); }
-.hero h1 { font-size: 2rem; font-weight: 800; margin-bottom: var(--spacing-sm); }
-.gradient-text { background: linear-gradient(135deg, var(--accent-light), #c4b5fd); -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text; }
-.hero-description { font-size: 1rem; color: var(--text-secondary); max-width: 600px; margin: 0 auto var(--spacing-xl); line-height: 1.6; }
-.hero-buttons { display: flex; gap: var(--spacing-md); justify-content: center; flex-wrap: wrap; }
-
-/* ========== WHATSAPP BANNER ========== */
-.whatsapp-banner { background: linear-gradient(135deg, #25D366, #128C7E); color: #ffffff; padding: var(--spacing-lg) var(--spacing-xl); border-radius: var(--radius-md); margin-bottom: var(--spacing-xl); display: flex; align-items: center; justify-content: space-between; flex-wrap: wrap; gap: var(--spacing-md); cursor: pointer; transition: all var(--transition-base); border: 2px solid transparent; }
-.whatsapp-banner:hover { transform: translateY(-2px); box-shadow: var(--shadow-md); border-color: rgba(255, 255, 255, 0.3); }
-.whatsapp-banner-left { display: flex; align-items: center; gap: var(--spacing-md); }
-.whatsapp-banner-icon { font-size: 1.5rem; }
-.whatsapp-banner-right { display: flex; align-items: center; gap: var(--spacing-sm); }
-
-/* ========== OFFLINE BANNER ========== */
-.offline-banner { background: var(--color-orange); color: #ffffff; padding: var(--spacing-md) var(--spacing-xl); border-radius: var(--radius-md); margin-bottom: var(--spacing-xl); display: none; align-items: center; justify-content: space-between; flex-wrap: wrap; gap: var(--spacing-md); }
-.offline-banner.show { display: flex; }
-
-/* ========== EXPIRY WARNING ========== */
-.expiry-warning { background: var(--color-danger); color: #ffffff; padding: var(--spacing-md) var(--spacing-xl); border-radius: var(--radius-md); margin-bottom: var(--spacing-xl); display: none; align-items: center; justify-content: space-between; flex-wrap: wrap; gap: var(--spacing-md); }
-.expiry-warning.show { display: flex; }
-
-/* ========== SECTION TITLE ========== */
-.section-title { text-align: center; font-size: 1.3rem; font-weight: 700; margin-bottom: var(--spacing-lg); margin-top: var(--spacing-sm); }
-
-/* ========== FEATURES ========== */
-.features-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(200px, 1fr)); gap: var(--spacing-lg); margin-bottom: var(--spacing-2xl); }
-.feature-card { background: var(--bg-secondary); border-radius: var(--radius-md); padding: var(--spacing-xl); border: 1px solid var(--border-color); text-align: center; transition: all var(--transition-base); }
-.feature-card:hover { border-color: var(--accent-primary); transform: translateY(-3px); box-shadow: var(--shadow-md); }
-.feature-icon { font-size: 2rem; margin-bottom: var(--spacing-sm); }
-.feature-card h4 { font-size: 1rem; font-weight: 600; margin-bottom: var(--spacing-xs); }
-.feature-card p { font-size: 0.85rem; color: var(--text-secondary); margin: 0; line-height: 1.5; }
-
-/* ========== PRICE GRID ========== */
-.price-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(240px, 1fr)); gap: var(--spacing-lg); margin-bottom: var(--spacing-2xl); }
-.price-card { background: var(--bg-secondary); border-radius: var(--radius-lg); padding: var(--spacing-2xl); border: 2px solid var(--border-color); text-align: center; transition: all var(--transition-base); position: relative; }
-.price-card:hover { border-color: var(--accent-primary); transform: translateY(-4px); box-shadow: var(--shadow-md); }
-.price-card.featured { border-color: var(--accent-primary); background: var(--bg-tertiary); }
-.price-card.featured .featured-badge { position: absolute; top: -12px; left: 50%; transform: translateX(-50%); background: var(--accent-primary); color: #ffffff; padding: 3px 16px; border-radius: var(--radius-full); font-size: 0.7rem; font-weight: 700; white-space: nowrap; }
-.price-icon { font-size: 2.5rem; margin-bottom: var(--spacing-sm); }
-.price-name { font-size: 1.2rem; font-weight: 700; }
-.price-value { font-size: 2rem; font-weight: 800; color: var(--color-success); margin: var(--spacing-sm) 0; }
-.price-duration { font-size: 0.85rem; color: var(--text-secondary); }
-
-/* ========== STATS ========== */
-.stats-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(130px, 1fr)); gap: var(--spacing-md); margin-bottom: var(--spacing-xl); }
-.stat-card { background: var(--bg-secondary); border-radius: var(--radius-sm); padding: var(--spacing-lg); border: 1px solid var(--border-color); text-align: center; }
-.stat-value { font-size: 1.5rem; font-weight: 700; color: var(--accent-light); }
-.stat-label { font-size: 0.78rem; color: var(--text-secondary); margin-top: var(--spacing-xs); }
-
-/* ========== TOOLBAR ========== */
-.toolbar { display: flex; gap: var(--spacing-md); flex-wrap: wrap; margin-bottom: var(--spacing-xl); }
-
-/* ========== APP LIST ========== */
-.app-list { display: grid; grid-template-columns: 1fr; gap: var(--spacing-md); }
-.app-item { background: var(--bg-secondary); border-radius: var(--radius-md); border: 1px solid var(--border-color); overflow: hidden; transition: all var(--transition-base); }
-.app-item:hover { border-color: var(--accent-primary); }
-.app-header { display: flex; align-items: center; justify-content: space-between; padding: var(--spacing-md) var(--spacing-lg); cursor: pointer; transition: all var(--transition-base); flex-wrap: wrap; gap: var(--spacing-sm); }
-.app-header:hover { background: var(--bg-hover); }
-.app-name { font-weight: 600; font-size: 1rem; display: flex; align-items: center; gap: var(--spacing-sm); }
-.app-code-count { font-size: 0.75rem; color: var(--text-muted); background: var(--bg-tertiary); padding: 2px 10px; border-radius: var(--radius-full); }
-.app-codes-container { padding: 0 var(--spacing-lg) var(--spacing-md); display: none; }
-.app-codes-container.open { display: block; }
-
-/* ========== CODE ITEM ========== */
-.code-item { background: var(--bg-tertiary); border-radius: var(--radius-sm); padding: var(--spacing-md); margin-bottom: var(--spacing-sm); border: 1px solid var(--border-color); transition: all var(--transition-base); }
-.code-item:hover { border-color: var(--accent-primary); }
-.code-header { display: flex; align-items: center; justify-content: space-between; margin-bottom: var(--spacing-sm); flex-wrap: wrap; gap: var(--spacing-sm); }
-.code-name { font-weight: 500; font-size: 0.9rem; }
-.code-content-preview { font-family: 'Courier New', monospace; font-size: 0.8rem; color: var(--text-secondary); white-space: pre-wrap; word-wrap: break-word; max-height: 180px; overflow-y: auto; padding: var(--spacing-sm); background: var(--bg-primary); border-radius: 6px; border: 1px solid var(--border-color); display: none; }
-.code-content-preview.show { display: block; }
-.code-content-preview pre { margin: 0; white-space: pre-wrap; word-wrap: break-word; }
-
-/* ========== EMPTY STATE ========== */
-.empty-state { text-align: center; padding: var(--spacing-3xl) var(--spacing-lg); color: var(--text-secondary); }
-.empty-state-icon { font-size: 3rem; margin-bottom: var(--spacing-md); }
-.empty-state h3 { font-size: 1.2rem; color: var(--text-primary); margin-bottom: var(--spacing-sm); }
-.empty-state p { color: var(--text-muted); margin-bottom: var(--spacing-lg); }
-
-/* ========== ADMIN TABS ========== */
-.admin-tabs { display: flex; gap: var(--spacing-sm); flex-wrap: wrap; margin-bottom: var(--spacing-lg); border-bottom: 1px solid var(--border-color); padding-bottom: var(--spacing-md); }
-.admin-tab { padding: 8px 16px; border: 2px solid var(--accent-primary); background: transparent; color: var(--accent-light); border-radius: var(--radius-sm); cursor: pointer; font-weight: 600; font-size: 0.85rem; transition: all var(--transition-base); }
-.admin-tab:hover { background: var(--accent-primary); color: #ffffff; }
-.admin-tab.active { background: var(--accent-primary); color: #ffffff; }
-.admin-tab-content { animation: fadeIn 0.3s ease; }
-
-/* ========== ADMIN TABLE ========== */
-.admin-table { width: 100%; border-collapse: collapse; font-size: 0.8rem; }
-.admin-table th, .admin-table td { padding: 8px 10px; border: 1px solid var(--border-color); text-align: left; vertical-align: middle; }
-.admin-table th { background: var(--bg-hover); font-weight: 600; font-size: 0.75rem; text-transform: uppercase; letter-spacing: 0.5px; }
-.admin-table tr:hover { background: var(--bg-tertiary); }
-
-/* ========== RESPONSIVE ========== */
-@media (max-width: 640px) {
-    .hero h1 { font-size: 1.5rem; }
-    .hero { padding: var(--spacing-2xl) var(--spacing-md); }
-    .price-grid { grid-template-columns: 1fr; }
-    .features-grid { grid-template-columns: 1fr; }
-    .header { flex-direction: column; align-items: stretch; }
-    .header-buttons { justify-content: center; }
-    .stats-grid { grid-template-columns: repeat(2, 1fr); }
-    .modal-content { padding: var(--spacing-lg); }
-    .hero-buttons { flex-direction: column; }
-    .hero-buttons .btn { width: 100%; }
-    .admin-table { font-size: 0.65rem; }
-    .admin-table th, .admin-table td { padding: 4px 6px; }
-}
+<script>
 // ============================================================
-// NOTEPAD+ CODE STORAGE v3.3 - SCRIPT.JS (FULL VERSION)
+// NOTEPAD+ CODE STORAGE v3.3 - FULL JAVASCRIPT
 // ============================================================
 
-// ========== SERVICE WORKER ==========
+// SERVICE WORKER
 if ('serviceWorker' in navigator) {
     var swCode = `
         var CACHE_NAME = 'notepad-v33';
-        var ASSETS = ['/', '/index.html', '/style.css', '/script.js'];
-        self.addEventListener('install', e => {
-            e.waitUntil(caches.open(CACHE_NAME).then(c => c.addAll(ASSETS)));
-            self.skipWaiting();
-        });
-        self.addEventListener('activate', e => {
-            e.waitUntil(caches.keys().then(keys => Promise.all(keys.filter(k => k !== CACHE_NAME).map(k => caches.delete(k)))));
-            self.clients.claim();
-        });
-        self.addEventListener('fetch', e => {
-            e.respondWith(caches.match(e.request).then(r => r || fetch(e.request).then(res => {
-                return caches.open(CACHE_NAME).then(cache => { cache.put(e.request, res.clone()); return res; });
-            })));
-        });
+        self.addEventListener('install', e => { e.waitUntil(caches.open(CACHE_NAME).then(c => c.addAll(['/']))); self.skipWaiting(); });
+        self.addEventListener('activate', e => { self.clients.claim(); });
+        self.addEventListener('fetch', e => { e.respondWith(caches.match(e.request).then(r => r || fetch(e.request))); });
     `;
     var blob = new Blob([swCode], { type: 'application/javascript' });
     navigator.serviceWorker.register(URL.createObjectURL(blob)).catch(() => {});
 }
 
-// ========== DATA DEFAULTS ==========
-const SUPER_ADMIN = {
-    username: 'superadmin',
-    password: 'admin123',
-    nama: 'Super Admin',
-    email: 'admin@notepad.com',
-    hp: '081220285226',
-    role: 'superadmin'
-};
-
+const SUPER_ADMIN = { username:'superadmin', password:'admin123', nama:'Super Admin', email:'admin@notepad.com', hp:'081220285226', role:'superadmin' };
 const DEFAULT_PACKAGES = [
-    { id: '1bulan', name: 'Basic', price: 25000, days: 30, label: '1 Bulan' },
-    { id: '3bulan', name: 'Premium', price: 50000, days: 90, label: '3 Bulan' },
-    { id: '6bulan', name: 'Enterprise', price: 75000, days: 180, label: '6 Bulan' }
+    { id:'1bulan', name:'Basic', price:25000, days:30, label:'1 Bulan' },
+    { id:'3bulan', name:'Premium', price:50000, days:90, label:'3 Bulan' },
+    { id:'6bulan', name:'Enterprise', price:75000, days:180, label:'6 Bulan' }
 ];
 
-// ========== STORAGE HELPERS ==========
-function getItem(key, def) {
-    try { const v = localStorage.getItem('np_' + key); return v ? JSON.parse(v) : def; }
-    catch { return def; }
-}
-function setItem(key, val) { localStorage.setItem('np_' + key, JSON.stringify(val)); }
-function removeItem(key) { localStorage.removeItem('np_' + key); }
-
+function getItem(key, def) { try { const v = localStorage.getItem('np_'+key); return v ? JSON.parse(v) : def; } catch(e) { return def; } }
+function setItem(key, val) { localStorage.setItem('np_'+key, JSON.stringify(val)); }
+function removeItem(key) { localStorage.removeItem('np_'+key); }
 function getUsers() { return getItem('users', []); }
 function saveUsers(u) { setItem('users', u); }
 function getApps() { return getItem('apps', {}); }
@@ -1044,10 +521,7 @@ function getValidCodes() { return getItem('codes', {}); }
 function saveValidCodes(c) { setItem('codes', c); }
 function getLogs() { return getItem('logs', []); }
 function saveLogs(l) { setItem('logs', l); }
-function getAttempts() { return getItem('attempts', {}); }
-function saveAttempts(a) { setItem('attempts', a); }
 
-// ========== WHATSAPP FORMATTING ==========
 function formatWA(raw) {
     let num = raw.replace(/[^0-9]/g, '');
     if (num.startsWith('0')) num = '62' + num.substring(1);
@@ -1061,7 +535,6 @@ function updateWADisplay() {
 }
 function openWhatsApp() { window.open('https://wa.me/' + getWANumber(), '_blank'); }
 
-// ========== ONLINE STATUS ==========
 function updateOnlineStatus() {
     const badge = document.getElementById('connectionBadge');
     const banner = document.getElementById('offlineBanner');
@@ -1077,7 +550,6 @@ function updateOnlineStatus() {
 window.addEventListener('online', updateOnlineStatus);
 window.addEventListener('offline', updateOnlineStatus);
 
-// ========== DOWNLOAD OFFLINE ==========
 function downloadForOffline() {
     const html = document.documentElement.outerHTML;
     const blob = new Blob(['<!DOCTYPE html>\n' + html], { type: 'text/html' });
@@ -1089,16 +561,14 @@ function downloadForOffline() {
     showToast('File offline berhasil didownload!', 'success');
 }
 
-// ========== INSTALL APP ==========
 function installApplication() {
     if (window.matchMedia('(display-mode: standalone)').matches) {
         showToast('Aplikasi sudah terinstall!', 'warning');
-        return;
+    } else {
+        alert('Untuk menginstall, buka menu browser (⋮) lalu pilih "Tambahkan ke Layar Utama" atau "Install".');
     }
-    alert('Untuk menginstall, buka menu browser (⋮) lalu pilih "Tambahkan ke Layar Utama" atau "Install".');
 }
 
-// ========== TOAST ==========
 function showToast(msg, type) {
     const container = document.getElementById('toastContainer');
     const toast = document.createElement('div');
@@ -1109,14 +579,10 @@ function showToast(msg, type) {
     setTimeout(() => { toast.classList.remove('show'); setTimeout(() => toast.remove(), 300); }, 3000);
 }
 
-// ========== MODAL HELPERS ==========
 function openModal(id) { document.getElementById(id).classList.add('show'); }
-function closeModal(id) { document.getElementById(id).classList.remove('show'); clearModalErrors(); }
-function clearModalErrors() {
-    document.querySelectorAll('.form-error, .form-success').forEach(el => { el.textContent = ''; el.classList.remove('show'); });
-}
+function closeModal(id) { document.getElementById(id).classList.remove('show'); }
+function clearModalErrors() { document.querySelectorAll('.form-error, .form-success').forEach(el => { el.textContent = ''; el.classList.remove('show'); }); }
 
-// ========== LOADING ==========
 function showLoading(txt) {
     const overlay = document.getElementById('loadingOverlay');
     document.getElementById('loadingText').textContent = txt || 'Memproses...';
@@ -1124,7 +590,6 @@ function showLoading(txt) {
 }
 function hideLoading() { document.getElementById('loadingOverlay').style.display = 'none'; }
 
-// ========== THEME ==========
 function toggleTheme() {
     document.body.classList.toggle('light-theme');
     const isLight = document.body.classList.contains('light-theme');
@@ -1135,12 +600,10 @@ function toggleTheme() {
 (function initTheme() {
     if (localStorage.getItem('np_theme') === 'light') {
         document.body.classList.add('light-theme');
-        const icon = '☀️ Light Mode';
-        document.querySelectorAll('#themeButton1, #themeButton2').forEach(b => { if (b) b.textContent = icon; });
+        document.querySelectorAll('#themeButton1, #themeButton2').forEach(b => { if (b) b.textContent = '☀️ Light Mode'; });
     }
 })();
 
-// ========== NAVIGATION ==========
 function openApplication() {
     const session = getSession();
     if (!session) { showLoginModal(); return; }
@@ -1158,17 +621,12 @@ function showLoginModal() { openModal('loginModal'); }
 function showRegisterModal() { openModal('registerModal'); }
 function showProfileModal() { openModal('profileModal'); loadProfileData(); }
 
-// ========== AUTH ==========
 function handleLogin() {
     const username = document.getElementById('loginUsername').value.trim();
     const password = document.getElementById('loginPassword').value;
     const errorEl = document.getElementById('loginError');
     errorEl.classList.remove('show');
-
     if (!username || !password) { errorEl.textContent = 'Isi semua field!'; errorEl.classList.add('show'); return; }
-
-    const users = getUsers();
-    // Cek super admin
     if (username === SUPER_ADMIN.username && password === SUPER_ADMIN.password) {
         saveSession({ ...SUPER_ADMIN, premium: true, premiumExpiry: null });
         closeModal('loginModal');
@@ -1176,11 +634,10 @@ function handleLogin() {
         openApplication();
         return;
     }
-
+    const users = getUsers();
     const user = users.find(u => (u.username === username || u.email === username) && u.password === password);
     if (!user) { errorEl.textContent = 'Username atau password salah!'; errorEl.classList.add('show'); return; }
     if (user.locked) { errorEl.textContent = 'Akun Anda terkunci! Hubungi admin.'; errorEl.classList.add('show'); return; }
-
     saveSession(user);
     closeModal('loginModal');
     showToast('Login berhasil!', 'success');
@@ -1197,18 +654,13 @@ function handleRegister() {
     const errorEl = document.getElementById('registerError');
     const successEl = document.getElementById('registerSuccess');
     errorEl.classList.remove('show'); successEl.classList.remove('show');
-
-    if (!nama || !email || !hp || !username || !password || !confirm) {
-        errorEl.textContent = 'Semua field wajib diisi!'; errorEl.classList.add('show'); return;
-    }
+    if (!nama || !email || !hp || !username || !password || !confirm) { errorEl.textContent = 'Semua field wajib diisi!'; errorEl.classList.add('show'); return; }
     if (password !== confirm) { errorEl.textContent = 'Password tidak cocok!'; errorEl.classList.add('show'); return; }
     if (password.length < 6) { errorEl.textContent = 'Password minimal 6 karakter!'; errorEl.classList.add('show'); return; }
-
     const users = getUsers();
     if (users.find(u => u.username === username)) { errorEl.textContent = 'Username sudah terdaftar!'; errorEl.classList.add('show'); return; }
     if (users.find(u => u.email === email)) { errorEl.textContent = 'Email sudah terdaftar!'; errorEl.classList.add('show'); return; }
-
-    const newUser = { id: Date.now().toString(), nama, email, hp, username, password, role: 'user', premium: false, premiumExpiry: null, locked: false, createdAt: new Date().toISOString() };
+    const newUser = { id: Date.now().toString(), nama, email, hp, username, password, role:'user', premium:false, premiumExpiry:null, locked:false, createdAt: new Date().toISOString() };
     users.push(newUser);
     saveUsers(users);
     successEl.textContent = 'Pendaftaran berhasil! Silakan login.';
@@ -1223,40 +675,29 @@ function handleLogout() {
     showToast('Anda telah logout.', 'info');
 }
 
-// ========== ACTIVATION ==========
 function activateFromLogin() {
     const code = document.getElementById('activationCodeInput').value.trim();
     const errEl = document.getElementById('activationError');
     const sucEl = document.getElementById('activationSuccess');
     errEl.classList.remove('show'); sucEl.classList.remove('show');
     if (!code) { errEl.textContent = 'Masukkan kode aktivasi!'; errEl.classList.add('show'); return; }
-
     const validCodes = getValidCodes();
     const codeData = validCodes[code];
     if (!codeData || codeData.used) { errEl.textContent = 'Kode tidak valid atau sudah digunakan!'; errEl.classList.add('show'); return; }
-
     const session = getSession();
     if (!session) { errEl.textContent = 'Anda harus login terlebih dahulu!'; errEl.classList.add('show'); return; }
-
     const users = getUsers();
     const userIdx = users.findIndex(u => u.id === session.id);
     if (userIdx === -1) { errEl.textContent = 'User tidak ditemukan!'; errEl.classList.add('show'); return; }
-
     const pkg = getPackages().find(p => p.id === codeData.packageId);
     if (!pkg) { errEl.textContent = 'Paket tidak valid!'; errEl.classList.add('show'); return; }
-
     const now = new Date();
     const expiry = new Date(now.getTime() + pkg.days * 86400000);
     users[userIdx].premium = true;
     users[userIdx].premiumExpiry = expiry.toISOString();
     saveUsers(users);
-
-    codeData.used = true;
-    codeData.usedBy = session.username;
-    codeData.usedAt = now.toISOString();
-    validCodes[code] = codeData;
+    codeData.used = true; codeData.usedBy = session.username; codeData.usedAt = now.toISOString();
     saveValidCodes(validCodes);
-
     const updatedSession = { ...users[userIdx] };
     saveSession(updatedSession);
     sucEl.textContent = 'Aktivasi berhasil! Premium hingga ' + expiry.toLocaleDateString();
@@ -1264,7 +705,6 @@ function activateFromLogin() {
     updateHeaderUser();
 }
 
-// ========== PASSWORD RECOVERY ==========
 function handleForgotPassword() {
     const nama = document.getElementById('forgotNama').value.trim();
     const email = document.getElementById('forgotEmail').value.trim();
@@ -1272,18 +712,15 @@ function handleForgotPassword() {
     const errEl = document.getElementById('forgotError');
     const sucEl = document.getElementById('forgotSuccess');
     errEl.classList.remove('show'); sucEl.classList.remove('show');
-
     if (!nama || !email || !hp) { errEl.textContent = 'Isi semua data!'; errEl.classList.add('show'); return; }
     const users = getUsers();
     const user = users.find(u => u.nama === nama && u.email === email && u.hp === hp);
     if (!user) { errEl.textContent = 'Data tidak ditemukan! Hubungi admin.'; errEl.classList.add('show'); return; }
-
     sucEl.textContent = 'Link reset password telah dikirim ke WhatsApp Admin. Silakan hubungi.';
     sucEl.classList.add('show');
     setTimeout(() => openWhatsApp(), 2000);
 }
 
-// ========== PROFILE ==========
 function loadProfileData() {
     const session = getSession();
     if (!session) return;
@@ -1304,7 +741,6 @@ function saveProfile() {
     const sucEl = document.getElementById('profileSuccess');
     errEl.classList.remove('show'); sucEl.classList.remove('show');
     if (!nama || !email || !hp) { errEl.textContent = 'Semua field wajib diisi!'; errEl.classList.add('show'); return; }
-
     session.nama = nama; session.email = email; session.hp = hp;
     saveSession(session);
     const users = getUsers();
@@ -1316,7 +752,6 @@ function saveProfile() {
     setTimeout(() => closeModal('profileModal'), 1500);
 }
 
-// ========== HEADER USER UPDATE ==========
 function updateHeaderUser() {
     const session = getSession();
     const badge = document.getElementById('userBadge');
@@ -1324,7 +759,6 @@ function updateHeaderUser() {
     const adminBtn = document.getElementById('adminButton');
     const logoutBtn = document.getElementById('logoutButton');
     const mergeBtn = document.getElementById('mergeButton');
-
     if (session) {
         badge.style.display = 'flex';
         document.getElementById('userAvatar').textContent = session.nama.charAt(0).toUpperCase();
@@ -1344,7 +778,6 @@ function updateHeaderUser() {
     }
 }
 
-// ========== STATS ==========
 function updateStats() {
     const session = getSession();
     const apps = session ? (getApps()[session.id] || []) : [];
@@ -1354,7 +787,6 @@ function updateStats() {
         totalCodes += (app.codes || []).length;
         (app.codes || []).forEach(c => totalStorage += new Blob([c.content]).size);
     });
-
     document.getElementById('statTotalApps').textContent = apps.length;
     document.getElementById('statTotalCodes').textContent = totalCodes;
     document.getElementById('statStorage').textContent = (totalStorage / 1024).toFixed(1) + ' KB';
@@ -1362,7 +794,6 @@ function updateStats() {
     document.getElementById('statPremiumStatus').textContent = (session && (session.premium || session.role === 'superadmin')) ? 'Premium' : 'Free';
 }
 
-// ========== APP CRUD ==========
 function showAddAppModal() {
     document.getElementById('appModalTitle').textContent = 'Tambah Aplikasi';
     document.getElementById('editAppId').value = '';
@@ -1380,7 +811,6 @@ function saveApplication() {
     const errEl = document.getElementById('appError');
     errEl.classList.remove('show');
     if (!name) { errEl.textContent = 'Nama aplikasi wajib diisi!'; errEl.classList.add('show'); return; }
-
     const allApps = getApps();
     const userApps = allApps[session.id] || [];
     if (editId) {
@@ -1412,7 +842,6 @@ function toggleAppCodes(appId) {
     if (container) container.classList.toggle('open');
 }
 
-// ========== CODE CRUD ==========
 function showAddCodeModal(appId) {
     document.getElementById('codeModalTitle').textContent = 'Tambah Code';
     document.getElementById('editCodeId').value = '';
@@ -1444,7 +873,6 @@ function saveCode() {
     const errEl = document.getElementById('codeError');
     errEl.classList.remove('show');
     if (!name || !content) { errEl.textContent = 'Nama dan kode wajib diisi!'; errEl.classList.add('show'); return; }
-
     const allApps = getApps();
     const apps = allApps[session.id] || [];
     const app = apps.find(a => a.id === appId);
@@ -1481,7 +909,6 @@ function toggleCodePreview(codeId) {
     if (preview) preview.classList.toggle('show');
 }
 
-// ========== RENDER APP LIST ==========
 function refreshAppUI() {
     const session = getSession();
     const container = document.getElementById('appListContainer');
@@ -1489,14 +916,10 @@ function refreshAppUI() {
     const apps = session ? (getApps()[session.id] || []) : [];
     if (apps.length === 0) { container.innerHTML = ''; emptyState.classList.remove('hidden'); return; }
     emptyState.classList.add('hidden');
-
     container.innerHTML = apps.map(app => `
         <div class="app-item">
             <div class="app-header" onclick="toggleAppCodes('${app.id}')">
-                <div class="app-name">
-                    📁 ${app.name}
-                    <span class="app-code-count">${app.codes.length} kode</span>
-                </div>
+                <div class="app-name">📁 ${app.name} <span class="app-code-count">${app.codes.length} kode</span></div>
                 <div style="display:flex;gap:4px;">
                     <button class="btn btn-primary btn-sm" onclick="event.stopPropagation(); showAddCodeModal('${app.id}')">+ Code</button>
                     <button class="btn btn-warning btn-sm" onclick="event.stopPropagation(); editApp('${app.id}')">Edit</button>
@@ -1514,9 +937,7 @@ function refreshAppUI() {
                                 <button class="btn btn-danger btn-sm" onclick="deleteCode('${app.id}','${code.id}')">Hapus</button>
                             </div>
                         </div>
-                        <div class="code-content-preview" id="preview-${code.id}">
-                            <pre>${escapeHTML(code.content)}</pre>
-                        </div>
+                        <div class="code-content-preview" id="preview-${code.id}"><pre>${escapeHTML(code.content)}</pre></div>
                     </div>
                 `).join('')}
             </div>
@@ -1533,20 +954,17 @@ function editApp(appId) {
     document.getElementById('appDescInput').value = app.desc || '';
     openModal('appModal');
 }
-function escapeHTML(str) { return str.replace(/[&<>"']/g, m => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' })[m]); }
+function escapeHTML(str) { return str.replace(/[&<>"']/g, m => ({ '&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;' })[m]); }
 
-// ========== SEARCH ==========
 function toggleSearch() { document.getElementById('searchBar').classList.toggle('hidden'); }
 function performSearch() {
     const q = document.getElementById('searchInput').value.toLowerCase();
     document.querySelectorAll('.app-item').forEach(item => {
-        const text = item.textContent.toLowerCase();
-        item.style.display = text.includes(q) ? '' : 'none';
+        item.style.display = item.textContent.toLowerCase().includes(q) ? '' : 'none';
     });
 }
 function clearSearch() { document.getElementById('searchInput').value = ''; performSearch(); }
 
-// ========== MERGE ==========
 function showMergeModal() {
     const session = getSession();
     if (!session || (!session.premium && session.role !== 'superadmin')) {
@@ -1583,7 +1001,6 @@ function downloadMergeResult() {
     a.click();
 }
 
-// ========== IMPORT/EXPORT ==========
 function exportAllData() {
     const session = getSession();
     if (!session) return showToast('Login dulu!', 'error');
@@ -1616,7 +1033,6 @@ function importAllData(input) {
     reader.readAsText(file);
 }
 
-// ========== CONFIRM DIALOG ==========
 let confirmCallback = null;
 function showConfirm(title, msg, cb) {
     document.getElementById('confirmTitle').textContent = title;
@@ -1626,7 +1042,6 @@ function showConfirm(title, msg, cb) {
 }
 function executeConfirmAction() { if (confirmCallback) { confirmCallback(); confirmCallback = null; } closeModal('confirmModal'); }
 
-// ========== EXPIRY CHECK ==========
 function checkExpiry() {
     const session = getSession();
     if (!session || !session.premiumExpiry) return;
@@ -1635,8 +1050,7 @@ function checkExpiry() {
     const diff = exp - now;
     const warning = document.getElementById('expiryWarning');
     if (diff < 0) {
-        session.premium = false;
-        session.premiumExpiry = null;
+        session.premium = false; session.premiumExpiry = null;
         saveSession(session);
         const users = getUsers();
         const idx = users.findIndex(u => u.id === session.id);
@@ -1646,12 +1060,10 @@ function checkExpiry() {
     } else if (diff < 3 * 86400000) {
         document.getElementById('expiryWarningText').textContent = `Premium akan berakhir dalam ${Math.ceil(diff/86400000)} hari!`;
         warning.classList.add('show');
-    } else {
-        warning.classList.remove('show');
-    }
+    } else { warning.classList.remove('show'); }
 }
 
-// ========== SUPER ADMIN PANEL ==========
+// SUPER ADMIN
 function showSuperAdminPanel() {
     const session = getSession();
     if (!session || session.role !== 'superadmin') return;
@@ -1670,7 +1082,6 @@ function switchAdminTab(tab) {
     document.getElementById('adminTab' + tab.charAt(0).toUpperCase() + tab.slice(1)).classList.remove('hidden');
     document.getElementById('tab' + tab.charAt(0).toUpperCase() + tab.slice(1)).classList.add('active');
 }
-
 function adminCreateActivationCode() {
     const username = document.getElementById('adminActivationUser').value.trim();
     const packageId = document.getElementById('adminActivationPackage').value;
@@ -1692,25 +1103,12 @@ function refreshAdminPackagesDropdown() {
 function refreshActiveCodesList() {
     const codes = getValidCodes();
     const list = document.getElementById('activeCodesList');
-    list.innerHTML = Object.entries(codes).filter(([_, v]) => !v.used).map(([k, v]) => `
-        <div style="padding:4px 0;border-bottom:1px solid var(--border-color);">${k} - ${v.forUser} (${v.packageId})</div>
-    `).join('') || '<p style="color:var(--text-muted);">Tidak ada kode aktif.</p>';
+    list.innerHTML = Object.entries(codes).filter(([_,v]) => !v.used).map(([k,v]) => `<div style="padding:4px 0;border-bottom:1px solid var(--border-color);">${k} - ${v.forUser} (${v.packageId})</div>`).join('') || '<p style="color:var(--text-muted);">Tidak ada kode aktif.</p>';
 }
 function refreshAdminUserList() {
     const users = getUsers();
     const list = document.getElementById('adminUserList');
-    list.innerHTML = users.length === 0 ? '<p>Tidak ada user.</p>' : `
-        <table class="admin-table"><tr><th>Username</th><th>Email</th><th>Premium</th><th>Locked</th><th>Aksi</th></tr>
-        ${users.map(u => `
-            <tr>
-                <td>${u.username}</td><td>${u.email}</td>
-                <td>${u.premium ? 'Ya' : 'Tidak'}</td>
-                <td>${u.locked ? '🔒' : '🔓'}</td>
-                <td>
-                    <button class="btn btn-warning btn-sm" onclick="toggleUserLock('${u.id}')">${u.locked ? 'Buka' : 'Kunci'}</button>
-                </td>
-            </tr>
-        `).join('')}</table>`;
+    list.innerHTML = users.length === 0 ? '<p>Tidak ada user.</p>' : `<table class="admin-table"><tr><th>Username</th><th>Email</th><th>Premium</th><th>Locked</th><th>Aksi</th></tr>${users.map(u => `<tr><td>${u.username}</td><td>${u.email}</td><td>${u.premium ? 'Ya' : 'Tidak'}</td><td>${u.locked ? '🔒' : '🔓'}</td><td><button class="btn btn-warning btn-sm" onclick="toggleUserLock('${u.id}')">${u.locked ? 'Buka' : 'Kunci'}</button></td></tr>`).join('')}</table>`;
 }
 function toggleUserLock(userId) {
     const users = getUsers();
@@ -1735,15 +1133,9 @@ function resetAllApplicationData() {
     });
 }
 
-// ========== PACKAGE EDITING ==========
 function refreshPackageEditList() {
     const packages = getPackages();
-    document.getElementById('packageEditList').innerHTML = packages.map(p => `
-        <div style="display:flex;justify-content:space-between;align-items:center;padding:8px;border-bottom:1px solid var(--border-color);">
-            <span>${p.name} - Rp${p.price} / ${p.label}</span>
-            <button class="btn btn-warning btn-sm" onclick="editPackage('${p.id}')">Edit</button>
-        </div>
-    `).join('');
+    document.getElementById('packageEditList').innerHTML = packages.map(p => `<div style="display:flex;justify-content:space-between;align-items:center;padding:8px;border-bottom:1px solid var(--border-color);"><span>${p.name} - Rp${p.price} / ${p.label}</span><button class="btn btn-warning btn-sm" onclick="editPackage('${p.id}')">Edit</button></div>`).join('');
 }
 function editPackage(id) {
     const pkg = getPackages().find(p => p.id === id);
@@ -1770,29 +1162,26 @@ function savePackageChanges() {
     showToast('Paket diperbarui!', 'success');
 }
 
-// ========== UI REFRESH FOR PACKAGES ON LANDING ==========
 function refreshPackageUI() {
     const grid = document.getElementById('landingPriceGrid');
     if (!grid) return;
     const packages = getPackages();
-    grid.innerHTML = packages.map((p, i) => `
-        <div class="price-card ${i === 1 ? 'featured' : ''}">
-            ${i === 1 ? '<div class="featured-badge">POPULER</div>' : ''}
-            <div class="price-icon">💎</div>
-            <div class="price-name">${p.name}</div>
-            <div class="price-value">Rp${p.price.toLocaleString()}</div>
-            <div class="price-duration">/${p.label}</div>
+    grid.innerHTML = packages.map((p,i) => `
+        <div class="price-card ${i===1 ? 'featured' : ''}">
+            ${i===1 ? '<div class="featured-badge">POPULER</div>' : ''}
+            <div class="price-icon">💎</div><div class="price-name">${p.name}</div>
+            <div class="price-value">Rp${p.price.toLocaleString()}</div><div class="price-duration">/${p.label}</div>
         </div>
     `).join('');
 }
 
-// ========== INIT ==========
 document.addEventListener('DOMContentLoaded', () => {
-    // Pastikan super admin ada di users (tidak perlu disimpan di users array)
     updateWADisplay();
     refreshPackageUI();
     updateOnlineStatus();
     updateHeaderUser();
-    const session = getSession();
-    if (session) openApplication();
+    if (getSession()) openApplication();
 });
+</script>
+</body>
+</html>
