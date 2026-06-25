@@ -3,2172 +3,411 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <meta name="theme-color" content="#0f0f1a">
+    <meta name="theme-color" content="#0a0a1a">
     <meta name="apple-mobile-web-app-capable" content="yes">
     <meta name="apple-mobile-web-app-status-bar-style" content="default">
-    <meta name="apple-mobile-web-app-title" content="Notepad+ Code Storage">
-    <title>📝 Notepad+ Code Storage v2.2</title>
-    <link rel="manifest" href="data:application/json;base64,ewogICJuYW1lIjogIk5vdGVwYWQrIENvZGUgU3RvcmFnZSIsCiAgInNob3J0X25hbWUiOiAiTm90ZXBhZCsiLAogICJzdGFydF91cmwiOiAiLyIsCiAgImRpc3BsYXkiOiAic3RhbmRhbG9uZSIsCiAgImJhY2tncm91bmRfY29sb3IiOiAiIzBmMGYxYSIsCiAgInRoZW1lX2NvbG9yIjogIiMwZjBmMWEiCn0=">
-    <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E%3Crect width='100' height='100' rx='20' fill='%230f0f1a'/%3E%3Ctext x='50' y='68' text-anchor='middle' font-size='60' fill='%23ffffff'%3E📝%3C/text%3E%3C/svg%3E">
+    <title>📝 Notepad+ Code Storage v3.0</title>
+    <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E%3Crect width='100' height='100' rx='20' fill='%230a0a1a'/%3E%3Ctext x='50' y='68' text-anchor='middle' font-size='60' fill='%23ffffff'%3E📝%3C/text%3E%3C/svg%3E">
+    
     <style>
-        *{box-sizing:border-box;margin:0;padding:0;border:0;font:inherit;font-size:100%;vertical-align:baseline;-webkit-tap-highlight-color:transparent}
-        html{scroll-behavior:smooth;-webkit-text-size-adjust:100%;font-size:16px;line-height:1.6;-webkit-font-smoothing:antialiased}
-        body{font-family:-apple-system,'Segoe UI',Roboto,sans-serif;background:var(--bg-primary,#0f0f1a);color:var(--text-primary,#fff);min-height:100vh;min-height:100dvh;overflow-x:hidden}
-        :root{--bg-primary:#0f0f1a;--bg-secondary:#1a1a2e;--bg-card:#16213e;--bg-hover:#1a1a3e;--bg-active:#2a2a4e;--text-primary:#fff;--text-secondary:#a0a0b0;--text-muted:#6a6a7a;--accent:#6c5ce7;--accent-hover:#5a4bd1;--gradient:linear-gradient(135deg,#6c5ce7,#a29bfe);--success:#00b894;--danger:#ff6b6b;--warning:#fdcb6e;--info:#74b9ff;--border-color:rgba(255,255,255,0.08);--shadow:0 2px 8px rgba(0,0,0,0.4);--shadow-md:0 4px 16px rgba(0,0,0,0.5);--shadow-lg:0 8px 32px rgba(0,0,0,0.6);--radius:8px;--radius-md:12px;--radius-lg:16px;--radius-full:9999px;--spacing-1:4px;--spacing-2:8px;--spacing-3:12px;--spacing-4:16px;--spacing-5:20px;--spacing-6:24px;--spacing-8:32px;--spacing-10:40px;--transition-base:250ms ease;--z-modal:40;--z-toast:50}
-        .light-theme{--bg-primary:#f5f5f5;--bg-secondary:#fff;--bg-card:#f0f0f0;--bg-hover:#e8e8e8;--text-primary:#1a1a2e;--text-secondary:#555;--text-muted:#888;--border-color:rgba(0,0,0,0.1)}
-        ::-webkit-scrollbar{width:4px}
-        ::-webkit-scrollbar-track{background:var(--bg-primary)}
-        ::-webkit-scrollbar-thumb{background:var(--accent);border-radius:var(--radius-full)}
-        *{scrollbar-width:thin;scrollbar-color:var(--accent) var(--bg-primary)}
+        /* ========== RESET & BASE ========== */
+        *,*::before,*::after{box-sizing:border-box;margin:0;padding:0;border:0;font:inherit;vertical-align:baseline}
+        html{scroll-behavior:smooth;-webkit-text-size-adjust:100%;font-size:16px;line-height:1.5;-webkit-font-smoothing:antialiased}
+        body{
+            font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,'Helvetica Neue',Arial,sans-serif;
+            background:var(--bg);
+            color:var(--text);
+            min-height:100vh;min-height:100dvh;overflow-x:hidden;
+            transition:background .3s,color .3s;
+        }
+        
+        /* ========== CSS VARIABLES ========== */
+        :root{
+            --bg:#0a0a1a;--bg2:#12122a;--bg3:#1a1a35;--bg4:#222240;
+            --text:#e8e8f0;--text2:#a0a0b8;--text3:#6a6a80;
+            --accent:#7c3aed;--accent2:#6d28d9;--accent3:#8b5cf6;
+            --green:#10b981;--green2:#059669;
+            --red:#ef4444;--red2:#dc2626;
+            --yellow:#f59e0b;--yellow2:#d97706;
+            --blue:#3b82f6;--blue2:#2563eb;
+            --border:rgba(255,255,255,0.06);--border2:rgba(255,255,255,0.1);
+            --shadow:0 2px 8px rgba(0,0,0,0.4);--shadow2:0 4px 20px rgba(0,0,0,0.5);
+            --radius:8px;--radius2:12px;--radius3:16px;--radius4:9999px;
+            --g1:4px;--g2:8px;--g3:12px;--g4:16px;--g5:20px;--g6:24px;--g8:32px;--g10:40px;
+            --z1:10;--z2:20;--z3:30;--z4:40;--z5:50;
+            --tr:200ms ease;
+        }
+        
+        .light{
+            --bg:#f5f5f8;--bg2:#ffffff;--bg3:#f0f0f5;--bg4:#e5e5ea;
+            --text:#1a1a2e;--text2:#555570;--text3:#8888a0;
+            --border:rgba(0,0,0,0.08);--border2:rgba(0,0,0,0.12);
+        }
+        
+        /* ========== SCROLLBAR ========== */
+        ::-webkit-scrollbar{width:4px;height:4px}
+        ::-webkit-scrollbar-track{background:transparent}
+        ::-webkit-scrollbar-thumb{background:var(--accent);border-radius:var(--radius4)}
+        *{scrollbar-width:thin;scrollbar-color:var(--accent) transparent}
+        
+        /* ========== UTILITIES ========== */
         .hidden{display:none!important}
-        .flex{display:flex}.flex-center{display:flex;align-items:center;justify-content:center}
-        .flex-between{display:flex;align-items:center;justify-content:space-between}
-        .flex-col{flex-direction:column}.flex-wrap{flex-wrap:wrap}.flex-1{flex:1}
-        .gap-1{gap:var(--spacing-1)}.gap-2{gap:var(--spacing-2)}.gap-3{gap:var(--spacing-3)}.gap-4{gap:var(--spacing-4)}
-        .w-full{width:100%}.h-full{height:100%}.text-center{text-align:center}
-        .text-sm{font-size:.85rem}.text-xs{font-size:.75rem}.text-muted{color:var(--text-muted)}
-        .text-secondary{color:var(--text-secondary)}.text-accent{color:var(--accent)}
-        .text-success{color:var(--success)}.text-danger{color:var(--danger)}.text-warning{color:var(--warning)}
-        .bg-card{background:var(--bg-card)}.bg-secondary{background:var(--bg-secondary)}
-        .rounded{border-radius:var(--radius)}.rounded-full{border-radius:var(--radius-full)}
-        .shadow{box-shadow:var(--shadow)}.shadow-md{box-shadow:var(--shadow-md)}
-        .border{border:1px solid var(--border-color)}.cursor-pointer{cursor:pointer}
-        .select-none{user-select:none}.overflow-hidden{overflow:hidden}.overflow-y-auto{overflow-y:auto}
+        .flex{display:flex}.iflex{display:inline-flex}
+        .fcenter{display:flex;align-items:center;justify-content:center}
+        .fbetween{display:flex;align-items:center;justify-content:space-between}
+        .fcol{flex-direction:column}.fwrap{flex-wrap:wrap}.f1{flex:1}
+        .gap1{gap:var(--g1)}.gap2{gap:var(--g2)}.gap3{gap:var(--g3)}.gap4{gap:var(--g4)}.gap5{gap:var(--g5)}.gap6{gap:var(--g6)}
+        .wfull{width:100%}.hfull{height:100%}
+        .tcenter{text-align:center}.tright{text-align:right}
+        .tsm{font-size:.85rem}.txs{font-size:.75rem}.tlg{font-size:1.1rem}.txl{font-size:1.3rem}.t2xl{font-size:1.8rem}
+        .tbold{font-weight:700}.tsemibold{font-weight:600}
+        .tmuted{color:var(--text3)}.t2{color:var(--text2)}.taccent{color:var(--accent3)}
+        .tgreen{color:var(--green)}.tred{color:var(--red)}.tyellow{color:var(--yellow)}
+        .bg2{background:var(--bg2)}.bg3{background:var(--bg3)}.bg4{background:var(--bg4)}
+        .rounded{border-radius:var(--radius)}.rounded2{border-radius:var(--radius2)}.rounded3{border-radius:var(--radius3)}.rounded4{border-radius:var(--radius4)}
+        .shadow{box-shadow:var(--shadow)}.shadow2{box-shadow:var(--shadow2)}
+        .border{border:1px solid var(--border)}.border2{border:1px solid var(--border2)}
+        .pointer{cursor:pointer}.noselect{user-select:none}
+        .overflow-h{overflow:hidden}.overflow-a{overflow-y:auto}
         .truncate{overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+        .relative{position:relative}.absolute{position:absolute}
+        
+        /* ========== ANIMATIONS ========== */
         @keyframes fadeIn{from{opacity:0}to{opacity:1}}
         @keyframes slideUp{from{opacity:0;transform:translateY(20px)}to{opacity:1;transform:translateY(0)}}
+        @keyframes slideDown{from{opacity:0;transform:translateY(-20px)}to{opacity:1;transform:translateY(0)}}
         @keyframes spin{to{transform:rotate(360deg)}}
-        @keyframes float{0%,100%{transform:translateY(0)}50%{transform:translateY(-10px)}}
-        @keyframes pulse-glow{0%,100%{box-shadow:0 0 20px rgba(108,92,231,0.2)}50%{box-shadow:0 0 40px rgba(108,92,231,0.4)}}
-        .animate-fade{animation:fadeIn var(--transition-base)}
-        .animate-slide-up{animation:slideUp var(--transition-base)}
-        .animate-spin{animation:spin .8s linear infinite}
-        .animate-float{animation:float 3s ease-in-out infinite}
-        .animate-glow{animation:pulse-glow 3s ease-in-out infinite}
-        .btn{display:inline-flex;align-items:center;justify-content:center;gap:var(--spacing-2);padding:10px 20px;border:none;border-radius:var(--radius);font-weight:600;cursor:pointer;transition:all var(--transition-base);font-size:.95rem;min-height:40px}
-        .btn:hover{transform:translateY(-1px);box-shadow:var(--shadow-md)}
-        .btn:disabled{opacity:.6;cursor:not-allowed;transform:none!important}
-        .btn-primary{background:var(--accent);color:#fff}.btn-primary:hover{background:var(--accent-hover)}
-        .btn-success{background:var(--success);color:#fff}.btn-success:hover{background:#00a381}
-        .btn-danger{background:var(--danger);color:#fff}.btn-danger:hover{background:#e55a5a}
-        .btn-warning{background:var(--warning);color:#1a1a2e}.btn-warning:hover{background:#e5b85e}
-        .btn-gray{background:var(--text-muted);color:#fff}.btn-gray:hover{background:#7a7a8a}
-        .btn-info{background:var(--info);color:#fff}.btn-info:hover{background:#5aa8e5}
-        .btn-sm{padding:6px 14px;font-size:.8rem;min-height:30px}
-        .btn-lg{padding:16px 32px;font-size:1.1rem;min-height:52px}
-        .btn-block{width:100%;display:flex}
-        .btn-outline{background:transparent;border:2px solid var(--accent);color:var(--accent)}
-        .btn-outline:hover{background:var(--accent);color:#fff}
-        .badge{display:inline-flex;align-items:center;gap:var(--spacing-1);padding:2px 10px;border-radius:var(--radius-full);font-size:.7rem;font-weight:600;text-transform:uppercase;letter-spacing:.3px}
-        .badge-success{background:var(--success);color:#fff}.badge-danger{background:var(--danger);color:#fff}
-        .badge-warning{background:var(--warning);color:#1a1a2e}.badge-accent{background:var(--accent);color:#fff}
-        .badge-gray{background:var(--text-muted);color:#fff}
-        .card{background:var(--bg-secondary);border-radius:var(--radius-md);padding:var(--spacing-4);border:1px solid var(--border-color);transition:all var(--transition-base)}
-        .card:hover{border-color:var(--accent)}
-        input,textarea,select{width:100%;padding:10px 14px;border:1px solid var(--border-color);border-radius:var(--radius);font-size:.95rem;transition:all var(--transition-base);background:var(--bg-primary);color:var(--text-primary)}
-        input:focus,textarea:focus,select:focus{outline:none;border-color:var(--accent);box-shadow:0 0 0 3px rgba(108,92,231,0.15)}
-        input::placeholder,textarea::placeholder{color:var(--text-muted)}
-        textarea{resize:vertical;min-height:80px;font-family:'Courier New',monospace;font-size:.9rem;line-height:1.8}
-        select{appearance:none;background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' viewBox='0 0 12 12'%3E%3Cpath fill='%23a0a0b0' d='M6 8L1 3h10z'/%3E%3C/svg%3E");background-repeat:no-repeat;background-position:right 12px center;padding-right:36px}
-        .form-group{margin-bottom:var(--spacing-4)}
-        .form-label{display:block;margin-bottom:var(--spacing-2);font-weight:500;font-size:.9rem;color:var(--text-secondary)}
-        .form-hint{font-size:.8rem;color:var(--text-muted);margin-top:var(--spacing-1)}
-        .toast-container{position:fixed;bottom:80px;left:50%;transform:translateX(-50%);z-index:var(--z-toast);max-width:90%;width:100%;pointer-events:none}
-        .toast{background:var(--bg-secondary);color:var(--text-primary);padding:10px 18px;border-radius:var(--radius);border:1px solid var(--border-color);box-shadow:var(--shadow-lg);font-size:.9rem;opacity:0;transform:translateY(20px);transition:all var(--transition-base);pointer-events:auto;text-align:center;margin-bottom:6px;border-left:4px solid var(--accent)}
+        @keyframes pulse{0%,100%{opacity:1}50%{opacity:.5}}
+        @keyframes shake{0%,100%{transform:translateX(0)}25%{transform:translateX(-5px)}75%{transform:translateX(5px)}}
+        @keyframes glow{0%,100%{box-shadow:0 0 20px rgba(124,58,237,0.2)}50%{box-shadow:0 0 40px rgba(124,58,237,0.5)}}
+        .afade{animation:fadeIn .3s ease}
+        .aslideup{animation:slideUp .3s ease}
+        .aspin{animation:spin .8s linear infinite}
+        .apulse{animation:pulse 2s ease-in-out infinite}
+        .ashake{animation:shake .4s ease}
+        .aglow{animation:glow 2s ease-in-out infinite}
+        
+        /* ========== BUTTONS ========== */
+        .btn{
+            display:inline-flex;align-items:center;justify-content:center;gap:6px;
+            padding:10px 20px;border:none;border-radius:var(--radius);font-weight:600;
+            cursor:pointer;transition:all var(--tr);font-size:.9rem;min-height:40px;
+            text-decoration:none;line-height:1.2;
+        }
+        .btn:hover{transform:translateY(-1px);box-shadow:var(--shadow2)}
+        .btn:active{transform:translateY(0)}
+        .btn:disabled{opacity:.5;cursor:not-allowed;transform:none!important}
+        
+        .btnp{background:var(--accent);color:#fff}.btnp:hover{background:var(--accent2)}
+        .btns{background:var(--green);color:#fff}.btns:hover{background:var(--green2)}
+        .btnd{background:var(--red);color:#fff}.btnd:hover{background:var(--red2)}
+        .btnw{background:var(--yellow);color:#000}.btnw:hover{background:var(--yellow2)}
+        .btnb{background:var(--blue);color:#fff}.btnb:hover{background:var(--blue2)}
+        .btng{background:var(--text3);color:#fff}.btng:hover{background:#7a7a8a}
+        .btno{background:transparent;border:2px solid var(--accent);color:var(--accent3)}
+        .btno:hover{background:var(--accent);color:#fff}
+        
+        .btnsm{padding:6px 14px;font-size:.8rem;min-height:30px}
+        .btnlg{padding:14px 28px;font-size:1.05rem;min-height:48px}
+        .btnxl{padding:18px 36px;font-size:1.15rem;min-height:56px}
+        .btnblock{width:100%;display:flex}
+        
+        /* ========== BADGES ========== */
+        .badge{
+            display:inline-flex;align-items:center;gap:4px;padding:3px 10px;
+            border-radius:var(--radius4);font-size:.7rem;font-weight:600;
+            text-transform:uppercase;letter-spacing:.5px;
+        }
+        .badges{background:var(--green);color:#fff}
+        .badged{background:var(--red);color:#fff}
+        .badgew{background:var(--yellow);color:#000}
+        .badgep{background:var(--accent);color:#fff}
+        .badgeb{background:var(--blue);color:#fff}
+        
+        /* ========== FORMS ========== */
+        input,textarea,select{
+            width:100%;padding:10px 14px;border:1px solid var(--border2);border-radius:var(--radius);
+            font-size:.9rem;transition:all var(--tr);background:var(--bg3);color:var(--text);
+            font-family:inherit;
+        }
+        input:focus,textarea:focus,select:focus{outline:none;border-color:var(--accent);box-shadow:0 0 0 3px rgba(124,58,237,0.15)}
+        input::placeholder,textarea::placeholder{color:var(--text3)}
+        textarea{resize:vertical;min-height:80px;font-family:'Courier New',monospace;font-size:.85rem;line-height:1.7}
+        select{appearance:none;background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' viewBox='0 0 12 12'%3E%3Cpath fill='%23a0a0b8' d='M6 8L1 3h10z'/%3E%3C/svg%3E");background-repeat:no-repeat;background-position:right 12px center;padding-right:36px}
+        
+        .formg{margin-bottom:var(--g4)}
+        .forml{display:block;margin-bottom:var(--g2);font-weight:500;font-size:.85rem;color:var(--text2)}
+        .formh{font-size:.75rem;color:var(--text3);margin-top:var(--g1)}
+        .formerr{color:var(--red);font-size:.8rem;margin-top:var(--g1);display:none}
+        .formerr.show{display:block}
+        .formsuc{color:var(--green);font-size:.8rem;margin-top:var(--g1);display:none}
+        .formsuc.show{display:block}
+        
+        /* ========== TOAST ========== */
+        .toastc{
+            position:fixed;bottom:80px;left:50%;transform:translateX(-50%);
+            z-index:var(--z5);max-width:90%;width:100%;pointer-events:none;
+        }
+        .toast{
+            background:var(--bg2);color:var(--text);padding:12px 20px;
+            border-radius:var(--radius);border:1px solid var(--border);box-shadow:var(--shadow2);
+            font-size:.9rem;opacity:0;transform:translateY(20px);transition:all var(--tr);
+            pointer-events:auto;text-align:center;margin-bottom:8px;
+            border-left:4px solid var(--accent);
+        }
         .toast.show{opacity:1;transform:translateY(0)}
-        .toast-success{border-left-color:var(--success)}.toast-error{border-left-color:var(--danger)}.toast-warning{border-left-color:var(--warning)}
-        .loading-overlay{position:fixed;top:0;left:0;width:100%;height:100%;background:rgba(0,0,0,0.6);backdrop-filter:blur(4px);display:flex;align-items:center;justify-content:center;z-index:var(--z-modal)}
-        .loading-overlay .spinner{width:40px;height:40px;border:4px solid rgba(255,255,255,0.1);border-top-color:var(--accent);border-radius:var(--radius-full);animation:spin .8s linear infinite}
-        .modal-overlay{position:fixed;top:0;left:0;width:100%;height:100%;background:rgba(0,0,0,0.6);backdrop-filter:blur(8px);display:none;align-items:center;justify-content:center;z-index:var(--z-modal);padding:var(--spacing-4)}
-        .modal-overlay.active{display:flex}
-        .modal-content{background:var(--bg-secondary);border-radius:var(--radius-lg);max-width:650px;width:100%;max-height:85vh;overflow-y:auto;padding:var(--spacing-6);animation:slideUp .3s ease;border:1px solid var(--border-color);box-shadow:var(--shadow-lg)}
-        .modal-header{display:flex;align-items:center;justify-content:space-between;margin-bottom:var(--spacing-4);padding-bottom:var(--spacing-4);border-bottom:1px solid var(--border-color)}
-        .modal-header h3{margin:0;font-size:1.25rem;font-weight:700}
-        .modal-close{background:transparent;border:none;font-size:1.5rem;color:var(--text-secondary);cursor:pointer;padding:0;min-height:0;width:auto;transition:all var(--transition-base)}
-        .modal-close:hover{color:var(--text-primary);transform:rotate(90deg)}
-        .modal-footer{display:flex;gap:var(--spacing-3);padding-top:var(--spacing-4);border-top:1px solid var(--border-color);margin-top:var(--spacing-4);justify-content:flex-end}
-        .landing-container{max-width:1100px;margin:0 auto;padding:var(--spacing-4);min-height:100vh}
-        .landing-header{display:flex;align-items:center;justify-content:space-between;padding:var(--spacing-3) var(--spacing-4);background:var(--bg-secondary);border-radius:var(--radius-md);border:1px solid var(--border-color);margin-bottom:var(--spacing-6);flex-wrap:wrap;gap:var(--spacing-2)}
-        .landing-header .logo{font-size:1.3rem;font-weight:700;display:flex;align-items:center;gap:var(--spacing-2)}
-        .landing-header .logo span{background:var(--gradient);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text}
-        .hero-section{text-align:center;padding:var(--spacing-10) var(--spacing-4);background:var(--bg-secondary);border-radius:var(--radius-lg);border:1px solid var(--border-color);margin-bottom:var(--spacing-6)}
-        .hero-section .hero-icon{font-size:4rem;margin-bottom:var(--spacing-4);display:block}
-        .hero-section h1{font-size:2.5rem;font-weight:800;margin-bottom:var(--spacing-2);background:var(--gradient);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text}
-        .hero-section p{font-size:1.1rem;color:var(--text-secondary);max-width:600px;margin:0 auto var(--spacing-6)}
-        .hero-buttons{display:flex;gap:var(--spacing-3);justify-content:center;flex-wrap:wrap}
-        .features-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(250px,1fr));gap:var(--spacing-4);margin-bottom:var(--spacing-6)}
-        .feature-card{background:var(--bg-secondary);border-radius:var(--radius-md);padding:var(--spacing-5);border:1px solid var(--border-color);text-align:center;transition:all var(--transition-base)}
-        .feature-card:hover{border-color:var(--accent);transform:translateY(-4px);box-shadow:var(--shadow-md)}
-        .feature-card .icon{font-size:2.5rem;margin-bottom:var(--spacing-2)}
-        .feature-card h4{font-size:1.1rem;margin-bottom:var(--spacing-1)}
-        .feature-card p{font-size:.9rem;color:var(--text-secondary);margin:0}
-        .price-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(280px,1fr));gap:var(--spacing-4);margin-bottom:var(--spacing-6)}
-        .price-card{background:var(--bg-secondary);border-radius:var(--radius-lg);padding:var(--spacing-6);border:2px solid var(--border-color);text-align:center;transition:all var(--transition-base);position:relative}
-        .price-card:hover{border-color:var(--accent);transform:translateY(-4px);box-shadow:var(--shadow-md)}
-        .price-card.featured{border-color:var(--accent);background:var(--bg-card)}
-        .featured-badge{position:absolute;top:-12px;left:50%;transform:translateX(-50%);background:var(--accent);color:#fff;padding:2px 16px;border-radius:var(--radius-full);font-size:.75rem;font-weight:600}
-        .price-card .plan-icon{font-size:2.5rem;margin-bottom:var(--spacing-2)}
-        .price-card .plan-name{font-size:1.3rem;font-weight:700}
-        .price-card .plan-price{font-size:2.2rem;font-weight:800;color:var(--success);margin:var(--spacing-2) 0}
-        .price-card .plan-duration{font-size:.9rem;color:var(--text-secondary)}
-        .plan-features{margin:var(--spacing-4) 0;text-align:left;padding:0}
-        .plan-features li{list-style:none;padding:4px 0;font-size:.9rem;display:flex;align-items:center;gap:var(--spacing-2);color:var(--text-secondary)}
-        .plan-features li .check{color:var(--success)}
-        .wa-banner{background:linear-gradient(135deg,#25D366,#128C7E);color:#fff;padding:var(--spacing-4) var(--spacing-6);border-radius:var(--radius-md);display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:var(--spacing-3);margin-bottom:var(--spacing-6);cursor:pointer;transition:all var(--transition-base)}
-        .wa-banner:hover{transform:translateY(-2px);box-shadow:var(--shadow-md)}
-        .app-container{max-width:900px;margin:0 auto;padding:var(--spacing-4);min-height:100vh}
-        .app-header{display:flex;align-items:center;justify-content:space-between;padding:var(--spacing-3) var(--spacing-4);background:var(--bg-secondary);border-radius:var(--radius-md);border:1px solid var(--border-color);margin-bottom:var(--spacing-4);flex-wrap:wrap;gap:var(--spacing-2)}
-        .app-header .logo{font-size:1.3rem;font-weight:700;display:flex;align-items:center;gap:var(--spacing-2)}
-        .app-header .logo span{background:var(--gradient);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text}
-        .user-badge{display:flex;align-items:center;gap:var(--spacing-2);padding:4px 12px 4px 8px;background:var(--bg-card);border-radius:var(--radius-full);font-size:.85rem}
-        .user-badge .avatar{width:28px;height:28px;border-radius:var(--radius-full);background:var(--gradient);display:flex;align-items:center;justify-content:center;font-size:.8rem;color:#fff}
-        .dashboard-stats{display:grid;grid-template-columns:repeat(auto-fill,minmax(140px,1fr));gap:var(--spacing-3);margin-bottom:var(--spacing-4)}
-        .stat-card{background:var(--bg-secondary);border-radius:var(--radius);padding:var(--spacing-3);border:1px solid var(--border-color);text-align:center}
-        .stat-card .stat-number{font-size:1.5rem;font-weight:700;color:var(--accent)}
-        .stat-card .stat-label{font-size:.8rem;color:var(--text-secondary);margin-top:var(--spacing-1)}
-        .app-list{display:grid;grid-template-columns:1fr;gap:var(--spacing-3)}
-        .app-item{background:var(--bg-secondary);border-radius:var(--radius-md);border:1px solid var(--border-color);overflow:hidden;transition:all var(--transition-base)}
-        .app-item:hover{border-color:var(--accent)}
-        .app-header-item{display:flex;align-items:center;justify-content:space-between;padding:var(--spacing-3) var(--spacing-4);cursor:pointer;transition:all var(--transition-base);flex-wrap:wrap;gap:var(--spacing-2)}
-        .app-header-item:hover{background:var(--bg-hover)}
-        .app-name{font-weight:600;font-size:1.05rem;display:flex;align-items:center;gap:var(--spacing-2)}
-        .app-count{font-size:.8rem;color:var(--text-muted);background:var(--bg-card);padding:2px 10px;border-radius:var(--radius-full)}
-        .app-codes{padding:0 var(--spacing-4) var(--spacing-3);display:none}
-        .app-codes.open{display:block}
-        .code-item{background:var(--bg-card);border-radius:var(--radius);padding:var(--spacing-3);margin-bottom:var(--spacing-2);border:1px solid var(--border-color);transition:all var(--transition-base)}
-        .code-item:hover{border-color:var(--accent)}
-        .code-header{display:flex;align-items:center;justify-content:space-between;margin-bottom:var(--spacing-2);flex-wrap:wrap;gap:var(--spacing-2)}
-        .code-title{font-weight:500;font-size:.95rem}
-        .code-content{font-family:'Courier New',monospace;font-size:.85rem;color:var(--text-secondary);white-space:pre-wrap;word-wrap:break-word;max-height:200px;overflow-y:auto;padding:var(--spacing-2);background:var(--bg-primary);border-radius:6px;border:1px solid var(--border-color)}
-        .code-content pre{margin:0;white-space:pre-wrap;word-wrap:break-word}
-        .empty-state{text-align:center;padding:var(--spacing-10) var(--spacing-4);color:var(--text-secondary)}
-        .empty-state .icon{font-size:4rem;margin-bottom:var(--spacing-4)}
-        .empty-state h3{font-size:1.2rem;color:var(--text-primary);margin-bottom:var(--spacing-2)}
-        .packages-grid{display:flex;gap:var(--spacing-3);flex-wrap:wrap;margin:12px 0}
-        .package-card{background:var(--bg-card);border-radius:var(--radius);padding:16px;text-align:center;border:2px solid transparent;transition:all var(--transition-base);cursor:pointer;flex:1;min-width:120px}
-        .package-card:hover,.package-card.selected{border-color:var(--accent);transform:translateY(-2px)}
-        .package-card .package-icon{font-size:2rem;margin-bottom:4px}
-        .package-card .package-name{font-weight:700;font-size:1rem}
-        .package-card .package-price{color:var(--success);font-weight:700;font-size:1.1rem;margin:4px 0}
-        .package-card .package-duration{font-size:.8rem;color:var(--text-secondary)}
-        .premium-badge{background:var(--accent);color:#fff;padding:2px 10px;border-radius:var(--radius-full);font-size:.7rem;font-weight:600;margin-left:var(--spacing-2)}
-        .link{color:var(--accent);cursor:pointer;transition:color var(--transition-base)}
-        .link:hover{color:var(--accent-hover);text-decoration:underline}
-        #connectionStatus{position:fixed;top:10px;right:10px;z-index:9999;padding:6px 14px;border-radius:20px;font-size:12px;font-weight:600;transition:all .3s ease;opacity:.8}
-        #installBanner{background:linear-gradient(135deg,var(--accent),#a29bfe);color:#fff;padding:12px 20px;border-radius:var(--radius-md);margin-bottom:var(--spacing-4);display:none;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:var(--spacing-2);cursor:pointer;transition:all var(--transition-base)}
-        #installBanner:hover{transform:translateY(-2px);box-shadow:var(--shadow-md)}
+        .toast.s{border-left-color:var(--green)}
+        .toast.e{border-left-color:var(--red)}
+        .toast.w{border-left-color:var(--yellow)}
+        
+        /* ========== MODAL ========== */
+        .modal{
+            position:fixed;top:0;left:0;width:100%;height:100%;
+            background:rgba(0,0,0,0.7);backdrop-filter:blur(8px);
+            display:none;align-items:center;justify-content:center;
+            z-index:var(--z4);padding:var(--g4);
+        }
+        .modal.show{display:flex}
+        .modalc{
+            background:var(--bg2);border-radius:var(--radius3);max-width:600px;width:100%;
+            max-height:85vh;overflow-y:auto;padding:var(--g6);
+            animation:slideUp .3s ease;border:1px solid var(--border);box-shadow:var(--shadow2);
+        }
+        .modalh{display:flex;align-items:center;justify-content:space-between;margin-bottom:var(--g5);padding-bottom:var(--g4);border-bottom:1px solid var(--border)}
+        .modalh h3{margin:0;font-size:1.2rem;font-weight:700}
+        .modalclose{background:none;border:none;font-size:1.5rem;color:var(--text2);cursor:pointer;padding:4px;transition:all var(--tr)}
+        .modalclose:hover{color:var(--red);transform:rotate(90deg)}
+        .modalf{display:flex;gap:var(--g3);padding-top:var(--g5);border-top:1px solid var(--border);margin-top:var(--g5);justify-content:flex-end}
+        
+        /* ========== CARD ========== */
+        .card{background:var(--bg2);border-radius:var(--radius2);padding:var(--g5);border:1px solid var(--border);transition:all var(--tr)}
+        .card:hover{border-color:var(--accent)}
+        
+        /* ========== LAYOUT ========== */
+        .container{max-width:1000px;margin:0 auto;padding:var(--g4);min-height:100vh}
+        
+        /* ========== HEADER ========== */
+        .header{
+            display:flex;align-items:center;justify-content:space-between;
+            padding:var(--g3) var(--g5);background:var(--bg2);
+            border-radius:var(--radius2);border:1px solid var(--border);
+            margin-bottom:var(--g5);flex-wrap:wrap;gap:var(--g2);
+        }
+        .logo{font-size:1.2rem;font-weight:700;display:flex;align-items:center;gap:var(--g2)}
+        .logo span{background:linear-gradient(135deg,var(--accent3),#c4b5fd);-webkit-background-clip:text;-webkit-text-fill-color:transparent}
+        
+        /* ========== HERO ========== */
+        .hero{
+            text-align:center;padding:var(--g10) var(--g5);background:var(--bg2);
+            border-radius:var(--radius3);border:1px solid var(--border);margin-bottom:var(--g6);
+        }
+        .hero h1{font-size:2.2rem;font-weight:800;margin-bottom:var(--g2)}
+        .hero p{font-size:1.05rem;color:var(--text2);max-width:600px;margin:0 auto var(--g6)}
+        .hero .gradient-text{background:linear-gradient(135deg,var(--accent3),#c4b5fd);-webkit-background-clip:text;-webkit-text-fill-color:transparent}
+        
+        /* ========== STATS ========== */
+        .stats{display:grid;grid-template-columns:repeat(auto-fill,minmax(130px,1fr));gap:var(--g3);margin-bottom:var(--g5)}
+        .statc{background:var(--bg2);border-radius:var(--radius);padding:var(--g4);border:1px solid var(--border);text-align:center}
+        .statv{font-size:1.5rem;font-weight:700;color:var(--accent3)}
+        .statl{font-size:.78rem;color:var(--text2);margin-top:var(--g1)}
+        
+        /* ========== FEATURES ========== */
+        .features{display:grid;grid-template-columns:repeat(auto-fill,minmax(220px,1fr));gap:var(--g4);margin-bottom:var(--g6)}
+        .featc{background:var(--bg2);border-radius:var(--radius2);padding:var(--g5);border:1px solid var(--border);text-align:center;transition:all var(--tr)}
+        .featc:hover{border-color:var(--accent);transform:translateY(-3px);box-shadow:var(--shadow2)}
+        .featicon{font-size:2.2rem;margin-bottom:var(--g2)}
+        .featc h4{font-size:1rem;margin-bottom:var(--g1)}
+        .featc p{font-size:.85rem;color:var(--text2);margin:0}
+        
+        /* ========== PRICE ========== */
+        .prices{display:grid;grid-template-columns:repeat(auto-fill,minmax(260px,1fr));gap:var(--g4);margin-bottom:var(--g6)}
+        .pricec{background:var(--bg2);border-radius:var(--radius3);padding:var(--g6);border:2px solid var(--border);text-align:center;transition:all var(--tr);position:relative}
+        .pricec:hover{border-color:var(--accent);transform:translateY(-4px);box-shadow:var(--shadow2)}
+        .pricec.featured{border-color:var(--accent);background:var(--bg3)}
+        .pricec.featured .fbadge{position:absolute;top:-12px;left:50%;transform:translateX(-50%);background:var(--accent);color:#fff;padding:3px 16px;border-radius:var(--radius4);font-size:.7rem;font-weight:700}
+        .priceicon{font-size:2.5rem;margin-bottom:var(--g2)}
+        .pricename{font-size:1.2rem;font-weight:700}
+        .priceval{font-size:2rem;font-weight:800;color:var(--green);margin:var(--g2) 0}
+        .pricedur{font-size:.85rem;color:var(--text2);margin-bottom:var(--g4)}
+        .pricelist{text-align:left;padding:0;margin:0 0 var(--g4) 0}
+        .pricelist li{list-style:none;padding:3px 0;font-size:.85rem;color:var(--text2);display:flex;align-items:center;gap:var(--g2)}
+        .pricelist li .c{color:var(--green)}
+        
+        /* ========== APP LIST ========== */
+        .applist{display:grid;grid-template-columns:1fr;gap:var(--g3)}
+        .appitem{background:var(--bg2);border-radius:var(--radius2);border:1px solid var(--border);overflow:hidden;transition:all var(--tr)}
+        .appitem:hover{border-color:var(--accent)}
+        .apphead{display:flex;align-items:center;justify-content:space-between;padding:var(--g3) var(--g4);cursor:pointer;transition:all var(--tr);flex-wrap:wrap;gap:var(--g2)}
+        .apphead:hover{background:var(--bg3)}
+        .appname{font-weight:600;font-size:1rem;display:flex;align-items:center;gap:var(--g2)}
+        .appcount{font-size:.75rem;color:var(--text3);background:var(--bg4);padding:2px 10px;border-radius:var(--radius4)}
+        .appcodes{padding:0 var(--g4) var(--g3);display:none}
+        .appcodes.open{display:block}
+        
+        .codeitem{background:var(--bg3);border-radius:var(--radius);padding:var(--g3);margin-bottom:var(--g2);border:1px solid var(--border);transition:all var(--tr)}
+        .codeitem:hover{border-color:var(--accent)}
+        .codehead{display:flex;align-items:center;justify-content:space-between;margin-bottom:var(--g2);flex-wrap:wrap;gap:var(--g2)}
+        .codename{font-weight:500;font-size:.9rem}
+        .codecontent{font-family:'Courier New',monospace;font-size:.8rem;color:var(--text2);white-space:pre-wrap;word-wrap:break-word;max-height:180px;overflow-y:auto;padding:var(--g2);background:var(--bg);border-radius:6px;border:1px solid var(--border);display:none}
+        .codecontent.show{display:block}
+        .codecontent pre{margin:0;white-space:pre-wrap;word-wrap:break-word}
+        
+        /* ========== EMPTY STATE ========== */
+        .empty{text-align:center;padding:var(--g10) var(--g4);color:var(--text2)}
+        .empty .icon{font-size:4rem;margin-bottom:var(--g4)}
+        .empty h3{font-size:1.2rem;color:var(--text);margin-bottom:var(--g2)}
+        
+        /* ========== WA BANNER ========== */
+        .wabanner{
+            background:linear-gradient(135deg,#25D366,#128C7E);color:#fff;
+            padding:var(--g4) var(--g5);border-radius:var(--radius2);
+            display:flex;align-items:center;justify-content:space-between;
+            flex-wrap:wrap;gap:var(--g3);margin-bottom:var(--g5);cursor:pointer;
+            transition:all var(--tr);border:2px solid transparent;
+        }
+        .wabanner:hover{transform:translateY(-2px);box-shadow:var(--shadow2);border-color:rgba(255,255,255,0.3)}
+        
+        /* ========== SECURITY ALERT ========== */
+        .security-alert{
+            background:var(--red);color:#fff;padding:var(--g3) var(--g5);
+            border-radius:var(--radius);margin-bottom:var(--g4);
+            display:none;align-items:center;justify-content:space-between;
+            flex-wrap:wrap;gap:var(--g2);font-weight:600;
+        }
+        .security-alert.show{display:flex}
+        .security-alert .safebtn{background:#fff;color:var(--red);border:none;padding:6px 16px;border-radius:var(--radius4);font-weight:700;cursor:pointer;transition:all var(--tr)}
+        .security-alert .safebtn:hover{background:#fee2e2}
+        
+        /* ========== RESPONSIVE ========== */
         @media(max-width:640px){
-            .hero-section h1{font-size:1.8rem}.hero-section{padding:var(--spacing-6) var(--spacing-3)}
-            .price-grid{grid-template-columns:1fr}.features-grid{grid-template-columns:1fr}
-            .landing-header{flex-direction:column;align-items:stretch}
-            .app-header{flex-direction:column;align-items:stretch}
-            .dashboard-stats{grid-template-columns:repeat(2,1fr)}
-            .modal-content{padding:var(--spacing-4);margin:var(--spacing-2)}
-            .packages-grid{flex-direction:column}
-            .hero-buttons{flex-direction:column}
-            .hero-buttons .btn{width:100%}
+            .hero h1{font-size:1.6rem}.hero{padding:var(--g6) var(--g3)}
+            .prices{grid-template-columns:1fr}.features{grid-template-columns:1fr}
+            .header{flex-direction:column;align-items:stretch}
+            .stats{grid-template-columns:repeat(2,1fr)}
+            .modalc{padding:var(--g4)}
         }
     </style>
 </head>
 <body>
 
+<!-- ===== SECURITY ALERT ===== -->
+<div class="security-alert" id="securityAlert">
+    <span>🚨 <strong>Peringatan Keamanan!</strong> Aktivitas mencurigakan terdeteksi.</span>
+    <div class="flex gap2">
+        <button class="safebtn" onclick="lockSystem()">🔒 Kunci Sistem</button>
+        <button class="safebtn" onclick="dismissAlert()">✕</button>
+    </div>
+</div>
+
 <!-- ===== CONNECTION STATUS ===== -->
-<div id="connectionStatus">🟢 ONLINE</div>
+<div id="connectionBadge" style="position:fixed;top:10px;right:10px;z-index:999;padding:6px 14px;border-radius:20px;font-size:11px;font-weight:700;transition:all .3s;opacity:.85;">🟢 ONLINE</div>
 
 <!-- ===== INSTALL BANNER ===== -->
-<div id="installBanner" onclick="installApp()">
-    <span>📥 <strong>Install Notepad+ sebagai Aplikasi Desktop!</strong> Klik di sini.</span>
+<div id="installBanner" style="display:none;background:linear-gradient(135deg,var(--accent),#a78bfa);color:#fff;padding:12px 20px;border-radius:var(--radius2);margin-bottom:var(--g4);align-items:center;justify-content:space-between;cursor:pointer;flex-wrap:wrap;gap:var(--g2);" onclick="installApp()">
+    <span>📥 <strong>Install sebagai Aplikasi Desktop!</strong></span>
     <span style="font-size:1.2rem;">👉</span>
 </div>
 
 <!-- ============================================================ -->
-<!-- HALAMAN LANDING                                              -->
+<!-- LANDING PAGE                                                  -->
 <!-- ============================================================ -->
-<div class="landing-container" id="landingContainer">
-    <header class="landing-header">
-        <div class="logo">📝 <span>Notepad+ Code Storage</span></div>
-        <div class="flex gap-2 flex-wrap">
-            <button onclick="showLoginModal()" class="btn btn-outline btn-sm">🔐 Login</button>
-            <button onclick="showRegisterModal()" class="btn btn-primary btn-sm">📝 Daftar</button>
-            <button onclick="toggleTheme()" id="themeToggle" class="btn btn-gray btn-sm">🌙</button>
-            <button onclick="switchToApp()" class="btn btn-success btn-sm">📱 Buka Aplikasi</button>
+<div class="container" id="landingPage">
+    <header class="header">
+        <div class="logo">📝 <span>Notepad+ v3.0</span></div>
+        <div class="flex gap2 fwrap">
+            <button onclick="showLoginModal()" class="btn btno btnsm">🔐 Login</button>
+            <button onclick="showRegisterModal()" class="btn btnp btnsm">📝 Daftar</button>
+            <button onclick="toggleTheme()" id="themeBtn1" class="btn btng btnsm">🌙</button>
+            <button onclick="openApp()" class="btn btns btnsm">🚀 Buka App</button>
         </div>
     </header>
 
-    <section class="hero-section animate-slide-up">
-        <span class="hero-icon animate-float">📝</span>
-        <h1>Notepad+ Code Storage</h1>
-        <p>Simpan semua kode HTML aplikasi Anda di satu tempat. Gabungkan otomatis menjadi 1 file index.html. Bisa diinstall sebagai aplikasi desktop!</p>
-        <div class="hero-buttons">
-            <button onclick="switchToApp()" class="btn btn-primary btn-lg">🚀 Mulai Sekarang</button>
-            <button onclick="showLoginModal()" class="btn btn-outline btn-lg">🔐 Login</button>
-            <button onclick="installApp()" class="btn btn-success btn-lg" id="heroInstallBtn">📥 Install .exe</button>
+    <section class="hero aslideup">
+        <div style="font-size:4rem;margin-bottom:var(--g3);">📝</div>
+        <h1 class="gradient-text">Notepad+ Code Storage</h1>
+        <p>Simpan, kelola, dan gabungkan semua kode HTML Anda. Multi-user, aktivasi premium, dan keamanan terjamin.</p>
+        <div class="flex gap3 fwrap fcenter">
+            <button onclick="openApp()" class="btn btnp btnlg">🚀 Mulai Sekarang</button>
+            <button onclick="showLoginModal()" class="btn btno btnlg">🔐 Login</button>
+            <button onclick="installApp()" class="btn btns btnlg" id="heroInstall">📥 Install Desktop</button>
         </div>
     </section>
 
-    <div class="wa-banner" onclick="waClick()">
-        <div><span style="font-size:1.5rem;">💬</span> <strong>Hubungi Admin:</strong> <span id="landingWaNumber">081220285226</span></div>
-        <div>📱 Klik untuk chat WhatsApp 👉</div>
+    <div class="wabanner" id="waBannerLanding" onclick="openWA()">
+        <div class="flex gap3" style="align-items:center;"><span style="font-size:1.5rem;">💬</span><div><strong>Hubungi Admin:</strong><br><span id="waLanding">081220285226</span></div></div>
+        <span>📱 Chat WhatsApp 👉</span>
     </div>
 
-    <h3 style="text-align:center;font-size:1.5rem;margin-bottom:var(--spacing-4);">✨ Fitur Unggulan</h3>
-    <div class="features-grid">
-        <div class="feature-card"><div class="icon">📁</div><h4>Penyimpanan Tak Terbatas</h4><p>Simpan aplikasi dan code HTML tanpa batas. Data di HP/PC Anda.</p></div>
-        <div class="feature-card"><div class="icon">🔄</div><h4>Gabung Otomatis</h4><p>Gabungkan semua code menjadi 1 file index.html siap pakai.</p></div>
-        <div class="feature-card"><div class="icon">🔐</div><h4>Aktivasi Premium</h4><p>Dapatkan fitur lengkap dengan aktivasi 1/3/6 bulan.</p></div>
-        <div class="feature-card"><div class="icon">💻</div><h4>Install Desktop</h4><p>Jalankan sebagai aplikasi desktop tanpa browser (PWA).</p></div>
-        <div class="feature-card"><div class="icon">📱</div><h4>Multi User</h4><p>Daftar dan login dengan akun pribadi. Data aman.</p></div>
-        <div class="feature-card"><div class="icon">🌐</div><h4>Online & Offline</h4><p>Bekerja tanpa internet. Aktivasi dicek saat online.</p></div>
+    <h3 style="text-align:center;margin-bottom:var(--g4);">✨ Fitur Unggulan</h3>
+    <div class="features">
+        <div class="featc"><div class="featicon">📁</div><h4>Penyimpanan Tak Terbatas</h4><p>Simpan aplikasi dan kode HTML tanpa batas.</p></div>
+        <div class="featc"><div class="featicon">🔄</div><h4>Gabung Otomatis</h4><p>Gabungkan semua kode jadi 1 file index.html.</p></div>
+        <div class="featc"><div class="featicon">🔐</div><h4>Aktivasi Premium</h4><p>Sistem aktivasi kode oleh Super Admin.</p></div>
+        <div class="featc"><div class="featicon">👥</div><h4>Multi User</h4><p>Daftar & login dengan akun pribadi.</p></div>
+        <div class="featc"><div class="featicon">🛡️</div><h4>Keamanan Ganda</h4><p>Proteksi dari aktivitas mencurigakan.</p></div>
+        <div class="featc"><div class="featicon">📱</div><h4>PWA Support</h4><p>Install sebagai aplikasi desktop.</p></div>
     </div>
 
-    <div style="text-align:center;margin-bottom:var(--spacing-6);">
-        <h3 style="font-size:1.5rem;margin-bottom:var(--spacing-2);">💎 Pilih Paket Aktivasi</h3>
-        <p style="color:var(--text-secondary);margin-bottom:var(--spacing-4);">Dapatkan fitur premium dengan paket pilihan Anda</p>
-        <div class="price-grid">
-            <div class="price-card">
-                <div class="plan-icon">🥈</div><div class="plan-name">Basic</div>
-                <div class="plan-price">Rp 25.000</div><div class="plan-duration">1 Bulan</div>
-                <ul class="plan-features"><li><span class="check">✅</span> Simpan Tak Terbatas</li><li><span class="check">✅</span> Gabung & Copy Code</li><li><span class="check">✅</span> Export/Import Data</li><li><span class="check">✅</span> Support WhatsApp</li></ul>
-                <button onclick="switchToApp();setTimeout(()=>showActivationModal('1bulan'),500)" class="btn btn-success btn-block">💳 Beli</button>
-            </div>
-            <div class="price-card featured animate-glow">
-                <div class="featured-badge">⭐ TERPOPULER</div>
-                <div class="plan-icon">🥇</div><div class="plan-name">Premium</div>
-                <div class="plan-price">Rp 50.000</div><div class="plan-duration">3 Bulan</div>
-                <ul class="plan-features"><li><span class="check">✅</span> Semua Fitur Basic</li><li><span class="check">✅</span> Multi User</li><li><span class="check">✅</span> Prioritas Support</li><li><span class="check">✅</span> Gabung Premium</li></ul>
-                <button onclick="switchToApp();setTimeout(()=>showActivationModal('3bulan'),500)" class="btn btn-primary btn-block">💳 Beli</button>
-            </div>
-            <div class="price-card">
-                <div class="plan-icon">👑</div><div class="plan-name">Enterprise</div>
-                <div class="plan-price">Rp 75.000</div><div class="plan-duration">6 Bulan</div>
-                <ul class="plan-features"><li><span class="check">✅</span> Semua Fitur Premium</li><li><span class="check">✅</span> Update Lifetime</li><li><span class="check">✅</span> VIP Support</li><li><span class="check">✅</span> Fitur Eksklusif</li></ul>
-                <button onclick="switchToApp();setTimeout(()=>showActivationModal('6bulan'),500)" class="btn btn-success btn-block">💳 Beli</button>
-            </div>
-        </div>
+    <h3 style="text-align:center;margin-bottom:var(--g4);">💎 Paket Aktivasi Premium</h3>
+    <div class="prices">
+        <div class="pricec"><div class="priceicon">🥈</div><div class="pricename">Basic</div><div class="priceval">Rp 25K</div><div class="pricedur">1 Bulan</div><ul class="pricelist"><li><span class="c">✅</span> Simpan Tak Terbatas</li><li><span class="c">✅</span> Gabung Code</li><li><span class="c">✅</span> Export/Import</li></ul></div>
+        <div class="pricec featured aglow"><div class="fbadge">⭐ POPULER</div><div class="priceicon">🥇</div><div class="pricename">Premium</div><div class="priceval">Rp 50K</div><div class="pricedur">3 Bulan</div><ul class="pricelist"><li><span class="c">✅</span> Semua Basic</li><li><span class="c">✅</span> Multi User</li><li><span class="c">✅</span> Prioritas Support</li></ul></div>
+        <div class="pricec"><div class="priceicon">👑</div><div class="pricename">Enterprise</div><div class="priceval">Rp 75K</div><div class="pricedur">6 Bulan</div><ul class="pricelist"><li><span class="c">✅</span> Semua Premium</li><li><span class="c">✅</span> VIP Support</li><li><span class="c">✅</span> Update Lifetime</li></ul></div>
     </div>
-
-    <div style="text-align:center;padding:var(--spacing-6);background:var(--bg-secondary);border-radius:var(--radius-lg);border:2px solid var(--accent);margin-bottom:var(--spacing-6);">
-        <div style="font-size:3rem;">📥</div>
-        <h3>Download & Install Aplikasi Desktop</h3>
-        <p style="color:var(--text-secondary);">Jalankan sebagai aplikasi .exe di Windows/Mac/Linux. Klik Install di browser!</p>
-        <button onclick="installApp()" class="btn btn-success btn-lg">📥 Install Notepad+ Desktop</button>
-        <p style="font-size:.8rem;color:var(--text-muted);margin-top:var(--spacing-2);">🔒 Buka di Chrome/Edge lalu klik "Install" di address bar</p>
-    </div>
-
-    <footer style="text-align:center;padding:var(--spacing-6) 0;border-top:1px solid var(--border-color);color:var(--text-muted);font-size:.85rem;">
-        <p>📝 Notepad+ Code Storage v2.2 • © 2025</p>
-        <p>💬 WA Admin: <span id="footerWa">081220285226</span></p>
-    </footer>
 </div>
-
 <!-- ============================================================ -->
-<!-- HALAMAN APLIKASI (DASHBOARD)                                 -->
+<!-- DASHBOARD / APP PAGE                                          -->
 <!-- ============================================================ -->
-<div class="app-container hidden" id="appContainer">
-    <header class="app-header">
-        <div class="logo">📝 <span>Notepad+ v2.2</span></div>
-        <div class="flex gap-2 flex-wrap">
-            <button onclick="toggleTheme()" id="themeToggle2" class="btn btn-gray btn-sm">🌙</button>
-            <button onclick="showProfile()" id="profileBtn" class="btn btn-outline btn-sm hidden">👤 Profil</button>
-            <button onclick="showAdminPanel()" id="adminBtn" class="btn btn-warning btn-sm hidden">⚙️ Admin</button>
-            <div class="user-badge hidden" id="userBadge">
-                <div class="avatar" id="userAvatar">U</div>
-                <span id="userName">User</span>
+<div class="container hidden" id="appPage">
+    <header class="header">
+        <div class="logo">📝 <span>Notepad+ v3.0</span></div>
+        <div class="flex gap2 fwrap">
+            <button onclick="toggleTheme()" id="themeBtn2" class="btn btng btnsm">🌙</button>
+            <button onclick="showProfileModal()" id="profilBtn" class="btn btno btnsm hidden">👤 Profil</button>
+            <button onclick="showSuperAdminPanel()" id="adminBtn" class="btn btnw btnsm hidden">⚙️ Admin</button>
+            <div class="flex gap2" style="align-items:center;background:var(--bg3);padding:4px 12px 4px 8px;border-radius:var(--radius4);" id="userBadge" style="display:none;">
+                <div id="userAvatar" style="width:28px;height:28px;border-radius:50%;background:var(--accent);display:flex;align-items:center;justify-content:center;font-size:.75rem;color:#fff;">U</div>
+                <span id="userNameDisplay" style="font-size:.85rem;font-weight:500;">User</span>
             </div>
-            <button onclick="handleLogoutBtn()" id="loginBtn" class="btn btn-outline btn-sm">🔐 Login</button>
-            <button onclick="switchToLanding()" class="btn btn-gray btn-sm">🏠 Home</button>
+            <button onclick="handleLogout()" id="logoutBtn" class="btn btnd btnsm">🚪 Logout</button>
+            <button onclick="goToLanding()" class="btn btng btnsm">🏠 Home</button>
         </div>
     </header>
 
-    <div class="wa-banner" onclick="waClick()">
-        <div><span style="font-size:1.5rem;">💬</span> <strong>Aktivasi & Info:</strong> <span id="waNumberDisplay">081220285226</span></div>
-        <div>📱 Klik Chat WA 👉</div>
+    <div class="wabanner" id="waBannerApp" onclick="openWA()">
+        <div class="flex gap3" style="align-items:center;"><span style="font-size:1.5rem;">💬</span><div><strong>Aktivasi & Bantuan:</strong><br><span id="waApp">081220285226</span></div></div>
+        <span>📱 Chat Admin 👉</span>
     </div>
 
-    <div class="dashboard-stats" id="dashboardStats">
-        <div class="stat-card"><div class="stat-number" id="totalApps">0</div><div class="stat-label">📱 Aplikasi</div></div>
-        <div class="stat-card"><div class="stat-number" id="totalCodes">0</div><div class="stat-label">📝 Code</div></div>
-        <div class="stat-card"><div class="stat-number" id="totalStorage">0 KB</div><div class="stat-label">💾 Storage</div></div>
-        <div class="stat-card"><div class="stat-number" id="totalUsers">0</div><div class="stat-label">👥 User</div></div>
-        <div class="stat-card" style="border-color:var(--accent);"><div class="stat-number" id="premiumStatus">🆓</div><div class="stat-label">💎 Status</div></div>
+    <div class="stats" id="dashboardStats">
+        <div class="statc"><div class="statv" id="statApps">0</div><div class="statl">📱 Aplikasi</div></div>
+        <div class="statc"><div class="statv" id="statCodes">0</div><div class="statl">📝 Total Code</div></div>
+        <div class="statc"><div class="statv" id="statStorage">0 KB</div><div class="statl">💾 Storage</div></div>
+        <div class="statc"><div class="statv" id="statUsers">0</div><div class="statl">👥 User</div></div>
+        <div class="statc" style="border-color:var(--accent);"><div class="statv" id="statPremium">🆓</div><div class="statl">💎 Status</div></div>
     </div>
 
-    <div class="flex gap-3 flex-wrap" style="margin-bottom:var(--spacing-4);">
-        <button onclick="showAddAppModal()" class="btn btn-success">➕ Tambah Aplikasi</button>
-        <button onclick="showSearch()" class="btn btn-primary">🔍 Cari</button>
-        <button onclick="exportAllData()" class="btn btn-warning">📤 Export</button>
-        <button onclick="document.getElementById('importFileInput').click()" class="btn btn-info">📥 Import</button>
-        <input type="file" id="importFileInput" accept=".json" class="hidden" onchange="importAllData(this)">
-        <button onclick="showMergeModal()" class="btn btn-primary" id="mergeBtnMain">🔄 Gabung & Copy <span class="premium-badge">Premium</span></button>
+    <div class="flex gap3 fwrap" style="margin-bottom:var(--g5);">
+        <button onclick="showAddAppModal()" class="btn btns">➕ Tambah Aplikasi</button>
+        <button onclick="toggleSearch()" class="btn btnp">🔍 Cari</button>
+        <button onclick="exportAll()" class="btn btnw">📤 Export</button>
+        <button onclick="document.getElementById('importFile').click()" class="btn btnb">📥 Import</button>
+        <input type="file" id="importFile" accept=".json" class="hidden" onchange="importAll(this)">
+        <button onclick="showMergeModal()" class="btn btnp" id="mergeBtn">🔄 Gabung & Copy <span class="badge badgep">Premium</span></button>
     </div>
 
-    <div id="searchBar" class="hidden" style="margin-bottom:var(--spacing-4);">
-        <div class="flex gap-2 flex-wrap">
-            <input type="text" id="searchInput" placeholder="Cari aplikasi atau kode..." style="flex:2;min-width:200px;" oninput="searchApps()">
-            <button onclick="clearSearch()" class="btn btn-gray btn-sm">✕ Clear</button>
+    <div id="searchBar" class="hidden" style="margin-bottom:var(--g4);">
+        <div class="flex gap2 fwrap">
+            <input type="text" id="searchInput" placeholder="Cari aplikasi atau kode..." style="flex:2;min-width:200px;" oninput="doSearch()">
+            <button onclick="clearSearch()" class="btn btng btnsm">✕ Clear</button>
         </div>
     </div>
 
     <div id="appListContainer"></div>
-    <div id="emptyState" class="empty-state">
+    <div id="emptyState" class="empty">
         <div class="icon">📝</div>
         <h3>Belum Ada Aplikasi</h3>
-        <p>Mulai tambahkan aplikasi dan kode-kode HTML Anda.</p>
-        <button onclick="showAddAppModal()" class="btn btn-success">➕ Tambah Aplikasi</button>
+        <p>Mulai tambahkan aplikasi dan kode HTML Anda.</p>
+        <button onclick="showAddAppModal()" class="btn btns">➕ Tambah Aplikasi</button>
     </div>
 </div>
-<!-- ============================================================ -->
-<!-- SEMUA MODAL                                                   -->
-<!-- ============================================================ -->
-
-<!-- MODAL LOGIN -->
-<div class="modal-overlay" id="loginModal">
-    <div class="modal-content" style="max-width:400px;">
-        <div class="modal-header"><h3>🔐 Login</h3><button class="modal-close" onclick="closeModal('loginModal')">✕</button></div>
-        <div class="modal-body">
-            <input type="text" id="loginUsername" placeholder="Username atau Email" style="margin-bottom:8px;">
-            <input type="password" id="loginPassword" placeholder="Password" style="margin-bottom:8px;">
-            <button onclick="handleLogin()" class="btn btn-success btn-block">🔓 Login</button>
-            <div id="loginError" class="hidden" style="color:var(--danger);margin-top:8px;font-size:13px;"></div>
-            <div class="flex-between" style="margin-top:12px;font-size:13px;">
-                <span class="link" onclick="closeModal('loginModal');openModal('registerModal')">📝 Daftar</span>
-                <span class="link" onclick="closeModal('loginModal');openModal('forgotPasswordModal')">🔑 Lupa Password</span>
-            </div>
-        </div>
-        <div class="modal-footer"><button onclick="closeModal('loginModal')" class="btn btn-gray">Tutup</button></div>
-    </div>
-</div>
-
-<!-- MODAL REGISTER -->
-<div class="modal-overlay" id="registerModal">
-    <div class="modal-content" style="max-width:400px;">
-        <div class="modal-header"><h3>📝 Daftar Akun</h3><button class="modal-close" onclick="closeModal('registerModal')">✕</button></div>
-        <div class="modal-body">
-            <input type="text" id="regNama" placeholder="Nama Lengkap *" style="margin-bottom:8px;">
-            <input type="email" id="regEmail" placeholder="Email *" style="margin-bottom:8px;">
-            <input type="text" id="regHp" placeholder="No HP *" style="margin-bottom:8px;">
-            <input type="text" id="regUsername" placeholder="Username *" style="margin-bottom:8px;">
-            <input type="password" id="regPassword" placeholder="Password * (min 6 karakter)" style="margin-bottom:8px;">
-            <input type="password" id="regConfirmPassword" placeholder="Konfirmasi Password *">
-            <button onclick="handleRegister()" class="btn btn-success btn-block" style="margin-top:8px;">📝 Daftar</button>
-            <div id="registerError" class="hidden" style="color:var(--danger);margin-top:8px;font-size:13px;"></div>
-            <div id="registerSuccess" class="hidden" style="color:var(--success);margin-top:8px;font-size:13px;"></div>
-            <div style="margin-top:12px;text-align:center;font-size:13px;"><span class="link" onclick="closeModal('registerModal');openModal('loginModal')">🔐 Sudah punya akun? Login</span></div>
-        </div>
-        <div class="modal-footer"><button onclick="closeModal('registerModal')" class="btn btn-gray">Tutup</button></div>
-    </div>
-</div>
-
-<!-- MODAL LUPA PASSWORD -->
-<div class="modal-overlay" id="forgotPasswordModal">
-    <div class="modal-content" style="max-width:400px;">
-        <div class="modal-header"><h3>🔑 Lupa Password</h3><button class="modal-close" onclick="closeModal('forgotPasswordModal')">✕</button></div>
-        <div class="modal-body">
-            <input type="text" id="forgotNama" placeholder="Nama Lengkap *" style="margin-bottom:8px;">
-            <input type="email" id="forgotEmail" placeholder="Email *" style="margin-bottom:8px;">
-            <input type="text" id="forgotHp" placeholder="No HP *">
-            <button onclick="handleForgotPassword()" class="btn btn-warning btn-block" style="margin-top:8px;">📧 Kirim Link Reset</button>
-            <div id="forgotError" class="hidden" style="color:var(--danger);margin-top:8px;font-size:13px;"></div>
-            <div id="forgotSuccess" class="hidden" style="color:var(--success);margin-top:8px;font-size:13px;"></div>
-        </div>
-        <div class="modal-footer"><button onclick="closeModal('forgotPasswordModal')" class="btn btn-gray">Tutup</button></div>
-    </div>
-</div>
-
-<!-- MODAL RESET PASSWORD -->
-<div class="modal-overlay" id="resetPasswordModal">
-    <div class="modal-content" style="max-width:400px;">
-        <div class="modal-header"><h3>🔒 Reset Password</h3><button class="modal-close" onclick="closeModal('resetPasswordModal')">✕</button></div>
-        <div class="modal-body">
-            <input type="hidden" id="resetToken">
-            <input type="password" id="resetNewPassword" placeholder="Password Baru * (min 6 karakter)" style="margin-bottom:8px;">
-            <input type="password" id="resetConfirmPassword" placeholder="Konfirmasi Password Baru *">
-            <button onclick="handleResetPassword()" class="btn btn-success btn-block" style="margin-top:8px;">💾 Simpan Password</button>
-            <div id="resetError" class="hidden" style="color:var(--danger);margin-top:8px;font-size:13px;"></div>
-            <div id="resetSuccess" class="hidden" style="color:var(--success);margin-top:8px;font-size:13px;"></div>
-        </div>
-        <div class="modal-footer"><button onclick="closeModal('resetPasswordModal')" class="btn btn-gray">Tutup</button></div>
-    </div>
-</div>
-
-<!-- MODAL PROFIL -->
-<div class="modal-overlay" id="profileModal">
-    <div class="modal-content" style="max-width:450px;">
-        <div class="modal-header"><h3>👤 Profil Saya</h3><button class="modal-close" onclick="closeModal('profileModal')">✕</button></div>
-        <div class="modal-body">
-            <div class="flex gap-4" style="margin-bottom:16px;">
-                <div style="width:60px;height:60px;border-radius:50%;background:var(--gradient);display:flex;align-items:center;justify-content:center;font-size:1.8rem;color:#fff;" id="profileAvatar">U</div>
-                <div><h4 id="profileName" style="margin:0;">User</h4><p id="profileRole" style="margin:0;font-size:.85rem;color:var(--text-secondary);">User</p></div>
-            </div>
-            <div class="form-group"><label class="form-label">Nama</label><input type="text" id="editNama"></div>
-            <div class="form-group"><label class="form-label">Email</label><input type="email" id="editEmail"></div>
-            <div class="form-group"><label class="form-label">No HP</label><input type="text" id="editHp"></div>
-            <button onclick="updateProfile()" class="btn btn-success btn-block">💾 Simpan</button>
-            <div id="profileError" class="hidden" style="color:var(--danger);margin-top:8px;font-size:13px;"></div>
-            <button onclick="togglePasswordChange()" class="btn btn-warning btn-block" style="margin-top:12px;">🔑 Ganti Password</button>
-            <div id="passwordChange" class="hidden" style="margin-top:12px;">
-                <input type="password" id="oldPassword" placeholder="Password Lama" style="margin-bottom:8px;">
-                <input type="password" id="newPassword" placeholder="Password Baru" style="margin-bottom:8px;">
-                <input type="password" id="confirmNewPassword" placeholder="Konfirmasi Password Baru">
-                <button onclick="saveNewPassword()" class="btn btn-success btn-block" style="margin-top:8px;">💾 Simpan</button>
-                <div id="passwordError" class="hidden" style="color:var(--danger);margin-top:8px;font-size:13px;"></div>
-                <div id="passwordSuccess" class="hidden" style="color:var(--success);margin-top:8px;font-size:13px;"></div>
-            </div>
-        </div>
-        <div class="modal-footer"><button onclick="closeModal('profileModal')" class="btn btn-gray">Tutup</button></div>
-    </div>
-</div>
-
-<!-- MODAL ADMIN -->
-<div class="modal-overlay" id="adminModal">
-    <div class="modal-content" style="max-width:550px;">
-        <div class="modal-header"><h3>⚙️ Admin Panel</h3><button class="modal-close" onclick="closeModal('adminModal')">✕</button></div>
-        <div class="modal-body">
-            <h4>💎 Edit Paket</h4>
-            <div class="packages-grid" id="adminPackagesGrid"></div>
-            <h4 style="margin-top:16px;">📱 Edit Nomor WA</h4>
-            <div class="flex gap-2 flex-wrap" style="align-items:center;">
-                <span>Nomor:</span><strong id="adminWaDisplay">081220285226</strong>
-                <button onclick="editWANumber()" class="btn btn-sm btn-warning">✏️ Edit</button>
-            </div>
-            <h4 style="margin-top:16px;">📤 Kirim Aktivasi</h4>
-            <input type="text" id="aktivasiUser" placeholder="Username/Email user" style="margin-bottom:8px;">
-            <select id="aktivasiPaket" style="margin-bottom:8px;">
-                <option value="1bulan">1 Bulan - Rp 25.000</option>
-                <option value="3bulan">3 Bulan - Rp 50.000</option>
-                <option value="6bulan">6 Bulan - Rp 75.000</option>
-            </select>
-            <button onclick="kirimAktivasi()" class="btn btn-success btn-block">📤 Kirim Aktivasi</button>
-            <div id="aktivasiResult" class="hidden" style="margin-top:8px;"></div>
-            <h4 style="margin-top:16px;">👥 User Terdaftar</h4>
-            <div id="userListAdmin" style="max-height:200px;overflow-y:auto;"></div>
-            <h4 style="margin-top:16px;">📊 Log Aktivasi</h4>
-            <div id="activationLogs" style="max-height:150px;overflow-y:auto;font-size:.8rem;"></div>
-        </div>
-        <div class="modal-footer"><button onclick="closeModal('adminModal')" class="btn btn-gray">Tutup</button></div>
-    </div>
-</div>
-
-<!-- MODAL EDIT WA -->
-<div class="modal-overlay" id="editWaModal">
-    <div class="modal-content" style="max-width:400px;">
-        <div class="modal-header"><h3>✏️ Edit Nomor WA</h3><button class="modal-close" onclick="closeModal('editWaModal')">✕</button></div>
-        <div class="modal-body">
-            <input type="text" id="editWaInput" placeholder="081234567890">
-            <div id="editWaError" class="hidden" style="color:var(--danger);margin-top:8px;font-size:13px;"></div>
-        </div>
-        <div class="modal-footer">
-            <button onclick="closeModal('editWaModal')" class="btn btn-gray">Batal</button>
-            <button onclick="saveWaNumber()" class="btn btn-success">💾 Simpan</button>
-        </div>
-    </div>
-</div>
-
-<!-- MODAL EDIT PAKET -->
-<div class="modal-overlay" id="editPackageModal">
-    <div class="modal-content" style="max-width:400px;">
-        <div class="modal-header"><h3 id="editPkgTitle">✏️ Edit Paket</h3><button class="modal-close" onclick="closeModal('editPackageModal')">✕</button></div>
-        <div class="modal-body">
-            <input type="hidden" id="editPkgIndex">
-            <div class="form-group"><label class="form-label">Nama</label><input type="text" id="editPkgName"></div>
-            <div class="form-group"><label class="form-label">Harga (Rp)</label><input type="number" id="editPkgPrice"></div>
-            <div class="form-group"><label class="form-label">Durasi</label><input type="text" id="editPkgDuration"></div>
-            <div id="editPkgError" class="hidden" style="color:var(--danger);margin-top:8px;font-size:13px;"></div>
-        </div>
-        <div class="modal-footer">
-            <button onclick="closeModal('editPackageModal')" class="btn btn-gray">Batal</button>
-            <button onclick="savePackageEdit()" class="btn btn-success">💾 Simpan</button>
-        </div>
-    </div>
-</div>
-
-<!-- MODAL GABUNG & COPY -->
-<div class="modal-overlay" id="mergeModal">
-    <div class="modal-content" style="max-width:650px;">
-        <div class="modal-header"><h3>🔄 Gabung & Copy</h3><button class="modal-close" onclick="closeModal('mergeModal')">✕</button></div>
-        <div class="modal-body">
-            <p style="color:var(--text-secondary);">Semua code digabung jadi 1 file index.html. <strong style="color:var(--warning);">🔒 Premium only.</strong></p>
-            <div id="mergeAppList" class="flex flex-wrap gap-2" style="padding:8px 0;"></div>
-            <button onclick="mergeAndCopy()" class="btn btn-success btn-block">🔄 Gabung & Copy</button>
-            <div id="mergeResult" class="hidden" style="margin-top:12px;">
-                <div class="flex-between" style="margin-bottom:8px;">
-                    <strong>📄 Hasil index.html</strong>
-                    <div class="flex gap-1">
-                        <button onclick="copyMergeResult()" class="btn btn-sm btn-primary">📋 Copy</button>
-                        <button onclick="downloadMergeResult()" class="btn btn-sm btn-success">📥 Download</button>
-                    </div>
-                </div>
-                <textarea id="mergeResultText" readonly style="font-family:'Courier New',monospace;font-size:.85rem;min-height:300px;background:var(--bg-primary);color:var(--text-primary);border:1px solid var(--accent);"></textarea>
-                <div style="margin-top:8px;font-size:.8rem;color:var(--text-muted);">💡 Total: <span id="mergeTotalCode">0</span> code</div>
-            </div>
-        </div>
-        <div class="modal-footer"><button onclick="closeModal('mergeModal')" class="btn btn-gray">Tutup</button></div>
-    </div>
-</div>
-
-<!-- MODAL APLIKASI -->
-<div class="modal-overlay" id="appModal">
-    <div class="modal-content" style="max-width:500px;">
-        <div class="modal-header"><h3 id="appModalTitle">➕ Tambah Aplikasi</h3><button class="modal-close" onclick="closeModal('appModal')">✕</button></div>
-        <div class="modal-body">
-            <input type="hidden" id="editAppId">
-            <div class="form-group"><label class="form-label">Nama Aplikasi *</label><input type="text" id="appName" placeholder="Contoh: APP TOKO ONLINE"></div>
-            <div class="form-group"><label class="form-label">Deskripsi</label><textarea id="appDesc" rows="2"></textarea></div>
-            <div id="appError" class="hidden" style="color:var(--danger);margin-top:8px;font-size:13px;"></div>
-        </div>
-        <div class="modal-footer">
-            <button onclick="closeModal('appModal')" class="btn btn-gray">Batal</button>
-            <button onclick="saveApp()" class="btn btn-success">💾 Simpan</button>
-        </div>
-    </div>
-</div>
-
-<!-- MODAL CODE -->
-<div class="modal-overlay" id="codeModal">
-    <div class="modal-content" style="max-width:600px;">
-        <div class="modal-header"><h3 id="codeModalTitle">➕ Tambah Code</h3><button class="modal-close" onclick="closeModal('codeModal')">✕</button></div>
-        <div class="modal-body">
-            <input type="hidden" id="editCodeId"><input type="hidden" id="codeAppId">
-            <div class="form-group"><label class="form-label">Nama Code *</label><input type="text" id="codeName" placeholder="Contoh: Code 1 : Header"></div>
-            <div class="form-group"><label class="form-label">Kode HTML *</label><textarea id="codeContent" rows="8" placeholder="Tempelkan kode HTML di sini..."></textarea></div>
-            <div id="codeError" class="hidden" style="color:var(--danger);margin-top:8px;font-size:13px;"></div>
-        </div>
-        <div class="modal-footer">
-            <button onclick="closeModal('codeModal')" class="btn btn-gray">Batal</button>
-            <button onclick="saveCode()" class="btn btn-success">💾 Simpan</button>
-        </div>
-    </div>
-</div>
-
-<!-- MODAL KONFIRMASI -->
-<div class="modal-overlay" id="confirmModal">
-    <div class="modal-content" style="max-width:380px;">
-        <div class="modal-header"><h3 id="confirmTitle">⚠️ Konfirmasi</h3><button class="modal-close" onclick="closeModal('confirmModal')">✕</button></div>
-        <div class="modal-body"><p id="confirmMessage">Apakah Anda yakin?</p></div>
-        <div class="modal-footer">
-            <button onclick="closeModal('confirmModal')" class="btn btn-gray">Batal</button>
-            <button onclick="confirmAction()" class="btn btn-danger" id="confirmOkBtn">Ya</button>
-        </div>
-    </div>
-</div>
-
-<!-- MODAL AKTIVASI (UNTUK USER) -->
-<div class="modal-overlay" id="activationModal">
-    <div class="modal-content" style="max-width:450px;">
-        <div class="modal-header"><h3>💎 Aktivasi Premium</h3><button class="modal-close" onclick="closeModal('activationModal')">✕</button></div>
-        <div class="modal-body">
-            <p style="color:var(--text-secondary);margin-bottom:12px;">Masukkan kode aktivasi dari Admin.</p>
-            <input type="text" id="activationCodeInput" placeholder="Kode Aktivasi (ACT-xxxxx-xxxxx)">
-            <button onclick="activatePremium()" class="btn btn-success btn-block" style="margin-top:8px;">🔓 Aktifkan</button>
-            <div id="activationError" class="hidden" style="color:var(--danger);margin-top:8px;font-size:13px;"></div>
-            <div id="activationSuccess" class="hidden" style="color:var(--success);margin-top:8px;font-size:13px;"></div>
-            <div style="margin-top:16px;padding-top:12px;border-top:1px solid var(--border-color);text-align:center;">
-                <p style="font-size:.85rem;color:var(--text-muted);">Belum punya kode? Hubungi Admin:</p>
-                <div class="wa-banner" onclick="waClick()" style="margin-top:8px;">
-                    <span>💬 <span id="activationWaNumber">081220285226</span></span>
-                    <span>👉 Chat</span>
-                </div>
-            </div>
-        </div>
-        <div class="modal-footer"><button onclick="closeModal('activationModal')" class="btn btn-gray">Tutup</button></div>
-    </div>
-</div>
-
-<!-- TOAST CONTAINER -->
-<div id="toastContainer"></div>
-
-<!-- LOADING OVERLAY -->
-<div id="loadingOverlay" class="loading-overlay hidden">
-    <div class="flex flex-col flex-center"><div class="spinner"></div><div class="loading-text" id="loadingText" style="color:#fff;margin-top:16px;">Memuat...</div></div>
-</div>
-<script>
-// ============================================================
-// NOTEPAD+ CODE STORAGE v2.2 - FIXED VERSION
-// ============================================================
-
-// ===== SERVICE WORKER (EXTERNAL REGISTRATION) =====
-if ('serviceWorker' in navigator) {
-  window.addEventListener('load', function() {
-    navigator.serviceWorker.register('/sw.js').catch(function() {
-      console.log('⚠️ SW not registered (expected on first load)');
-    });
-  });
-}
-
-// ===== PWA INSTALL PROMPT =====
-var deferredPrompt = null;
-window.addEventListener('beforeinstallprompt', function(e) {
-  e.preventDefault();
-  deferredPrompt = e;
-  var banner = document.getElementById('installBanner');
-  var heroBtn = document.getElementById('heroInstallBtn');
-  if (banner) banner.style.display = 'flex';
-  if (heroBtn) heroBtn.style.display = 'inline-flex';
-});
-
-function installApp() {
-  if (deferredPrompt) {
-    deferredPrompt.prompt();
-    deferredPrompt.userChoice.then(function(result) {
-      if (result.outcome === 'accepted') {
-        showToast('✅ Notepad+ berhasil diinstall! Cek desktop Anda.', 'success');
-        var banner = document.getElementById('installBanner');
-        if (banner) banner.style.display = 'none';
-      }
-      deferredPrompt = null;
-    });
-  } else {
-    showToast('📱 Buka menu browser > "Install Notepad+" atau "Tambahkan ke Layar Utama"', 'info');
-    setTimeout(function() {
-      alert('Cara Install Notepad+ Desktop:\n\n' +
-        '1. Buka di Chrome/Edge\n' +
-        '2. Klik ikon ⋮ (titik tiga) di pojok kanan atas\n' +
-        '3. Pilih "Install Notepad+..." atau "Apps > Install"\n' +
-        '4. Atau klik ikon ⊕ di address bar\n\n' +
-        'Setelah terinstall, aplikasi bisa dibuka seperti .exe biasa!');
-    }, 500);
-  }
-}
-
-// ===== DATA DEFAULT =====
-var SUPER_ADMIN = {
-  username: 'superadmin',
-  password: 'admin123',
-  nama: 'Super Admin',
-  email: 'admin@notepad.com',
-  hp: '081220285226',
-  role: 'superadmin'
-};
-
-var DEFAULT_PACKAGES = [
-  { id: '1bulan', name: 'Basic', price: 25000, duration: '1 Bulan', icon: '🥈' },
-  { id: '3bulan', name: 'Premium', price: 50000, duration: '3 Bulan', icon: '🥇' },
-  { id: '6bulan', name: 'Enterprise', price: 75000, duration: '6 Bulan', icon: '👑' }
-];
-
-var DEFAULT_WA = '081220285226';
-
-// ===== STORAGE FUNCTIONS =====
-function getUsers() {
-  try { return JSON.parse(localStorage.getItem('np_users') || '[]'); } catch(e) { return []; }
-}
-function saveUsers(u) { localStorage.setItem('np_users', JSON.stringify(u)); }
-
-function getApps() {
-  try { return JSON.parse(localStorage.getItem('np_apps') || '{}'); } catch(e) { return {}; }
-}
-function saveApps(a) { localStorage.setItem('np_apps', JSON.stringify(a)); }
-
-function getPackages() {
-  try { return JSON.parse(localStorage.getItem('np_packages') || JSON.stringify(DEFAULT_PACKAGES)); } catch(e) { return DEFAULT_PACKAGES; }
-}
-function savePackages(p) { localStorage.setItem('np_packages', JSON.stringify(p)); }
-
-function getWaNumber() {
-  try { return localStorage.getItem('np_wa') || DEFAULT_WA; } catch(e) { return DEFAULT_WA; }
-}
-function saveWaNumber(n) { localStorage.setItem('np_wa', n); }
-
-function getSession() {
-  try { return JSON.parse(localStorage.getItem('np_session') || 'null'); } catch(e) { return null; }
-}
-function saveSession(s) { localStorage.setItem('np_session', JSON.stringify(s)); }
-function clearSession() { localStorage.removeItem('np_session'); }
-
-function getActivationLogs() {
-  try { return JSON.parse(localStorage.getItem('np_logs') || '[]'); } catch(e) { return []; }
-}
-function saveActivationLogs(l) { localStorage.setItem('np_logs', JSON.stringify(l)); }
-
-function getValidCodes() {
-  try { return JSON.parse(localStorage.getItem('np_valid_codes') || '{}'); } catch(e) { return {}; }
-}
-function saveValidCodes(c) { localStorage.setItem('np_valid_codes', JSON.stringify(c)); }
-
-// ===== NAVIGATION =====
-function switchToApp() {
-  var session = getSession();
-  if (!session) {
-    showToast('⚠️ Silakan login terlebih dahulu.', 'warning');
-    showLoginModal();
-    return;
-  }
-  document.getElementById('landingContainer').classList.add('hidden');
-  document.getElementById('appContainer').classList.remove('hidden');
-  updateUI();
-  renderApps();
-  updateWaDisplay();
-}
-
-function switchToLanding() {
-  document.getElementById('appContainer').classList.add('hidden');
-  document.getElementById('landingContainer').classList.remove('hidden');
-  updateWaDisplay();
-}
-
-function showActivationModal(pkg) {
-  document.getElementById('activationCodeInput').value = '';
-  document.getElementById('activationError').classList.add('hidden');
-  document.getElementById('activationSuccess').classList.add('hidden');
-  document.getElementById('activationWaNumber').textContent = getWaNumber();
-  openModal('activationModal');
-}
-
-// ===== ONLINE/OFFLINE DETECTION =====
-function updateOnlineStatus() {
-  var badge = document.getElementById('connectionStatus');
-  if (!badge) {
-    badge = document.createElement('div');
-    badge.id = 'connectionStatus';
-    badge.style.cssText = 'position:fixed;top:10px;right:10px;z-index:9999;padding:6px 14px;border-radius:20px;font-size:12px;font-weight:600;transition:all .3s ease;opacity:.8;';
-    document.body.appendChild(badge);
-  }
-  
-  if (navigator.onLine) {
-    badge.textContent = '🟢 ONLINE';
-    badge.style.background = '#00b894';
-    badge.style.color = '#fff';
-    checkActivationOnline();
-  } else {
-    badge.textContent = '🔴 OFFLINE';
-    badge.style.background = '#ff6b6b';
-    badge.style.color = '#fff';
-  }
-  
-  setTimeout(function() {
-    badge.style.opacity = '0.7';
-  }, 2000);
-}
-
-window.addEventListener('online', updateOnlineStatus);
-window.addEventListener('offline', updateOnlineStatus);
-
-// ===== ACTIVATION TRACKING =====
-function checkActivationOnline() {
-  if (!navigator.onLine) return;
-  
-  var session = getSession();
-  if (!session || session.role === 'superadmin') return;
-  
-  var users = getUsers();
-  var user = users.find(function(u) { return u.username === session.username; });
-  if (!user) return;
-  
-  // Cek expired
-  if (user.isActivated && user.activationExpiry && Date.now() > user.activationExpiry) {
-    user.isActivated = false;
-    user.activationCode = null;
-    user.activationExpiry = null;
-    saveUsers(users.map(function(u) { return u.username === user.username ? user : u; }));
-    session.isPremium = false;
-    saveSession(session);
-    updateUI();
-    showToast('⚠️ Masa premium telah berakhir!', 'warning');
-  }
-  
-  // Verifikasi kode aktivasi yang belum dipakai
-  if (user.activationCode && !user.isActivated) {
-    var validCodes = getValidCodes();
-    if (validCodes[user.activationCode]) {
-      var pkgData = validCodes[user.activationCode];
-      var durations = {
-        '1bulan': 30 * 24 * 60 * 60 * 1000,
-        '3bulan': 90 * 24 * 60 * 60 * 1000,
-        '6bulan': 180 * 24 * 60 * 60 * 1000
-      };
-      user.isActivated = true;
-      user.activationPackage = pkgData.package;
-      user.activationDate = Date.now();
-      user.activationExpiry = Date.now() + (durations[pkgData.package] || 0);
-      saveUsers(users);
-      delete validCodes[user.activationCode];
-      saveValidCodes(validCodes);
-      session.isPremium = true;
-      saveSession(session);
-      updateUI();
-      showToast('🎉 Premium otomatis aktif!', 'success');
-    }
-  }
-  
-  // Log aktivitas
-  var logs = getActivationLogs();
-  logs.push({
-    username: user.username,
-    time: Date.now(),
-    activated: user.isActivated || false,
-    online: true
-  });
-  if (logs.length > 100) logs.shift();
-  saveActivationLogs(logs);
-}
-
-function activatePremium() {
-  var code = document.getElementById('activationCodeInput').value.trim();
-  var errEl = document.getElementById('activationError');
-  var sucEl = document.getElementById('activationSuccess');
-  
-  errEl.classList.add('hidden');
-  sucEl.classList.add('hidden');
-  
-  if (!code) {
-    errEl.textContent = 'Masukkan kode aktivasi.';
-    errEl.classList.remove('hidden');
-    return;
-  }
-  
-  var session = getSession();
-  if (!session) {
-    errEl.textContent = 'Login terlebih dahulu.';
-    errEl.classList.remove('hidden');
-    return;
-  }
-  
-  var validCodes = getValidCodes();
-  if (validCodes[code]) {
-    var pkgData = validCodes[code];
-    var users = getUsers();
-    var user = users.find(function(u) { return u.username === session.username; });
-    
-    if (user) {
-      var durations = {
-        '1bulan': 30 * 24 * 60 * 60 * 1000,
-        '3bulan': 90 * 24 * 60 * 60 * 1000,
-        '6bulan': 180 * 24 * 60 * 60 * 1000
-      };
-      user.isActivated = true;
-      user.activationCode = code;
-      user.activationPackage = pkgData.package;
-      user.activationDate = Date.now();
-      user.activationExpiry = Date.now() + (durations[pkgData.package] || 0);
-      saveUsers(users);
-      
-      session.isPremium = true;
-      saveSession(session);
-      updateUI();
-      
-      sucEl.textContent = '🎉 Premium berhasil diaktifkan!';
-      sucEl.classList.remove('hidden');
-      showToast('🎉 Premium aktif! Paket: ' + pkgData.package, 'success');
-      
-      delete validCodes[code];
-      saveValidCodes(validCodes);
-      
-      setTimeout(function() { closeModal('activationModal'); }, 1500);
-    }
-  } else {
-    errEl.textContent = '❌ Kode aktivasi tidak valid. Hubungi Admin: ' + getWaNumber();
-    errEl.classList.remove('hidden');
-  }
-}
-
-// ===== WA FUNCTIONS =====
-function waClick() {
-  var number = getWaNumber().replace(/[^0-9]/g, '');
-  window.open('https://wa.me/' + number, '_blank');
-}
-
-function editWANumber() {
-  document.getElementById('editWaInput').value = getWaNumber();
-  document.getElementById('editWaError').classList.add('hidden');
-  openModal('editWaModal');
-}
-
-function saveWaNumber() {
-  var n = document.getElementById('editWaInput').value.replace(/[^0-9]/g, '');
-  var errEl = document.getElementById('editWaError');
-  
-  if (n.length < 10) {
-    errEl.textContent = 'Nomor WA minimal 10 digit.';
-    errEl.classList.remove('hidden');
-    return;
-  }
-  
-  saveWaNumber(n);
-  closeModal('editWaModal');
-  updateWaDisplay();
-  showToast('✅ Nomor WA berhasil disimpan!', 'success');
-}
-
-function updateWaDisplay() {
-  var n = getWaNumber();
-  var ids = ['landingWaNumber', 'waNumberDisplay', 'adminWaDisplay', 'footerWa', 'activationWaNumber'];
-  ids.forEach(function(id) {
-    var el = document.getElementById(id);
-    if (el) el.textContent = n;
-  });
-}
-
-// ===== AUTH FUNCTIONS =====
-function handleLogin() {
-  var u = document.getElementById('loginUsername').value.trim();
-  var p = document.getElementById('loginPassword').value.trim();
-  var errEl = document.getElementById('loginError');
-  
-  errEl.classList.add('hidden');
-  
-  if (!u || !p) {
-    errEl.textContent = 'Masukkan username/email dan password.';
-    errEl.classList.remove('hidden');
-    return;
-  }
-  
-  // Super admin login
-  if (u === SUPER_ADMIN.username && p === SUPER_ADMIN.password) {
-    var session = {
-      username: SUPER_ADMIN.username,
-      nama: SUPER_ADMIN.nama,
-      email: SUPER_ADMIN.email,
-      hp: SUPER_ADMIN.hp,
-      role: 'superadmin',
-      isPremium: true
-    };
-    saveSession(session);
-    closeModal('loginModal');
-    document.getElementById('landingContainer').classList.add('hidden');
-    document.getElementById('appContainer').classList.remove('hidden');
-    updateUI();
-    renderApps();
-    showToast('👑 Selamat datang Super Admin!', 'success');
-    return;
-  }
-  
-  // Regular user login
-  var users = getUsers();
-  var user = users.find(function(x) {
-    return (x.username === u || x.email === u) && x.password === p;
-  });
-  
-  if (!user) {
-    errEl.textContent = 'Username/email atau password salah.';
-    errEl.classList.remove('hidden');
-    return;
-  }
-  
-  var session = {
-    username: user.username,
-    nama: user.nama,
-    email: user.email,
-    hp: user.hp || '',
-    role: 'user',
-    isPremium: user.isActivated || false
-  };
-  saveSession(session);
-  closeModal('loginModal');
-  document.getElementById('landingContainer').classList.add('hidden');
-  document.getElementById('appContainer').classList.remove('hidden');
-  updateUI();
-  renderApps();
-  showToast('👤 Selamat datang ' + user.nama + '!', 'success');
-}
-
-function handleRegister() {
-  var nama = document.getElementById('regNama').value.trim();
-  var email = document.getElementById('regEmail').value.trim();
-  var hp = document.getElementById('regHp').value.trim();
-  var username = document.getElementById('regUsername').value.trim();
-  var pass = document.getElementById('regPassword').value.trim();
-  var conf = document.getElementById('regConfirmPassword').value.trim();
-  var errEl = document.getElementById('registerError');
-  var sucEl = document.getElementById('registerSuccess');
-  
-  errEl.classList.add('hidden');
-  sucEl.classList.add('hidden');
-  
-  if (!nama || !email || !hp || !username || pass.length < 6 || pass !== conf) {
-    errEl.textContent = 'Lengkapi semua data. Password minimal 6 karakter dan harus sama.';
-    errEl.classList.remove('hidden');
-    return;
-  }
-  
-  var users = getUsers();
-  if (users.find(function(x) { return x.username === username || x.email === email; })) {
-    errEl.textContent = 'Username atau email sudah terdaftar.';
-    errEl.classList.remove('hidden');
-    return;
-  }
-  
-  users.push({
-    id: 'u_' + Date.now(),
-    nama: nama,
-    email: email,
-    hp: hp,
-    username: username,
-    password: pass,
-    role: 'user',
-    isActivated: false,
-    registeredAt: Date.now()
-  });
-  saveUsers(users);
-  
-  sucEl.textContent = '✅ Pendaftaran berhasil! Silakan login.';
-  sucEl.classList.remove('hidden');
-  
-  // Clear form
-  ['regNama', 'regEmail', 'regHp', 'regUsername', 'regPassword', 'regConfirmPassword'].forEach(function(id) {
-    document.getElementById(id).value = '';
-  });
-  
-  setTimeout(function() {
-    closeModal('registerModal');
-    openModal('loginModal');
-  }, 1500);
-}
-
-function handleForgotPassword() {
-  var nama = document.getElementById('forgotNama').value.trim();
-  var email = document.getElementById('forgotEmail').value.trim();
-  var hp = document.getElementById('forgotHp').value.trim();
-  var errEl = document.getElementById('forgotError');
-  var sucEl = document.getElementById('forgotSuccess');
-  
-  errEl.classList.add('hidden');
-  sucEl.classList.add('hidden');
-  
-  if (!nama || !email || !hp) {
-    errEl.textContent = 'Lengkapi semua data (Nama, Email, No HP).';
-    errEl.classList.remove('hidden');
-    return;
-  }
-  
-  var users = getUsers();
-  var user = users.find(function(x) {
-    return x.nama.toLowerCase() === nama.toLowerCase() && x.email.toLowerCase() === email.toLowerCase() && x.hp === hp;
-  });
-  
-  if (user) {
-    user.resetToken = 'rst_' + Date.now();
-    user.resetExpiry = Date.now() + (24 * 60 * 60 * 1000);
-    saveUsers(users);
-  } else if (nama === SUPER_ADMIN.nama && email === SUPER_ADMIN.email && hp === SUPER_ADMIN.hp) {
-    localStorage.setItem('admin_rst', 'rst_' + Date.now());
-    localStorage.setItem('admin_rst_exp', Date.now() + (24 * 60 * 60 * 1000));
-  } else {
-    errEl.textContent = 'Data tidak cocok dengan yang terdaftar.';
-    errEl.classList.remove('hidden');
-    return;
-  }
-  
-  sucEl.textContent = '📧 Link reset password telah dikirim ke ' + email;
-  sucEl.classList.remove('hidden');
-  showToast('📧 Cek email untuk link reset password.', 'success');
-  
-  ['forgotNama', 'forgotEmail', 'forgotHp'].forEach(function(id) {
-    document.getElementById(id).value = '';
-  });
-}
-
-function handleResetPassword() {
-  var token = document.getElementById('resetToken').value;
-  var np = document.getElementById('resetNewPassword').value.trim();
-  var cp = document.getElementById('resetConfirmPassword').value.trim();
-  var errEl = document.getElementById('resetError');
-  var sucEl = document.getElementById('resetSuccess');
-  
-  errEl.classList.add('hidden');
-  sucEl.classList.add('hidden');
-  
-  if (np.length < 6 || np !== cp) {
-    errEl.textContent = 'Password minimal 6 karakter dan harus sama.';
-    errEl.classList.remove('hidden');
-    return;
-  }
-  
-  var users = getUsers();
-  var found = users.find(function(x) {
-    return x.resetToken === token && x.resetExpiry > Date.now();
-  });
-  
-  if (found) {
-    found.password = np;
-    found.resetToken = null;
-    found.resetExpiry = null;
-    saveUsers(users);
-  } else {
-    var at = localStorage.getItem('admin_rst');
-    var ae = localStorage.getItem('admin_rst_exp');
-    if (token === at && ae && parseInt(ae) > Date.now()) {
-      SUPER_ADMIN.password = np;
-      localStorage.removeItem('admin_rst');
-      localStorage.removeItem('admin_rst_exp');
-    } else {
-      errEl.textContent = 'Token reset tidak valid atau sudah kadaluarsa.';
-      errEl.classList.remove('hidden');
-      return;
-    }
-  }
-  
-  sucEl.textContent = '✅ Password berhasil direset! Silakan login.';
-  sucEl.classList.remove('hidden');
-  setTimeout(function() {
-    closeModal('resetPasswordModal');
-    openModal('loginModal');
-  }, 2000);
-}
-
-function handleLogoutBtn() {
-  var session = getSession();
-  if (session) {
-    if (!confirm('Yakin ingin logout?')) return;
-    clearSession();
-    updateUI();
-    renderApps();
-    showToast('🚪 Logout berhasil!', 'info');
-  } else {
-    showLoginModal();
-  }
-}
-
-function showLoginModal() {
-  document.getElementById('loginError').classList.add('hidden');
-  document.getElementById('loginUsername').value = '';
-  document.getElementById('loginPassword').value = '';
-  openModal('loginModal');
-}
-
-function showRegisterModal() {
-  ['regNama', 'regEmail', 'regHp', 'regUsername', 'regPassword', 'regConfirmPassword'].forEach(function(id) {
-    document.getElementById(id).value = '';
-  });
-  document.getElementById('registerError').classList.add('hidden');
-  document.getElementById('registerSuccess').classList.add('hidden');
-  openModal('registerModal');
-}
-
-// ===== UI UPDATE =====
-function updateUI() {
-  var session = getSession();
-  var loginBtn = document.getElementById('loginBtn');
-  var userBadge = document.getElementById('userBadge');
-  var profileBtn = document.getElementById('profileBtn');
-  var adminBtn = document.getElementById('adminBtn');
-  var premiumStatus = document.getElementById('premiumStatus');
-  
-  if (session) {
-    if (loginBtn) loginBtn.textContent = '🚪 Logout';
-    if (userBadge) userBadge.style.display = 'flex';
-    if (document.getElementById('userName')) document.getElementById('userName').textContent = session.nama || session.username;
-    if (document.getElementById('userAvatar')) document.getElementById('userAvatar').textContent = (session.nama || session.username).charAt(0).toUpperCase();
-    if (profileBtn) profileBtn.style.display = 'inline-flex';
-    
-    if (session.role === 'superadmin') {
-      if (adminBtn) adminBtn.style.display = 'inline-flex';
-    } else {
-      if (adminBtn) adminBtn.style.display = 'none';
-    }
-    
-    if (premiumStatus) {
-      premiumStatus.textContent = session.isPremium ? '💎 Premium' : '🆓 Gratis';
-      premiumStatus.style.color = session.isPremium ? 'var(--success)' : 'var(--warning)';
-    }
-  } else {
-    if (loginBtn) loginBtn.textContent = '🔐 Login';
-    if (userBadge) userBadge.style.display = 'none';
-    if (profileBtn) profileBtn.style.display = 'none';
-    if (adminBtn) adminBtn.style.display = 'none';
-    if (premiumStatus) {
-      premiumStatus.textContent = '🆓';
-      premiumStatus.style.color = 'var(--text-muted)';
-    }
-  }
-}
-
-// ===== PROFILE =====
-function showProfile() {
-  var s = getSession();
-  if (!s) {
-    showToast('⚠️ Login terlebih dahulu.', 'warning');
-    showLoginModal();
-    return;
-  }
-  
-  document.getElementById('profileName').textContent = s.nama || s.username;
-  document.getElementById('profileAvatar').textContent = (s.nama || s.username).charAt(0).toUpperCase();
-  document.getElementById('profileRole').textContent = s.role === 'superadmin' ? '⭐ Super Admin' : '👤 User';
-  document.getElementById('editNama').value = s.nama || '';
-  document.getElementById('editEmail').value = s.email || '';
-  document.getElementById('editHp').value = s.hp || '';
-  document.getElementById('profileError').classList.add('hidden');
-  document.getElementById('passwordChange').classList.add('hidden');
-  document.getElementById('oldPassword').value = '';
-  document.getElementById('newPassword').value = '';
-  document.getElementById('confirmNewPassword').value = '';
-  document.getElementById('passwordError').classList.add('hidden');
-  document.getElementById('passwordSuccess').classList.add('hidden');
-  openModal('profileModal');
-}
-
-function updateProfile() {
-  var s = getSession();
-  if (!s) return;
-  
-  var nama = document.getElementById('editNama').value.trim();
-  var email = document.getElementById('editEmail').value.trim();
-  var hp = document.getElementById('editHp').value.trim();
-  var errEl = document.getElementById('profileError');
-  
-  errEl.classList.add('hidden');
-  
-  if (!nama || !email || !hp) {
-    errEl.textContent = 'Lengkapi semua data profil.';
-    errEl.classList.remove('hidden');
-    return;
-  }
-  
-  if (s.role === 'superadmin') {
-    SUPER_ADMIN.nama = nama;
-    SUPER_ADMIN.email = email;
-    SUPER_ADMIN.hp = hp;
-  } else {
-    var users = getUsers();
-    var u = users.find(function(x) { return x.username === s.username; });
-    if (u) {
-      u.nama = nama;
-      u.email = email;
-      u.hp = hp;
-      saveUsers(users);
-    }
-  }
-  
-  s.nama = nama;
-  s.email = email;
-  s.hp = hp;
-  saveSession(s);
-  updateUI();
-  showToast('✅ Profil berhasil diupdate!', 'success');
-}
-
-function togglePasswordChange() {
-  var div = document.getElementById('passwordChange');
-  div.classList.toggle('hidden');
-  document.getElementById('passwordError').classList.add('hidden');
-  document.getElementById('passwordSuccess').classList.add('hidden');
-  document.getElementById('oldPassword').value = '';
-  document.getElementById('newPassword').value = '';
-  document.getElementById('confirmNewPassword').value = '';
-}
-
-function saveNewPassword() {
-  var s = getSession();
-  if (!s) return;
-  
-  var op = document.getElementById('oldPassword').value.trim();
-  var np = document.getElementById('newPassword').value.trim();
-  var cp = document.getElementById('confirmNewPassword').value.trim();
-  var errEl = document.getElementById('passwordError');
-  var sucEl = document.getElementById('passwordSuccess');
-  
-  errEl.classList.add('hidden');
-  sucEl.classList.add('hidden');
-  
-  if (np.length < 6 || np !== cp) {
-    errEl.textContent = 'Password baru minimal 6 karakter dan harus sama.';
-    errEl.classList.remove('hidden');
-    return;
-  }
-  
-  var valid = false;
-  
-  if (s.role === 'superadmin') {
-    if (op === SUPER_ADMIN.password) {
-      valid = true;
-      SUPER_ADMIN.password = np;
-    }
-  } else {
-    var users = getUsers();
-    var u = users.find(function(x) { return x.username === s.username; });
-    if (u && op === u.password) {
-      valid = true;
-      u.password = np;
-      saveUsers(users);
-    }
-  }
-  
-  if (!valid) {
-    errEl.textContent = 'Password lama salah.';
-    errEl.classList.remove('hidden');
-    return;
-  }
-  
-  sucEl.textContent = '✅ Password berhasil diubah!';
-  sucEl.classList.remove('hidden');
-  document.getElementById('oldPassword').value = '';
-  document.getElementById('newPassword').value = '';
-  document.getElementById('confirmNewPassword').value = '';
-  showToast('✅ Password berhasil diubah!', 'success');
-}
-
-// ===== ADMIN =====
-function showAdminPanel() {
-  var s = getSession();
-  if (!s || s.role !== 'superadmin') {
-    showToast('⚠️ Hanya Super Admin yang bisa mengakses.', 'warning');
-    return;
-  }
-  
-  renderAdminPackages();
-  renderUserList();
-  updateWaDisplay();
-  renderActivationLogs();
-  openModal('adminModal');
-}
-
-function renderAdminPackages() {
-  var pkgs = getPackages();
-  var grid = document.getElementById('adminPackagesGrid');
-  if (!grid) return;
-  
-  grid.innerHTML = pkgs.map(function(p, i) {
-    return '<div class="package-card" onclick="editPackage(' + i + ')" style="cursor:pointer;">' +
-      '<div class="package-icon">' + (p.icon || '📦') + '</div>' +
-      '<div class="package-name">' + escapeHtml(p.name) + '</div>' +
-      '<div class="package-price">Rp ' + (p.price || 0).toLocaleString('id-ID') + '</div>' +
-      '<div class="package-duration">' + escapeHtml(p.duration) + '</div>' +
-      '</div>';
-  }).join('');
-}
-
-function editPackage(idx) {
-  var pkgs = getPackages();
-  var p = pkgs[idx];
-  if (!p) return;
-  
-  document.getElementById('editPkgIndex').value = idx;
-  document.getElementById('editPkgName').value = p.name || '';
-  document.getElementById('editPkgPrice').value = p.price || 0;
-  document.getElementById('editPkgDuration').value = p.duration || '';
-  document.getElementById('editPkgTitle').textContent = '✏️ Edit Paket ' + (idx + 1);
-  document.getElementById('editPkgError').classList.add('hidden');
-  openModal('editPackageModal');
-}
-
-function savePackageEdit() {
-  var idx = parseInt(document.getElementById('editPkgIndex').value);
-  var name = document.getElementById('editPkgName').value.trim();
-  var price = parseInt(document.getElementById('editPkgPrice').value) || 0;
-  var duration = document.getElementById('editPkgDuration').value.trim();
-  var errEl = document.getElementById('editPkgError');
-  
-  errEl.classList.add('hidden');
-  
-  if (!name || price <= 0 || !duration) {
-    errEl.textContent = 'Lengkapi semua data paket dengan benar.';
-    errEl.classList.remove('hidden');
-    return;
-  }
-  
-  var pkgs = getPackages();
-  if (idx >= 0 && idx < pkgs.length) {
-    pkgs[idx].name = name;
-    pkgs[idx].price = price;
-    pkgs[idx].duration = duration;
-    savePackages(pkgs);
-    closeModal('editPackageModal');
-    renderAdminPackages();
-    showToast('✅ Paket berhasil diupdate!', 'success');
-  }
-}
-
-function kirimAktivasi() {
-  var input = document.getElementById('aktivasiUser').value.trim();
-  var paket = document.getElementById('aktivasiPaket').value;
-  var result = document.getElementById('aktivasiResult');
-  
-  result.classList.add('hidden');
-  
-  if (!input) {
-    showToast('⚠️ Masukkan username atau email user.', 'warning');
-    return;
-  }
-  
-  var users = getUsers();
-  var user = users.find(function(u) {
-    return u.username === input || u.email === input;
-  });
-  
-  if (!user) {
-    result.classList.remove('hidden');
-    result.innerHTML = '<div style="color:var(--danger);padding:12px;background:var(--bg-card);border-radius:var(--radius);">❌ User tidak ditemukan.</div>';
-    return;
-  }
-  
-  var pkgs = getPackages();
-  var pkg = pkgs.find(function(p) { return p.id === paket; }) || {};
-  var kode = 'ACT-' + user.id.substring(0, 6).toUpperCase() + '-' + Date.now().toString(36).toUpperCase();
-  
-  user.activationCode = kode;
-  user.activationPackage = paket;
-  user.activationSent = Date.now();
-  user.isActivated = false;
-  saveUsers(users);
-  
-  var validCodes = getValidCodes();
-  validCodes[kode] = { package: paket, created: Date.now(), createdBy: 'superadmin' };
-  saveValidCodes(validCodes);
-  
-  result.classList.remove('hidden');
-  result.innerHTML = '<div style="color:var(--success);padding:12px;background:var(--bg-card);border-radius:var(--radius);">' +
-    '<p><strong>✅ Aktivasi berhasil dikirim!</strong></p>' +
-    '<p><strong>User:</strong> ' + escapeHtml(user.nama) + ' (@' + escapeHtml(user.username) + ')</p>' +
-    '<p><strong>Paket:</strong> ' + escapeHtml(pkg.name || paket) + ' - Rp ' + (pkg.price || 0).toLocaleString('id-ID') + '</p>' +
-    '<p><strong>Kode Aktivasi:</strong> <code style="background:var(--bg-primary);padding:2px 8px;border-radius:4px;">' + kode + '</code></p>' +
-    '<p style="font-size:0.8rem;color:var(--text-muted);">📧 Kode juga dikirim ke email: ' + escapeHtml(user.email) + '</p>' +
-    '<button onclick="copyToClipboard(\'' + kode + '\')" class="btn btn-sm btn-primary" style="margin-top:8px;">📋 Copy Kode</button>' +
-    '</div>';
-  
-  document.getElementById('aktivasiUser').value = '';
-  showToast('📤 Aktivasi berhasil dikirim ke ' + user.nama + '!', 'success');
-}
-
-function renderUserList() {
-  var users = getUsers();
-  var container = document.getElementById('userListAdmin');
-  var totalUsersEl = document.getElementById('totalUsers');
-  
-  if (totalUsersEl) totalUsersEl.textContent = users.length;
-  
-  if (!container) return;
-  
-  if (users.length === 0) {
-    container.innerHTML = '<p style="color:var(--text-muted);font-size:0.9rem;">Belum ada user terdaftar.</p>';
-    return;
-  }
-  
-  container.innerHTML = users.map(function(u) {
-    return '<div style="display:flex;justify-content:space-between;align-items:center;padding:8px 12px;background:var(--bg-card);border-radius:6px;margin-bottom:4px;font-size:0.85rem;flex-wrap:wrap;gap:4px;">' +
-      '<span><strong>' + escapeHtml(u.nama) + '</strong> (@' + escapeHtml(u.username) + ')</span>' +
-      '<span>' + (u.isActivated ? '💎 Premium' : '🆓 Free') + '</span>' +
-      '</div>';
-  }).join('');
-}
-
-function renderActivationLogs() {
-  var logs = getActivationLogs();
-  var container = document.getElementById('activationLogs');
-  
-  if (!container) return;
-  
-  if (logs.length === 0) {
-    container.innerHTML = '<p style="color:var(--text-muted);font-size:0.85rem;">Belum ada log aktivitas.</p>';
-    return;
-  }
-  
-  container.innerHTML = logs.slice(-30).reverse().map(function(l) {
-    return '<div style="font-size:0.75rem;padding:3px 0;color:var(--text-secondary);border-bottom:1px solid var(--border-color);">' +
-      '<span>' + new Date(l.time).toLocaleString('id-ID') + '</span> - ' +
-      '<span>' + escapeHtml(l.username) + '</span> - ' +
-      '<span>' + (l.activated ? '💎 Aktif' : '🆓 Free') + '</span> - ' +
-      '<span>' + (l.online ? '🟢' : '🔴') + '</span>' +
-      '</div>';
-  }).join('');
-}
-
-// ===== CRUD APPS =====
-function renderApps() {
-  var container = document.getElementById('appListContainer');
-  var empty = document.getElementById('emptyState');
-  var stats = document.getElementById('dashboardStats');
-  var session = getSession();
-  
-  if (!session) {
-    if (container) {
-      container.innerHTML = '<div class="empty-state"><div class="icon">🔐</div><h3>Silakan Login</h3><p>Login untuk melihat dan menyimpan kode Anda.</p><button onclick="showLoginModal()" class="btn btn-primary">🔐 Login</button></div>';
-    }
-    if (empty) empty.style.display = 'none';
-    if (stats) stats.style.display = 'none';
-    return;
-  }
-  
-  if (stats) stats.style.display = 'grid';
-  
-  var apps = getApps();
-  var keys = Object.keys(apps);
-  var totalCodes = 0;
-  
-  keys.forEach(function(k) {
-    totalCodes += (apps[k].codes || []).length;
-  });
-  
-  if (document.getElementById('totalApps')) document.getElementById('totalApps').textContent = keys.length;
-  if (document.getElementById('totalCodes')) document.getElementById('totalCodes').textContent = totalCodes;
-  
-  var storageSize = new Blob([JSON.stringify(apps)]).size;
-  var storageDisplay = storageSize < 1024 ? storageSize + ' B' :
-    storageSize < 1048576 ? (storageSize / 1024).toFixed(1) + ' KB' :
-    (storageSize / 1048576).toFixed(1) + ' MB';
-  if (document.getElementById('totalStorage')) document.getElementById('totalStorage').textContent = storageDisplay;
-  
-  renderUserList();
-  
-  if (keys.length === 0) {
-    if (empty) empty.style.display = 'block';
-    if (container) container.innerHTML = '';
-    return;
-  }
-  
-  if (empty) empty.style.display = 'none';
-  
-  var html = '<div class="app-list">';
-  keys.forEach(function(k) {
-    var a = apps[k];
-    var n = (a.codes || []).length;
-    
-    html += '<div class="app-item">' +
-      '<div class="app-header-item" onclick="toggleApp(\'' + k + '\')">' +
-      '<div class="app-name">📱 ' + escapeHtml(a.name) + ' <span class="app-count">' + n + ' code</span></div>' +
-      '<div class="flex gap-1 flex-wrap">' +
-      '<button class="btn btn-sm btn-primary" onclick="event.stopPropagation();addCode(\'' + k + '\')">+ Code</button>' +
-      '<button class="btn btn-sm btn-warning" onclick="event.stopPropagation();editApp(\'' + k + '\')">✏️</button>' +
-      '<button class="btn btn-sm btn-danger" onclick="event.stopPropagation();deleteApp(\'' + k + '\')">🗑️</button>' +
-      '</div></div>' +
-      '<div class="app-codes ' + (a.isOpen ? 'open' : '') + '" id="ac_' + k + '">' + renderCodes(k, a.codes || []) + '</div>' +
-      '</div>';
-  });
-  html += '</div>';
-  
-  if (container) container.innerHTML = html;
-}
-
-function renderCodes(appId, codes) {
-  if (!codes || codes.length === 0) {
-    return '<div style="padding:12px;text-align:center;color:var(--text-muted);">Belum ada code. Klik <strong>+ Code</strong> untuk menambahkan.</div>';
-  }
-  
-  return codes.map(function(c) {
-    var preview = (c.content || '').substring(0, 100);
-    return '<div class="code-item">' +
-      '<div class="code-header">' +
-      '<div class="code-title">📝 ' + escapeHtml(c.name) + '</div>' +
-      '<div class="flex gap-1">' +
-      '<button class="btn btn-sm" style="color:var(--success);" onclick="copySingleCode(\'' + appId + '\',\'' + c.id + '\')" title="Copy">📋</button>' +
-      '<button class="btn btn-sm" onclick="toggleCode(\'' + appId + '\',\'' + c.id + '\')">' + (c.isOpen ? '📄 Sembunyikan' : '👁️ Lihat') + '</button>' +
-      '<button class="btn btn-sm btn-warning" onclick="editCode(\'' + appId + '\',\'' + c.id + '\')">✏️</button>' +
-      '<button class="btn btn-sm btn-danger" onclick="deleteCode(\'' + appId + '\',\'' + c.id + '\')">🗑️</button>' +
-      '</div></div>' +
-      (c.isOpen ? '<div class="code-content"><pre>' + escapeHtml(c.content || '') + '</pre></div>' : '<div style="font-size:0.8rem;color:var(--text-muted);">' + escapeHtml(preview) + '...</div>') +
-      '</div>';
-  }).join('');
-}
-
-function showAddAppModal() {
-  if (!getSession()) {
-    showToast('⚠️ Silakan login terlebih dahulu.', 'warning');
-    showLoginModal();
-    return;
-  }
-  
-  document.getElementById('appModalTitle').textContent = '➕ Tambah Aplikasi';
-  document.getElementById('editAppId').value = '';
-  document.getElementById('appName').value = '';
-  document.getElementById('appDesc').value = '';
-  document.getElementById('appError').classList.add('hidden');
-  openModal('appModal');
-}
-
-function saveApp() {
-  var id = document.getElementById('editAppId').value;
-  var name = document.getElementById('appName').value.trim();
-  var desc = document.getElementById('appDesc').value.trim();
-  var errEl = document.getElementById('appError');
-  
-  errEl.classList.add('hidden');
-  
-  if (!name) {
-    errEl.textContent = 'Nama aplikasi wajib diisi.';
-    errEl.classList.remove('hidden');
-    return;
-  }
-  
-  var apps = getApps();
-  
-  if (id && apps[id]) {
-    apps[id].name = name;
-    apps[id].desc = desc;
-    apps[id].updatedAt = Date.now();
-  } else {
-    var newId = 'app_' + Date.now() + '_' + Math.random().toString(36).substr(2, 4);
-    apps[newId] = {
-      name: name,
-      desc: desc,
-      codes: [],
-      createdAt: Date.now(),
-      updatedAt: Date.now()
-    };
-  }
-  
-  saveApps(apps);
-  closeModal('appModal');
-  renderApps();
-  showToast('✅ Aplikasi berhasil disimpan!', 'success');
-}
-
-function editApp(id) {
-  var apps = getApps();
-  var a = apps[id];
-  if (!a) {
-    showToast('⚠️ Aplikasi tidak ditemukan.', 'warning');
-    return;
-  }
-  
-  document.getElementById('appModalTitle').textContent = '✏️ Edit Aplikasi';
-  document.getElementById('editAppId').value = id;
-  document.getElementById('appName').value = a.name || '';
-  document.getElementById('appDesc').value = a.desc || '';
-  document.getElementById('appError').classList.add('hidden');
-  openModal('appModal');
-}
-
-function deleteApp(id) {
-  var apps = getApps();
-  var a = apps[id];
-  if (!a) return;
-  
-  window._confirmCallback = function() {
-    delete apps[id];
-    saveApps(apps);
-    closeModal('confirmModal');
-    renderApps();
-    showToast('🗑️ Aplikasi "' + a.name + '" dihapus.', 'info');
-    window._confirmCallback = null;
-  };
-  
-  document.getElementById('confirmTitle').textContent = '⚠️ Hapus Aplikasi?';
-  document.getElementById('confirmMessage').textContent = 'Yakin ingin menghapus "' + a.name + '" beserta semua codenya?';
-  document.getElementById('confirmOkBtn').textContent = 'Ya, Hapus';
-  openModal('confirmModal');
-}
-
-function toggleApp(id) {
-  var apps = getApps();
-  if (apps[id]) {
-    apps[id].isOpen = !apps[id].isOpen;
-    saveApps(apps);
-    renderApps();
-  }
-}
-
-function addCode(appId) {
-  var apps = getApps();
-  var a = apps[appId];
-  if (!a) return;
-  
-  document.getElementById('codeModalTitle').textContent = '➕ Tambah Code ke ' + a.name;
-  document.getElementById('codeAppId').value = appId;
-  document.getElementById('editCodeId').value = '';
-  document.getElementById('codeName').value = '';
-  document.getElementById('codeContent').value = '';
-  document.getElementById('codeError').classList.add('hidden');
-  openModal('codeModal');
-}
-
-function saveCode() {
-  var appId = document.getElementById('codeAppId').value;
-  var codeId = document.getElementById('editCodeId').value;
-  var name = document.getElementById('codeName').value.trim();
-  var content = document.getElementById('codeContent').value.trim();
-  var errEl = document.getElementById('codeError');
-  
-  errEl.classList.add('hidden');
-  
-  if (!name || !content) {
-    errEl.textContent = 'Nama code dan konten wajib diisi.';
-    errEl.classList.remove('hidden');
-    return;
-  }
-  
-  var apps = getApps();
-  var app = apps[appId];
-  if (!app) {
-    errEl.textContent = 'Aplikasi tidak ditemukan.';
-    errEl.classList.remove('hidden');
-    return;
-  }
-  
-  if (!app.codes) app.codes = [];
-  
-  if (codeId) {
-    var c = app.codes.find(function(x) { return x.id === codeId; });
-    if (c) {
-      c.name = name;
-      c.content = content;
-      c.updatedAt = Date.now();
-    }
-  } else {
-    app.codes.push({
-      id: 'c_' + Date.now() + '_' + Math.random().toString(36).substr(2, 4),
-      name: name,
-      content: content,
-      createdAt: Date.now(),
-      updatedAt: Date.now()
-    });
-  }
-  
-  saveApps(apps);
-  closeModal('codeModal');
-  renderApps();
-  showToast('✅ Code berhasil disimpan!', 'success');
-}
-
-function editCode(appId, codeId) {
-  var apps = getApps();
-  var a = apps[appId];
-  if (!a) return;
-  
-  var c = a.codes.find(function(x) { return x.id === codeId; });
-  if (!c) return;
-  
-  document.getElementById('codeModalTitle').textContent = '✏️ Edit Code';
-  document.getElementById('codeAppId').value = appId;
-  document.getElementById('editCodeId').value = codeId;
-  document.getElementById('codeName').value = c.name || '';
-  document.getElementById('codeContent').value = c.content || '';
-  document.getElementById('codeError').classList.add('hidden');
-  openModal('codeModal');
-}
-
-function deleteCode(appId, codeId) {
-  var apps = getApps();
-  var a = apps[appId];
-  if (!a) return;
-  
-  var c = a.codes.find(function(x) { return x.id === codeId; });
-  if (!c) return;
-  
-  window._confirmCallback = function() {
-    a.codes = a.codes.filter(function(x) { return x.id !== codeId; });
-    saveApps(apps);
-    closeModal('confirmModal');
-    renderApps();
-    showToast('🗑️ Code "' + c.name + '" dihapus.', 'info');
-    window._confirmCallback = null;
-  };
-  
-  document.getElementById('confirmTitle').textContent = '⚠️ Hapus Code?';
-  document.getElementById('confirmMessage').textContent = 'Yakin ingin menghapus code "' + c.name + '"?';
-  document.getElementById('confirmOkBtn').textContent = 'Ya, Hapus';
-  openModal('confirmModal');
-}
-
-function toggleCode(appId, codeId) {
-  var apps = getApps();
-  var a = apps[appId];
-  if (!a || !a.codes) return;
-  
-  var c = a.codes.find(function(x) { return x.id === codeId; });
-  if (c) {
-    c.isOpen = !c.isOpen;
-    saveApps(apps);
-    renderApps();
-  }
-}
-
-function copySingleCode(appId, codeId) {
-  var apps = getApps();
-  var a = apps[appId];
-  if (!a || !a.codes) return;
-  
-  var c = a.codes.find(function(x) { return x.id === codeId; });
-  if (!c || !c.content) {
-    showToast('⚠️ Code tidak ditemukan atau kosong.', 'warning');
-    return;
-  }
-  
-  navigator.clipboard.writeText(c.content).then(function() {
-    showToast('✅ Code "' + c.name + '" berhasil dicopy!', 'success');
-  }).catch(function() {
-    showToast('⚠️ Gagal copy, coba lagi.', 'error');
-  });
-}
-
-// ===== SEARCH =====
-function showSearch() {
-  var bar = document.getElementById('searchBar');
-  bar.classList.toggle('hidden');
-  if (!bar.classList.contains('hidden')) {
-    document.getElementById('searchInput').focus();
-  } else {
-    renderApps();
-  }
-}
-
-function searchApps() {
-  var q = document.getElementById('searchInput').value.toLowerCase().trim();
-  
-  if (!q) {
-    renderApps();
-    return;
-  }
-  
-  var apps = getApps();
-  var container = document.getElementById('appListContainer');
-  var empty = document.getElementById('emptyState');
-  var html = '<div class="app-list">';
-  var found = false;
-  
-  Object.keys(apps).forEach(function(k) {
-    var a = apps[k];
-    var matchName = a.name.toLowerCase().includes(q);
-    var matchCode = (a.codes || []).some(function(c) {
-      return c.name.toLowerCase().includes(q) || (c.content || '').toLowerCase().includes(q);
-    });
-    
-    if (matchName || matchCode) {
-      found = true;
-      html += '<div class="app-item">' +
-        '<div class="app-header-item" onclick="toggleApp(\'' + k + '\')">' +
-        '<div class="app-name">📱 ' + escapeHtml(a.name) + ' <span class="app-count">' + (a.codes || []).length + ' code</span></div>' +
-        '<div class="flex gap-1"><button class="btn btn-sm btn-primary" onclick="event.stopPropagation();addCode(\'' + k + '\')">+ Code</button></div>' +
-        '</div>' +
-        '<div class="app-codes open">' + renderCodes(k, a.codes || []) + '</div>' +
-        '</div>';
-    }
-  });
-  
-  html += '</div>';
-  
-  if (empty) empty.style.display = 'none';
-  
-  if (container) {
-    container.innerHTML = found ? html : '<div class="empty-state"><div class="icon">🔍</div><h3>Tidak Ditemukan</h3><p>Tidak ada hasil untuk "' + escapeHtml(q) + '".</p></div>';
-  }
-}
-
-function clearSearch() {
-  document.getElementById('searchInput').value = '';
-  document.getElementById('searchBar').classList.add('hidden');
-  renderApps();
-}
-
-// ===== EXPORT / IMPORT =====
-function exportAllData() {
-  if (!getSession()) {
-    showToast('⚠️ Silakan login terlebih dahulu.', 'warning');
-    return;
-  }
-  
-  var data = {
-    exportedAt: new Date().toISOString(),
-    apps: getApps(),
-    packages: getPackages(),
-    waNumber: getWaNumber(),
-    version: '2.2'
-  };
-  
-  var json = JSON.stringify(data, null, 2);
-  var blob = new Blob([json], { type: 'application/json' });
-  var url = URL.createObjectURL(blob);
-  var a = document.createElement('a');
-  a.href = url;
-  a.download = 'Notepad_Backup_' + new Date().toISOString().slice(0, 10) + '.json';
-  document.body.appendChild(a);
-  a.click();
-  document.body.removeChild(a);
-  URL.revokeObjectURL(url);
-  showToast('📤 Data berhasil diexport!', 'success');
-}
-
-function importAllData(input) {
-  if (!getSession()) {
-    showToast('⚠️ Silakan login terlebih dahulu.', 'warning');
-    return;
-  }
-  
-  var file = input.files[0];
-  if (!file) return;
-  
-  var reader = new FileReader();
-  reader.onload = function(e) {
-    try {
-      var data = JSON.parse(e.target.result);
-      if (!data.apps || typeof data.apps !== 'object') {
-        showToast('❌ Format file tidak valid.', 'error');
-        return;
-      }
-      
-      window._confirmCallback = function() {
-        saveApps(data.apps);
-        if (data.packages) savePackages(data.packages);
-        if (data.waNumber) saveWaNumber(data.waNumber);
-        closeModal('confirmModal');
-        renderApps();
-        updateWaDisplay();
-        showToast('📥 Data berhasil diimport!', 'success');
-        window._confirmCallback = null;
-      };
-      
-      document.getElementById('confirmTitle').textContent = '📥 Import Data';
-      document.getElementById('confirmMessage').textContent = 'Data saat ini akan ditimpa. Yakin ingin melanjutkan?';
-      document.getElementById('confirmOkBtn').textContent = 'Ya, Import';
-      openModal('confirmModal');
-      
-    } catch (err) {
-      showToast('❌ Gagal import: ' + err.message, 'error');
-    }
-  };
-  reader.readAsText(file);
-  input.value = '';
-}
-
-// ===== MERGE & COPY =====
-var selectedMergeApps = [];
-
-function showMergeModal() {
-  var session = getSession();
-  if (!session) {
-    showToast('⚠️ Silakan login terlebih dahulu.', 'warning');
-    showLoginModal();
-    return;
-  }
-  
-  if (!session.isPremium && session.role !== 'superadmin') {
-    showToast('🔒 Fitur ini hanya untuk pengguna Premium!', 'warning');
-    showToast('💎 Hubungi Admin: ' + getWaNumber(), 'info');
-    showActivationModal();
-    return;
-  }
-  
-  var apps = getApps();
-  var keys = Object.keys(apps);
-  
-  if (keys.length === 0) {
-    showToast('⚠️ Belum ada aplikasi yang bisa digabung.', 'warning');
-    return;
-  }
-  
-  var container = document.getElementById('mergeAppList');
-  container.innerHTML = '';
-  selectedMergeApps = [];
-  
-  keys.forEach(function(k) {
-    var a = apps[k];
-    var n = (a.codes || []).length;
-    
-    var label = document.createElement('label');
-    label.style.cssText = 'display:flex;align-items:center;gap:6px;padding:6px 12px;background:var(--bg-card);border-radius:6px;cursor:pointer;font-size:0.9rem;';
-    label.innerHTML = '<input type="checkbox" class="mc" value="' + k + '" ' + (n > 0 ? 'checked' : 'disabled') + '> 📱 ' + escapeHtml(a.name) + ' (' + n + ' code)';
-    
-    if (n > 0) selectedMergeApps.push(k);
-    
-    container.appendChild(label);
-    
-    var cb = label.querySelector('.mc');
-    if (cb) {
-      cb.addEventListener('change', function() {
-        if (this.checked) {
-          if (selectedMergeApps.indexOf(this.value) === -1) selectedMergeApps.push(this.value);
-        } else {
-          selectedMergeApps = selectedMergeApps.filter(function(x) { return x !== this.value; });
-        }
-      });
-    }
-  });
-  
-  document.getElementById('mergeResult').classList.add('hidden');
-  document.getElementById('mergeResultText').value = '';
-  openModal('mergeModal');
-}
-
-function mergeAndCopy() {
-  if (selectedMergeApps.length === 0) {
-    showToast('⚠️ Pilih minimal satu aplikasi yang memiliki code.', 'warning');
-    return;
-  }
-  
-  var apps = getApps();
-  var allCodes = [];
-  
-  selectedMergeApps.forEach(function(k) {
-    var a = apps[k];
-    if (a && a.codes) {
-      a.codes.forEach(function(c) {
-        if (c.content && c.content.trim()) {
-          allCodes.push({
-            appName: a.name,
-            codeName: c.name || 'Tanpa Nama',
-            content: c.content
-          });
-        }
-      });
-    }
-  });
-  
-  if (allCodes.length === 0) {
-    showToast('⚠️ Tidak ada code yang bisa digabung.', 'warning');
-    return;
-  }
-  
-  var html = '<!DOCTYPE html>\n<html lang="id">\n<head>\n<meta charset="UTF-8">\n<meta name="viewport" content="width=device-width, initial-scale=1.0">\n<title>Gabungan Code - Notepad+</title>\n<style>body{font-family:monospace;padding:20px;background:#0f0f1a;color:#fff;}.cb{margin-bottom:20px;border:1px solid #333;border-radius:8px;overflow:hidden;}.cb .h{background:#1a1a2e;padding:10px 16px;border-bottom:1px solid #333;display:flex;justify-content:space-between;}.cb .h .a{color:#6c5ce7;}.cb .h .n{color:#a0a0b0;}pre{margin:0;padding:16px;overflow-x:auto;font-size:13px;line-height:1.6;}.f{text-align:center;padding:20px;color:#6a6a7a;font-size:12px;border-top:1px solid #333;margin-top:20px;}</style>\n</head>\n<body>\n<h1>📝 Gabungan Code - Notepad+</h1>\n<p style="color:#a0a0b0;margin-bottom:20px;">Total ' + allCodes.length + ' code</p>\n';
-  
-  allCodes.forEach(function(c) {
-    html += '<div class="cb"><div class="h"><span class="a">📱 ' + escapeHtml(c.appName) + '</span><span class="n">📝 ' + escapeHtml(c.codeName) + '</span></div><pre>' + escapeHtml(c.content) + '</pre></div>\n';
-  });
-  
-  html += '<div class="f">Generated by Notepad+ v2.2<br>' + new Date().toLocaleString('id-ID') + '</div>\n</body>\n</html>';
-  
-  document.getElementById('mergeResultText').value = html;
-  document.getElementById('mergeTotalCode').textContent = allCodes.length;
-  document.getElementById('mergeResult').classList.remove('hidden');
-  showToast('✅ ' + allCodes.length + ' code berhasil digabung!', 'success');
-}
-
-function copyMergeResult() {
-  var t = document.getElementById('mergeResultText').value;
-  if (!t) {
-    showToast('⚠️ Tidak ada hasil untuk dicopy.', 'warning');
-    return;
-  }
-  
-  navigator.clipboard.writeText(t).then(function() {
-    showToast('✅ Berhasil dicopy ke clipboard!', 'success');
-  }).catch(function() {
-    showToast('⚠️ Gagal copy, coba lagi.', 'error');
-  });
-}
-
-function downloadMergeResult() {
-  var t = document.getElementById('mergeResultText').value;
-  if (!t) {
-    showToast('⚠️ Tidak ada hasil untuk didownload.', 'warning');
-    return;
-  }
-  
-  var blob = new Blob([t], { type: 'text/html' });
-  var url = URL.createObjectURL(blob);
-  var a = document.createElement('a');
-  a.href = url;
-  a.download = 'index_' + new Date().toISOString().slice(0, 10) + '.html';
-  document.body.appendChild(a);
-  a.click();
-  document.body.removeChild(a);
-  URL.revokeObjectURL(url);
-  showToast('📥 index.html berhasil didownload!', 'success');
-}
-
-// ===== CONFIRM ACTION =====
-function confirmAction() {
-  if (typeof window._confirmCallback === 'function') {
-    window._confirmCallback();
-  }
-}
-
-// ===== TOAST =====
-function showToast(msg, type) {
-  var container = document.getElementById('toastContainer');
-  if (!container) {
-    container = document.createElement('div');
-    container.id = 'toastContainer';
-    container.className = 'toast-container';
-    document.body.appendChild(container);
-  }
-  
-  var toast = document.createElement('div');
-  toast.className = 'toast toast-' + (type || 'info');
-  toast.textContent = msg;
-  container.appendChild(toast);
-  
-  setTimeout(function() { toast.classList.add('show'); }, 10);
-  
-  setTimeout(function() {
-    toast.classList.remove('show');
-    setTimeout(function() { toast.remove(); }, 300);
-  }, 3000);
-}
-
-// ===== MODAL FUNCTIONS =====
-function openModal(id) {
-  var m = document.getElementById(id);
-  if (m) {
-    m.classList.add('active');
-    m.style.display = 'flex';
-    document.body.style.overflow = 'hidden';
-  }
-}
-
-function closeModal(id) {
-  var m = document.getElementById(id);
-  if (m) {
-    m.classList.remove('active');
-    m.style.display = 'none';
-    document.body.style.overflow = '';
-  }
-}
-
-// Close modal on overlay click
-document.addEventListener('click', function(e) {
-  if (e.target.classList.contains('modal-overlay') && e.target.classList.contains('active')) {
-    e.target.classList.remove('active');
-    e.target.style.display = 'none';
-    document.body.style.overflow = '';
-  }
-});
-
-// Close modal on Escape key
-document.addEventListener('keydown', function(e) {
-  if (e.key === 'Escape') {
-    var modals = document.querySelectorAll('.modal-overlay.active');
-    modals.forEach(function(modal) {
-      modal.classList.remove('active');
-      modal.style.display = 'none';
-    });
-    document.body.style.overflow = '';
-  }
-});
-
-// ===== UTILS =====
-function escapeHtml(text) {
-  if (!text) return '';
-  var div = document.createElement('div');
-  div.textContent = text;
-  return div.innerHTML;
-}
-
-function copyToClipboard(text) {
-  navigator.clipboard.writeText(text).then(function() {
-    showToast('✅ Berhasil dicopy!', 'success');
-  }).catch(function() {
-    var textarea = document.createElement('textarea');
-    textarea.value = text;
-    textarea.style.position = 'fixed';
-    textarea.style.opacity = '0';
-    document.body.appendChild(textarea);
-    textarea.select();
-    document.execCommand('copy');
-    document.body.removeChild(textarea);
-    showToast('✅ Berhasil dicopy!', 'success');
-  });
-}
-
-function toggleTheme() {
-  document.body.classList.toggle('light-theme');
-  var isLight = document.body.classList.contains('light-theme');
-  var icon = isLight ? '☀️' : '🌙';
-  
-  var toggles = document.querySelectorAll('#themeToggle, #themeToggle2');
-  toggles.forEach(function(btn) {
-    btn.textContent = icon;
-  });
-}
-
-// ===== INIT =====
-function initApp() {
-  updateOnlineStatus();
-  updateUI();
-  renderApps();
-  updateWaDisplay();
-  
-  var session = getSession();
-  if (session) {
-    document.getElementById('landingContainer').classList.add('hidden');
-    document.getElementById('appContainer').classList.remove('hidden');
-  } else {
-    document.getElementById('landingContainer').classList.remove('hidden');
-    document.getElementById('appContainer').classList.add('hidden');
-  }
-  
-  console.log('✅ Notepad+ Code Storage v2.2 Ready!');
-  console.log('📊 Session:', session ? session.username : 'Guest');
-  console.log('📱 WA:', getWaNumber());
-  console.log('💡 Tips: Klik tombol Install untuk menjadikan aplikasi desktop!');
-}
-
-document.addEventListener('DOMContentLoaded', initApp);
-</script>
