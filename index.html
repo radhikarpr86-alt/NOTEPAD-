@@ -722,7 +722,7 @@
       <div class="form-error" id="profileError"></div>
       <div class="form-success" id="profileSuccess"></div>
       <hr style="border-color:var(--border-color);margin:20px 0;">
-      <button onclick="deleteAccount()" class="btn btn-danger btn-block">🗑 Hapus Akun Saya</button>
+      <button onclick="deleteAccount()" id="deleteAccountButton" class="btn btn-danger btn-block">🗑 Hapus Akun Saya</button>
     </div>
     <div class="modal-footer">
       <button onclick="closeModal('profileModal')" class="btn btn-gray">Tutup</button>
@@ -1026,7 +1026,7 @@
 <div id="toastContainer" class="toast-container"></div>
 
 </body>
-  <script>
+<script>
 // ============================================================
 // NOTEPAD+ CODE STORAGE v3.3 - COMPLETE JAVASCRIPT
 // ============================================================
@@ -1040,7 +1040,7 @@ if ('serviceWorker' in navigator) {
   `;
   var swBlob = new Blob([swCode], {type: 'application/javascript'});
   var swUrl = URL.createObjectURL(swBlob);
-  navigator.serviceWorker.register(swUrl).catch(()=>{});
+  navigator.serviceWorker.register(swUrl).catch(function(){});
 }
 
 // ---------- ENCRYPT / DECRYPT (SIMPLE BASE64) ----------
@@ -1101,7 +1101,8 @@ function formatWa(raw) {
 }
 function updateAllWaDisplays() {
   var f = formatWa(getWhatsapp());
-  ['whatsappNumberLanding','whatsappNumberApp'].forEach(function(id){
+  var ids = ['whatsappNumberLanding','whatsappNumberApp'];
+  ids.forEach(function(id){
     var el = document.getElementById(id); if(el) el.textContent = f;
   });
 }
@@ -1260,6 +1261,11 @@ function loadProfileData() {
   document.getElementById('editProfileNama').value = s.nama||'';
   document.getElementById('editProfileEmail').value = s.email||'';
   document.getElementById('editProfileHp').value = s.hp||'';
+  // SEMBUNYIKAN TOMBOL HAPUS AKUN JIKA SUPERADMIN
+  var delBtn = document.getElementById('deleteAccountButton');
+  if (delBtn) {
+    delBtn.style.display = (s.role === 'superadmin') ? 'none' : 'block';
+  }
 }
 function saveProfile() {
   var s = getSession(); if(!s) return;
@@ -1276,8 +1282,10 @@ function saveProfile() {
   updateHeaderUser(); setTimeout(function(){ closeModal('profileModal'); },1500);
 }
 function deleteAccount() {
+  // Jangan izinkan superadmin
+  var s = getSession();
+  if (!s || s.role === 'superadmin') return;
   showConfirm('Hapus Akun?','Semua data Anda akan hilang permanen.',function(){
-    var s = getSession(); if(!s) return;
     var users = getAllUsers().filter(function(x){return x.id!==s.id;}); saveAllUsers(users);
     var apps = getAllApps(); delete apps[s.id]; saveAllApps(apps);
     clearSession(); closeModal('profileModal'); goToLandingPage(); updateHeaderUser(); showToast('Akun dihapus.','warning');
@@ -1525,7 +1533,6 @@ function checkAllExpiredActivations() {
 function showSuperAdminPanel() {
   if(!getSession()||getSession().role!=='superadmin') return;
   openModal('superAdminModal');
-  // isi dropdown paket
   var sel = document.getElementById('adminActivationPackage'); sel.innerHTML='<option value="">-- Pilih Paket --</option>';
   getPackages().forEach(function(p){ sel.innerHTML += '<option value="'+p.id+'">'+p.name+' - Rp '+p.price+' ('+p.label+')</option>'; });
   switchAdminTab('codes');
@@ -1705,7 +1712,6 @@ function sendUserChat() {
   saveChatMessages(msgs); input.value=''; loadUserChat();
 }
 
-// Admin chat
 var adminChatTarget = null;
 function renderAdminChat() {
   var users = getAllUsers(); var html='<div class="admin-chat-user-list">';
@@ -1774,7 +1780,6 @@ window.addEventListener('online',updateOnlineStatus); window.addEventListener('o
 
 // ---------- INIT ----------
 (function init(){
-  // pastikan super admin selalu ada
   var users = getAllUsers();
   if(!users.find(function(u){return u.role==='superadmin';})) users.push(SUPER_ADMIN_DATA);
   saveAllUsers(users);
