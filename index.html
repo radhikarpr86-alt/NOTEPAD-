@@ -7,11 +7,13 @@
     <meta name="apple-mobile-web-app-capable" content="yes">
     <meta name="apple-mobile-web-app-status-bar-style" content="default">
     <meta name="apple-mobile-web-app-title" content="Notepad+ Code Storage">
-    <title>📝 Notepad+ Code Storage</title>
+    <title>📝 Notepad+ Code Storage v2.1</title>
     <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E%3Crect width='100' height='100' rx='20' fill='%230f0f1a'/%3E%3Ctext x='50' y='68' text-anchor='middle' font-size='60' fill='%23ffffff'%3E📝%3C/text%3E%3C/svg%3E">
     
     <style>
-        /* ===== CSS RESET ===== */
+        /* ============================================================ */
+        /* CSS LENGKAP (sama seperti sebelumnya)                       */
+        /* ============================================================ */
         * {
             box-sizing: border-box;
             margin: 0;
@@ -22,13 +24,7 @@
             vertical-align: baseline;
             -webkit-tap-highlight-color: transparent;
         }
-        html {
-            scroll-behavior: smooth;
-            -webkit-text-size-adjust: 100%;
-            font-size: 16px;
-            line-height: 1.6;
-            -webkit-font-smoothing: antialiased;
-        }
+        html { scroll-behavior: smooth; -webkit-text-size-adjust: 100%; font-size: 16px; line-height: 1.6; -webkit-font-smoothing: antialiased; }
         body {
             font-family: -apple-system, 'Segoe UI', Roboto, sans-serif;
             background: var(--bg-primary, #0f0f1a);
@@ -38,7 +34,6 @@
             overflow-x: hidden;
         }
         
-        /* ===== VARIABLES ===== */
         :root {
             --bg-primary: #0f0f1a;
             --bg-secondary: #1a1a2e;
@@ -92,7 +87,6 @@
         ::-webkit-scrollbar-thumb { background: var(--accent); border-radius: var(--radius-full); }
         * { scrollbar-width: thin; scrollbar-color: var(--accent) var(--bg-primary); }
         
-        /* ===== UTILITY ===== */
         .hidden { display: none !important; }
         .flex { display: flex; }
         .flex-center { display: flex; align-items: center; justify-content: center; }
@@ -130,23 +124,13 @@
         .overflow-y-auto { overflow-y: auto; }
         .truncate { overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
         
-        /* ===== ANIMATIONS ===== */
-        @keyframes fadeIn {
-            from { opacity: 0; }
-            to { opacity: 1; }
-        }
-        @keyframes slideUp {
-            from { opacity: 0; transform: translateY(20px); }
-            to { opacity: 1; transform: translateY(0); }
-        }
-        @keyframes spin {
-            to { transform: rotate(360deg); }
-        }
+        @keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
+        @keyframes slideUp { from { opacity: 0; transform: translateY(20px); } to { opacity: 1; transform: translateY(0); } }
+        @keyframes spin { to { transform: rotate(360deg); } }
         .animate-fade { animation: fadeIn var(--transition-base); }
         .animate-slide-up { animation: slideUp var(--transition-base); }
         .animate-spin { animation: spin 0.8s linear infinite; }
         
-        /* ===== BUTTON ===== */
         .btn {
             display: inline-flex;
             align-items: center;
@@ -361,7 +345,6 @@
             justify-content: flex-end;
         }
         
-        /* ===== LAYOUT ===== */
         .app-container { max-width: 900px; margin: 0 auto; padding: var(--spacing-4); min-height: 100vh; }
         .app-header {
             display: flex;
@@ -520,7 +503,80 @@
         .empty-state h3 { font-size: 1.2rem; color: var(--text-primary); margin-bottom: var(--spacing-2); }
         .empty-state p { color: var(--text-muted); max-width: 400px; margin: 0 auto var(--spacing-4); }
         
-        /* ===== RESPONSIVE ===== */
+        /* ===== WA INFO BANNER ===== */
+        .wa-info-banner {
+            background: linear-gradient(135deg, #25D366, #128C7E);
+            color: #fff;
+            padding: 12px 20px;
+            border-radius: var(--radius-md);
+            margin-bottom: var(--spacing-4);
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            flex-wrap: wrap;
+            gap: var(--spacing-2);
+            cursor: pointer;
+            transition: all var(--transition-base);
+            border: 2px solid transparent;
+        }
+        .wa-info-banner:hover {
+            transform: translateY(-2px);
+            box-shadow: var(--shadow-md);
+            border-color: rgba(255,255,255,0.3);
+        }
+        .wa-info-banner .wa-text {
+            display: flex;
+            align-items: center;
+            gap: var(--spacing-2);
+        }
+        .wa-info-banner .wa-text .icon { font-size: 1.8rem; }
+        .wa-info-banner .wa-text .label { font-weight: 600; font-size: 1rem; }
+        .wa-info-banner .wa-text .number { font-size: 1.1rem; font-weight: 700; }
+        .wa-info-banner .wa-arrow { font-size: 1.5rem; }
+        .wa-info-banner .wa-edit {
+            background: rgba(255,255,255,0.2);
+            border: none;
+            color: #fff;
+            padding: 4px 12px;
+            border-radius: var(--radius-full);
+            cursor: pointer;
+            font-size: 0.8rem;
+            transition: all var(--transition-base);
+        }
+        .wa-info-banner .wa-edit:hover {
+            background: rgba(255,255,255,0.3);
+        }
+        
+        /* ===== PAKET AKTIVASI ===== */
+        .package-card {
+            background: var(--bg-card);
+            border-radius: var(--radius);
+            padding: 16px;
+            text-align: center;
+            border: 2px solid transparent;
+            transition: all var(--transition-base);
+            cursor: pointer;
+            flex: 1;
+            min-width: 120px;
+        }
+        .package-card:hover { border-color: var(--accent); transform: translateY(-2px); }
+        .package-card.selected { border-color: var(--accent); background: var(--bg-active); }
+        .package-card .package-icon { font-size: 2rem; margin-bottom: 4px; }
+        .package-card .package-name { font-weight: 700; font-size: 1rem; }
+        .package-card .package-price { color: var(--success); font-weight: 700; font-size: 1.1rem; margin: 4px 0; }
+        .package-card .package-duration { font-size: 0.8rem; color: var(--text-secondary); }
+        .packages-grid { display: flex; gap: var(--spacing-3); flex-wrap: wrap; margin: 12px 0; }
+        
+        .premium-badge {
+            background: var(--accent);
+            color: #fff;
+            padding: 2px 10px;
+            border-radius: var(--radius-full);
+            font-size: 0.7rem;
+            font-weight: 600;
+            margin-left: var(--spacing-2);
+        }
+        
         @media (max-width: 640px) {
             .app-container { padding: var(--spacing-2); }
             .app-header { flex-direction: column; align-items: stretch; }
@@ -528,6 +584,8 @@
             .dashboard-stats { grid-template-columns: repeat(2, 1fr); }
             .modal-content { padding: var(--spacing-4); margin: var(--spacing-2); }
             .code-item .code-header { flex-direction: column; align-items: flex-start; }
+            .packages-grid { flex-direction: column; }
+            .wa-info-banner { flex-direction: column; align-items: stretch; text-align: center; }
         }
         @media (min-width: 641px) and (max-width: 768px) {
             .app-container { padding: var(--spacing-3); }
@@ -541,10 +599,11 @@
 
     <!-- ===== HEADER ===== -->
     <header class="app-header" id="appHeader">
-        <div class="logo">📝 <span>Notepad+ Code Storage</span></div>
+        <div class="logo">📝 <span>Notepad+ Code Storage v2.1</span></div>
         <div class="header-actions">
             <button onclick="toggleTheme()" id="themeToggle" title="Ganti Tema">🌙</button>
             <button onclick="showProfile()" id="profileBtn" title="Profil" style="display:none;">👤</button>
+            <button onclick="showAdminPanel()" id="adminBtn" title="Admin Panel" style="display:none;">⚙️</button>
             <div class="user-badge" id="userBadge" style="display:none;">
                 <div class="avatar" id="userAvatar">DB</div>
                 <span id="userName">DedeBintang</span>
@@ -552,6 +611,20 @@
             <button onclick="showLoginModal()" id="loginBtn" title="Login">🔐 Login</button>
         </div>
     </header>
+
+    <!-- ===== WA INFO BANNER ===== -->
+    <div class="wa-info-banner" id="waBanner" onclick="waClick()">
+        <div class="wa-text">
+            <span class="icon">💬</span>
+            <span class="label">📱 Aktivasi & Info:</span>
+            <span class="number" id="waNumberDisplay">081220285226</span>
+        </div>
+        <div style="display:flex;align-items:center;gap:var(--spacing-2);">
+            <span class="wa-arrow">👉</span>
+            <span style="font-size:0.9rem;opacity:0.8;">Klik untuk chat</span>
+            <button class="wa-edit" onclick="event.stopPropagation(); editWANumber()">✏️ Edit</button>
+        </div>
+    </div>
 
     <!-- ===== DASHBOARD STATS ===== -->
     <div class="dashboard-stats" id="dashboardStats">
@@ -567,6 +640,14 @@
             <div class="stat-number" id="totalStorage">0 KB</div>
             <div class="stat-label">💾 Total Penyimpanan</div>
         </div>
+        <div class="stat-card">
+            <div class="stat-number" id="totalUsers">0</div>
+            <div class="stat-label">👥 Total User</div>
+        </div>
+        <div class="stat-card" style="border-color:var(--accent);">
+            <div class="stat-number" id="premiumStatus">🆓</div>
+            <div class="stat-label">💎 Status</div>
+        </div>
     </div>
 
     <!-- ===== TOOLBAR ===== -->
@@ -576,7 +657,9 @@
         <button onclick="exportAllData()" class="btn btn-warning">📤 Export Semua</button>
         <button onclick="document.getElementById('importFileInput').click()" class="btn btn-info" style="background:var(--info);color:#fff;">📥 Import</button>
         <input type="file" id="importFileInput" accept=".json" style="display:none;" onchange="importAllData(this)">
-        <button onclick="showMergeModal()" class="btn btn-primary" style="background:var(--accent);">🔄 Gabung & Copy</button>
+        <button onclick="showMergeModal()" class="btn btn-primary" style="background:var(--accent);" id="mergeBtnMain">
+            🔄 Gabung & Copy <span class="premium-badge" id="mergeBadge">Premium</span>
+        </button>
     </div>
 
     <!-- ===== SEARCH BAR ===== -->
@@ -600,7 +683,7 @@
 </div>
 
 <!-- ============================================================ -->
-<!-- MODALS                                                       -->
+<!-- MODALS (sama seperti sebelumnya, ditambah modal edit WA)     -->
 <!-- ============================================================ -->
 
 <!-- ===== MODAL LOGIN ===== -->
@@ -612,8 +695,8 @@
         </div>
         <div class="modal-body">
             <div id="loginStatus" style="margin-bottom:12px;"><p style="color:var(--text-secondary);">Masukkan username dan password.</p></div>
-            <input type="text" id="loginUsername" placeholder="Username" value="DedeBintang">
-            <input type="password" id="loginPassword" placeholder="Password" value="MyHand0286">
+            <input type="text" id="loginUsername" placeholder="Username">
+            <input type="password" id="loginPassword" placeholder="Password">
             <button onclick="handleLogin()" class="btn btn-success btn-block">🔓 Login</button>
             <div id="loginError" class="hidden" style="color:var(--danger);margin-top:8px;font-size:13px;"></div>
             <div style="display:flex;justify-content:space-between;margin-top:12px;font-size:13px;">
@@ -663,8 +746,10 @@
             <button class="modal-close" onclick="closeModal('forgotPasswordModal')">✕</button>
         </div>
         <div class="modal-body">
-            <div id="forgotStatus" style="margin-bottom:12px;"><p style="color:var(--text-secondary);">Masukkan email terdaftar untuk reset password.</p></div>
-            <input type="email" id="forgotEmail" placeholder="Email Terdaftar *">
+            <div id="forgotStatus" style="margin-bottom:12px;"><p style="color:var(--text-secondary);">Masukkan data untuk verifikasi.</p></div>
+            <input type="text" id="forgotNama" placeholder="Nama Lengkap *">
+            <input type="email" id="forgotEmail" placeholder="Email *">
+            <input type="text" id="forgotHp" placeholder="No HP *">
             <button onclick="handleForgotPassword()" class="btn btn-warning btn-block">📧 Kirim Link Reset</button>
             <div id="forgotError" class="hidden" style="color:var(--danger);margin-top:8px;font-size:13px;"></div>
             <div id="forgotSuccess" class="hidden" style="color:var(--success);margin-top:8px;font-size:13px;"></div>
@@ -741,11 +826,183 @@
                 <input type="password" id="confirmNewPassword" placeholder="Konfirmasi Password Baru">
                 <button onclick="saveNewPassword()" class="btn btn-success btn-block">💾 Simpan Password</button>
                 <div id="passwordError" class="hidden" style="color:var(--danger);margin-top:8px;font-size:13px;"></div>
-                <div id="passwordSuccess" class="hidden" style="color:var(--success);margin-top:8px;font-size:13px;"></div>
+                <div id="passwordSuccess" class="hidden" style: color:var(--success);margin-top:8px;font-size:13px;"></div>
             </div>
         </div>
         <div class="modal-footer">
             <button onclick="closeModal('profileModal')" class="btn btn-gray">Tutup</button>
+        </div>
+    </div>
+</div>
+
+<!-- ===== MODAL EDIT WA NUMBER ===== -->
+<div class="modal-overlay" id="editWaModal">
+    <div class="modal-content" style="max-width:400px;">
+        <div class="modal-header">
+            <h3>✏️ Edit Nomor WA</h3>
+            <button class="modal-close" onclick="closeModal('editWaModal')">✕</button>
+        </div>
+        <div class="modal-body">
+            <p style="color:var(--text-secondary);margin-bottom:12px;">Edit nomor WhatsApp untuk aktivasi dan info.</p>
+            <div class="form-group">
+                <label class="form-label">Nomor WA</label>
+                <input type="text" id="editWaInput" placeholder="Contoh: 081234567890">
+            </div>
+            <div id="editWaError" class="hidden" style="color:var(--danger);margin-top:8px;font-size:13px;"></div>
+        </div>
+        <div class="modal-footer">
+            <button onclick="closeModal('editWaModal')" class="btn btn-gray">Batal</button>
+            <button onclick="saveWaNumber()" class="btn btn-success">💾 Simpan</button>
+        </div>
+    </div>
+</div>
+
+<!-- ===== MODAL ADMIN PANEL ===== -->
+<div class="modal-overlay" id="adminModal">
+    <div class="modal-content" style="max-width:550px;">
+        <div class="modal-header">
+            <h3>⚙️ Admin Panel</h3>
+            <button class="modal-close" onclick="closeModal('adminModal')">✕</button>
+        </div>
+        <div class="modal-body">
+            <!-- Paket Aktivasi -->
+            <h4 style="margin-bottom:12px;">💎 Paket Aktivasi</h4>
+            <div class="packages-grid" id="packagesGrid">
+                <div class="package-card" id="pkg1">
+                    <div class="package-icon">🥈</div>
+                    <div class="package-name">Basic</div>
+                    <div class="package-price" id="pkg1Price">Rp 25.000</div>
+                    <div class="package-duration" id="pkg1Duration">1 Bulan</div>
+                    <input type="hidden" id="pkg1Id" value="1bulan">
+                </div>
+                <div class="package-card" id="pkg2">
+                    <div class="package-icon">🥇</div>
+                    <div class="package-name">Premium</div>
+                    <div class="package-price" id="pkg2Price">Rp 50.000</div>
+                    <div class="package-duration" id="pkg2Duration">3 Bulan</div>
+                    <input type="hidden" id="pkg2Id" value="3bulan">
+                </div>
+                <div class="package-card" id="pkg3">
+                    <div class="package-icon">👑</div>
+                    <div class="package-name">Enterprise</div>
+                    <div class="package-price" id="pkg3Price">Rp 75.000</div>
+                    <div class="package-duration" id="pkg3Duration">6 Bulan</div>
+                    <input type="hidden" id="pkg3Id" value="6bulan">
+                </div>
+            </div>
+            
+            <div style="display:flex;gap:var(--spacing-2);flex-wrap:wrap;margin-bottom:16px;">
+                <button onclick="editPackage(1)" class="btn btn-sm btn-warning">✏️ Edit Paket 1</button>
+                <button onclick="editPackage(2)" class="btn btn-sm btn-warning">✏️ Edit Paket 2</button>
+                <button onclick="editPackage(3)" class="btn btn-sm btn-warning">✏️ Edit Paket 3</button>
+            </div>
+            
+            <!-- Edit WA Number -->
+            <div style="border-top:1px solid var(--border-color);padding-top:16px;margin-top:8px;">
+                <h4 style="margin-bottom:12px;">📱 Edit Nomor WA</h4>
+                <div style="display:flex;gap:var(--spacing-2);flex-wrap:wrap;align-items:center;">
+                    <span style="font-size:0.9rem;color:var(--text-secondary);">Nomor saat ini:</span>
+                    <span style="font-weight:600;color:var(--success);" id="adminWaDisplay">081220285226</span>
+                    <button onclick="closeModal('adminModal');editWANumber()" class="btn btn-sm btn-warning">✏️ Edit</button>
+                </div>
+            </div>
+            
+            <!-- Kirim Aktivasi -->
+            <div style="border-top:1px solid var(--border-color);padding-top:16px;margin-top:8px;">
+                <h4 style="margin-bottom:12px;">📤 Kirim Link & Kode Aktivasi</h4>
+                <div class="form-group">
+                    <label class="form-label">Username/Email User</label>
+                    <input type="text" id="aktivasiUser" placeholder="Masukkan username atau email user">
+                </div>
+                <div class="form-group">
+                    <label class="form-label">Pilih Paket</label>
+                    <select id="aktivasiPaket">
+                        <option value="1bulan">1 Bulan - Rp 25.000</option>
+                        <option value="3bulan">3 Bulan - Rp 50.000</option>
+                        <option value="6bulan">6 Bulan - Rp 75.000</option>
+                    </select>
+                </div>
+                <button onclick="kirimAktivasi()" class="btn btn-success btn-block">📤 Kirim Link & Kode Aktivasi</button>
+                <div id="aktivasiResult" class="hidden" style="margin-top:8px;"></div>
+            </div>
+            
+            <!-- Daftar User -->
+            <div style="border-top:1px solid var(--border-color);padding-top:16px;margin-top:8px;">
+                <h4 style="margin-bottom:12px;">👥 Daftar User</h4>
+                <div id="userListAdmin" style="max-height:200px;overflow-y:auto;"></div>
+            </div>
+        </div>
+        <div class="modal-footer">
+            <button onclick="closeModal('adminModal')" class="btn btn-gray">Tutup</button>
+        </div>
+    </div>
+</div>
+
+<!-- ===== MODAL EDIT PAKET ===== -->
+<div class="modal-overlay" id="editPackageModal">
+    <div class="modal-content" style="max-width:400px;">
+        <div class="modal-header">
+            <h3 id="editPkgTitle">✏️ Edit Paket</h3>
+            <button class="modal-close" onclick="closeModal('editPackageModal')">✕</button>
+        </div>
+        <div class="modal-body">
+            <input type="hidden" id="editPkgIndex">
+            <div class="form-group">
+                <label class="form-label">Nama Paket</label>
+                <input type="text" id="editPkgName" placeholder="Nama Paket">
+            </div>
+            <div class="form-group">
+                <label class="form-label">Harga (Rp)</label>
+                <input type="number" id="editPkgPrice" placeholder="Harga">
+            </div>
+            <div class="form-group">
+                <label class="form-label">Durasi</label>
+                <input type="text" id="editPkgDuration" placeholder="Contoh: 1 Bulan">
+            </div>
+            <div id="editPkgError" class="hidden" style="color:var(--danger);margin-top:8px;font-size:13px;"></div>
+        </div>
+        <div class="modal-footer">
+            <button onclick="closeModal('editPackageModal')" class="btn btn-gray">Batal</button>
+            <button onclick="savePackageEdit()" class="btn btn-success">💾 Simpan</button>
+        </div>
+    </div>
+</div>
+
+<!-- ===== MODAL GABUNG & COPY ===== -->
+<div class="modal-overlay" id="mergeModal">
+    <div class="modal-content" style="max-width:650px;">
+        <div class="modal-header">
+            <h3>🔄 Gabung & Copy Semua Code</h3>
+            <button class="modal-close" onclick="closeModal('mergeModal')">✕</button>
+        </div>
+        <div class="modal-body">
+            <div style="margin-bottom:12px;">
+                <p style="color:var(--text-secondary);">Semua code dari semua aplikasi akan digabung menjadi 1 file <strong>index.html</strong> lengkap.</p>
+                <p style="color:var(--warning);font-size:0.9rem;margin-top:4px;">🔒 Fitur ini hanya untuk pengguna <strong>Premium</strong>.</p>
+            </div>
+            <div class="form-group">
+                <label class="form-label">Pilih Aplikasi yang Digabung</label>
+                <div id="mergeAppList" style="display:flex;flex-wrap:wrap;gap:8px;padding:8px 0;"></div>
+            </div>
+            <button onclick="mergeAndCopy()" class="btn btn-success btn-block" id="mergeBtn">
+                🔄 Gabung & Copy ke Clipboard <span class="premium-badge">Premium</span>
+            </button>
+            <div id="mergeResult" class="hidden" style="margin-top:12px;">
+                <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:8px;">
+                    <span style="font-weight:600;">📄 Hasil index.html</span>
+                    <div style="display:flex;gap:6px;">
+                        <button onclick="copyMergeResult()" class="btn btn-sm btn-primary">📋 Copy</button>
+                        <button onclick="downloadMergeResult()" class="btn btn-sm btn-success">📥 Download</button>
+                    </div>
+                </div>
+                <textarea id="mergeResultText" readonly style="font-family:'Courier New',monospace;font-size:0.85rem;min-height:300px;background:var(--bg-primary);color:var(--text-primary);border:1px solid var(--accent);"></textarea>
+                <div style="margin-top:8px;font-size:0.8rem;color:var(--text-muted);">
+                    💡 Total: <span id="mergeTotalCode">0</span> code tergabung
+                </div>
+            </div>
+        </div>
+        <div class="modal-footer">
+            <button onclick="closeModal('mergeModal')" class="btn btn-gray">Tutup</button>
         </div>
     </div>
 </div>
@@ -804,42 +1061,6 @@
     </div>
 </div>
 
-<!-- ===== MODAL GABUNG & COPY ===== -->
-<div class="modal-overlay" id="mergeModal">
-    <div class="modal-content" style="max-width:650px;">
-        <div class="modal-header">
-            <h3>🔄 Gabung & Copy Semua Code</h3>
-            <button class="modal-close" onclick="closeModal('mergeModal')">✕</button>
-        </div>
-        <div class="modal-body">
-            <div style="margin-bottom:12px;">
-                <p style="color:var(--text-secondary);">Semua code dari semua aplikasi akan digabung menjadi 1 file <strong>index.html</strong> lengkap.</p>
-            </div>
-            <div class="form-group">
-                <label class="form-label">Pilih Aplikasi yang Digabung</label>
-                <div id="mergeAppList" style="display:flex;flex-wrap:wrap;gap:8px;padding:8px 0;"></div>
-            </div>
-            <button onclick="mergeAndCopy()" class="btn btn-success btn-block" id="mergeBtn">🔄 Gabung & Copy ke Clipboard</button>
-            <div id="mergeResult" class="hidden" style="margin-top:12px;">
-                <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:8px;">
-                    <span style="font-weight:600;">📄 Hasil index.html</span>
-                    <div style="display:flex;gap:6px;">
-                        <button onclick="copyMergeResult()" class="btn btn-sm btn-primary">📋 Copy</button>
-                        <button onclick="downloadMergeResult()" class="btn btn-sm btn-success">📥 Download</button>
-                    </div>
-                </div>
-                <textarea id="mergeResultText" readonly style="font-family:'Courier New',monospace;font-size:0.85rem;min-height:300px;background:var(--bg-primary);color:var(--text-primary);border:1px solid var(--accent);"></textarea>
-                <div style="margin-top:8px;font-size:0.8rem;color:var(--text-muted);">
-                    💡 Total: <span id="mergeTotalCode">0</span> code tergabung
-                </div>
-            </div>
-        </div>
-        <div class="modal-footer">
-            <button onclick="closeModal('mergeModal')" class="btn btn-gray">Tutup</button>
-        </div>
-    </div>
-</div>
-
 <!-- ===== MODAL KONFIRMASI ===== -->
 <div class="modal-overlay" id="confirmModal">
     <div class="modal-content" style="max-width:380px;">
@@ -876,61 +1097,103 @@
     // 1. DATA DEFAULT                                              */
     // ============================================================ */
     
-    const ADMIN_USER = {
-        username: 'DedeBintang',
-        password: 'MyHand0286',
-        nama: 'Dede Bintang',
-        email: 'dede@notepad.com',
-        hp: '081220285126',
+    const SUPER_ADMIN = {
+        username: 'superadmin',
+        password: 'admin123',
+        nama: 'NOTEPAD+',
+        email: 'dedesugiono.ai@gmail.com',
+        hp: '081220285226',
         role: 'superadmin'
     };
+    
+    const DEFAULT_PACKAGES = [
+        { id: '1bulan', name: 'Basic', price: 25000, duration: '1 Bulan', icon: '🥈' },
+        { id: '3bulan', name: 'Premium', price: 50000, duration: '3 Bulan', icon: '🥇' },
+        { id: '6bulan', name: 'Enterprise', price: 75000, duration: '6 Bulan', icon: '👑' }
+    ];
+    
+    const DEFAULT_WA_NUMBER = '081220285226';
     
     // ============================================================ */
     // 2. STORAGE FUNCTIONS                                         */
     // ============================================================ */
     
     function getUsers() {
-        try {
-            return JSON.parse(localStorage.getItem('notepad_users') || '[]');
-        } catch (e) {
-            return [];
-        }
+        try { return JSON.parse(localStorage.getItem('notepad_users') || '[]'); } catch(e) { return []; }
     }
-    
-    function saveUsers(users) {
-        localStorage.setItem('notepad_users', JSON.stringify(users));
-    }
+    function saveUsers(users) { localStorage.setItem('notepad_users', JSON.stringify(users)); }
     
     function getApps() {
-        try {
-            return JSON.parse(localStorage.getItem('notepad_apps') || '{}');
-        } catch (e) {
-            return {};
-        }
+        try { return JSON.parse(localStorage.getItem('notepad_apps') || '{}'); } catch(e) { return {}; }
     }
+    function saveApps(apps) { localStorage.setItem('notepad_apps', JSON.stringify(apps)); }
     
-    function saveApps(apps) {
-        localStorage.setItem('notepad_apps', JSON.stringify(apps));
+    function getPackages() {
+        try { return JSON.parse(localStorage.getItem('notepad_packages') || JSON.stringify(DEFAULT_PACKAGES)); } catch(e) { return DEFAULT_PACKAGES; }
     }
+    function savePackages(pkgs) { localStorage.setItem('notepad_packages', JSON.stringify(pkgs)); }
+    
+    function getWaNumber() {
+        try { return localStorage.getItem('notepad_wa_number') || DEFAULT_WA_NUMBER; } catch(e) { return DEFAULT_WA_NUMBER; }
+    }
+    function saveWaNumber(number) { localStorage.setItem('notepad_wa_number', number); }
     
     function getSession() {
-        try {
-            return JSON.parse(localStorage.getItem('notepad_session') || 'null');
-        } catch (e) {
-            return null;
+        try { return JSON.parse(localStorage.getItem('notepad_session') || 'null'); } catch(e) { return null; }
+    }
+    function saveSession(session) { localStorage.setItem('notepad_session', JSON.stringify(session)); }
+    function clearSession() { localStorage.removeItem('notepad_session'); }
+    
+    // ============================================================ */
+    // 3. WA FUNCTIONS                                              */
+    // ============================================================ */
+    
+    function waClick() {
+        var number = getWaNumber();
+        var cleanNumber = number.replace(/[^0-9]/g, '');
+        window.open('https://wa.me/' + cleanNumber, '_blank');
+    }
+    
+    function editWANumber() {
+        var current = getWaNumber();
+        document.getElementById('editWaInput').value = current;
+        document.getElementById('editWaError').classList.add('hidden');
+        openModal('editWaModal');
+    }
+    
+    function saveWaNumber() {
+        var number = document.getElementById('editWaInput').value.trim();
+        var error = document.getElementById('editWaError');
+        error.classList.add('hidden');
+        
+        if (!number) {
+            error.textContent = 'Masukkan nomor WA.';
+            error.classList.remove('hidden');
+            return;
         }
+        
+        var cleanNumber = number.replace(/[^0-9]/g, '');
+        if (cleanNumber.length < 10) {
+            error.textContent = 'Nomor WA minimal 10 digit.';
+            error.classList.remove('hidden');
+            return;
+        }
+        
+        saveWaNumber(cleanNumber);
+        document.getElementById('waNumberDisplay').textContent = cleanNumber;
+        document.getElementById('adminWaDisplay').textContent = cleanNumber;
+        closeModal('editWaModal');
+        showToast('✅ Nomor WA berhasil diupdate!', 'success');
     }
     
-    function saveSession(session) {
-        localStorage.setItem('notepad_session', JSON.stringify(session));
-    }
-    
-    function clearSession() {
-        localStorage.removeItem('notepad_session');
+    function updateWaDisplay() {
+        var number = getWaNumber();
+        document.getElementById('waNumberDisplay').textContent = number;
+        document.getElementById('adminWaDisplay').textContent = number;
     }
     
     // ============================================================ */
-    // 3. AUTH FUNCTIONS                                            */
+    // 4. AUTH FUNCTIONS (sama seperti sebelumnya)                  */
     // ============================================================ */
     
     function handleLogin() {
@@ -945,19 +1208,20 @@
             return;
         }
         
-        if (username === ADMIN_USER.username && password === ADMIN_USER.password) {
+        if (username === SUPER_ADMIN.username && password === SUPER_ADMIN.password) {
             var session = {
-                username: ADMIN_USER.username,
-                nama: ADMIN_USER.nama,
-                email: ADMIN_USER.email,
-                hp: ADMIN_USER.hp,
-                role: 'superadmin'
+                username: SUPER_ADMIN.username,
+                nama: SUPER_ADMIN.nama,
+                email: SUPER_ADMIN.email,
+                hp: SUPER_ADMIN.hp,
+                role: 'superadmin',
+                isPremium: true
             };
             saveSession(session);
             closeModal('loginModal');
             updateUI();
             renderApps();
-            showToast('👑 Selamat datang Admin ' + ADMIN_USER.nama + '!', 'success');
+            showToast('👑 Selamat datang Super Admin ' + SUPER_ADMIN.nama + '!', 'success');
             return;
         }
         
@@ -983,7 +1247,8 @@
             nama: user.nama,
             email: user.email,
             hp: user.hp || '',
-            role: 'user'
+            role: 'user',
+            isPremium: user.isActivated || false
         };
         saveSession(session);
         closeModal('loginModal');
@@ -1028,6 +1293,7 @@
             password: password,
             role: 'user',
             isVerified: false,
+            isActivated: false,
             registeredAt: Date.now()
         };
         
@@ -1052,42 +1318,52 @@
     }
     
     function handleForgotPassword() {
+        var nama = document.getElementById('forgotNama').value.trim();
         var email = document.getElementById('forgotEmail').value.trim();
+        var hp = document.getElementById('forgotHp').value.trim();
         var error = document.getElementById('forgotError');
         var success = document.getElementById('forgotSuccess');
         
         error.classList.add('hidden');
         success.classList.add('hidden');
         
-        if (!email) {
-            error.textContent = 'Masukkan email terdaftar.';
+        if (!nama || !email || !hp) {
+            error.textContent = 'Masukkan Nama, Email, dan No HP terdaftar.';
             error.classList.remove('hidden');
             return;
         }
         
-        var users = getUsers();
-        var user = users.find(function(u) { return u.email === email; });
+        if (nama === SUPER_ADMIN.nama && email === SUPER_ADMIN.email && hp === SUPER_ADMIN.hp) {
+            var resetToken = 'reset_' + Date.now() + '_' + Math.random().toString(36).substr(2, 8);
+            localStorage.setItem('admin_reset_token', resetToken);
+            localStorage.setItem('admin_reset_expiry', Date.now() + (24 * 60 * 60 * 1000));
+            success.textContent = '📧 Link reset password telah dikirim ke ' + email;
+            success.classList.remove('hidden');
+            showToast('📧 Cek email untuk link reset password.', 'success');
+            return;
+        }
         
-        if (!user && email !== ADMIN_USER.email) {
-            error.textContent = 'Email tidak ditemukan.';
+        var users = getUsers();
+        var user = users.find(function(u) {
+            return u.nama === nama && u.email === email && u.hp === hp;
+        });
+        
+        if (!user) {
+            error.textContent = 'Data tidak cocok dengan yang terdaftar.';
             error.classList.remove('hidden');
             return;
         }
         
         var resetToken = 'reset_' + Date.now() + '_' + Math.random().toString(36).substr(2, 8);
-        
-        if (email === ADMIN_USER.email) {
-            localStorage.setItem('admin_reset_token', resetToken);
-            localStorage.setItem('admin_reset_expiry', Date.now() + (24 * 60 * 60 * 1000));
-        } else {
-            user.resetToken = resetToken;
-            user.resetExpiry = Date.now() + (24 * 60 * 60 * 1000);
-            saveUsers(users);
-        }
+        user.resetToken = resetToken;
+        user.resetExpiry = Date.now() + (24 * 60 * 60 * 1000);
+        saveUsers(users);
         
         success.textContent = '📧 Link reset password telah dikirim ke ' + email;
         success.classList.remove('hidden');
+        document.getElementById('forgotNama').value = '';
         document.getElementById('forgotEmail').value = '';
+        document.getElementById('forgotHp').value = '';
         showToast('📧 Cek email untuk link reset password.', 'success');
     }
     
@@ -1124,7 +1400,7 @@
             var adminToken = localStorage.getItem('admin_reset_token');
             var adminExpiry = localStorage.getItem('admin_reset_expiry');
             if (token === adminToken && adminExpiry && parseInt(adminExpiry) > Date.now()) {
-                ADMIN_USER.password = newPass;
+                SUPER_ADMIN.password = newPass;
                 localStorage.removeItem('admin_reset_token');
                 localStorage.removeItem('admin_reset_expiry');
             } else {
@@ -1143,7 +1419,7 @@
     }
     
     // ============================================================ */
-    // 4. PROFILE FUNCTIONS                                         */
+    // 5. PROFILE FUNCTIONS                                         */
     // ============================================================ */
     
     function showProfile() {
@@ -1188,9 +1464,9 @@
         }
         
         if (session.role === 'superadmin') {
-            ADMIN_USER.nama = nama;
-            ADMIN_USER.email = email;
-            ADMIN_USER.hp = hp;
+            SUPER_ADMIN.nama = nama;
+            SUPER_ADMIN.email = email;
+            SUPER_ADMIN.hp = hp;
             session.nama = nama;
             session.email = email;
             session.hp = hp;
@@ -1243,7 +1519,7 @@
         success.classList.add('hidden');
         
         if (session.role === 'superadmin') {
-            if (oldPass !== ADMIN_USER.password) {
+            if (oldPass !== SUPER_ADMIN.password) {
                 error.textContent = 'Password lama salah.';
                 error.classList.remove('hidden');
                 return;
@@ -1253,7 +1529,7 @@
                 error.classList.remove('hidden');
                 return;
             }
-            ADMIN_USER.password = newPass;
+            SUPER_ADMIN.password = newPass;
         } else {
             var users = getUsers();
             var user = users.find(function(u) { return u.username === session.username; });
@@ -1299,6 +1575,8 @@
         var userName = document.getElementById('userName');
         var userAvatar = document.getElementById('userAvatar');
         var profileBtn = document.getElementById('profileBtn');
+        var adminBtn = document.getElementById('adminBtn');
+        var premiumStatus = document.getElementById('premiumStatus');
         
         if (session) {
             loginBtn.textContent = '🚪 Logout';
@@ -1307,23 +1585,219 @@
             userName.textContent = session.nama || session.username;
             userAvatar.textContent = (session.nama || session.username).charAt(0).toUpperCase();
             profileBtn.style.display = 'inline-flex';
+            if (session.role === 'superadmin') {
+                adminBtn.style.display = 'inline-flex';
+            } else {
+                adminBtn.style.display = 'none';
+            }
+            if (session.isPremium) {
+                premiumStatus.textContent = '💎 Premium';
+                premiumStatus.style.color = 'var(--success)';
+            } else {
+                premiumStatus.textContent = '🆓 Gratis';
+                premiumStatus.style.color = 'var(--warning)';
+            }
         } else {
             loginBtn.textContent = '🔐 Login';
             loginBtn.onclick = function() { showLoginModal(); };
             userBadge.style.display = 'none';
             profileBtn.style.display = 'none';
+            adminBtn.style.display = 'none';
+            premiumStatus.textContent = '🆓';
+            premiumStatus.style.color = 'var(--text-muted)';
         }
     }
     
     function showLoginModal() {
         document.getElementById('loginError').classList.add('hidden');
-        document.getElementById('loginUsername').value = 'DedeBintang';
-        document.getElementById('loginPassword').value = 'MyHand0286';
+        document.getElementById('loginUsername').value = '';
+        document.getElementById('loginPassword').value = '';
         openModal('loginModal');
     }
     
+    function showAdminPanel() {
+        var session = getSession();
+        if (!session || session.role !== 'superadmin') {
+            showToast('⚠️ Hanya Super Admin yang bisa mengakses.', 'warning');
+            return;
+        }
+        renderPackages();
+        renderUserList();
+        updateWaDisplay();
+        openModal('adminModal');
+    }
+    
     // ============================================================ */
-    // 5. CRUD APLIKASI                                             */
+    // 6. PACKAGE FUNCTIONS                                         */
+    // ============================================================ */
+    
+    function renderPackages() {
+        var pkgs = getPackages();
+        var pkgData = [
+            { id: 'pkg1', nameId: 'pkg1Name', priceId: 'pkg1Price', durationId: 'pkg1Duration' },
+            { id: 'pkg2', nameId: 'pkg2Name', priceId: 'pkg2Price', durationId: 'pkg2Duration' },
+            { id: 'pkg3', nameId: 'pkg3Name', priceId: 'pkg3Price', durationId: 'pkg3Duration' }
+        ];
+        
+        pkgs.forEach(function(pkg, index) {
+            if (index < pkgData.length) {
+                var data = pkgData[index];
+                document.getElementById(data.nameId).textContent = pkg.name || 'Paket';
+                document.getElementById(data.priceId).textContent = 'Rp ' + (pkg.price || 0).toLocaleString('id-ID');
+                document.getElementById(data.durationId).textContent = pkg.duration || '-';
+            }
+        });
+    }
+    
+    function editPackage(index) {
+        var pkgs = getPackages();
+        var pkg = pkgs[index - 1];
+        if (!pkg) {
+            showToast('⚠️ Paket tidak ditemukan.', 'warning');
+            return;
+        }
+        
+        document.getElementById('editPkgIndex').value = index - 1;
+        document.getElementById('editPkgName').value = pkg.name || '';
+        document.getElementById('editPkgPrice').value = pkg.price || 0;
+        document.getElementById('editPkgDuration').value = pkg.duration || '';
+        document.getElementById('editPkgError').classList.add('hidden');
+        document.getElementById('editPkgTitle').textContent = '✏️ Edit Paket ' + index;
+        openModal('editPackageModal');
+    }
+    
+    function savePackageEdit() {
+        var idx = parseInt(document.getElementById('editPkgIndex').value);
+        var name = document.getElementById('editPkgName').value.trim();
+        var price = parseInt(document.getElementById('editPkgPrice').value) || 0;
+        var duration = document.getElementById('editPkgDuration').value.trim();
+        var error = document.getElementById('editPkgError');
+        
+        error.classList.add('hidden');
+        
+        if (!name || price <= 0 || !duration) {
+            error.textContent = 'Lengkapi semua data dengan benar.';
+            error.classList.remove('hidden');
+            return;
+        }
+        
+        var pkgs = getPackages();
+        if (idx >= 0 && idx < pkgs.length) {
+            pkgs[idx].name = name;
+            pkgs[idx].price = price;
+            pkgs[idx].duration = duration;
+            savePackages(pkgs);
+            closeModal('editPackageModal');
+            renderPackages();
+            showToast('✅ Paket berhasil diupdate!', 'success');
+        }
+    }
+    
+    // ============================================================ */
+    // 7. KIRIM AKTIVASI                                            */
+    // ============================================================ */
+    
+    function kirimAktivasi() {
+        var userInput = document.getElementById('aktivasiUser').value.trim();
+        var paket = document.getElementById('aktivasiPaket').value;
+        var result = document.getElementById('aktivasiResult');
+        
+        result.classList.add('hidden');
+        
+        if (!userInput) {
+            showToast('⚠️ Masukkan username atau email user.', 'warning');
+            return;
+        }
+        
+        var users = getUsers();
+        var user = users.find(function(u) {
+            return u.username === userInput || u.email === userInput;
+        });
+        
+        if (!user) {
+            result.classList.remove('hidden');
+            result.innerHTML = '<div style="color:var(--danger);">❌ User tidak ditemukan.</div>';
+            return;
+        }
+        
+        var pkgs = getPackages();
+        var pkg = pkgs.find(function(p) { return p.id === paket; });
+        var pkgName = pkg ? pkg.name : paket;
+        var pkgPrice = pkg ? pkg.price : 0;
+        
+        var kodeAktivasi = 'ACT-' + user.id.substring(0, 6) + '-' + Date.now().toString(36).toUpperCase();
+        
+        user.activationCode = kodeAktivasi;
+        user.activationPackage = paket;
+        user.activationSent = Date.now();
+        user.isActivated = false;
+        saveUsers(users);
+        
+        var waNumber = getWaNumber();
+        
+        result.classList.remove('hidden');
+        result.innerHTML = `
+            <div style="color:var(--success);padding:12px;background:var(--bg-card);border-radius:var(--radius);">
+                <p><strong>✅ Aktivasi dikirim!</strong></p>
+                <p><strong>User:</strong> ${escapeHtml(user.nama)} (${escapeHtml(user.username)})</p>
+                <p><strong>Paket:</strong> ${escapeHtml(pkgName)} - Rp ${pkgPrice.toLocaleString('id-ID')}</p>
+                <p><strong>Kode Aktivasi:</strong> <code style="background:var(--bg-primary);padding:2px 8px;border-radius:4px;font-size:0.9rem;">${kodeAktivasi}</code></p>
+                <p style="font-size:0.8rem;color:var(--text-muted);margin-top:4px;">📧 Link dan kode aktivasi telah dikirim ke ${escapeHtml(user.email)}</p>
+                <p style="font-size:0.8rem;color:var(--text-muted);">💬 WA: <a href="https://wa.me/${waNumber}" target="_blank" style="color:var(--success);">${waNumber}</a></p>
+                <button onclick="copyToClipboard('${kodeAktivasi}')" class="btn btn-sm btn-primary" style="margin-top:6px;">📋 Copy Kode</button>
+            </div>
+        `;
+        
+        showToast('📤 Link dan kode aktivasi dikirim ke ' + user.nama, 'success');
+        document.getElementById('aktivasiUser').value = '';
+    }
+    
+    function copyToClipboard(text) {
+        navigator.clipboard.writeText(text).then(function() {
+            showToast('✅ Kode berhasil dicopy!', 'success');
+        }).catch(function() {
+            var textarea = document.createElement('textarea');
+            textarea.value = text;
+            document.body.appendChild(textarea);
+            textarea.select();
+            document.execCommand('copy');
+            document.body.removeChild(textarea);
+            showToast('✅ Kode berhasil dicopy!', 'success');
+        });
+    }
+    
+    // ============================================================ */
+    // 8. USER LIST                                                 */
+    // ============================================================ */
+    
+    function renderUserList() {
+        var users = getUsers();
+        var container = document.getElementById('userListAdmin');
+        if (users.length === 0) {
+            container.innerHTML = '<p style="color:var(--text-muted);font-size:0.9rem;">Belum ada user terdaftar.</p>';
+            return;
+        }
+        
+        var html = '<div style="display:grid;gap:4px;">';
+        users.forEach(function(user) {
+            var status = user.isVerified ? '✅' : '⏳';
+            var activated = user.isActivated ? '💎' : '🔓';
+            html += `
+                <div style="display:flex;justify-content:space-between;padding:6px 10px;background:var(--bg-card);border-radius:var(--radius-sm);font-size:0.85rem;align-items:center;flex-wrap:wrap;gap:4px;">
+                    <span>${escapeHtml(user.nama)} (@${escapeHtml(user.username)})</span>
+                    <span>${status} ${activated}</span>
+                    ${user.activationCode ? `<span style="font-size:0.7rem;color:var(--text-muted);">Kode: ${user.activationCode}</span>` : ''}
+                </div>
+            `;
+        });
+        html += '</div>';
+        container.innerHTML = html;
+        
+        document.getElementById('totalUsers').textContent = users.length;
+    }
+    
+    // ============================================================ */
+    // 9. CRUD APLIKASI (sama seperti sebelumnya)                   */
     // ============================================================ */
     
     function renderApps() {
@@ -1363,6 +1837,8 @@
                              storageSize < 1048576 ? (storageSize / 1024).toFixed(1) + ' KB' : 
                              (storageSize / 1048576).toFixed(1) + ' MB';
         document.getElementById('totalStorage').textContent = storageDisplay;
+        
+        renderUserList();
         
         if (appKeys.length === 0) {
             emptyState.style.display = 'block';
@@ -1445,6 +1921,10 @@
         });
         return html;
     }
+    
+    // ============================================================ */
+    // 10. CRUD CODE FUNCTIONS                                      */
+    // ============================================================ */
     
     function showAddAppModal() {
         var session = getSession();
@@ -1544,10 +2024,6 @@
         }
     }
     
-    // ============================================================ */
-    // 6. CRUD CODE                                                 */
-    // ============================================================ */
-    
     function addCodeToApp(appId) {
         var apps = getApps();
         var app = apps[appId];
@@ -1571,7 +2047,7 @@
         
         error.classList.add('hidden');
         if (!appId || !name || !content) {
-            error.textContent = 'Lengkapi semua data.';
+            error.textContent = 'Lengkapi semua数据.';
             error.classList.remove('hidden');
             return;
         }
@@ -1688,7 +2164,7 @@
     }
     
     // ============================================================ */
-    // 7. SEARCH FUNCTIONS                                          */
+    // 11. SEARCH FUNCTIONS                                         */
     // ============================================================ */
     
     var confirmAction = null;
@@ -1778,7 +2254,7 @@
     }
     
     // ============================================================ */
-    // 8. EXPORT & IMPORT                                           */
+    // 12. EXPORT & IMPORT                                           */
     // ============================================================ */
     
     function exportAllData() {
@@ -1789,11 +2265,15 @@
         }
         
         var apps = getApps();
+        var pkgs = getPackages();
+        var waNumber = getWaNumber();
         var data = {
             exportedAt: new Date().toISOString(),
             user: session.username,
             apps: apps,
-            version: '1.0'
+            packages: pkgs,
+            waNumber: waNumber,
+            version: '2.1'
         };
         
         var json = JSON.stringify(data, null, 2);
@@ -1801,7 +2281,7 @@
         var url = URL.createObjectURL(blob);
         var a = document.createElement('a');
         a.href = url;
-        a.download = 'Notepad_Backup_' + new Date().toISOString().slice(0, 10) + '.json';
+        a.download = 'Notepad_Backup_v2.1_' + new Date().toISOString().slice(0, 10) + '.json';
         document.body.appendChild(a);
         a.click();
         document.body.removeChild(a);
@@ -1830,8 +2310,15 @@
                 
                 confirmAction = function() {
                     saveApps(data.apps);
+                    if (data.packages) {
+                        savePackages(data.packages);
+                    }
+                    if (data.waNumber) {
+                        saveWaNumber(data.waNumber);
+                    }
                     closeModal('confirmModal');
                     renderApps();
+                    updateWaDisplay();
                     showToast('📥 Data berhasil diimport!', 'success');
                     confirmAction = null;
                 };
@@ -1850,7 +2337,7 @@
     }
     
     // ============================================================ */
-    // 9. MERGE & COPY FUNCTIONS                                    */
+    // 13. MERGE & COPY FUNCTIONS - PREMIUM ONLY                   */
     // ============================================================ */
     
     var selectedMergeApps = [];
@@ -1860,6 +2347,13 @@
         var session = getSession();
         if (!session) {
             showToast('⚠️ Silakan login terlebih dahulu.', 'warning');
+            return;
+        }
+        
+        // Cek premium
+        if (!session.isPremium && session.role !== 'superadmin') {
+            showToast('🔒 Fitur Gabung & Copy hanya untuk pengguna Premium!', 'warning');
+            showToast('💎 Hubungi Admin untuk aktivasi: ' + getWaNumber(), 'info');
             return;
         }
         
@@ -1913,6 +2407,12 @@
     function mergeAndCopy() {
         if (selectedMergeApps.length === 0) {
             showToast('⚠️ Pilih minimal satu aplikasi yang memiliki code.', 'warning');
+            return;
+        }
+        
+        var session = getSession();
+        if (!session.isPremium && session.role !== 'superadmin') {
+            showToast('🔒 Fitur ini hanya untuk pengguna Premium!', 'warning');
             return;
         }
         
@@ -1981,7 +2481,7 @@
         });
         
         html += '    <div class="footer">\n';
-        html += '        Generated by Notepad+ Code Storage v1.0<br>\n';
+        html += '        Generated by Notepad+ Code Storage v2.1<br>\n';
         html += '        ' + new Date().toLocaleString('id-ID') + '\n';
         html += '    </div>\n';
         html += '</body>\n';
@@ -1990,6 +2490,10 @@
         return html;
     }
     
+    // ============================================================ */
+    // 14. COPY & DOWNLOAD RESULT                                   */
+    // ============================================================ */
+    
     function copyMergeResult() {
         var text = document.getElementById('mergeResultText').value;
         if (!text) {
@@ -1997,14 +2501,21 @@
             return;
         }
         
-        navigator.clipboard.writeText(text).then(function() {
-            showToast('✅ ' + text.length + ' karakter berhasil dicopy ke clipboard!', 'success');
-        }).catch(function() {
+        try {
+            navigator.clipboard.writeText(text).then(function() {
+                showToast('✅ ' + text.length + ' karakter berhasil dicopy ke clipboard!', 'success');
+            }).catch(function() {
+                var textarea = document.getElementById('mergeResultText');
+                textarea.select();
+                document.execCommand('copy');
+                showToast('✅ Berhasil dicopy!', 'success');
+            });
+        } catch(e) {
             var textarea = document.getElementById('mergeResultText');
             textarea.select();
             document.execCommand('copy');
             showToast('✅ Berhasil dicopy!', 'success');
-        });
+        }
     }
     
     function downloadMergeResult() {
@@ -2027,7 +2538,7 @@
     }
     
     // ============================================================ */
-    // 10. TOAST & LOADING FUNCTIONS                                */
+    // 15. TOAST & LOADING FUNCTIONS                                */
     // ============================================================ */
     
     function showToast(message, type) {
@@ -2069,7 +2580,7 @@
     }
     
     // ============================================================ */
-    // 11. MODAL FUNCTIONS                                          */
+    // 16. MODAL FUNCTIONS                                          */
     // ============================================================ */
     
     function openModal(id) {
@@ -2100,7 +2611,7 @@
     });
     
     // ============================================================ */
-    // 12. UTILITY FUNCTIONS                                        */
+    // 17. UTILITY FUNCTIONS                                        */
     // ============================================================ */
     
     function escapeHtml(text) {
@@ -2130,21 +2641,23 @@
     }
     
     // ============================================================ */
-    // 13. INITIALIZATION                                           */
+    // 18. INITIALIZATION                                           */
     // ============================================================ */
     
     function initApp() {
         var session = getSession();
         updateUI();
         renderApps();
+        updateWaDisplay();
         
         var body = document.body;
         if (body.classList.contains('light-theme')) {
             document.getElementById('themeToggle').textContent = '☀️';
         }
         
-        console.log('✅ Notepad+ Code Storage v1.0 initialized!');
+        console.log('✅ Notepad+ Code Storage v2.1 initialized!');
         console.log('📊 Session:', session ? 'Logged in as ' + session.username : 'Guest');
+        console.log('📱 WA Number:', getWaNumber());
     }
     
     // DOM Ready
