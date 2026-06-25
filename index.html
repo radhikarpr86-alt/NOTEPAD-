@@ -254,8 +254,9 @@
         </div>
     </section>
 
+    <!-- WA BANNER DENGAN +62 -->
     <div class="wabanner" onclick="openWA()">
-        <div><strong>💬 Hubungi Admin:</strong> <span id="waLanding">081220285226</span></div>
+        <div><strong>💬 Hubungi Admin:</strong> <span id="waLanding">+6281220285226</span></div>
         <span>📱 Chat WhatsApp 👉</span>
     </div>
 
@@ -296,8 +297,9 @@
         </div>
     </header>
 
+    <!-- WA BANNER DENGAN +62 -->
     <div class="wabanner" onclick="openWA()">
-        <div><strong>💬 Aktivasi & Bantuan:</strong> <span id="waApp">081220285226</span></div>
+        <div><strong>💬 Aktivasi & Bantuan:</strong> <span id="waApp">+6281220285226</span></div>
         <span>📱 Chat Admin 👉</span>
     </div>
 
@@ -462,7 +464,7 @@
             
             <div id="adminTabSettings" class="hidden">
                 <h4>⚙️ Pengaturan</h4>
-                <div class="formg"><label class="forml">Nomor WA</label><div class="flex gap2"><input type="text" id="adminWaInput"><button onclick="saveAdminWA()" class="btn btns btnsm">💾 Simpan</button></div></div>
+                <div class="formg"><label class="forml">Nomor WA (format: 08xxx)</label><div class="flex gap2"><input type="text" id="adminWaInput" placeholder="081220285226"><button onclick="saveAdminWA()" class="btn btns btnsm">💾 Simpan</button></div><div class="formh">💡 Masukkan tanpa +62, cukup 08xxx. Sistem otomatis tambahkan +62.</div></div>
                 <div class="formg"><label class="forml">Password Admin</label><div class="flex gap2"><input type="password" id="adminNewPass" placeholder="Password baru"><button onclick="changeAdminPass()" class="btn btnw btnsm">🔑 Ganti</button></div></div>
                 <div class="formg"><label class="forml">Nama Admin</label><div class="flex gap2"><input type="text" id="adminNewName"><button onclick="changeAdminName()" class="btn btnp btnsm">✏️ Ganti</button></div></div>
                 <hr style="border-color:var(--border);margin:var(--g4) 0;">
@@ -545,7 +547,7 @@ var DEFAULT_PACKAGES = [
 // ===== STORAGE =====
 function g(k,d){try{var v=localStorage.getItem('np3_'+k);return v?JSON.parse(v):d}catch(e){return d}}
 function s(k,v){try{localStorage.setItem('np3_'+k,JSON.stringify(v))}catch(e){}}
-function d(k){localStorage.removeItem('np3_'+k)}
+function dl(k){localStorage.removeItem('np3_'+k)}
 
 function getUsers(){return g('users',[])}
 function saveUsers(u){s('users',u)}
@@ -553,7 +555,7 @@ function getApps(){return g('apps',{})}
 function saveApps(a){s('apps',a)}
 function getSession(){return g('session',null)}
 function saveSession(ss){s('session',ss)}
-function clearSession(){d('session')}
+function clearSession(){dl('session')}
 function getPackages(){return g('packages',DEFAULT_PACKAGES)}
 function savePackages(p){s('packages',p)}
 function getWA(){return g('wa',DEFAULT_WA)}
@@ -564,6 +566,23 @@ function getSecLogs(){return g('seclog',[])}
 function saveSecLogs(l){s('seclog',l)}
 function getLoginAttempts(){return g('la',{})}
 function saveLoginAttempts(a){s('la',a)}
+
+// ===== WA FORMATTER =====
+function formatWA(number){
+    var clean = number.replace(/[^0-9]/g,'');
+    if(clean.startsWith('0')){clean = '62' + clean.substring(1);}
+    else if(clean.startsWith('+')){clean = clean.substring(1);}
+    if(!clean.startsWith('62')){clean = '62' + clean;}
+    return '+' + clean;
+}
+
+function getWADisplay(){
+    return formatWA(getWA());
+}
+
+function getWALink(){
+    return getWA().replace(/[^0-9]/g,'');
+}
 
 // ===== SECURITY =====
 function logSec(ev,dt){
@@ -613,8 +632,17 @@ function updOnline(){
 window.addEventListener('online',updOnline);window.addEventListener('offline',updOnline);
 
 // ===== WA =====
-function openWA(){window.open('https://wa.me/'+getWA().replace(/[^0-9]/g,''),'_blank');}
-function updateWA(){var n=getWA();['waLanding','waApp'].forEach(function(id){var e=document.getElementById(id);if(e)e.textContent=n;});}
+function openWA(){
+    var link = getWALink();
+    window.open('https://wa.me/' + link, '_blank');
+}
+function updateWA(){
+    var n = getWADisplay();
+    ['waLanding','waApp'].forEach(function(id){
+        var e=document.getElementById(id);
+        if(e)e.textContent=n;
+    });
+}
 
 // ===== AUTH =====
 function showLoginModal(){
@@ -640,7 +668,7 @@ function doLogin(){
     var users=getUsers();
     var user=users.find(function(x){return(x.username===u||x.email===u)&&x.password===p;});
     if(!user){recordAttempt(u,false);e.textContent='Username/password salah.';e.classList.add('show');return;}
-    if(user.locked){e.textContent='⚠️ Akun dikunci Admin.';e.classList.add('show');return;}
+    if(user.locked){e.textContent='⚠️ Akun dikunci Admin. Hubungi '+getWADisplay();e.classList.add('show');return;}
     recordAttempt(u,true);
     saveSession({username:user.username,nama:user.nama,email:user.email,hp:user.hp||'',role:'user',isPremium:user.isActivated||false});
     closeModal('loginModal');document.getElementById('landingPage').classList.add('hidden');document.getElementById('appPage').classList.remove('hidden');
@@ -656,7 +684,7 @@ function activateFromLogin(){
     if(!tu){ee.textContent='❌ Kode tidak valid.';ee.classList.add('show');return;}
     var vc=getValidCodes();if(!vc[code]){ee.textContent='❌ Kode kadaluarsa.';ee.classList.add('show');return;}
     if(ss&&ss.username===tu.username){
-        var pk=vc[code],dr={};dr['1bulan']=30;dr['3bulan']=90;dr['6bulan']=180;
+        var pk=vc[code],dr={'1bulan':30,'3bulan':90,'6bulan':180};
         tu.isActivated=true;tu.activationExpiry=Date.now()+(dr[pk.package]||30)*86400000;
         saveUsers(users);delete vc[code];saveValidCodes(vc);
         ss.isPremium=true;saveSession(ss);updateUI();
@@ -682,6 +710,7 @@ function doRegister(){
     ee.classList.remove('show');se.classList.remove('show');
     if(!n||!em||!hp||!un){ee.textContent='Semua field wajib diisi.';ee.classList.add('show');return;}
     if(pw.length<6||pw!==pw2){ee.textContent='Password min 6 dan harus sama.';ee.classList.add('show');return;}
+    if(!hp.match(/^08[0-9]{8,}$/)){ee.textContent='No HP tidak valid (harus 08xx).';ee.classList.add('show');return;}
     var users=getUsers();
     if(users.find(function(x){return x.username.toLowerCase()===un.toLowerCase();})){ee.textContent='Username sudah dipakai.';ee.classList.add('show');return;}
     if(users.find(function(x){return x.email.toLowerCase()===em.toLowerCase();})){ee.textContent='Email sudah dipakai.';ee.classList.add('show');return;}
@@ -785,9 +814,22 @@ function adminCreateCode(){
     var code='NP3-'+Date.now().toString(36).toUpperCase();
     u.activationCode=code;u.activationPackage=pk;saveUsers(users);
     var vc=getValidCodes();vc[code]={package:pk,created:Date.now(),forUser:u.username,userName:u.nama};saveValidCodes(vc);
-    rs.innerHTML='<div style="background:var(--bg3);padding:16px;border-radius:var(--radius);border:2px solid var(--green);"><p style="color:var(--green);"><strong>✅ Kode Dibuat!</strong></p><p>User: <strong>'+esc(u.nama)+'</strong></p><p>Paket: <strong>'+esc(pd.name||pk)+'</strong></p><p>Kode: <code style="background:var(--bg);padding:6px 12px;border-radius:4px;font-size:1.1rem;">'+code+'</code></p><button onclick="copyText(\''+code+'\')" class="btn btnp btnsm">📋 Copy</button></div>';
+    rs.innerHTML='<div style="background:var(--bg3);padding:16px;border-radius:var(--radius);border:2px solid var(--green);"><p style="color:var(--green);"><strong>✅ Kode Dibuat!</strong></p><p>User: <strong>'+esc(u.nama)+'</strong></p><p>Paket: <strong>'+esc(pd.name||pk)+'</strong></p><p>Kode: <code style="background:var(--bg);padding:6px 12px;border-radius:4px;font-size:1.1rem;">'+code+'</code></p><button onclick="copyText(\''+code+'\')" class="btn btnp btnsm">📋 Copy</button> <button onclick="shareCodeWA(\''+code+'\',\''+esc(u.nama)+'\',\''+esc(pd.name||pk)+'\')" class="btn btns btnsm">📱 Kirim WA</button></div>';
     document.getElementById('adminActUser').value='';renderActiveCodes();logSec('CODE_CREATED',{user:u.username,pkg:pk});
     showToast('🎫 Kode dibuat!','s');
+}
+function shareCodeWA(code,nama,paket){
+    var wa = getWALink();
+    var msg = 'Halo '+nama+'!%0A%0A'+
+              'Ini kode aktivasi Notepad+ Anda:%0A'+
+              '📝 Kode: *'+code+'*%0A'+
+              '💎 Paket: '+paket+'%0A%0A'+
+              'Cara aktivasi:%0A'+
+              '1. Login ke aplikasi%0A'+
+              '2. Masukkan kode di halaman login%0A'+
+              '3. Premium langsung aktif!%0A%0A'+
+              'Terima kasih! 🙏';
+    window.open('https://wa.me/'+wa+'?text='+msg,'_blank');
 }
 function renderActiveCodes(){
     var vc=getValidCodes(),ks=Object.keys(vc),c=document.getElementById('activeCodesList');if(!c)return;
@@ -838,12 +880,17 @@ function unlockAllUsers(){
     var users=getUsers();users.forEach(function(u){u.locked=false;u.lockedAt=null;});saveUsers(users);
     renderUserListAdmin();logSec('ALL_UNLOCKED',{});showToast('🔓 Semua dibuka!','s');
 }
-function saveAdminWA(){var n=document.getElementById('adminWaInput').value.replace(/[^0-9]/g,'');if(n.length<10){showToast('⚠️ Tidak valid.','w');return;}saveWA(n);updateWA();showToast('✅ WA disimpan!','s');}
+function saveAdminWA(){
+    var n=document.getElementById('adminWaInput').value.replace(/[^0-9]/g,'');
+    if(n.length<10){showToast('⚠️ Nomor WA minimal 10 digit.','w');return;}
+    if(!n.startsWith('0')){showToast('⚠️ Masukkan dengan format 08xxx.','w');return;}
+    saveWA(n);updateWA();showToast('✅ WA disimpan!','s');
+}
 function changeAdminPass(){var np=document.getElementById('adminNewPass').value.trim();if(np.length<6){showToast('⚠️ Min 6 karakter.','w');return;}SUPER_ADMIN.password=np;document.getElementById('adminNewPass').value='';showToast('🔑 Password diubah!','s');}
 function changeAdminName(){var nn=document.getElementById('adminNewName').value.trim();if(!nn){showToast('⚠️ Tidak boleh kosong.','w');return;}SUPER_ADMIN.nama=nn;var ss=getSession();if(ss&&ss.role==='superadmin'){ss.nama=nn;saveSession(ss);}updateUI();showToast('✏️ Nama diubah!','s');}
 function resetAllData(){
-    if(!confirm('⚠️ HAPUS SEMUA DATA?\\n\\nIni tidak bisa dibatalkan!'))return;
-    ['users','apps','packages','vc','seclog','la','session','wa'].forEach(function(k){d(k);});
+    if(!confirm('⚠️ HAPUS SEMUA DATA?\n\nIni tidak bisa dibatalkan!'))return;
+    ['users','apps','packages','vc','seclog','la','session','wa'].forEach(function(k){dl(k);});
     closeModal('superAdminModal');clearSession();updateUI();renderApps();showToast('⚠️ Semua data direset!','w');
     setTimeout(function(){location.reload();},1500);
 }
@@ -980,6 +1027,7 @@ function init(){
     if(ss){document.getElementById('landingPage').classList.add('hidden');document.getElementById('appPage').classList.remove('hidden');}
     console.log('✅ Notepad+ v3.0 Ready!');
     console.log('👑 Super Admin: superadmin / admin123');
+    console.log('📱 WA Admin: ' + getWADisplay());
 }
 document.addEventListener('DOMContentLoaded',init);
 </script>
