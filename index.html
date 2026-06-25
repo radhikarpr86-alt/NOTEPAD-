@@ -982,67 +982,34 @@ select { appearance: none; background-image: url("data:image/svg+xml,%3Csvg xmln
     .admin-table th, .admin-table td { padding: 4px 6px; }
 }
 // ============================================================
-// NOTEPAD+ CODE STORAGE v3.3 - SCRIPT.JS
+// NOTEPAD+ CODE STORAGE v3.3 - SCRIPT.JS (FULL VERSION)
 // ============================================================
 
-// ============================================================
-// 1. SERVICE WORKER UNTUK OFFLINE SUPPORT
-// ============================================================
+// ========== SERVICE WORKER ==========
 if ('serviceWorker' in navigator) {
-    var serviceWorkerCode = `
+    var swCode = `
         var CACHE_NAME = 'notepad-v33';
-        var ASSETS_TO_CACHE = ['/', '/index.html', '/style.css', '/script.js'];
-        
-        self.addEventListener('install', function(event) {
-            event.waitUntil(
-                caches.open(CACHE_NAME).then(function(cache) {
-                    return cache.addAll(ASSETS_TO_CACHE);
-                })
-            );
+        var ASSETS = ['/', '/index.html', '/style.css', '/script.js'];
+        self.addEventListener('install', e => {
+            e.waitUntil(caches.open(CACHE_NAME).then(c => c.addAll(ASSETS)));
             self.skipWaiting();
         });
-        
-        self.addEventListener('activate', function(event) {
-            event.waitUntil(
-                caches.keys().then(function(keys) {
-                    return Promise.all(
-                        keys.filter(function(key) {
-                            return key !== CACHE_NAME;
-                        }).map(function(key) {
-                            return caches.delete(key);
-                        })
-                    );
-                })
-            );
+        self.addEventListener('activate', e => {
+            e.waitUntil(caches.keys().then(keys => Promise.all(keys.filter(k => k !== CACHE_NAME).map(k => caches.delete(k)))));
             self.clients.claim();
         });
-        
-        self.addEventListener('fetch', function(event) {
-            event.respondWith(
-                caches.match(event.request).then(function(response) {
-                    return response || fetch(event.request).then(function(fetchResponse) {
-                        return caches.open(CACHE_NAME).then(function(cache) {
-                            cache.put(event.request, fetchResponse.clone());
-                            return fetchResponse;
-                        });
-                    });
-                })
-            );
+        self.addEventListener('fetch', e => {
+            e.respondWith(caches.match(e.request).then(r => r || fetch(e.request).then(res => {
+                return caches.open(CACHE_NAME).then(cache => { cache.put(e.request, res.clone()); return res; });
+            })));
         });
     `;
-
-    var serviceWorkerBlob = new Blob([serviceWorkerCode], { type: 'application/javascript' });
-    var serviceWorkerUrl = URL.createObjectURL(serviceWorkerBlob);
-
-    navigator.serviceWorker.register(serviceWorkerUrl).catch(function(error) {
-        console.log('Service Worker registration failed:', error);
-    });
+    var blob = new Blob([swCode], { type: 'application/javascript' });
+    navigator.serviceWorker.register(URL.createObjectURL(blob)).catch(() => {});
 }
 
-// ============================================================
-// 2. DATA DEFAULT
-// ============================================================
-var SUPER_ADMIN_DATA = {
+// ========== DATA DEFAULTS ==========
+const SUPER_ADMIN = {
     username: 'superadmin',
     password: 'admin123',
     nama: 'Super Admin',
@@ -1051,106 +1018,784 @@ var SUPER_ADMIN_DATA = {
     role: 'superadmin'
 };
 
-var DEFAULT_WHATSAPP_NUMBER = '081220285226';
-
-var DEFAULT_PACKAGES = [
+const DEFAULT_PACKAGES = [
     { id: '1bulan', name: 'Basic', price: 25000, days: 30, label: '1 Bulan' },
     { id: '3bulan', name: 'Premium', price: 50000, days: 90, label: '3 Bulan' },
     { id: '6bulan', name: 'Enterprise', price: 75000, days: 180, label: '6 Bulan' }
 ];
 
-// ============================================================
-// 3. LOCAL STORAGE FUNCTIONS
-// ============================================================
-function getStorageItem(key, defaultValue) {
-    try {
-        var value = localStorage.getItem('notepad_' + key);
-        if (value === null || value === undefined) { return defaultValue; }
-        return JSON.parse(value);
-    } catch (error) { return defaultValue; }
+// ========== STORAGE HELPERS ==========
+function getItem(key, def) {
+    try { const v = localStorage.getItem('np_' + key); return v ? JSON.parse(v) : def; }
+    catch { return def; }
+}
+function setItem(key, val) { localStorage.setItem('np_' + key, JSON.stringify(val)); }
+function removeItem(key) { localStorage.removeItem('np_' + key); }
+
+function getUsers() { return getItem('users', []); }
+function saveUsers(u) { setItem('users', u); }
+function getApps() { return getItem('apps', {}); }
+function saveApps(a) { setItem('apps', a); }
+function getSession() { return getItem('session', null); }
+function saveSession(s) { setItem('session', s); }
+function clearSession() { removeItem('session'); }
+function getPackages() { return getItem('packages', DEFAULT_PACKAGES); }
+function savePackages(p) { setItem('packages', p); refreshPackageUI(); }
+function getWA() { return getItem('whatsapp', '081220285226'); }
+function saveWA(n) { setItem('whatsapp', n); updateWADisplay(); }
+function getValidCodes() { return getItem('codes', {}); }
+function saveValidCodes(c) { setItem('codes', c); }
+function getLogs() { return getItem('logs', []); }
+function saveLogs(l) { setItem('logs', l); }
+function getAttempts() { return getItem('attempts', {}); }
+function saveAttempts(a) { setItem('attempts', a); }
+
+// ========== WHATSAPP FORMATTING ==========
+function formatWA(raw) {
+    let num = raw.replace(/[^0-9]/g, '');
+    if (num.startsWith('0')) num = '62' + num.substring(1);
+    if (!num.startsWith('62')) num = '62' + num;
+    return '+' + num;
+}
+function getWANumber() { return getWA().replace(/[^0-9]/g, ''); }
+function updateWADisplay() {
+    const f = formatWA(getWA());
+    document.querySelectorAll('#whatsappNumberLanding, #whatsappNumberApp').forEach(el => { if (el) el.textContent = f; });
+}
+function openWhatsApp() { window.open('https://wa.me/' + getWANumber(), '_blank'); }
+
+// ========== ONLINE STATUS ==========
+function updateOnlineStatus() {
+    const badge = document.getElementById('connectionBadge');
+    const banner = document.getElementById('offlineBanner');
+    if (navigator.onLine) {
+        badge.textContent = 'ONLINE'; badge.style.background = '#10b981';
+        if (banner) banner.classList.remove('show');
+        checkExpiry();
+    } else {
+        badge.textContent = 'OFFLINE'; badge.style.background = '#ef4444';
+        if (banner) banner.classList.add('show');
+    }
+}
+window.addEventListener('online', updateOnlineStatus);
+window.addEventListener('offline', updateOnlineStatus);
+
+// ========== DOWNLOAD OFFLINE ==========
+function downloadForOffline() {
+    const html = document.documentElement.outerHTML;
+    const blob = new Blob(['<!DOCTYPE html>\n' + html], { type: 'text/html' });
+    const a = document.createElement('a');
+    a.href = URL.createObjectURL(blob);
+    a.download = 'NotepadPlus_v3.3_Offline.html';
+    a.click();
+    URL.revokeObjectURL(a.href);
+    showToast('File offline berhasil didownload!', 'success');
 }
 
-function setStorageItem(key, value) {
-    try { localStorage.setItem('notepad_' + key, JSON.stringify(value)); }
-    catch (error) { showToast('Penyimpanan penuh! Hapus beberapa data.', 'error'); }
+// ========== INSTALL APP ==========
+function installApplication() {
+    if (window.matchMedia('(display-mode: standalone)').matches) {
+        showToast('Aplikasi sudah terinstall!', 'warning');
+        return;
+    }
+    alert('Untuk menginstall, buka menu browser (⋮) lalu pilih "Tambahkan ke Layar Utama" atau "Install".');
 }
 
-function removeStorageItem(key) { localStorage.removeItem('notepad_' + key); }
-
-function getAllUsers() { return getStorageItem('users', []); }
-function saveAllUsers(users) { setStorageItem('users', users); }
-function getAllApplications() { return getStorageItem('applications', {}); }
-function saveAllApplications(apps) { setStorageItem('applications', apps); }
-function getCurrentSession() { return getStorageItem('session', null); }
-function saveCurrentSession(session) { setStorageItem('session', session); }
-function clearCurrentSession() { removeStorageItem('session'); }
-function getAllPackages() { return getStorageItem('packages', DEFAULT_PACKAGES); }
-function saveAllPackages(packages) { setStorageItem('packages', packages); refreshPackageDisplay(); }
-function getWhatsappNumber() { return getStorageItem('whatsapp', DEFAULT_WHATSAPP_NUMBER); }
-function saveWhatsappNumber(number) { setStorageItem('whatsapp', number); }
-function getAllValidCodes() { return getStorageItem('validCodes', {}); }
-function saveAllValidCodes(codes) { setStorageItem('validCodes', codes); }
-function getAllSecurityLogs() { return getStorageItem('securityLogs', []); }
-function saveAllSecurityLogs(logs) { setStorageItem('securityLogs', logs); }
-function getAllLoginAttempts() { return getStorageItem('loginAttempts', {}); }
-function saveAllLoginAttempts(attempts) { setStorageItem('loginAttempts', attempts); }
-
-// ============================================================
-// 4. WHATSAPP NUMBER FORMATTING
-// ============================================================
-function formatWhatsappNumber(rawNumber) {
-    var cleanNumber = rawNumber.replace(/[^0-9]/g, '');
-    if (cleanNumber.startsWith('0')) { cleanNumber = '62' + cleanNumber.substring(1); }
-    if (!cleanNumber.startsWith('62')) { cleanNumber = '62' + cleanNumber; }
-    return '+' + cleanNumber;
+// ========== TOAST ==========
+function showToast(msg, type) {
+    const container = document.getElementById('toastContainer');
+    const toast = document.createElement('div');
+    toast.className = 'toast toast-' + (type || 'info');
+    toast.textContent = msg;
+    container.appendChild(toast);
+    requestAnimationFrame(() => toast.classList.add('show'));
+    setTimeout(() => { toast.classList.remove('show'); setTimeout(() => toast.remove(), 300); }, 3000);
 }
 
-function getFormattedWhatsappNumber() { return formatWhatsappNumber(getWhatsappNumber()); }
-
-function getWhatsappLink() {
-    var rawNumber = getWhatsappNumber();
-    return rawNumber.replace(/[^0-9]/g, '');
+// ========== MODAL HELPERS ==========
+function openModal(id) { document.getElementById(id).classList.add('show'); }
+function closeModal(id) { document.getElementById(id).classList.remove('show'); clearModalErrors(); }
+function clearModalErrors() {
+    document.querySelectorAll('.form-error, .form-success').forEach(el => { el.textContent = ''; el.classList.remove('show'); });
 }
 
-function updateAllWhatsappDisplays() {
-    var formattedNumber = getFormattedWhatsappNumber();
-    var displayElements = ['whatsappNumberLanding', 'whatsappNumberApp'];
-    displayElements.forEach(function (elementId) {
-        var element = document.getElementById(elementId);
-        if (element) { element.textContent = formattedNumber; }
+// ========== LOADING ==========
+function showLoading(txt) {
+    const overlay = document.getElementById('loadingOverlay');
+    document.getElementById('loadingText').textContent = txt || 'Memproses...';
+    overlay.style.display = 'flex';
+}
+function hideLoading() { document.getElementById('loadingOverlay').style.display = 'none'; }
+
+// ========== THEME ==========
+function toggleTheme() {
+    document.body.classList.toggle('light-theme');
+    const isLight = document.body.classList.contains('light-theme');
+    const icon = isLight ? '☀️ Light Mode' : '🌙 Dark Mode';
+    document.querySelectorAll('#themeButton1, #themeButton2').forEach(b => { if (b) b.textContent = icon; });
+    localStorage.setItem('np_theme', isLight ? 'light' : 'dark');
+}
+(function initTheme() {
+    if (localStorage.getItem('np_theme') === 'light') {
+        document.body.classList.add('light-theme');
+        const icon = '☀️ Light Mode';
+        document.querySelectorAll('#themeButton1, #themeButton2').forEach(b => { if (b) b.textContent = icon; });
+    }
+})();
+
+// ========== NAVIGATION ==========
+function openApplication() {
+    const session = getSession();
+    if (!session) { showLoginModal(); return; }
+    document.getElementById('landingPage').classList.add('hidden');
+    document.getElementById('applicationPage').classList.remove('hidden');
+    refreshAppUI();
+    updateStats();
+    updateHeaderUser();
+}
+function goToLandingPage() {
+    document.getElementById('applicationPage').classList.add('hidden');
+    document.getElementById('landingPage').classList.remove('hidden');
+}
+function showLoginModal() { openModal('loginModal'); }
+function showRegisterModal() { openModal('registerModal'); }
+function showProfileModal() { openModal('profileModal'); loadProfileData(); }
+
+// ========== AUTH ==========
+function handleLogin() {
+    const username = document.getElementById('loginUsername').value.trim();
+    const password = document.getElementById('loginPassword').value;
+    const errorEl = document.getElementById('loginError');
+    errorEl.classList.remove('show');
+
+    if (!username || !password) { errorEl.textContent = 'Isi semua field!'; errorEl.classList.add('show'); return; }
+
+    const users = getUsers();
+    // Cek super admin
+    if (username === SUPER_ADMIN.username && password === SUPER_ADMIN.password) {
+        saveSession({ ...SUPER_ADMIN, premium: true, premiumExpiry: null });
+        closeModal('loginModal');
+        showToast('Login sebagai Super Admin berhasil!', 'success');
+        openApplication();
+        return;
+    }
+
+    const user = users.find(u => (u.username === username || u.email === username) && u.password === password);
+    if (!user) { errorEl.textContent = 'Username atau password salah!'; errorEl.classList.add('show'); return; }
+    if (user.locked) { errorEl.textContent = 'Akun Anda terkunci! Hubungi admin.'; errorEl.classList.add('show'); return; }
+
+    saveSession(user);
+    closeModal('loginModal');
+    showToast('Login berhasil!', 'success');
+    openApplication();
+}
+
+function handleRegister() {
+    const nama = document.getElementById('registerNama').value.trim();
+    const email = document.getElementById('registerEmail').value.trim();
+    const hp = document.getElementById('registerHp').value.trim();
+    const username = document.getElementById('registerUsername').value.trim();
+    const password = document.getElementById('registerPassword').value;
+    const confirm = document.getElementById('registerPasswordConfirm').value;
+    const errorEl = document.getElementById('registerError');
+    const successEl = document.getElementById('registerSuccess');
+    errorEl.classList.remove('show'); successEl.classList.remove('show');
+
+    if (!nama || !email || !hp || !username || !password || !confirm) {
+        errorEl.textContent = 'Semua field wajib diisi!'; errorEl.classList.add('show'); return;
+    }
+    if (password !== confirm) { errorEl.textContent = 'Password tidak cocok!'; errorEl.classList.add('show'); return; }
+    if (password.length < 6) { errorEl.textContent = 'Password minimal 6 karakter!'; errorEl.classList.add('show'); return; }
+
+    const users = getUsers();
+    if (users.find(u => u.username === username)) { errorEl.textContent = 'Username sudah terdaftar!'; errorEl.classList.add('show'); return; }
+    if (users.find(u => u.email === email)) { errorEl.textContent = 'Email sudah terdaftar!'; errorEl.classList.add('show'); return; }
+
+    const newUser = { id: Date.now().toString(), nama, email, hp, username, password, role: 'user', premium: false, premiumExpiry: null, locked: false, createdAt: new Date().toISOString() };
+    users.push(newUser);
+    saveUsers(users);
+    successEl.textContent = 'Pendaftaran berhasil! Silakan login.';
+    successEl.classList.add('show');
+    setTimeout(() => { closeModal('registerModal'); showLoginModal(); }, 2000);
+}
+
+function handleLogout() {
+    clearSession();
+    goToLandingPage();
+    updateHeaderUser();
+    showToast('Anda telah logout.', 'info');
+}
+
+// ========== ACTIVATION ==========
+function activateFromLogin() {
+    const code = document.getElementById('activationCodeInput').value.trim();
+    const errEl = document.getElementById('activationError');
+    const sucEl = document.getElementById('activationSuccess');
+    errEl.classList.remove('show'); sucEl.classList.remove('show');
+    if (!code) { errEl.textContent = 'Masukkan kode aktivasi!'; errEl.classList.add('show'); return; }
+
+    const validCodes = getValidCodes();
+    const codeData = validCodes[code];
+    if (!codeData || codeData.used) { errEl.textContent = 'Kode tidak valid atau sudah digunakan!'; errEl.classList.add('show'); return; }
+
+    const session = getSession();
+    if (!session) { errEl.textContent = 'Anda harus login terlebih dahulu!'; errEl.classList.add('show'); return; }
+
+    const users = getUsers();
+    const userIdx = users.findIndex(u => u.id === session.id);
+    if (userIdx === -1) { errEl.textContent = 'User tidak ditemukan!'; errEl.classList.add('show'); return; }
+
+    const pkg = getPackages().find(p => p.id === codeData.packageId);
+    if (!pkg) { errEl.textContent = 'Paket tidak valid!'; errEl.classList.add('show'); return; }
+
+    const now = new Date();
+    const expiry = new Date(now.getTime() + pkg.days * 86400000);
+    users[userIdx].premium = true;
+    users[userIdx].premiumExpiry = expiry.toISOString();
+    saveUsers(users);
+
+    codeData.used = true;
+    codeData.usedBy = session.username;
+    codeData.usedAt = now.toISOString();
+    validCodes[code] = codeData;
+    saveValidCodes(validCodes);
+
+    const updatedSession = { ...users[userIdx] };
+    saveSession(updatedSession);
+    sucEl.textContent = 'Aktivasi berhasil! Premium hingga ' + expiry.toLocaleDateString();
+    sucEl.classList.add('show');
+    updateHeaderUser();
+}
+
+// ========== PASSWORD RECOVERY ==========
+function handleForgotPassword() {
+    const nama = document.getElementById('forgotNama').value.trim();
+    const email = document.getElementById('forgotEmail').value.trim();
+    const hp = document.getElementById('forgotHp').value.trim();
+    const errEl = document.getElementById('forgotError');
+    const sucEl = document.getElementById('forgotSuccess');
+    errEl.classList.remove('show'); sucEl.classList.remove('show');
+
+    if (!nama || !email || !hp) { errEl.textContent = 'Isi semua data!'; errEl.classList.add('show'); return; }
+    const users = getUsers();
+    const user = users.find(u => u.nama === nama && u.email === email && u.hp === hp);
+    if (!user) { errEl.textContent = 'Data tidak ditemukan! Hubungi admin.'; errEl.classList.add('show'); return; }
+
+    sucEl.textContent = 'Link reset password telah dikirim ke WhatsApp Admin. Silakan hubungi.';
+    sucEl.classList.add('show');
+    setTimeout(() => openWhatsApp(), 2000);
+}
+
+// ========== PROFILE ==========
+function loadProfileData() {
+    const session = getSession();
+    if (!session) return;
+    document.getElementById('profileAvatar').textContent = session.nama.charAt(0).toUpperCase();
+    document.getElementById('profileName').textContent = session.nama;
+    document.getElementById('profileRole').textContent = session.role === 'superadmin' ? 'Super Admin' : (session.premium ? 'User Premium' : 'User Biasa');
+    document.getElementById('editProfileNama').value = session.nama || '';
+    document.getElementById('editProfileEmail').value = session.email || '';
+    document.getElementById('editProfileHp').value = session.hp || '';
+}
+function saveProfile() {
+    const session = getSession();
+    if (!session) return;
+    const nama = document.getElementById('editProfileNama').value.trim();
+    const email = document.getElementById('editProfileEmail').value.trim();
+    const hp = document.getElementById('editProfileHp').value.trim();
+    const errEl = document.getElementById('profileError');
+    const sucEl = document.getElementById('profileSuccess');
+    errEl.classList.remove('show'); sucEl.classList.remove('show');
+    if (!nama || !email || !hp) { errEl.textContent = 'Semua field wajib diisi!'; errEl.classList.add('show'); return; }
+
+    session.nama = nama; session.email = email; session.hp = hp;
+    saveSession(session);
+    const users = getUsers();
+    const idx = users.findIndex(u => u.id === session.id);
+    if (idx !== -1) { users[idx] = { ...users[idx], nama, email, hp }; saveUsers(users); }
+    sucEl.textContent = 'Profil berhasil disimpan!';
+    sucEl.classList.add('show');
+    updateHeaderUser();
+    setTimeout(() => closeModal('profileModal'), 1500);
+}
+
+// ========== HEADER USER UPDATE ==========
+function updateHeaderUser() {
+    const session = getSession();
+    const badge = document.getElementById('userBadge');
+    const profileBtn = document.getElementById('profileButton');
+    const adminBtn = document.getElementById('adminButton');
+    const logoutBtn = document.getElementById('logoutButton');
+    const mergeBtn = document.getElementById('mergeButton');
+
+    if (session) {
+        badge.style.display = 'flex';
+        document.getElementById('userAvatar').textContent = session.nama.charAt(0).toUpperCase();
+        document.getElementById('userNameDisplay').textContent = session.nama;
+        profileBtn.classList.remove('hidden');
+        logoutBtn.classList.remove('hidden');
+        if (session.role === 'superadmin') adminBtn.classList.remove('hidden');
+        else adminBtn.classList.add('hidden');
+        if (session.premium || session.role === 'superadmin') mergeBtn.classList.remove('hidden');
+        else mergeBtn.classList.add('hidden');
+    } else {
+        badge.style.display = 'none';
+        profileBtn.classList.add('hidden');
+        adminBtn.classList.add('hidden');
+        logoutBtn.classList.add('hidden');
+        mergeBtn.classList.add('hidden');
+    }
+}
+
+// ========== STATS ==========
+function updateStats() {
+    const session = getSession();
+    const apps = session ? (getApps()[session.id] || []) : [];
+    const users = getUsers();
+    let totalCodes = 0, totalStorage = 0;
+    apps.forEach(app => {
+        totalCodes += (app.codes || []).length;
+        (app.codes || []).forEach(c => totalStorage += new Blob([c.content]).size);
+    });
+
+    document.getElementById('statTotalApps').textContent = apps.length;
+    document.getElementById('statTotalCodes').textContent = totalCodes;
+    document.getElementById('statStorage').textContent = (totalStorage / 1024).toFixed(1) + ' KB';
+    document.getElementById('statTotalUsers').textContent = users.length;
+    document.getElementById('statPremiumStatus').textContent = (session && (session.premium || session.role === 'superadmin')) ? 'Premium' : 'Free';
+}
+
+// ========== APP CRUD ==========
+function showAddAppModal() {
+    document.getElementById('appModalTitle').textContent = 'Tambah Aplikasi';
+    document.getElementById('editAppId').value = '';
+    document.getElementById('appNameInput').value = '';
+    document.getElementById('appDescInput').value = '';
+    document.getElementById('appError').classList.remove('show');
+    openModal('appModal');
+}
+function saveApplication() {
+    const session = getSession();
+    if (!session) return showToast('Silakan login.', 'error');
+    const editId = document.getElementById('editAppId').value;
+    const name = document.getElementById('appNameInput').value.trim();
+    const desc = document.getElementById('appDescInput').value.trim();
+    const errEl = document.getElementById('appError');
+    errEl.classList.remove('show');
+    if (!name) { errEl.textContent = 'Nama aplikasi wajib diisi!'; errEl.classList.add('show'); return; }
+
+    const allApps = getApps();
+    const userApps = allApps[session.id] || [];
+    if (editId) {
+        const idx = userApps.findIndex(a => a.id === editId);
+        if (idx !== -1) { userApps[idx].name = name; userApps[idx].desc = desc; }
+    } else {
+        userApps.push({ id: Date.now().toString(), name, desc, codes: [], createdAt: new Date().toISOString() });
+    }
+    allApps[session.id] = userApps;
+    saveApps(allApps);
+    closeModal('appModal');
+    refreshAppUI();
+    updateStats();
+    showToast('Aplikasi berhasil disimpan!', 'success');
+}
+function deleteApp(appId) {
+    showConfirm('Hapus Aplikasi?', 'Semua kode di dalamnya juga akan dihapus.', () => {
+        const session = getSession();
+        const allApps = getApps();
+        allApps[session.id] = (allApps[session.id] || []).filter(a => a.id !== appId);
+        saveApps(allApps);
+        refreshAppUI();
+        updateStats();
+        showToast('Aplikasi dihapus.', 'warning');
+    });
+}
+function toggleAppCodes(appId) {
+    const container = document.getElementById('codes-' + appId);
+    if (container) container.classList.toggle('open');
+}
+
+// ========== CODE CRUD ==========
+function showAddCodeModal(appId) {
+    document.getElementById('codeModalTitle').textContent = 'Tambah Code';
+    document.getElementById('editCodeId').value = '';
+    document.getElementById('codeAppId').value = appId;
+    document.getElementById('codeNameInput').value = '';
+    document.getElementById('codeContentInput').value = '';
+    document.getElementById('codeError').classList.remove('show');
+    openModal('codeModal');
+}
+function editCode(appId, codeId) {
+    const session = getSession();
+    const app = (getApps()[session.id] || []).find(a => a.id === appId);
+    if (!app) return;
+    const code = app.codes.find(c => c.id === codeId);
+    if (!code) return;
+    document.getElementById('codeModalTitle').textContent = 'Edit Code';
+    document.getElementById('editCodeId').value = codeId;
+    document.getElementById('codeAppId').value = appId;
+    document.getElementById('codeNameInput').value = code.name;
+    document.getElementById('codeContentInput').value = code.content;
+    openModal('codeModal');
+}
+function saveCode() {
+    const session = getSession();
+    const appId = document.getElementById('codeAppId').value;
+    const editId = document.getElementById('editCodeId').value;
+    const name = document.getElementById('codeNameInput').value.trim();
+    const content = document.getElementById('codeContentInput').value;
+    const errEl = document.getElementById('codeError');
+    errEl.classList.remove('show');
+    if (!name || !content) { errEl.textContent = 'Nama dan kode wajib diisi!'; errEl.classList.add('show'); return; }
+
+    const allApps = getApps();
+    const apps = allApps[session.id] || [];
+    const app = apps.find(a => a.id === appId);
+    if (!app) return;
+    if (editId) {
+        const code = app.codes.find(c => c.id === editId);
+        if (code) { code.name = name; code.content = content; }
+    } else {
+        app.codes.push({ id: Date.now().toString(), name, content, createdAt: new Date().toISOString() });
+    }
+    allApps[session.id] = apps;
+    saveApps(allApps);
+    closeModal('codeModal');
+    refreshAppUI();
+    updateStats();
+    showToast('Kode berhasil disimpan!', 'success');
+}
+function deleteCode(appId, codeId) {
+    showConfirm('Hapus Kode?', 'Kode akan dihapus permanen.', () => {
+        const session = getSession();
+        const allApps = getApps();
+        const apps = allApps[session.id] || [];
+        const app = apps.find(a => a.id === appId);
+        if (app) app.codes = app.codes.filter(c => c.id !== codeId);
+        allApps[session.id] = apps;
+        saveApps(allApps);
+        refreshAppUI();
+        updateStats();
+        showToast('Kode dihapus.', 'warning');
+    });
+}
+function toggleCodePreview(codeId) {
+    const preview = document.getElementById('preview-' + codeId);
+    if (preview) preview.classList.toggle('show');
+}
+
+// ========== RENDER APP LIST ==========
+function refreshAppUI() {
+    const session = getSession();
+    const container = document.getElementById('appListContainer');
+    const emptyState = document.getElementById('emptyState');
+    const apps = session ? (getApps()[session.id] || []) : [];
+    if (apps.length === 0) { container.innerHTML = ''; emptyState.classList.remove('hidden'); return; }
+    emptyState.classList.add('hidden');
+
+    container.innerHTML = apps.map(app => `
+        <div class="app-item">
+            <div class="app-header" onclick="toggleAppCodes('${app.id}')">
+                <div class="app-name">
+                    📁 ${app.name}
+                    <span class="app-code-count">${app.codes.length} kode</span>
+                </div>
+                <div style="display:flex;gap:4px;">
+                    <button class="btn btn-primary btn-sm" onclick="event.stopPropagation(); showAddCodeModal('${app.id}')">+ Code</button>
+                    <button class="btn btn-warning btn-sm" onclick="event.stopPropagation(); editApp('${app.id}')">Edit</button>
+                    <button class="btn btn-danger btn-sm" onclick="event.stopPropagation(); deleteApp('${app.id}')">Hapus</button>
+                </div>
+            </div>
+            <div class="app-codes-container" id="codes-${app.id}">
+                ${app.codes.length === 0 ? '<p style="color:var(--text-muted);padding:8px;">Belum ada kode.</p>' : app.codes.map(code => `
+                    <div class="code-item">
+                        <div class="code-header">
+                            <span class="code-name">📄 ${code.name}</span>
+                            <div style="display:flex;gap:4px;">
+                                <button class="btn btn-gray btn-sm" onclick="toggleCodePreview('${code.id}')">Preview</button>
+                                <button class="btn btn-warning btn-sm" onclick="editCode('${app.id}','${code.id}')">Edit</button>
+                                <button class="btn btn-danger btn-sm" onclick="deleteCode('${app.id}','${code.id}')">Hapus</button>
+                            </div>
+                        </div>
+                        <div class="code-content-preview" id="preview-${code.id}">
+                            <pre>${escapeHTML(code.content)}</pre>
+                        </div>
+                    </div>
+                `).join('')}
+            </div>
+        </div>
+    `).join('');
+}
+function editApp(appId) {
+    const session = getSession();
+    const app = (getApps()[session.id] || []).find(a => a.id === appId);
+    if (!app) return;
+    document.getElementById('appModalTitle').textContent = 'Edit Aplikasi';
+    document.getElementById('editAppId').value = appId;
+    document.getElementById('appNameInput').value = app.name;
+    document.getElementById('appDescInput').value = app.desc || '';
+    openModal('appModal');
+}
+function escapeHTML(str) { return str.replace(/[&<>"']/g, m => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' })[m]); }
+
+// ========== SEARCH ==========
+function toggleSearch() { document.getElementById('searchBar').classList.toggle('hidden'); }
+function performSearch() {
+    const q = document.getElementById('searchInput').value.toLowerCase();
+    document.querySelectorAll('.app-item').forEach(item => {
+        const text = item.textContent.toLowerCase();
+        item.style.display = text.includes(q) ? '' : 'none';
+    });
+}
+function clearSearch() { document.getElementById('searchInput').value = ''; performSearch(); }
+
+// ========== MERGE ==========
+function showMergeModal() {
+    const session = getSession();
+    if (!session || (!session.premium && session.role !== 'superadmin')) {
+        showToast('Fitur ini khusus pengguna Premium!', 'error');
+        return;
+    }
+    const apps = getApps()[session.id] || [];
+    document.getElementById('mergeAppList').innerHTML = apps.map(app => `
+        <label style="display:flex;align-items:center;gap:4px;font-size:0.85rem;">
+            <input type="checkbox" checked value="${app.id}"> ${app.name}
+        </label>
+    `).join('');
+    document.getElementById('mergeResult').classList.add('hidden');
+    document.getElementById('mergeOutput').value = '';
+    openModal('mergeModal');
+}
+function performMerge() {
+    const session = getSession();
+    const apps = getApps()[session.id] || [];
+    const checked = Array.from(document.querySelectorAll('#mergeAppList input:checked')).map(i => i.value);
+    const merged = apps.filter(a => checked.includes(a.id)).flatMap(a => a.codes).map(c => c.content).join('\n\n');
+    document.getElementById('mergeOutput').value = merged;
+    document.getElementById('mergeResult').classList.remove('hidden');
+}
+function copyMergeResult() {
+    const ta = document.getElementById('mergeOutput');
+    ta.select(); navigator.clipboard.writeText(ta.value).then(() => showToast('Hasil digabung disalin!', 'success'));
+}
+function downloadMergeResult() {
+    const blob = new Blob([document.getElementById('mergeOutput').value], { type: 'text/html' });
+    const a = document.createElement('a');
+    a.href = URL.createObjectURL(blob);
+    a.download = 'index.html';
+    a.click();
+}
+
+// ========== IMPORT/EXPORT ==========
+function exportAllData() {
+    const session = getSession();
+    if (!session) return showToast('Login dulu!', 'error');
+    const data = { apps: getApps()[session.id] || [], exportedAt: new Date().toISOString() };
+    const blob = new Blob([JSON.stringify(data, null, 2)], { type: 'application/json' });
+    const a = document.createElement('a');
+    a.href = URL.createObjectURL(blob);
+    a.download = 'notepad_backup.json';
+    a.click();
+    showToast('Data diexport!', 'success');
+}
+function importAllData(input) {
+    const session = getSession();
+    if (!session) return;
+    const file = input.files[0];
+    if (!file) return;
+    const reader = new FileReader();
+    reader.onload = function(e) {
+        try {
+            const data = JSON.parse(e.target.result);
+            if (!data.apps || !Array.isArray(data.apps)) throw new Error('Format salah');
+            const allApps = getApps();
+            allApps[session.id] = data.apps;
+            saveApps(allApps);
+            refreshAppUI();
+            updateStats();
+            showToast('Data berhasil diimport!', 'success');
+        } catch (err) { showToast('Gagal import: format tidak valid.', 'error'); }
+    };
+    reader.readAsText(file);
+}
+
+// ========== CONFIRM DIALOG ==========
+let confirmCallback = null;
+function showConfirm(title, msg, cb) {
+    document.getElementById('confirmTitle').textContent = title;
+    document.getElementById('confirmMessage').textContent = msg;
+    confirmCallback = cb;
+    openModal('confirmModal');
+}
+function executeConfirmAction() { if (confirmCallback) { confirmCallback(); confirmCallback = null; } closeModal('confirmModal'); }
+
+// ========== EXPIRY CHECK ==========
+function checkExpiry() {
+    const session = getSession();
+    if (!session || !session.premiumExpiry) return;
+    const now = new Date();
+    const exp = new Date(session.premiumExpiry);
+    const diff = exp - now;
+    const warning = document.getElementById('expiryWarning');
+    if (diff < 0) {
+        session.premium = false;
+        session.premiumExpiry = null;
+        saveSession(session);
+        const users = getUsers();
+        const idx = users.findIndex(u => u.id === session.id);
+        if (idx !== -1) { users[idx].premium = false; users[idx].premiumExpiry = null; saveUsers(users); }
+        warning.classList.remove('show');
+        showToast('Masa premium Anda telah berakhir.', 'warning');
+    } else if (diff < 3 * 86400000) {
+        document.getElementById('expiryWarningText').textContent = `Premium akan berakhir dalam ${Math.ceil(diff/86400000)} hari!`;
+        warning.classList.add('show');
+    } else {
+        warning.classList.remove('show');
+    }
+}
+
+// ========== SUPER ADMIN PANEL ==========
+function showSuperAdminPanel() {
+    const session = getSession();
+    if (!session || session.role !== 'superadmin') return;
+    refreshAdminPackagesDropdown();
+    refreshActiveCodesList();
+    refreshAdminUserList();
+    refreshSecurityLogList();
+    refreshPackageEditList();
+    document.getElementById('adminWhatsappInput').value = getWA();
+    switchAdminTab('codes');
+    openModal('superAdminModal');
+}
+function switchAdminTab(tab) {
+    document.querySelectorAll('.admin-tab-content').forEach(el => el.classList.add('hidden'));
+    document.querySelectorAll('.admin-tab').forEach(el => el.classList.remove('active'));
+    document.getElementById('adminTab' + tab.charAt(0).toUpperCase() + tab.slice(1)).classList.remove('hidden');
+    document.getElementById('tab' + tab.charAt(0).toUpperCase() + tab.slice(1)).classList.add('active');
+}
+
+function adminCreateActivationCode() {
+    const username = document.getElementById('adminActivationUser').value.trim();
+    const packageId = document.getElementById('adminActivationPackage').value;
+    if (!username || !packageId) { showToast('Isi username dan pilih paket!', 'error'); return; }
+    const users = getUsers();
+    const user = users.find(u => u.username === username || u.email === username);
+    if (!user) { showToast('User tidak ditemukan!', 'error'); return; }
+    const code = 'NP-' + Math.random().toString(36).substring(2, 10).toUpperCase();
+    const validCodes = getValidCodes();
+    validCodes[code] = { packageId, forUser: user.username, used: false, createdAt: new Date().toISOString() };
+    saveValidCodes(validCodes);
+    document.getElementById('adminCodeResult').innerHTML = `<div class="form-success show">Kode aktivasi: <strong>${code}</strong> untuk ${user.username}</div>`;
+    refreshActiveCodesList();
+}
+function refreshAdminPackagesDropdown() {
+    const select = document.getElementById('adminActivationPackage');
+    select.innerHTML = getPackages().map(p => `<option value="${p.id}">${p.name} - ${p.label} (Rp${p.price})</option>`).join('');
+}
+function refreshActiveCodesList() {
+    const codes = getValidCodes();
+    const list = document.getElementById('activeCodesList');
+    list.innerHTML = Object.entries(codes).filter(([_, v]) => !v.used).map(([k, v]) => `
+        <div style="padding:4px 0;border-bottom:1px solid var(--border-color);">${k} - ${v.forUser} (${v.packageId})</div>
+    `).join('') || '<p style="color:var(--text-muted);">Tidak ada kode aktif.</p>';
+}
+function refreshAdminUserList() {
+    const users = getUsers();
+    const list = document.getElementById('adminUserList');
+    list.innerHTML = users.length === 0 ? '<p>Tidak ada user.</p>' : `
+        <table class="admin-table"><tr><th>Username</th><th>Email</th><th>Premium</th><th>Locked</th><th>Aksi</th></tr>
+        ${users.map(u => `
+            <tr>
+                <td>${u.username}</td><td>${u.email}</td>
+                <td>${u.premium ? 'Ya' : 'Tidak'}</td>
+                <td>${u.locked ? '🔒' : '🔓'}</td>
+                <td>
+                    <button class="btn btn-warning btn-sm" onclick="toggleUserLock('${u.id}')">${u.locked ? 'Buka' : 'Kunci'}</button>
+                </td>
+            </tr>
+        `).join('')}</table>`;
+}
+function toggleUserLock(userId) {
+    const users = getUsers();
+    const user = users.find(u => u.id === userId);
+    if (user) { user.locked = !user.locked; saveUsers(users); refreshAdminUserList(); showToast('Status user diubah.', 'info'); }
+}
+function refreshSecurityLogList() {
+    const logs = getLogs();
+    document.getElementById('securityLogList').innerHTML = logs.slice(-20).reverse().map(l => `<div style="padding:2px 0;font-size:0.75rem;">${l}</div>`).join('');
+}
+function clearAllSecurityLogs() { saveLogs([]); refreshSecurityLogList(); showToast('Log dibersihkan.', 'info'); }
+function lockAllUsers() { const users = getUsers(); users.forEach(u => u.locked = true); saveUsers(users); refreshAdminUserList(); showToast('Semua user dikunci.', 'warning'); }
+function unlockAllUsers() { const users = getUsers(); users.forEach(u => u.locked = false); saveUsers(users); refreshAdminUserList(); showToast('Semua user dibuka.', 'success'); }
+function saveAdminWhatsapp() { const num = document.getElementById('adminWhatsappInput').value.trim(); saveWA(num); showToast('Nomor WhatsApp disimpan.', 'success'); }
+function changeAdminPassword() { const pw = document.getElementById('adminNewPassword').value; if (pw) { SUPER_ADMIN.password = pw; showToast('Password super admin diubah.', 'success'); } }
+function changeAdminName() { const name = document.getElementById('adminNewName').value.trim(); if (name) { SUPER_ADMIN.nama = name; showToast('Nama super admin diubah.', 'success'); } }
+function resetAllApplicationData() {
+    showConfirm('Reset Semua Data?', 'Semua data akan dihapus permanen!', () => {
+        localStorage.clear();
+        showToast('Data direset. Halaman akan dimuat ulang.', 'warning');
+        setTimeout(() => location.reload(), 1500);
     });
 }
 
-function openWhatsApp() {
-    var link = getWhatsappLink();
-    window.open('https://wa.me/' + link, '_blank');
+// ========== PACKAGE EDITING ==========
+function refreshPackageEditList() {
+    const packages = getPackages();
+    document.getElementById('packageEditList').innerHTML = packages.map(p => `
+        <div style="display:flex;justify-content:space-between;align-items:center;padding:8px;border-bottom:1px solid var(--border-color);">
+            <span>${p.name} - Rp${p.price} / ${p.label}</span>
+            <button class="btn btn-warning btn-sm" onclick="editPackage('${p.id}')">Edit</button>
+        </div>
+    `).join('');
+}
+function editPackage(id) {
+    const pkg = getPackages().find(p => p.id === id);
+    if (!pkg) return;
+    document.getElementById('editPackageId').value = pkg.id;
+    document.getElementById('editPackageName').value = pkg.name;
+    document.getElementById('editPackagePrice').value = pkg.price;
+    document.getElementById('editPackageDays').value = pkg.days;
+    document.getElementById('editPackageLabel').value = pkg.label;
+    openModal('editPackageModal');
+}
+function savePackageChanges() {
+    const id = document.getElementById('editPackageId').value;
+    const name = document.getElementById('editPackageName').value.trim();
+    const price = parseInt(document.getElementById('editPackagePrice').value) || 0;
+    const days = parseInt(document.getElementById('editPackageDays').value) || 0;
+    const label = document.getElementById('editPackageLabel').value.trim();
+    if (!name || !price || !days) { showToast('Data tidak lengkap!', 'error'); return; }
+    const packages = getPackages();
+    const pkg = packages.find(p => p.id === id);
+    if (pkg) { pkg.name = name; pkg.price = price; pkg.days = days; pkg.label = label; savePackages(packages); }
+    closeModal('editPackageModal');
+    refreshPackageEditList();
+    showToast('Paket diperbarui!', 'success');
 }
 
-// ============================================================
-// 5. OFFLINE / ONLINE STATUS
-// ============================================================
-function downloadForOffline() {
-    var htmlContent = document.documentElement.outerHTML;
-    var fullDocument = '<!DOCTYPE html>\n' + htmlContent;
-    var blob = new Blob([fullDocument], { type: 'text/html' });
-    var downloadUrl = URL.createObjectURL(blob);
-    var downloadLink = document.createElement('a');
-    downloadLink.href = downloadUrl;
-    downloadLink.download = 'NotepadPlus_v3.3_Offline.html';
-    document.body.appendChild(downloadLink);
-    downloadLink.click();
-    document.body.removeChild(downloadLink);
-    URL.revokeObjectURL(downloadUrl);
-    showToast('Aplikasi berhasil didownload! Buka file untuk mode offline.', 'success');
+// ========== UI REFRESH FOR PACKAGES ON LANDING ==========
+function refreshPackageUI() {
+    const grid = document.getElementById('landingPriceGrid');
+    if (!grid) return;
+    const packages = getPackages();
+    grid.innerHTML = packages.map((p, i) => `
+        <div class="price-card ${i === 1 ? 'featured' : ''}">
+            ${i === 1 ? '<div class="featured-badge">POPULER</div>' : ''}
+            <div class="price-icon">💎</div>
+            <div class="price-name">${p.name}</div>
+            <div class="price-value">Rp${p.price.toLocaleString()}</div>
+            <div class="price-duration">/${p.label}</div>
+        </div>
+    `).join('');
 }
 
-function updateOnlineStatus() {
-    var connectionBadge = document.getElementById('connectionBadge');
-    var offlineBanner = document.getElementById('offlineBanner');
-    if (navigator.onLine) {
-        connectionBadge.textContent = 'ONLINE';
-        connectionBadge.style.background = '#10b981';
-        if (offlineBanner) { offlineBanner.classList.remove('show'); }
-        checkAllExpiredActivations();
-    } else {
-        connectionBadge.textContent = 'OFFLINE';
+// ========== INIT ==========
+document.addEventListener('DOMContentLoaded', () => {
+    // Pastikan super admin ada di users (tidak perlu disimpan di users array)
+    updateWADisplay();
+    refreshPackageUI();
+    updateOnlineStatus();
+    updateHeaderUser();
+    const session = getSession();
+    if (session) openApplication();
+});
