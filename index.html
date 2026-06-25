@@ -317,3 +317,267 @@
         <button onclick="showAddAppModal()" class="btn btn-success">➕ Tambah Aplikasi</button>
     </div>
 </div>
+<!-- ============================================================ -->
+<!-- SEMUA MODAL                                                   -->
+<!-- ============================================================ -->
+
+<!-- MODAL LOGIN -->
+<div class="modal-overlay" id="loginModal">
+    <div class="modal-content" style="max-width:400px;">
+        <div class="modal-header"><h3>🔐 Login</h3><button class="modal-close" onclick="closeModal('loginModal')">✕</button></div>
+        <div class="modal-body">
+            <input type="text" id="loginUsername" placeholder="Username atau Email" style="margin-bottom:8px;">
+            <input type="password" id="loginPassword" placeholder="Password" style="margin-bottom:8px;">
+            <button onclick="handleLogin()" class="btn btn-success btn-block">🔓 Login</button>
+            <div id="loginError" class="hidden" style="color:var(--danger);margin-top:8px;font-size:13px;"></div>
+            <div class="flex-between" style="margin-top:12px;font-size:13px;">
+                <span class="link" onclick="closeModal('loginModal');openModal('registerModal')">📝 Daftar</span>
+                <span class="link" onclick="closeModal('loginModal');openModal('forgotPasswordModal')">🔑 Lupa Password</span>
+            </div>
+        </div>
+        <div class="modal-footer"><button onclick="closeModal('loginModal')" class="btn btn-gray">Tutup</button></div>
+    </div>
+</div>
+
+<!-- MODAL REGISTER -->
+<div class="modal-overlay" id="registerModal">
+    <div class="modal-content" style="max-width:400px;">
+        <div class="modal-header"><h3>📝 Daftar Akun</h3><button class="modal-close" onclick="closeModal('registerModal')">✕</button></div>
+        <div class="modal-body">
+            <input type="text" id="regNama" placeholder="Nama Lengkap *" style="margin-bottom:8px;">
+            <input type="email" id="regEmail" placeholder="Email *" style="margin-bottom:8px;">
+            <input type="text" id="regHp" placeholder="No HP *" style="margin-bottom:8px;">
+            <input type="text" id="regUsername" placeholder="Username *" style="margin-bottom:8px;">
+            <input type="password" id="regPassword" placeholder="Password * (min 6 karakter)" style="margin-bottom:8px;">
+            <input type="password" id="regConfirmPassword" placeholder="Konfirmasi Password *">
+            <button onclick="handleRegister()" class="btn btn-success btn-block" style="margin-top:8px;">📝 Daftar</button>
+            <div id="registerError" class="hidden" style="color:var(--danger);margin-top:8px;font-size:13px;"></div>
+            <div id="registerSuccess" class="hidden" style="color:var(--success);margin-top:8px;font-size:13px;"></div>
+            <div style="margin-top:12px;text-align:center;font-size:13px;"><span class="link" onclick="closeModal('registerModal');openModal('loginModal')">🔐 Sudah punya akun? Login</span></div>
+        </div>
+        <div class="modal-footer"><button onclick="closeModal('registerModal')" class="btn btn-gray">Tutup</button></div>
+    </div>
+</div>
+
+<!-- MODAL LUPA PASSWORD -->
+<div class="modal-overlay" id="forgotPasswordModal">
+    <div class="modal-content" style="max-width:400px;">
+        <div class="modal-header"><h3>🔑 Lupa Password</h3><button class="modal-close" onclick="closeModal('forgotPasswordModal')">✕</button></div>
+        <div class="modal-body">
+            <input type="text" id="forgotNama" placeholder="Nama Lengkap *" style="margin-bottom:8px;">
+            <input type="email" id="forgotEmail" placeholder="Email *" style="margin-bottom:8px;">
+            <input type="text" id="forgotHp" placeholder="No HP *">
+            <button onclick="handleForgotPassword()" class="btn btn-warning btn-block" style="margin-top:8px;">📧 Kirim Link Reset</button>
+            <div id="forgotError" class="hidden" style="color:var(--danger);margin-top:8px;font-size:13px;"></div>
+            <div id="forgotSuccess" class="hidden" style="color:var(--success);margin-top:8px;font-size:13px;"></div>
+        </div>
+        <div class="modal-footer"><button onclick="closeModal('forgotPasswordModal')" class="btn btn-gray">Tutup</button></div>
+    </div>
+</div>
+
+<!-- MODAL RESET PASSWORD -->
+<div class="modal-overlay" id="resetPasswordModal">
+    <div class="modal-content" style="max-width:400px;">
+        <div class="modal-header"><h3>🔒 Reset Password</h3><button class="modal-close" onclick="closeModal('resetPasswordModal')">✕</button></div>
+        <div class="modal-body">
+            <input type="hidden" id="resetToken">
+            <input type="password" id="resetNewPassword" placeholder="Password Baru * (min 6 karakter)" style="margin-bottom:8px;">
+            <input type="password" id="resetConfirmPassword" placeholder="Konfirmasi Password Baru *">
+            <button onclick="handleResetPassword()" class="btn btn-success btn-block" style="margin-top:8px;">💾 Simpan Password</button>
+            <div id="resetError" class="hidden" style="color:var(--danger);margin-top:8px;font-size:13px;"></div>
+            <div id="resetSuccess" class="hidden" style="color:var(--success);margin-top:8px;font-size:13px;"></div>
+        </div>
+        <div class="modal-footer"><button onclick="closeModal('resetPasswordModal')" class="btn btn-gray">Tutup</button></div>
+    </div>
+</div>
+
+<!-- MODAL PROFIL -->
+<div class="modal-overlay" id="profileModal">
+    <div class="modal-content" style="max-width:450px;">
+        <div class="modal-header"><h3>👤 Profil Saya</h3><button class="modal-close" onclick="closeModal('profileModal')">✕</button></div>
+        <div class="modal-body">
+            <div class="flex gap-4" style="margin-bottom:16px;">
+                <div style="width:60px;height:60px;border-radius:50%;background:var(--gradient);display:flex;align-items:center;justify-content:center;font-size:1.8rem;color:#fff;" id="profileAvatar">U</div>
+                <div><h4 id="profileName" style="margin:0;">User</h4><p id="profileRole" style="margin:0;font-size:.85rem;color:var(--text-secondary);">User</p></div>
+            </div>
+            <div class="form-group"><label class="form-label">Nama</label><input type="text" id="editNama"></div>
+            <div class="form-group"><label class="form-label">Email</label><input type="email" id="editEmail"></div>
+            <div class="form-group"><label class="form-label">No HP</label><input type="text" id="editHp"></div>
+            <button onclick="updateProfile()" class="btn btn-success btn-block">💾 Simpan</button>
+            <div id="profileError" class="hidden" style="color:var(--danger);margin-top:8px;font-size:13px;"></div>
+            <button onclick="togglePasswordChange()" class="btn btn-warning btn-block" style="margin-top:12px;">🔑 Ganti Password</button>
+            <div id="passwordChange" class="hidden" style="margin-top:12px;">
+                <input type="password" id="oldPassword" placeholder="Password Lama" style="margin-bottom:8px;">
+                <input type="password" id="newPassword" placeholder="Password Baru" style="margin-bottom:8px;">
+                <input type="password" id="confirmNewPassword" placeholder="Konfirmasi Password Baru">
+                <button onclick="saveNewPassword()" class="btn btn-success btn-block" style="margin-top:8px;">💾 Simpan</button>
+                <div id="passwordError" class="hidden" style="color:var(--danger);margin-top:8px;font-size:13px;"></div>
+                <div id="passwordSuccess" class="hidden" style="color:var(--success);margin-top:8px;font-size:13px;"></div>
+            </div>
+        </div>
+        <div class="modal-footer"><button onclick="closeModal('profileModal')" class="btn btn-gray">Tutup</button></div>
+    </div>
+</div>
+
+<!-- MODAL ADMIN -->
+<div class="modal-overlay" id="adminModal">
+    <div class="modal-content" style="max-width:550px;">
+        <div class="modal-header"><h3>⚙️ Admin Panel</h3><button class="modal-close" onclick="closeModal('adminModal')">✕</button></div>
+        <div class="modal-body">
+            <h4>💎 Edit Paket</h4>
+            <div class="packages-grid" id="adminPackagesGrid"></div>
+            <h4 style="margin-top:16px;">📱 Edit Nomor WA</h4>
+            <div class="flex gap-2 flex-wrap" style="align-items:center;">
+                <span>Nomor:</span><strong id="adminWaDisplay">081220285226</strong>
+                <button onclick="editWANumber()" class="btn btn-sm btn-warning">✏️ Edit</button>
+            </div>
+            <h4 style="margin-top:16px;">📤 Kirim Aktivasi</h4>
+            <input type="text" id="aktivasiUser" placeholder="Username/Email user" style="margin-bottom:8px;">
+            <select id="aktivasiPaket" style="margin-bottom:8px;">
+                <option value="1bulan">1 Bulan - Rp 25.000</option>
+                <option value="3bulan">3 Bulan - Rp 50.000</option>
+                <option value="6bulan">6 Bulan - Rp 75.000</option>
+            </select>
+            <button onclick="kirimAktivasi()" class="btn btn-success btn-block">📤 Kirim Aktivasi</button>
+            <div id="aktivasiResult" class="hidden" style="margin-top:8px;"></div>
+            <h4 style="margin-top:16px;">👥 User Terdaftar</h4>
+            <div id="userListAdmin" style="max-height:200px;overflow-y:auto;"></div>
+            <h4 style="margin-top:16px;">📊 Log Aktivasi</h4>
+            <div id="activationLogs" style="max-height:150px;overflow-y:auto;font-size:.8rem;"></div>
+        </div>
+        <div class="modal-footer"><button onclick="closeModal('adminModal')" class="btn btn-gray">Tutup</button></div>
+    </div>
+</div>
+
+<!-- MODAL EDIT WA -->
+<div class="modal-overlay" id="editWaModal">
+    <div class="modal-content" style="max-width:400px;">
+        <div class="modal-header"><h3>✏️ Edit Nomor WA</h3><button class="modal-close" onclick="closeModal('editWaModal')">✕</button></div>
+        <div class="modal-body">
+            <input type="text" id="editWaInput" placeholder="081234567890">
+            <div id="editWaError" class="hidden" style="color:var(--danger);margin-top:8px;font-size:13px;"></div>
+        </div>
+        <div class="modal-footer">
+            <button onclick="closeModal('editWaModal')" class="btn btn-gray">Batal</button>
+            <button onclick="saveWaNumber()" class="btn btn-success">💾 Simpan</button>
+        </div>
+    </div>
+</div>
+
+<!-- MODAL EDIT PAKET -->
+<div class="modal-overlay" id="editPackageModal">
+    <div class="modal-content" style="max-width:400px;">
+        <div class="modal-header"><h3 id="editPkgTitle">✏️ Edit Paket</h3><button class="modal-close" onclick="closeModal('editPackageModal')">✕</button></div>
+        <div class="modal-body">
+            <input type="hidden" id="editPkgIndex">
+            <div class="form-group"><label class="form-label">Nama</label><input type="text" id="editPkgName"></div>
+            <div class="form-group"><label class="form-label">Harga (Rp)</label><input type="number" id="editPkgPrice"></div>
+            <div class="form-group"><label class="form-label">Durasi</label><input type="text" id="editPkgDuration"></div>
+            <div id="editPkgError" class="hidden" style="color:var(--danger);margin-top:8px;font-size:13px;"></div>
+        </div>
+        <div class="modal-footer">
+            <button onclick="closeModal('editPackageModal')" class="btn btn-gray">Batal</button>
+            <button onclick="savePackageEdit()" class="btn btn-success">💾 Simpan</button>
+        </div>
+    </div>
+</div>
+
+<!-- MODAL GABUNG & COPY -->
+<div class="modal-overlay" id="mergeModal">
+    <div class="modal-content" style="max-width:650px;">
+        <div class="modal-header"><h3>🔄 Gabung & Copy</h3><button class="modal-close" onclick="closeModal('mergeModal')">✕</button></div>
+        <div class="modal-body">
+            <p style="color:var(--text-secondary);">Semua code digabung jadi 1 file index.html. <strong style="color:var(--warning);">🔒 Premium only.</strong></p>
+            <div id="mergeAppList" class="flex flex-wrap gap-2" style="padding:8px 0;"></div>
+            <button onclick="mergeAndCopy()" class="btn btn-success btn-block">🔄 Gabung & Copy</button>
+            <div id="mergeResult" class="hidden" style="margin-top:12px;">
+                <div class="flex-between" style="margin-bottom:8px;">
+                    <strong>📄 Hasil index.html</strong>
+                    <div class="flex gap-1">
+                        <button onclick="copyMergeResult()" class="btn btn-sm btn-primary">📋 Copy</button>
+                        <button onclick="downloadMergeResult()" class="btn btn-sm btn-success">📥 Download</button>
+                    </div>
+                </div>
+                <textarea id="mergeResultText" readonly style="font-family:'Courier New',monospace;font-size:.85rem;min-height:300px;background:var(--bg-primary);color:var(--text-primary);border:1px solid var(--accent);"></textarea>
+                <div style="margin-top:8px;font-size:.8rem;color:var(--text-muted);">💡 Total: <span id="mergeTotalCode">0</span> code</div>
+            </div>
+        </div>
+        <div class="modal-footer"><button onclick="closeModal('mergeModal')" class="btn btn-gray">Tutup</button></div>
+    </div>
+</div>
+
+<!-- MODAL APLIKASI -->
+<div class="modal-overlay" id="appModal">
+    <div class="modal-content" style="max-width:500px;">
+        <div class="modal-header"><h3 id="appModalTitle">➕ Tambah Aplikasi</h3><button class="modal-close" onclick="closeModal('appModal')">✕</button></div>
+        <div class="modal-body">
+            <input type="hidden" id="editAppId">
+            <div class="form-group"><label class="form-label">Nama Aplikasi *</label><input type="text" id="appName" placeholder="Contoh: APP TOKO ONLINE"></div>
+            <div class="form-group"><label class="form-label">Deskripsi</label><textarea id="appDesc" rows="2"></textarea></div>
+            <div id="appError" class="hidden" style="color:var(--danger);margin-top:8px;font-size:13px;"></div>
+        </div>
+        <div class="modal-footer">
+            <button onclick="closeModal('appModal')" class="btn btn-gray">Batal</button>
+            <button onclick="saveApp()" class="btn btn-success">💾 Simpan</button>
+        </div>
+    </div>
+</div>
+
+<!-- MODAL CODE -->
+<div class="modal-overlay" id="codeModal">
+    <div class="modal-content" style="max-width:600px;">
+        <div class="modal-header"><h3 id="codeModalTitle">➕ Tambah Code</h3><button class="modal-close" onclick="closeModal('codeModal')">✕</button></div>
+        <div class="modal-body">
+            <input type="hidden" id="editCodeId"><input type="hidden" id="codeAppId">
+            <div class="form-group"><label class="form-label">Nama Code *</label><input type="text" id="codeName" placeholder="Contoh: Code 1 : Header"></div>
+            <div class="form-group"><label class="form-label">Kode HTML *</label><textarea id="codeContent" rows="8" placeholder="Tempelkan kode HTML di sini..."></textarea></div>
+            <div id="codeError" class="hidden" style="color:var(--danger);margin-top:8px;font-size:13px;"></div>
+        </div>
+        <div class="modal-footer">
+            <button onclick="closeModal('codeModal')" class="btn btn-gray">Batal</button>
+            <button onclick="saveCode()" class="btn btn-success">💾 Simpan</button>
+        </div>
+    </div>
+</div>
+
+<!-- MODAL KONFIRMASI -->
+<div class="modal-overlay" id="confirmModal">
+    <div class="modal-content" style="max-width:380px;">
+        <div class="modal-header"><h3 id="confirmTitle">⚠️ Konfirmasi</h3><button class="modal-close" onclick="closeModal('confirmModal')">✕</button></div>
+        <div class="modal-body"><p id="confirmMessage">Apakah Anda yakin?</p></div>
+        <div class="modal-footer">
+            <button onclick="closeModal('confirmModal')" class="btn btn-gray">Batal</button>
+            <button onclick="confirmAction()" class="btn btn-danger" id="confirmOkBtn">Ya</button>
+        </div>
+    </div>
+</div>
+
+<!-- MODAL AKTIVASI (UNTUK USER) -->
+<div class="modal-overlay" id="activationModal">
+    <div class="modal-content" style="max-width:450px;">
+        <div class="modal-header"><h3>💎 Aktivasi Premium</h3><button class="modal-close" onclick="closeModal('activationModal')">✕</button></div>
+        <div class="modal-body">
+            <p style="color:var(--text-secondary);margin-bottom:12px;">Masukkan kode aktivasi dari Admin.</p>
+            <input type="text" id="activationCodeInput" placeholder="Kode Aktivasi (ACT-xxxxx-xxxxx)">
+            <button onclick="activatePremium()" class="btn btn-success btn-block" style="margin-top:8px;">🔓 Aktifkan</button>
+            <div id="activationError" class="hidden" style="color:var(--danger);margin-top:8px;font-size:13px;"></div>
+            <div id="activationSuccess" class="hidden" style="color:var(--success);margin-top:8px;font-size:13px;"></div>
+            <div style="margin-top:16px;padding-top:12px;border-top:1px solid var(--border-color);text-align:center;">
+                <p style="font-size:.85rem;color:var(--text-muted);">Belum punya kode? Hubungi Admin:</p>
+                <div class="wa-banner" onclick="waClick()" style="margin-top:8px;">
+                    <span>💬 <span id="activationWaNumber">081220285226</span></span>
+                    <span>👉 Chat</span>
+                </div>
+            </div>
+        </div>
+        <div class="modal-footer"><button onclick="closeModal('activationModal')" class="btn btn-gray">Tutup</button></div>
+    </div>
+</div>
+
+<!-- TOAST CONTAINER -->
+<div id="toastContainer"></div>
+
+<!-- LOADING OVERLAY -->
+<div id="loadingOverlay" class="loading-overlay hidden">
+    <div class="flex flex-col flex-center"><div class="spinner"></div><div class="loading-text" id="loadingText" style="color:#fff;margin-top:16px;">Memuat...</div></div>
+</div>
