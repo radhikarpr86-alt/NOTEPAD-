@@ -6,1030 +6,1151 @@
     <meta name="theme-color" content="#0a0a1a">
     <meta name="apple-mobile-web-app-capable" content="yes">
     <meta name="apple-mobile-web-app-status-bar-style" content="default">
-    <title>📝 Notepad+ Code Storage v3.0</title>
+    <title>Notepad+ Code Storage v3.3</title>
     <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E%3Crect width='100' height='100' rx='20' fill='%230a0a1a'/%3E%3Ctext x='50' y='68' text-anchor='middle' font-size='60' fill='%23ffffff'%3E📝%3C/text%3E%3C/svg%3E">
-    
-    <style>
-        *,*::before,*::after{box-sizing:border-box;margin:0;padding:0;border:0;font:inherit;vertical-align:baseline}
-        html{scroll-behavior:smooth;-webkit-text-size-adjust:100%;font-size:16px;line-height:1.5;-webkit-font-smoothing:antialiased}
-        body{
-            font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,Arial,sans-serif;
-            background:var(--bg);color:var(--text);min-height:100vh;overflow-x:hidden;
-            transition:background .3s,color .3s;
-        }
-        
-        :root{
-            --bg:#0a0a1a;--bg2:#12122a;--bg3:#1a1a35;--bg4:#222240;
-            --text:#e8e8f0;--text2:#a0a0b8;--text3:#6a6a80;
-            --accent:#7c3aed;--accent2:#6d28d9;--accent3:#8b5cf6;
-            --green:#10b981;--green2:#059669;
-            --red:#ef4444;--red2:#dc2626;
-            --yellow:#f59e0b;--yellow2:#d97706;
-            --blue:#3b82f6;
-            --border:rgba(255,255,255,0.06);--border2:rgba(255,255,255,0.1);
-            --shadow:0 2px 8px rgba(0,0,0,0.4);--shadow2:0 4px 20px rgba(0,0,0,0.5);
-            --radius:8px;--radius2:12px;--radius3:16px;--radius4:9999px;
-            --g1:4px;--g2:8px;--g3:12px;--g4:16px;--g5:20px;--g6:24px;
-            --tr:200ms ease;
-        }
-        
-        .light{
-            --bg:#f5f5f8;--bg2:#fff;--bg3:#f0f0f5;--bg4:#e5e5ea;
-            --text:#1a1a2e;--text2:#555;--text3:#888;
-            --border:rgba(0,0,0,0.08);--border2:rgba(0,0,0,0.12);
-        }
-        
-        ::-webkit-scrollbar{width:4px}
-        ::-webkit-scrollbar-track{background:transparent}
-        ::-webkit-scrollbar-thumb{background:var(--accent);border-radius:var(--radius4)}
-        
-        .hidden{display:none!important}
-        .flex{display:flex}.fcenter{display:flex;align-items:center;justify-content:center}
-        .fbetween{display:flex;align-items:center;justify-content:space-between}
-        .fcol{flex-direction:column}.fwrap{flex-wrap:wrap}.f1{flex:1}
-        .gap1{gap:var(--g1)}.gap2{gap:var(--g2)}.gap3{gap:var(--g3)}.gap4{gap:var(--g4)}.gap5{gap:var(--g5)}
-        .wfull{width:100%}.tcenter{text-align:center}
-        .tsm{font-size:.85rem}.txs{font-size:.75rem}.tbold{font-weight:700}
-        .tmuted{color:var(--text3)}.t2{color:var(--text2)}.taccent{color:var(--accent3)}
-        .tgreen{color:var(--green)}.tred{color:var(--red)}.tyellow{color:var(--yellow)}
-        .bg2{background:var(--bg2)}.bg3{background:var(--bg3)}
-        .rounded{border-radius:var(--radius)}.rounded2{border-radius:var(--radius2)}.rounded3{border-radius:var(--radius3)}.rounded4{border-radius:var(--radius4)}
-        .border{border:1px solid var(--border)}.pointer{cursor:pointer}
-        .overflow-h{overflow:hidden}.overflow-a{overflow-y:auto}
-        .truncate{overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
-        
-        @keyframes fadeIn{from{opacity:0}to{opacity:1}}
-        @keyframes slideUp{from{opacity:0;transform:translateY(20px)}to{opacity:1;transform:translateY(0)}}
-        @keyframes spin{to{transform:rotate(360deg)}}
-        @keyframes glow{0%,100%{box-shadow:0 0 20px rgba(124,58,237,0.2)}50%{box-shadow:0 0 40px rgba(124,58,237,0.5)}}
-        .afade{animation:fadeIn .3s ease}
-        .aslideup{animation:slideUp .3s ease}
-        .aspin{animation:spin .8s linear infinite}
-        .aglow{animation:glow 2s ease-in-out infinite}
-        
-        .btn{
-            display:inline-flex;align-items:center;justify-content:center;gap:6px;
-            padding:10px 20px;border:none;border-radius:var(--radius);font-weight:600;
-            cursor:pointer;transition:all var(--tr);font-size:.9rem;min-height:40px;
-            text-decoration:none;line-height:1.2;
-        }
-        .btn:hover{transform:translateY(-1px);box-shadow:var(--shadow2)}
-        .btn:active{transform:translateY(0)}
-        .btn:disabled{opacity:.5;cursor:not-allowed;transform:none!important}
-        
-        .btnp{background:var(--accent);color:#fff}.btnp:hover{background:var(--accent2)}
-        .btns{background:var(--green);color:#fff}.btns:hover{background:var(--green2)}
-        .btnd{background:var(--red);color:#fff}.btnd:hover{background:var(--red2)}
-        .btnw{background:var(--yellow);color:#000}.btnw:hover{background:var(--yellow2)}
-        .btnb{background:var(--blue);color:#fff}
-        .btng{background:var(--text3);color:#fff}
-        .btno{background:transparent;border:2px solid var(--accent);color:var(--accent3)}
-        .btno:hover{background:var(--accent);color:#fff}
-        
-        .btnsm{padding:6px 14px;font-size:.8rem;min-height:30px}
-        .btnlg{padding:14px 28px;font-size:1.05rem;min-height:48px}
-        .btnblock{width:100%;display:flex}
-        
-        .badge{display:inline-flex;align-items:center;gap:4px;padding:3px 10px;border-radius:var(--radius4);font-size:.7rem;font-weight:600;text-transform:uppercase}
-        .badges{background:var(--green);color:#fff}
-        .badged{background:var(--red);color:#fff}
-        .badgew{background:var(--yellow);color:#000}
-        .badgep{background:var(--accent);color:#fff}
-        
-        input,textarea,select{
-            width:100%;padding:10px 14px;border:1px solid var(--border2);border-radius:var(--radius);
-            font-size:.9rem;transition:all var(--tr);background:var(--bg3);color:var(--text);
-            font-family:inherit;
-        }
-        input:focus,textarea:focus,select:focus{outline:none;border-color:var(--accent);box-shadow:0 0 0 3px rgba(124,58,237,0.15)}
-        input::placeholder,textarea::placeholder{color:var(--text3)}
-        textarea{resize:vertical;min-height:80px;font-family:'Courier New',monospace;font-size:.85rem;line-height:1.7}
-        select{appearance:none;background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12'%3E%3Cpath fill='%23a0a0b8' d='M6 8L1 3h10z'/%3E%3C/svg%3E");background-repeat:no-repeat;background-position:right 12px center;padding-right:36px}
-        
-        .formg{margin-bottom:var(--g4)}
-        .forml{display:block;margin-bottom:var(--g2);font-weight:500;font-size:.85rem;color:var(--text2)}
-        .formerr{color:var(--red);font-size:.8rem;margin-top:var(--g1);display:none}
-        .formerr.show{display:block}
-        .formsuc{color:var(--green);font-size:.8rem;margin-top:var(--g1);display:none}
-        .formsuc.show{display:block}
-        
-        .toastc{position:fixed;bottom:80px;left:50%;transform:translateX(-50%);z-index:999;max-width:90%;pointer-events:none}
-        .toast{
-            background:var(--bg2);color:var(--text);padding:12px 20px;border-radius:var(--radius);
-            border:1px solid var(--border);box-shadow:var(--shadow2);font-size:.9rem;
-            opacity:0;transform:translateY(20px);transition:all var(--tr);pointer-events:auto;
-            text-align:center;margin-bottom:8px;border-left:4px solid var(--accent);
-        }
-        .toast.show{opacity:1;transform:translateY(0)}
-        .toast.s{border-left-color:var(--green)}
-        .toast.e{border-left-color:var(--red)}
-        .toast.w{border-left-color:var(--yellow)}
-        
-        .modal{
-            position:fixed;top:0;left:0;width:100%;height:100%;
-            background:rgba(0,0,0,0.7);backdrop-filter:blur(8px);
-            display:none;align-items:center;justify-content:center;
-            z-index:998;padding:var(--g4);
-        }
-        .modal.show{display:flex}
-        .modalc{
-            background:var(--bg2);border-radius:var(--radius3);max-width:600px;width:100%;
-            max-height:85vh;overflow-y:auto;padding:var(--g6);
-            animation:slideUp .3s ease;border:1px solid var(--border);box-shadow:var(--shadow2);
-        }
-        .modalh{display:flex;align-items:center;justify-content:space-between;margin-bottom:var(--g5);padding-bottom:var(--g4);border-bottom:1px solid var(--border)}
-        .modalh h3{margin:0;font-size:1.2rem;font-weight:700}
-        .modalclose{background:none;border:none;font-size:1.5rem;color:var(--text2);cursor:pointer;padding:4px;transition:all var(--tr)}
-        .modalclose:hover{color:var(--red);transform:rotate(90deg)}
-        .modalf{display:flex;gap:var(--g3);padding-top:var(--g5);border-top:1px solid var(--border);margin-top:var(--g5);justify-content:flex-end}
-        
-        .container{max-width:1000px;margin:0 auto;padding:var(--g4);min-height:100vh}
-        
-        .header{
-            display:flex;align-items:center;justify-content:space-between;
-            padding:var(--g3) var(--g5);background:var(--bg2);border-radius:var(--radius2);
-            border:1px solid var(--border);margin-bottom:var(--g5);flex-wrap:wrap;gap:var(--g2);
-        }
-        .logo{font-size:1.2rem;font-weight:700;display:flex;align-items:center;gap:var(--g2)}
-        .logo span{background:linear-gradient(135deg,var(--accent3),#c4b5fd);-webkit-background-clip:text;-webkit-text-fill-color:transparent}
-        
-        .hero{
-            text-align:center;padding:var(--g6) var(--g5);background:var(--bg2);
-            border-radius:var(--radius3);border:1px solid var(--border);margin-bottom:var(--g5);
-        }
-        .hero h1{font-size:2rem;font-weight:800;margin-bottom:var(--g2)}
-        .hero p{font-size:1rem;color:var(--text2);max-width:600px;margin:0 auto var(--g5)}
-        .hero .gradient-text{background:linear-gradient(135deg,var(--accent3),#c4b5fd);-webkit-background-clip:text;-webkit-text-fill-color:transparent}
-        
-        .stats{display:grid;grid-template-columns:repeat(auto-fill,minmax(130px,1fr));gap:var(--g3);margin-bottom:var(--g5)}
-        .statc{background:var(--bg2);border-radius:var(--radius);padding:var(--g4);border:1px solid var(--border);text-align:center}
-        .statv{font-size:1.5rem;font-weight:700;color:var(--accent3)}
-        .statl{font-size:.78rem;color:var(--text2);margin-top:var(--g1)}
-        
-        .features{display:grid;grid-template-columns:repeat(auto-fill,minmax(200px,1fr));gap:var(--g4);margin-bottom:var(--g5)}
-        .featc{background:var(--bg2);border-radius:var(--radius2);padding:var(--g5);border:1px solid var(--border);text-align:center;transition:all var(--tr)}
-        .featc:hover{border-color:var(--accent);transform:translateY(-3px)}
-        .featicon{font-size:2rem;margin-bottom:var(--g2)}
-        .featc h4{font-size:1rem;margin-bottom:var(--g1)}
-        .featc p{font-size:.85rem;color:var(--text2);margin:0}
-        
-        .prices{display:grid;grid-template-columns:repeat(auto-fill,minmax(240px,1fr));gap:var(--g4);margin-bottom:var(--g5)}
-        .pricec{background:var(--bg2);border-radius:var(--radius3);padding:var(--g6);border:2px solid var(--border);text-align:center;transition:all var(--tr);position:relative}
-        .pricec:hover{border-color:var(--accent);transform:translateY(-4px)}
-        .pricec.featured{border-color:var(--accent);background:var(--bg3)}
-        .fbadge{position:absolute;top:-12px;left:50%;transform:translateX(-50%);background:var(--accent);color:#fff;padding:3px 16px;border-radius:var(--radius4);font-size:.7rem;font-weight:700}
-        .priceicon{font-size:2.5rem;margin-bottom:var(--g2)}
-        .pricename{font-size:1.2rem;font-weight:700}
-        .priceval{font-size:2rem;font-weight:800;color:var(--green);margin:var(--g2) 0}
-        .pricedur{font-size:.85rem;color:var(--text2);margin-bottom:var(--g4)}
-        .pricelist{text-align:left;padding:0;margin:0 0 var(--g4) 0}
-        .pricelist li{list-style:none;padding:3px 0;font-size:.85rem;color:var(--text2);display:flex;align-items:center;gap:var(--g2)}
-        .pricelist li .c{color:var(--green)}
-        
-        .applist{display:grid;grid-template-columns:1fr;gap:var(--g3)}
-        .appitem{background:var(--bg2);border-radius:var(--radius2);border:1px solid var(--border);overflow:hidden}
-        .appitem:hover{border-color:var(--accent)}
-        .apphead{display:flex;align-items:center;justify-content:space-between;padding:var(--g3) var(--g4);cursor:pointer;flex-wrap:wrap;gap:var(--g2)}
-        .apphead:hover{background:var(--bg3)}
-        .appname{font-weight:600;font-size:1rem;display:flex;align-items:center;gap:var(--g2)}
-        .appcount{font-size:.75rem;color:var(--text3);background:var(--bg4);padding:2px 10px;border-radius:var(--radius4)}
-        .appcodes{padding:0 var(--g4) var(--g3);display:none}
-        .appcodes.open{display:block}
-        
-        .codeitem{background:var(--bg3);border-radius:var(--radius);padding:var(--g3);margin-bottom:var(--g2);border:1px solid var(--border)}
-        .codehead{display:flex;align-items:center;justify-content:space-between;margin-bottom:var(--g2);flex-wrap:wrap;gap:var(--g2)}
-        .codename{font-weight:500;font-size:.9rem}
-        .codecontent{font-family:'Courier New',monospace;font-size:.8rem;color:var(--text2);white-space:pre-wrap;word-wrap:break-word;max-height:180px;overflow-y:auto;padding:var(--g2);background:var(--bg);border-radius:6px;border:1px solid var(--border);display:none}
-        .codecontent.show{display:block}
-        .codecontent pre{margin:0;white-space:pre-wrap;word-wrap:break-word}
-        
-        .empty{text-align:center;padding:var(--g6) var(--g4);color:var(--text2)}
-        .empty .icon{font-size:3rem;margin-bottom:var(--g3)}
-        .empty h3{font-size:1.2rem;color:var(--text);margin-bottom:var(--g2)}
-        
-        .wabanner{
-            background:linear-gradient(135deg,#25D366,#128C7E);color:#fff;
-            padding:var(--g4) var(--g5);border-radius:var(--radius2);margin-bottom:var(--g5);
-            display:flex;align-items:center;justify-content:space-between;
-            flex-wrap:wrap;gap:var(--g3);cursor:pointer;transition:all var(--tr);
-        }
-        .wabanner:hover{transform:translateY(-2px);box-shadow:var(--shadow2)}
-        
-        @media(max-width:640px){
-            .hero h1{font-size:1.5rem}
-            .prices{grid-template-columns:1fr}
-            .features{grid-template-columns:1fr}
-            .header{flex-direction:column;align-items:stretch}
-            .stats{grid-template-columns:repeat(2,1fr)}
-            .modalc{padding:var(--g4)}
-        }
-    </style>
+    <link rel="stylesheet" href="style.css">
 </head>
 <body>
 
-<div id="connectionBadge" style="position:fixed;top:10px;right:10px;z-index:997;padding:6px 14px;border-radius:20px;font-size:11px;font-weight:700;background:#10b981;color:#fff;opacity:.85;">🟢 ONLINE</div>
-
-<!-- ============================================================ -->
-<!-- LANDING PAGE -->
-<!-- ============================================================ -->
-<div class="container" id="landingPage">
-    <header class="header">
-        <div class="logo">📝 <span>Notepad+ v3.0</span></div>
-        <div class="flex gap2 fwrap">
-            <button onclick="showLoginModal()" class="btn btno btnsm">🔐 Login</button>
-            <button onclick="showRegisterModal()" class="btn btnp btnsm">📝 Daftar</button>
-            <button onclick="toggleTheme()" id="themeBtn1" class="btn btng btnsm">🌙</button>
-            <button onclick="openApp()" class="btn btns btnsm">🚀 Buka App</button>
-        </div>
-    </header>
-
-    <section class="hero aslideup">
-        <div style="font-size:3rem;">📝</div>
-        <h1 class="gradient-text">Notepad+ Code Storage</h1>
-        <p>Simpan, kelola, dan gabungkan semua kode HTML Anda. Multi-user, aktivasi premium, keamanan terjamin.</p>
-        <div class="flex gap3 fwrap fcenter">
-            <button onclick="openApp()" class="btn btnp btnlg">🚀 Mulai Sekarang</button>
-            <button onclick="showLoginModal()" class="btn btno btnlg">🔐 Login</button>
-            <button onclick="installApp()" class="btn btns btnlg" id="heroInstall">📥 Install Desktop</button>
-        </div>
-    </section>
-
-    <!-- WA BANNER DENGAN +62 -->
-    <div class="wabanner" onclick="openWA()">
-        <div><strong>💬 Hubungi Admin:</strong> <span id="waLanding">+6281220285226</span></div>
-        <span>📱 Chat WhatsApp 👉</span>
+    <!-- CONNECTION STATUS BADGE -->
+    <div id="connectionBadge" style="position:fixed;top:10px;right:10px;z-index:997;padding:6px 14px;border-radius:20px;font-size:11px;font-weight:700;background:#10b981;color:#fff;opacity:0.85;">
+        ONLINE
     </div>
 
-    <h3 style="text-align:center;margin-bottom:var(--g4);">✨ Fitur Unggulan</h3>
-    <div class="features">
-        <div class="featc"><div class="featicon">📁</div><h4>Penyimpanan Tak Terbatas</h4><p>Simpan aplikasi & kode HTML tanpa batas.</p></div>
-        <div class="featc"><div class="featicon">🔄</div><h4>Gabung Otomatis</h4><p>Gabung semua kode jadi 1 file index.html.</p></div>
-        <div class="featc"><div class="featicon">🔐</div><h4>Aktivasi Premium</h4><p>Sistem kode aktivasi oleh Super Admin.</p></div>
-        <div class="featc"><div class="featicon">👥</div><h4>Multi User</h4><p>Daftar & login akun pribadi.</p></div>
-        <div class="featc"><div class="featicon">🛡️</div><h4>Keamanan</h4><p>Anti-hack & proteksi berlapis.</p></div>
-        <div class="featc"><div class="featicon">📱</div><h4>PWA Support</h4><p>Install sebagai aplikasi desktop.</p></div>
+    <!-- OFFLINE BANNER -->
+    <div class="offline-banner" id="offlineBanner">
+        <span><strong>Mode Offline</strong> - Data disimpan di browser. Beberapa fitur terbatas.</span>
+        <button onclick="downloadForOffline()" class="btn btn-warning btn-sm">Download Untuk Offline</button>
     </div>
 
-    <h3 style="text-align:center;margin-bottom:var(--g4);">💎 Paket Aktivasi Premium</h3>
-    <div class="prices">
-        <div class="pricec"><div class="priceicon">🥈</div><div class="pricename">Basic</div><div class="priceval">Rp 25K</div><div class="pricedur">1 Bulan</div><ul class="pricelist"><li><span class="c">✅</span> Simpan Tak Terbatas</li><li><span class="c">✅</span> Gabung Code</li><li><span class="c">✅</span> Export/Import</li></ul></div>
-        <div class="pricec featured aglow"><div class="fbadge">⭐ POPULER</div><div class="priceicon">🥇</div><div class="pricename">Premium</div><div class="priceval">Rp 50K</div><div class="pricedur">3 Bulan</div><ul class="pricelist"><li><span class="c">✅</span> Semua Basic</li><li><span class="c">✅</span> Multi User</li><li><span class="c">✅</span> Prioritas Support</li></ul></div>
-        <div class="pricec"><div class="priceicon">👑</div><div class="pricename">Enterprise</div><div class="priceval">Rp 75K</div><div class="pricedur">6 Bulan</div><ul class="pricelist"><li><span class="c">✅</span> Semua Premium</li><li><span class="c">✅</span> VIP Support</li><li><span class="c">✅</span> Update Lifetime</li></ul></div>
+    <!-- EXPIRY WARNING BANNER -->
+    <div class="expiry-warning" id="expiryWarning">
+        <span id="expiryWarningText">Premium akan segera berakhir!</span>
+        <button onclick="showLoginModal()" class="btn btn-warning btn-sm">Perpanjang Premium</button>
     </div>
-</div>
 
-<!-- ============================================================ -->
-<!-- APP PAGE -->
-<!-- ============================================================ -->
-<div class="container hidden" id="appPage">
-    <header class="header">
-        <div class="logo">📝 <span>Notepad+ v3.0</span></div>
-        <div class="flex gap2 fwrap">
-            <button onclick="toggleTheme()" id="themeBtn2" class="btn btng btnsm">🌙</button>
-            <button onclick="showProfileModal()" id="profilBtn" class="btn btno btnsm hidden">👤 Profil</button>
-            <button onclick="showSuperAdminPanel()" id="adminBtn" class="btn btnw btnsm hidden">⚙️ Admin</button>
-            <div class="flex gap2" style="align-items:center;background:var(--bg3);padding:4px 12px;border-radius:var(--radius4);" id="userBadge" style="display:none;">
-                <div id="userAvatar" style="width:28px;height:28px;border-radius:50%;background:var(--accent);display:flex;align-items:center;justify-content:center;font-size:.75rem;color:#fff;">U</div>
-                <span id="userNameDisplay" style="font-size:.85rem;font-weight:500;">User</span>
+    <!-- INSTALL BANNER -->
+    <div id="installBanner" style="display:none;background:linear-gradient(135deg,#7c3aed,#a78bfa);color:#fff;padding:12px 20px;border-radius:12px;margin-bottom:20px;align-items:center;justify-content:space-between;cursor:pointer;" onclick="installApplication()">
+        <span><strong>Install Notepad+ sebagai Aplikasi Desktop!</strong></span>
+        <span style="font-size:1.2rem;">Klik Disini</span>
+    </div>
+
+    <!-- ============================================================ -->
+    <!-- LANDING PAGE                                                  -->
+    <!-- ============================================================ -->
+    <div class="container" id="landingPage">
+        
+        <!-- HEADER -->
+        <header class="header">
+            <div class="logo">
+                <span class="logo-icon">📝</span>
+                <span class="logo-text">Notepad+ v3.3</span>
             </div>
-            <button onclick="handleLogout()" id="logoutBtn" class="btn btnd btnsm hidden">🚪 Logout</button>
-            <button onclick="goToLanding()" class="btn btng btnsm">🏠 Home</button>
-        </div>
-    </header>
-
-    <!-- WA BANNER DENGAN +62 -->
-    <div class="wabanner" onclick="openWA()">
-        <div><strong>💬 Aktivasi & Bantuan:</strong> <span id="waApp">+6281220285226</span></div>
-        <span>📱 Chat Admin 👉</span>
-    </div>
-
-    <div class="stats" id="dashboardStats">
-        <div class="statc"><div class="statv" id="statApps">0</div><div class="statl">📱 Aplikasi</div></div>
-        <div class="statc"><div class="statv" id="statCodes">0</div><div class="statl">📝 Total Code</div></div>
-        <div class="statc"><div class="statv" id="statStorage">0 KB</div><div class="statl">💾 Storage</div></div>
-        <div class="statc"><div class="statv" id="statUsers">0</div><div class="statl">👥 User</div></div>
-        <div class="statc" style="border-color:var(--accent);"><div class="statv" id="statPremium">🆓</div><div class="statl">💎 Status</div></div>
-    </div>
-
-    <div class="flex gap3 fwrap" style="margin-bottom:var(--g5);">
-        <button onclick="showAddAppModal()" class="btn btns">➕ Tambah Aplikasi</button>
-        <button onclick="toggleSearch()" class="btn btnp">🔍 Cari</button>
-        <button onclick="exportAll()" class="btn btnw">📤 Export</button>
-        <button onclick="document.getElementById('importFile').click()" class="btn btnb">📥 Import</button>
-        <input type="file" id="importFile" accept=".json" class="hidden" onchange="importAll(this)">
-        <button onclick="showMergeModal()" class="btn btnp" id="mergeBtn">🔄 Gabung & Copy <span class="badge badgep">Premium</span></button>
-    </div>
-
-    <div id="searchBar" class="hidden" style="margin-bottom:var(--g4);">
-        <div class="flex gap2 fwrap">
-            <input type="text" id="searchInput" placeholder="Cari aplikasi atau kode..." style="flex:2;min-width:200px;" oninput="doSearch()">
-            <button onclick="clearSearch()" class="btn btng btnsm">✕ Clear</button>
-        </div>
-    </div>
-
-    <div id="appListContainer"></div>
-    <div id="emptyState" class="empty">
-        <div class="icon">📝</div>
-        <h3>Belum Ada Aplikasi</h3>
-        <p>Mulai tambahkan aplikasi dan kode HTML Anda.</p>
-        <button onclick="showAddAppModal()" class="btn btns">➕ Tambah Aplikasi</button>
-    </div>
-</div>
-
-<!-- ============================================================ -->
-<!-- ALL MODALS -->
-<!-- ============================================================ -->
-
-<!-- LOGIN -->
-<div class="modal" id="loginModal">
-    <div class="modalc" style="max-width:420px;">
-        <div class="modalh"><h3>🔐 Login</h3><button class="modalclose" onclick="closeModal('loginModal')">✕</button></div>
-        <div>
-            <div class="formg"><input type="text" id="loginUser" placeholder="Username atau Email"></div>
-            <div class="formg"><input type="password" id="loginPass" placeholder="Password"></div>
-            <button onclick="doLogin()" class="btn btns btnblock">🔓 Masuk</button>
-            <div class="formerr" id="loginErr"></div>
-            
-            <div style="margin-top:var(--g5);padding-top:var(--g4);border-top:1px solid var(--border);">
-                <p style="font-size:.85rem;color:var(--text2);margin-bottom:var(--g2);">💎 <strong>Aktivasi Premium</strong></p>
-                <div class="flex gap2">
-                    <input type="text" id="activationCodeInput" placeholder="Masukkan kode aktivasi" style="flex:1;">
-                    <button onclick="activateFromLogin()" class="btn btnp btnsm">Aktifkan</button>
-                </div>
-                <div class="formerr" id="activationErr"></div>
-                <div class="formsuc" id="activationSuc"></div>
+            <div class="header-buttons">
+                <button onclick="showLoginModal()" class="btn btn-outline btn-sm">Login</button>
+                <button onclick="showRegisterModal()" class="btn btn-primary btn-sm">Daftar</button>
+                <button onclick="toggleTheme()" id="themeButton1" class="btn btn-gray btn-sm">🌙 Dark Mode</button>
+                <button onclick="openApplication()" class="btn btn-success btn-sm">Buka Aplikasi</button>
+                <button onclick="downloadForOffline()" class="btn btn-blue btn-sm">Download Offline</button>
             </div>
-            
-            <div class="fbetween" style="margin-top:var(--g4);font-size:.8rem;">
-                <span class="pointer" style="color:var(--accent3);" onclick="closeModal('loginModal');showRegisterModal()">📝 Daftar</span>
-                <span class="pointer" style="color:var(--text2);" onclick="closeModal('loginModal');openModal('forgotModal')">🔑 Lupa Password?</span>
-            </div>
-        </div>
-        <div class="modalf"><button onclick="closeModal('loginModal')" class="btn btng">Tutup</button></div>
-    </div>
-</div>
+        </header>
 
-<!-- REGISTER -->
-<div class="modal" id="registerModal">
-    <div class="modalc" style="max-width:420px;">
-        <div class="modalh"><h3>📝 Daftar Akun</h3><button class="modalclose" onclick="closeModal('registerModal')">✕</button></div>
-        <div>
-            <div class="formg"><input type="text" id="regNama" placeholder="Nama Lengkap *"></div>
-            <div class="formg"><input type="email" id="regEmail" placeholder="Email *"></div>
-            <div class="formg"><input type="text" id="regHp" placeholder="No HP/WA * (08xxx)"></div>
-            <div class="formg"><input type="text" id="regUser" placeholder="Username *"></div>
-            <div class="formg"><input type="password" id="regPass" placeholder="Password * (min 6 karakter)"></div>
-            <div class="formg"><input type="password" id="regPass2" placeholder="Konfirmasi Password *"></div>
-            <button onclick="doRegister()" class="btn btnp btnblock">📝 Daftar</button>
-            <div class="formerr" id="regErr"></div>
-            <div class="formsuc" id="regSuc"></div>
-            <p style="text-align:center;margin-top:var(--g4);font-size:.8rem;">Sudah punya akun? <span class="pointer" style="color:var(--accent3);" onclick="closeModal('registerModal');showLoginModal()">Login</span></p>
-        </div>
-        <div class="modalf"><button onclick="closeModal('registerModal')" class="btn btng">Tutup</button></div>
-    </div>
-</div>
+        <!-- HERO SECTION -->
+        <section class="hero">
+            <div class="hero-icon">📝</div>
+            <h1 class="gradient-text">Notepad+ Code Storage</h1>
+            <p class="hero-description">
+                Simpan, kelola, dan gabungkan semua kode HTML Anda dalam satu tempat.
+                Multi-user, aktivasi premium, keamanan terjamin, dan bisa digunakan secara offline.
+            </p>
+            <div class="hero-buttons">
+                <button onclick="openApplication()" class="btn btn-primary btn-lg">Mulai Sekarang</button>
+                <button onclick="showLoginModal()" class="btn btn-outline btn-lg">Login</button>
+                <button onclick="installApplication()" class="btn btn-success btn-lg" id="heroInstallButton">Install Desktop</button>
+            </div>
+        </section>
 
-<!-- FORGOT PASSWORD -->
-<div class="modal" id="forgotModal">
-    <div class="modalc" style="max-width:420px;">
-        <div class="modalh"><h3>🔑 Lupa Password</h3><button class="modalclose" onclick="closeModal('forgotModal')">✕</button></div>
-        <div>
-            <div class="formg"><input type="text" id="forgotNama" placeholder="Nama Lengkap *"></div>
-            <div class="formg"><input type="email" id="forgotEmail" placeholder="Email *"></div>
-            <div class="formg"><input type="text" id="forgotHp" placeholder="No HP *"></div>
-            <button onclick="doForgot()" class="btn btnw btnblock">📧 Kirim Link Reset</button>
-            <div class="formerr" id="forgotErr"></div>
-            <div class="formsuc" id="forgotSuc"></div>
-        </div>
-        <div class="modalf"><button onclick="closeModal('forgotModal')" class="btn btng">Tutup</button></div>
-    </div>
-</div>
-
-<!-- PROFILE -->
-<div class="modal" id="profileModal">
-    <div class="modalc" style="max-width:450px;">
-        <div class="modalh"><h3>👤 Profil</h3><button class="modalclose" onclick="closeModal('profileModal')">✕</button></div>
-        <div>
-            <div class="flex gap4" style="align-items:center;margin-bottom:var(--g4);">
-                <div id="profAvatar" style="width:60px;height:60px;border-radius:50%;background:var(--accent);display:flex;align-items:center;justify-content:center;font-size:1.5rem;color:#fff;">U</div>
-                <div><h4 id="profName" style="margin:0;">User</h4><p id="profRole" style="margin:0;font-size:.8rem;color:var(--text2);">User</p></div>
-            </div>
-            <div class="formg"><label class="forml">Nama</label><input type="text" id="editNama"></div>
-            <div class="formg"><label class="forml">Email</label><input type="email" id="editEmail"></div>
-            <div class="formg"><label class="forml">No HP</label><input type="text" id="editHp"></div>
-            <button onclick="saveProfile()" class="btn btns btnblock">💾 Simpan</button>
-            <div class="formerr" id="profErr"></div>
-            <div class="formsuc" id="profSuc"></div>
-        </div>
-        <div class="modalf"><button onclick="closeModal('profileModal')" class="btn btng">Tutup</button></div>
-    </div>
-</div>
-
-<!-- SUPER ADMIN -->
-<div class="modal" id="superAdminModal">
-    <div class="modalc" style="max-width:650px;">
-        <div class="modalh"><h3>⚙️ Panel Super Admin</h3><button class="modalclose" onclick="closeModal('superAdminModal')">✕</button></div>
-        <div>
-            <div class="flex gap2 fwrap" style="margin-bottom:var(--g4);border-bottom:1px solid var(--border);padding-bottom:var(--g3);">
-                <button class="btn btnsm btnp" onclick="switchAdminTab('codes')" id="tabCodes">🎫 Kode</button>
-                <button class="btn btnsm btno" onclick="switchAdminTab('users')" id="tabUsers">👥 User</button>
-                <button class="btn btnsm btno" onclick="switchAdminTab('security')" id="tabSecurity">🛡️ Log</button>
-                <button class="btn btnsm btno" onclick="switchAdminTab('settings')" id="tabSettings">⚙️ Set</button>
-            </div>
-            
-            <div id="adminTabCodes">
-                <h4>🎫 Buat Kode Aktivasi</h4>
-                <div class="formg"><input type="text" id="adminActUser" placeholder="Username/email user"></div>
-                <div class="formg"><select id="adminActPackage"><option value="1bulan">1 Bulan - Rp 25K</option><option value="3bulan">3 Bulan - Rp 50K</option><option value="6bulan">6 Bulan - Rp 75K</option></select></div>
-                <button onclick="adminCreateCode()" class="btn btns btnblock">🎫 Buat Kode</button>
-                <div id="adminCodeResult" style="margin-top:var(--g3);"></div>
-                <h4 style="margin-top:var(--g5);">📋 Kode Aktif</h4>
-                <div id="activeCodesList" style="max-height:200px;overflow-y:auto;font-size:.8rem;"></div>
-            </div>
-            
-            <div id="adminTabUsers" class="hidden">
-                <h4>👥 Daftar User</h4>
-                <div id="adminUserList" style="max-height:350px;overflow-y:auto;"></div>
-            </div>
-            
-            <div id="adminTabSecurity" class="hidden">
-                <h4>🛡️ Log Keamanan</h4>
-                <div id="securityLog" style="max-height:300px;overflow-y:auto;font-size:.8rem;"></div>
-                <div class="flex gap2 fwrap" style="margin-top:var(--g4);">
-                    <button onclick="clearSecurityLogs()" class="btn btnw btnsm">🧹 Bersihkan</button>
-                    <button onclick="lockAllUsers()" class="btn btnd btnsm">🔒 Kunci Semua</button>
-                    <button onclick="unlockAllUsers()" class="btn btns btnsm">🔓 Buka Semua</button>
+        <!-- WHATSAPP BANNER -->
+        <div class="whatsapp-banner" onclick="openWhatsApp()">
+            <div class="whatsapp-banner-left">
+                <span class="whatsapp-banner-icon">💬</span>
+                <div>
+                    <strong>Hubungi Admin untuk Aktivasi:</strong>
+                    <br>
+                    <span id="whatsappNumberLanding">+6281220285226</span>
                 </div>
             </div>
-            
-            <div id="adminTabSettings" class="hidden">
-                <h4>⚙️ Pengaturan</h4>
-                <div class="formg"><label class="forml">Nomor WA (format: 08xxx)</label><div class="flex gap2"><input type="text" id="adminWaInput" placeholder="081220285226"><button onclick="saveAdminWA()" class="btn btns btnsm">💾 Simpan</button></div><div class="formh">💡 Masukkan tanpa +62, cukup 08xxx. Sistem otomatis tambahkan +62.</div></div>
-                <div class="formg"><label class="forml">Password Admin</label><div class="flex gap2"><input type="password" id="adminNewPass" placeholder="Password baru"><button onclick="changeAdminPass()" class="btn btnw btnsm">🔑 Ganti</button></div></div>
-                <div class="formg"><label class="forml">Nama Admin</label><div class="flex gap2"><input type="text" id="adminNewName"><button onclick="changeAdminName()" class="btn btnp btnsm">✏️ Ganti</button></div></div>
-                <hr style="border-color:var(--border);margin:var(--g4) 0;">
-                <button onclick="resetAllData()" class="btn btnd btnblock">⚠️ Reset Semua Data</button>
+            <div class="whatsapp-banner-right">
+                <span>Chat WhatsApp</span>
+                <span style="font-size:1.2rem;">👉</span>
             </div>
         </div>
-        <div class="modalf"><button onclick="closeModal('superAdminModal')" class="btn btng">Tutup</button></div>
-    </div>
-</div>
 
-<!-- APP MODAL -->
-<div class="modal" id="appModal">
-    <div class="modalc" style="max-width:500px;">
-        <div class="modalh"><h3 id="appModalTitle">➕ Tambah Aplikasi</h3><button class="modalclose" onclick="closeModal('appModal')">✕</button></div>
-        <div>
-            <input type="hidden" id="editAppId">
-            <div class="formg"><label class="forml">Nama *</label><input type="text" id="appName" placeholder="Nama aplikasi"></div>
-            <div class="formg"><label class="forml">Deskripsi</label><textarea id="appDesc" rows="2"></textarea></div>
-            <div class="formerr" id="appErr"></div>
-        </div>
-        <div class="modalf"><button onclick="closeModal('appModal')" class="btn btng">Batal</button><button onclick="saveApp()" class="btn btns">💾 Simpan</button></div>
-    </div>
-</div>
-
-<!-- CODE MODAL -->
-<div class="modal" id="codeModal">
-    <div class="modalc" style="max-width:600px;">
-        <div class="modalh"><h3 id="codeModalTitle">➕ Tambah Code</h3><button class="modalclose" onclick="closeModal('codeModal')">✕</button></div>
-        <div>
-            <input type="hidden" id="editCodeId"><input type="hidden" id="codeAppId">
-            <div class="formg"><label class="forml">Nama Code *</label><input type="text" id="codeName" placeholder="Nama code"></div>
-            <div class="formg"><label class="forml">Kode HTML *</label><textarea id="codeContent" rows="10" placeholder="Tempelkan kode di sini..."></textarea></div>
-            <div class="formerr" id="codeErr"></div>
-        </div>
-        <div class="modalf"><button onclick="closeModal('codeModal')" class="btn btng">Batal</button><button onclick="saveCode()" class="btn btns">💾 Simpan</button></div>
-    </div>
-</div>
-
-<!-- MERGE MODAL -->
-<div class="modal" id="mergeModal">
-    <div class="modalc" style="max-width:650px;">
-        <div class="modalh"><h3>🔄 Gabung & Copy</h3><button class="modalclose" onclick="closeModal('mergeModal')">✕</button></div>
-        <div>
-            <p style="color:var(--text2);">🔒 <strong>Fitur Premium.</strong> Gabung semua code jadi 1 index.html.</p>
-            <div id="mergeAppList" class="flex fwrap gap2" style="padding:var(--g2) 0;"></div>
-            <button onclick="doMerge()" class="btn btns btnblock">🔄 Gabung & Copy</button>
-            <div id="mergeResult" class="hidden" style="margin-top:var(--g4);">
-                <div class="fbetween" style="margin-bottom:var(--g2);"><strong>📄 Hasil</strong><div class="flex gap1"><button onclick="copyMergeResult()" class="btn btnp btnsm">📋 Copy</button><button onclick="downloadMergeResult()" class="btn btns btnsm">📥 Download</button></div></div>
-                <textarea id="mergeOutput" readonly style="font-family:'Courier New',monospace;font-size:.8rem;min-height:250px;background:var(--bg);color:var(--text);border:1px solid var(--accent);"></textarea>
+        <!-- FEATURES SECTION -->
+        <h3 class="section-title">Fitur Unggulan</h3>
+        <div class="features-grid">
+            <div class="feature-card">
+                <div class="feature-icon">📁</div>
+                <h4>Penyimpanan Tak Terbatas</h4>
+                <p>Simpan aplikasi dan kode HTML tanpa batasan jumlah.</p>
+            </div>
+            <div class="feature-card">
+                <div class="feature-icon">🔄</div>
+                <h4>Gabung Otomatis</h4>
+                <p>Gabungkan semua kode menjadi 1 file index.html siap pakai.</p>
+            </div>
+            <div class="feature-card">
+                <div class="feature-icon">🔐</div>
+                <h4>Aktivasi Premium</h4>
+                <p>Sistem kode aktivasi yang dikelola oleh Super Admin.</p>
+            </div>
+            <div class="feature-card">
+                <div class="feature-icon">👥</div>
+                <h4>Multi User</h4>
+                <p>Setiap pengguna memiliki akun dan data masing-masing.</p>
+            </div>
+            <div class="feature-card">
+                <div class="feature-icon">📡</div>
+                <h4>Online & Offline</h4>
+                <p>Aplikasi tetap berfungsi tanpa koneksi internet.</p>
+            </div>
+            <div class="feature-card">
+                <div class="feature-icon">📱</div>
+                <h4>Install Desktop</h4>
+                <p>Install sebagai aplikasi desktop di Windows, Mac, atau Linux.</p>
             </div>
         </div>
-        <div class="modalf"><button onclick="closeModal('mergeModal')" class="btn btng">Tutup</button></div>
+
+        <!-- PRICE SECTION -->
+        <h3 class="section-title">Paket Aktivasi Premium</h3>
+        <div class="price-grid" id="landingPriceGrid">
+            <!-- Diisi oleh JavaScript -->
+        </div>
+
     </div>
-</div>
 
-<!-- CONFIRM MODAL -->
-<div class="modal" id="confirmModal">
-    <div class="modalc" style="max-width:380px;">
-        <div class="modalh"><h3 id="confirmTitle">⚠️ Konfirmasi</h3><button class="modalclose" onclick="closeModal('confirmModal')">✕</button></div>
-        <div><p id="confirmMsg">Apakah Anda yakin?</p></div>
-        <div class="modalf"><button onclick="closeModal('confirmModal')" class="btn btng">Batal</button><button onclick="execConfirm()" class="btn btnd" id="confirmBtn">Ya</button></div>
+    <!-- ============================================================ -->
+    <!-- APPLICATION PAGE                                              -->
+    <!-- ============================================================ -->
+    <div class="container hidden" id="applicationPage">
+        
+        <!-- HEADER -->
+        <header class="header">
+            <div class="logo">
+                <span class="logo-icon">📝</span>
+                <span class="logo-text">Notepad+ v3.3</span>
+            </div>
+            <div class="header-buttons">
+                <button onclick="toggleTheme()" id="themeButton2" class="btn btn-gray btn-sm">🌙 Dark Mode</button>
+                <button onclick="showProfileModal()" id="profileButton" class="btn btn-outline btn-sm hidden">Profil</button>
+                <button onclick="showSuperAdminPanel()" id="adminButton" class="btn btn-warning btn-sm hidden">Panel Admin</button>
+                <div class="user-badge" id="userBadge" style="display:none;">
+                    <div class="user-avatar" id="userAvatar">U</div>
+                    <span class="user-name" id="userNameDisplay">User</span>
+                </div>
+                <button onclick="handleLogout()" id="logoutButton" class="btn btn-danger btn-sm hidden">Logout</button>
+                <button onclick="goToLandingPage()" class="btn btn-gray btn-sm">Halaman Utama</button>
+                <button onclick="downloadForOffline()" class="btn btn-blue btn-sm">Download Offline</button>
+            </div>
+        </header>
+
+        <!-- WHATSAPP BANNER -->
+        <div class="whatsapp-banner" onclick="openWhatsApp()">
+            <div class="whatsapp-banner-left">
+                <span class="whatsapp-banner-icon">💬</span>
+                <div>
+                    <strong>Aktivasi & Bantuan:</strong>
+                    <br>
+                    <span id="whatsappNumberApp">+6281220285226</span>
+                </div>
+            </div>
+            <div class="whatsapp-banner-right">
+                <span>Chat Admin</span>
+                <span style="font-size:1.2rem;">👉</span>
+            </div>
+        </div>
+
+        <!-- STATISTICS -->
+        <div class="stats-grid" id="dashboardStats">
+            <div class="stat-card">
+                <div class="stat-value" id="statTotalApps">0</div>
+                <div class="stat-label">Total Aplikasi</div>
+            </div>
+            <div class="stat-card">
+                <div class="stat-value" id="statTotalCodes">0</div>
+                <div class="stat-label">Total Code</div>
+            </div>
+            <div class="stat-card">
+                <div class="stat-value" id="statStorage">0 KB</div>
+                <div class="stat-label">Penyimpanan</div>
+            </div>
+            <div class="stat-card">
+                <div class="stat-value" id="statTotalUsers">0</div>
+                <div class="stat-label">Total User</div>
+            </div>
+            <div class="stat-card" style="border-color:#7c3aed;">
+                <div class="stat-value" id="statPremiumStatus">Free</div>
+                <div class="stat-label">Status Premium</div>
+            </div>
+        </div>
+
+        <!-- TOOLBAR -->
+        <div class="toolbar">
+            <button onclick="showAddAppModal()" class="btn btn-success">Tambah Aplikasi</button>
+            <button onclick="toggleSearch()" class="btn btn-primary">Cari</button>
+            <button onclick="exportAllData()" class="btn btn-warning">Export Data</button>
+            <button onclick="document.getElementById('importFileInput').click()" class="btn btn-blue">Import Data</button>
+            <input type="file" id="importFileInput" accept=".json" class="hidden" onchange="importAllData(this)">
+            <button onclick="showMergeModal()" class="btn btn-primary" id="mergeButton">
+                Gabung & Copy <span class="badge badge-purple">Premium</span>
+            </button>
+        </div>
+
+        <!-- SEARCH BAR -->
+        <div id="searchBar" class="hidden" style="margin-bottom:20px;">
+            <div style="display:flex;gap:8px;">
+                <input type="text" id="searchInput" placeholder="Cari aplikasi atau kode..." style="flex:2;" oninput="performSearch()">
+                <button onclick="clearSearch()" class="btn btn-gray btn-sm">Clear</button>
+            </div>
+        </div>
+
+        <!-- APP LIST -->
+        <div id="appListContainer"></div>
+
+        <!-- EMPTY STATE -->
+        <div id="emptyState" class="empty-state">
+            <div class="empty-state-icon">📝</div>
+            <h3>Belum Ada Aplikasi</h3>
+            <p>Mulai tambahkan aplikasi dan kode HTML Anda sekarang.</p>
+            <button onclick="showAddAppModal()" class="btn btn-success">Tambah Aplikasi Pertama</button>
+        </div>
+
     </div>
-</div>
 
-<div id="toastContainer"></div>
+    <!-- ============================================================ -->
+    <!-- ALL MODALS                                                    -->
+    <!-- ============================================================ -->
 
-<!-- ============================================================ -->
-<!-- ALL JAVASCRIPT -->
-<!-- ============================================================ -->
-<script>
-// ===== DATA DEFAULT =====
-var SUPER_ADMIN = {username:'superadmin',password:'admin123',nama:'Super Admin',email:'admin@notepad.com',hp:'081220285226',role:'superadmin'};
-var DEFAULT_WA = '081220285226';
-var DEFAULT_PACKAGES = [
-    {id:'1bulan',name:'Basic',price:25000,duration:'1 Bulan'},
-    {id:'3bulan',name:'Premium',price:50000,duration:'3 Bulan'},
-    {id:'6bulan',name:'Enterprise',price:75000,duration:'6 Bulan'}
-];
+    <!-- LOGIN MODAL -->
+    <div class="modal-overlay" id="loginModal">
+        <div class="modal-content" style="max-width:420px;">
+            <div class="modal-header">
+                <h3>Login</h3>
+                <button class="modal-close" onclick="closeModal('loginModal')">✕</button>
+            </div>
+            <div class="modal-body">
+                <div class="form-group">
+                    <input type="text" id="loginUsername" placeholder="Username atau Email">
+                </div>
+                <div class="form-group">
+                    <input type="password" id="loginPassword" placeholder="Password">
+                </div>
+                <button onclick="handleLogin()" class="btn btn-success btn-block">Masuk</button>
+                <div class="form-error" id="loginError"></div>
 
-// ===== STORAGE =====
-function g(k,d){try{var v=localStorage.getItem('np3_'+k);return v?JSON.parse(v):d}catch(e){return d}}
-function s(k,v){try{localStorage.setItem('np3_'+k,JSON.stringify(v))}catch(e){}}
-function dl(k){localStorage.removeItem('np3_'+k)}
+                <div style="margin-top:20px;padding-top:16px;border-top:1px solid var(--border-color);">
+                    <p style="font-size:0.85rem;color:var(--text-secondary);margin-bottom:8px;"><strong>Aktivasi Premium</strong></p>
+                    <div style="display:flex;gap:8px;">
+                        <input type="text" id="activationCodeInput" placeholder="Masukkan kode aktivasi" style="flex:1;">
+                        <button onclick="activateFromLogin()" class="btn btn-primary btn-sm">Aktifkan</button>
+                    </div>
+                    <div class="form-error" id="activationError"></div>
+                    <div class="form-success" id="activationSuccess"></div>
+                </div>
 
-function getUsers(){return g('users',[])}
-function saveUsers(u){s('users',u)}
-function getApps(){return g('apps',{})}
-function saveApps(a){s('apps',a)}
-function getSession(){return g('session',null)}
-function saveSession(ss){s('session',ss)}
-function clearSession(){dl('session')}
-function getPackages(){return g('packages',DEFAULT_PACKAGES)}
-function savePackages(p){s('packages',p)}
-function getWA(){return g('wa',DEFAULT_WA)}
-function saveWA(n){s('wa',n)}
-function getValidCodes(){return g('vc',{})}
-function saveValidCodes(c){s('vc',c)}
-function getSecLogs(){return g('seclog',[])}
-function saveSecLogs(l){s('seclog',l)}
-function getLoginAttempts(){return g('la',{})}
-function saveLoginAttempts(a){s('la',a)}
+                <div style="display:flex;justify-content:space-between;margin-top:16px;font-size:0.8rem;">
+                    <span class="link-text" onclick="closeModal('loginModal');showRegisterModal()">Daftar Akun Baru</span>
+                    <span class="link-text" onclick="closeModal('loginModal');openModal('forgotPasswordModal')">Lupa Password?</span>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button onclick="closeModal('loginModal')" class="btn btn-gray">Tutup</button>
+            </div>
+        </div>
+    </div>
 
-// ===== WA FORMATTER =====
-function formatWA(number){
-    var clean = number.replace(/[^0-9]/g,'');
-    if(clean.startsWith('0')){clean = '62' + clean.substring(1);}
-    else if(clean.startsWith('+')){clean = clean.substring(1);}
-    if(!clean.startsWith('62')){clean = '62' + clean;}
-    return '+' + clean;
-}
+    <!-- REGISTER MODAL -->
+    <div class="modal-overlay" id="registerModal">
+        <div class="modal-content" style="max-width:420px;">
+            <div class="modal-header">
+                <h3>Daftar Akun Baru</h3>
+                <button class="modal-close" onclick="closeModal('registerModal')">✕</button>
+            </div>
+            <div class="modal-body">
+                <div class="form-group">
+                    <input type="text" id="registerNama" placeholder="Nama Lengkap *">
+                </div>
+                <div class="form-group">
+                    <input type="email" id="registerEmail" placeholder="Email *">
+                </div>
+                <div class="form-group">
+                    <input type="text" id="registerHp" placeholder="Nomor HP * (contoh: 081234567890)">
+                </div>
+                <div class="form-group">
+                    <input type="text" id="registerUsername" placeholder="Username *">
+                </div>
+                <div class="form-group">
+                    <input type="password" id="registerPassword" placeholder="Password * (minimal 6 karakter)">
+                </div>
+                <div class="form-group">
+                    <input type="password" id="registerPasswordConfirm" placeholder="Konfirmasi Password *">
+                </div>
+                <button onclick="handleRegister()" class="btn btn-primary btn-block">Daftar Sekarang</button>
+                <div class="form-error" id="registerError"></div>
+                <div class="form-success" id="registerSuccess"></div>
+                <p style="text-align:center;margin-top:16px;font-size:0.8rem;color:var(--text-secondary);">
+                    Sudah punya akun?
+                    <span class="link-text" onclick="closeModal('registerModal');showLoginModal()">Login disini</span>
+                </p>
+            </div>
+            <div class="modal-footer">
+                <button onclick="closeModal('registerModal')" class="btn btn-gray">Tutup</button>
+            </div>
+        </div>
+    </div>
 
-function getWADisplay(){
-    return formatWA(getWA());
-}
+    <!-- FORGOT PASSWORD MODAL -->
+    <div class="modal-overlay" id="forgotPasswordModal">
+        <div class="modal-content" style="max-width:420px;">
+            <div class="modal-header">
+                <h3>Lupa Password</h3>
+                <button class="modal-close" onclick="closeModal('forgotPasswordModal')">✕</button>
+            </div>
+            <div class="modal-body">
+                <p style="font-size:0.85rem;color:var(--text-secondary);margin-bottom:12px;">
+                    Masukkan data Anda untuk mereset password.
+                </p>
+                <div class="form-group">
+                    <input type="text" id="forgotNama" placeholder="Nama Lengkap *">
+                </div>
+                <div class="form-group">
+                    <input type="email" id="forgotEmail" placeholder="Email *">
+                </div>
+                <div class="form-group">
+                    <input type="text" id="forgotHp" placeholder="Nomor HP *">
+                </div>
+                <button onclick="handleForgotPassword()" class="btn btn-warning btn-block">Kirim Link Reset Password</button>
+                <div class="form-error" id="forgotError"></div>
+                <div class="form-success" id="forgotSuccess"></div>
+            </div>
+            <div class="modal-footer">
+                <button onclick="closeModal('forgotPasswordModal')" class="btn btn-gray">Tutup</button>
+            </div>
+        </div>
+    </div>
 
-function getWALink(){
-    return getWA().replace(/[^0-9]/g,'');
-}
+    <!-- PROFILE MODAL -->
+    <div class="modal-overlay" id="profileModal">
+        <div class="modal-content" style="max-width:450px;">
+            <div class="modal-header">
+                <h3>Profil Saya</h3>
+                <button class="modal-close" onclick="closeModal('profileModal')">✕</button>
+            </div>
+            <div class="modal-body">
+                <div style="display:flex;align-items:center;gap:16px;margin-bottom:20px;">
+                    <div id="profileAvatar" style="width:60px;height:60px;border-radius:50%;background:#7c3aed;display:flex;align-items:center;justify-content:center;font-size:1.5rem;color:#fff;">U</div>
+                    <div>
+                        <h4 id="profileName" style="margin:0;">User</h4>
+                        <p id="profileRole" style="margin:0;font-size:0.8rem;color:var(--text-secondary);">User Biasa</p>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label class="form-label">Nama Lengkap</label>
+                    <input type="text" id="editProfileNama">
+                </div>
+                <div class="form-group">
+                    <label class="form-label">Email</label>
+                    <input type="email" id="editProfileEmail">
+                </div>
+                <div class="form-group">
+                    <label class="form-label">Nomor HP</label>
+                    <input type="text" id="editProfileHp">
+                </div>
+                <button onclick="saveProfile()" class="btn btn-success btn-block">Simpan Profil</button>
+                <div class="form-error" id="profileError"></div>
+                <div class="form-success" id="profileSuccess"></div>
+            </div>
+            <div class="modal-footer">
+                <button onclick="closeModal('profileModal')" class="btn btn-gray">Tutup</button>
+            </div>
+        </div>
+    </div>
 
-// ===== SECURITY =====
-function logSec(ev,dt){
-    var l=getSecLogs();l.push({time:Date.now(),event:ev,detail:dt||{}});
-    if(l.length>200)l.shift();saveSecLogs(l);
-}
-function checkAttempts(un){
-    var a=getLoginAttempts(),k=un.toLowerCase(),n=Date.now();
-    if(a[k]&&a[k].locked&&(n-a[k].lockedAt)<1800000)return{blocked:true,remaining:Math.ceil((1800000-(n-a[k].lockedAt))/60000)};
-    return{blocked:false,remaining:0};
-}
-function recordAttempt(un,ok){
-    var a=getLoginAttempts(),k=un.toLowerCase();
-    if(!a[k])a[k]={count:0,locked:false,lockedAt:null};
-    if(ok){a[k].count=0;a[k].locked=false;}
-    else{a[k].count++;if(a[k].count>=5){a[k].locked=true;a[k].lockedAt=Date.now();logSec('LOCKED',{user:un});}}
-    saveLoginAttempts(a);
-}
+    <!-- SUPER ADMIN PANEL MODAL -->
+    <div class="modal-overlay" id="superAdminModal">
+        <div class="modal-content" style="max-width:750px;">
+            <div class="modal-header">
+                <h3>Panel Super Admin</h3>
+                <button class="modal-close" onclick="closeModal('superAdminModal')">✕</button>
+            </div>
+            <div class="modal-body">
+                <!-- TABS -->
+                <div class="admin-tabs">
+                    <button class="admin-tab active" onclick="switchAdminTab('codes')" id="tabCodes">Kode Aktivasi</button>
+                    <button class="admin-tab" onclick="switchAdminTab('users')" id="tabUsers">Daftar User</button>
+                    <button class="admin-tab" onclick="switchAdminTab('packages')" id="tabPackages">Paket & Harga</button>
+                    <button class="admin-tab" onclick="switchAdminTab('security')" id="tabSecurity">Log Keamanan</button>
+                    <button class="admin-tab" onclick="switchAdminTab('settings')" id="tabSettings">Pengaturan</button>
+                </div>
 
-// ===== PWA =====
-var dp=null;
-window.addEventListener('beforeinstallprompt',function(e){e.preventDefault();dp=e;var b=document.getElementById('heroInstall');if(b)b.style.display='inline-flex';});
-function installApp(){
-    if(dp){dp.prompt();dp.userChoice.then(function(r){if(r.outcome==='accepted')showToast('✅ Terinstall!','s');dp=null;});}
-    else{alert('📱 Buka Chrome/Edge > klik ⋮ > "Install Notepad+"');}
-}
+                <!-- TAB: KODE AKTIVASI -->
+                <div class="admin-tab-content" id="adminTabCodes">
+                    <h4 style="margin-bottom:12px;">Buat Kode Aktivasi Baru</h4>
+                    <div class="form-group">
+                        <input type="text" id="adminActivationUser" placeholder="Username atau email user">
+                    </div>
+                    <div class="form-group">
+                        <select id="adminActivationPackage">
+                            <option value="">-- Pilih Paket --</option>
+                        </select>
+                    </div>
+                    <button onclick="adminCreateActivationCode()" class="btn btn-success btn-block">Buat Kode Aktivasi</button>
+                    <div id="adminCodeResult" style="margin-top:12px;"></div>
 
-// ===== NAV =====
-function openApp(){
-    var ss=getSession();if(!ss){showLoginModal();return;}
-    document.getElementById('landingPage').classList.add('hidden');
-    document.getElementById('appPage').classList.remove('hidden');
-    updateUI();renderApps();
-}
-function goToLanding(){
-    document.getElementById('appPage').classList.add('hidden');
-    document.getElementById('landingPage').classList.remove('hidden');
-    updateWA();
-}
+                    <h4 style="margin-top:24px;margin-bottom:8px;">Kode Aktivasi Aktif</h4>
+                    <div id="activeCodesList" style="max-height:200px;overflow-y:auto;font-size:0.8rem;"></div>
+                </div>
 
-// ===== ONLINE =====
-function updOnline(){
-    var b=document.getElementById('connectionBadge');
-    if(navigator.onLine){b.textContent='🟢 ONLINE';b.style.background='#10b981';}
-    else{b.textContent='🔴 OFFLINE';b.style.background='#ef4444';}
-}
-window.addEventListener('online',updOnline);window.addEventListener('offline',updOnline);
+                <!-- TAB: DAFTAR USER -->
+                <div class="admin-tab-content hidden" id="adminTabUsers">
+                    <h4 style="margin-bottom:12px;">Daftar Semua User</h4>
+                    <div id="adminUserList" style="max-height:400px;overflow-y:auto;"></div>
+                </div>
 
-// ===== WA =====
-function openWA(){
-    var link = getWALink();
-    window.open('https://wa.me/' + link, '_blank');
-}
-function updateWA(){
-    var n = getWADisplay();
-    ['waLanding','waApp'].forEach(function(id){
-        var e=document.getElementById(id);
-        if(e)e.textContent=n;
-    });
-}
+                <!-- TAB: PAKET & HARGA -->
+                <div class="admin-tab-content hidden" id="adminTabPackages">
+                    <h4 style="margin-bottom:12px;">Edit Paket dan Harga</h4>
+                    <p style="font-size:0.85rem;color:var(--text-secondary);margin-bottom:16px;">
+                        Ubah nama, harga, dan durasi paket premium.
+                    </p>
+                    <div id="packageEditList"></div>
+                </div>
 
-// ===== AUTH =====
-function showLoginModal(){
-    document.getElementById('loginUser').value='';document.getElementById('loginPass').value='';
-    document.getElementById('activationCodeInput').value='';
-    document.getElementById('loginErr').classList.remove('show');
-    document.getElementById('activationErr').classList.remove('show');
-    document.getElementById('activationSuc').classList.remove('show');
-    openModal('loginModal');
-}
-function doLogin(){
-    var u=document.getElementById('loginUser').value.trim();
-    var p=document.getElementById('loginPass').value.trim();
-    var e=document.getElementById('loginErr');e.classList.remove('show');
-    if(!u||!p){e.textContent='Isi username dan password.';e.classList.add('show');return;}
-    var ch=checkAttempts(u);if(ch.blocked){e.textContent='⚠️ Akun dikunci '+ch.remaining+' menit.';e.classList.add('show');return;}
-    if(u===SUPER_ADMIN.username&&p===SUPER_ADMIN.password){
-        recordAttempt(u,true);
-        saveSession({username:SUPER_ADMIN.username,nama:SUPER_ADMIN.nama,email:SUPER_ADMIN.email,hp:SUPER_ADMIN.hp,role:'superadmin',isPremium:true});
-        closeModal('loginModal');document.getElementById('landingPage').classList.add('hidden');document.getElementById('appPage').classList.remove('hidden');
-        updateUI();renderApps();showToast('👑 Welcome Super Admin!','s');return;
-    }
-    var users=getUsers();
-    var user=users.find(function(x){return(x.username===u||x.email===u)&&x.password===p;});
-    if(!user){recordAttempt(u,false);e.textContent='Username/password salah.';e.classList.add('show');return;}
-    if(user.locked){e.textContent='⚠️ Akun dikunci Admin. Hubungi '+getWADisplay();e.classList.add('show');return;}
-    recordAttempt(u,true);
-    saveSession({username:user.username,nama:user.nama,email:user.email,hp:user.hp||'',role:'user',isPremium:user.isActivated||false});
-    closeModal('loginModal');document.getElementById('landingPage').classList.add('hidden');document.getElementById('appPage').classList.remove('hidden');
-    updateUI();renderApps();showToast('👤 Welcome '+user.nama+'!','s');
-}
-function activateFromLogin(){
-    var code=document.getElementById('activationCodeInput').value.trim();
-    var ee=document.getElementById('activationErr'),se=document.getElementById('activationSuc');
-    ee.classList.remove('show');se.classList.remove('show');
-    if(!code){ee.textContent='Masukkan kode.';ee.classList.add('show');return;}
-    var ss=getSession(),users=getUsers();
-    var tu=users.find(function(x){return x.activationCode===code;});
-    if(!tu){ee.textContent='❌ Kode tidak valid.';ee.classList.add('show');return;}
-    var vc=getValidCodes();if(!vc[code]){ee.textContent='❌ Kode kadaluarsa.';ee.classList.add('show');return;}
-    if(ss&&ss.username===tu.username){
-        var pk=vc[code],dr={'1bulan':30,'3bulan':90,'6bulan':180};
-        tu.isActivated=true;tu.activationExpiry=Date.now()+(dr[pk.package]||30)*86400000;
-        saveUsers(users);delete vc[code];saveValidCodes(vc);
-        ss.isPremium=true;saveSession(ss);updateUI();
-        se.textContent='🎉 Premium aktif!';se.classList.add('show');showToast('🎉 Berhasil!','s');
-        document.getElementById('activationCodeInput').value='';return;
-    }
-    if(!ss){ee.textContent='⚠️ Login dulu dengan akun: '+tu.username;ee.classList.add('show');document.getElementById('loginUser').value=tu.username;}
-    else{ee.textContent='⚠️ Kode untuk akun: '+tu.username;ee.classList.add('show');}
-}
-function showRegisterModal(){
-    ['regNama','regEmail','regHp','regUser','regPass','regPass2'].forEach(function(id){document.getElementById(id).value='';});
-    document.getElementById('regErr').classList.remove('show');document.getElementById('regSuc').classList.remove('show');
-    openModal('registerModal');
-}
-function doRegister(){
-    var n=document.getElementById('regNama').value.trim();
-    var em=document.getElementById('regEmail').value.trim();
-    var hp=document.getElementById('regHp').value.trim();
-    var un=document.getElementById('regUser').value.trim();
-    var pw=document.getElementById('regPass').value.trim();
-    var pw2=document.getElementById('regPass2').value.trim();
-    var ee=document.getElementById('regErr'),se=document.getElementById('regSuc');
-    ee.classList.remove('show');se.classList.remove('show');
-    if(!n||!em||!hp||!un){ee.textContent='Semua field wajib diisi.';ee.classList.add('show');return;}
-    if(pw.length<6||pw!==pw2){ee.textContent='Password min 6 dan harus sama.';ee.classList.add('show');return;}
-    if(!hp.match(/^08[0-9]{8,}$/)){ee.textContent='No HP tidak valid (harus 08xx).';ee.classList.add('show');return;}
-    var users=getUsers();
-    if(users.find(function(x){return x.username.toLowerCase()===un.toLowerCase();})){ee.textContent='Username sudah dipakai.';ee.classList.add('show');return;}
-    if(users.find(function(x){return x.email.toLowerCase()===em.toLowerCase();})){ee.textContent='Email sudah dipakai.';ee.classList.add('show');return;}
-    users.push({id:'u_'+Date.now(),nama:n,email:em,hp:hp,username:un,password:pw,role:'user',isActivated:false,locked:false,registeredAt:Date.now()});
-    saveUsers(users);
-    se.textContent='✅ Berhasil! Silakan login.';se.classList.add('show');
-    logSec('REGISTER',{user:un});
-    setTimeout(function(){closeModal('registerModal');showLoginModal();document.getElementById('loginUser').value=un;},2000);
-}
-function doForgot(){
-    var n=document.getElementById('forgotNama').value.trim();
-    var em=document.getElementById('forgotEmail').value.trim();
-    var hp=document.getElementById('forgotHp').value.trim();
-    var ee=document.getElementById('forgotErr'),se=document.getElementById('forgotSuc');
-    ee.classList.remove('show');se.classList.remove('show');
-    if(!n||!em||!hp){ee.textContent='Lengkapi semua data.';ee.classList.add('show');return;}
-    if(n===SUPER_ADMIN.nama&&em===SUPER_ADMIN.email&&hp===SUPER_ADMIN.hp){se.textContent='📧 Link reset dikirim ke '+em;se.classList.add('show');return;}
-    var users=getUsers();
-    var u=users.find(function(x){return x.nama.toLowerCase()===n.toLowerCase()&&x.email.toLowerCase()===em.toLowerCase()&&x.hp===hp;});
-    if(!u){ee.textContent='Data tidak cocok.';ee.classList.add('show');return;}
-    u.resetToken='rst_'+Date.now();u.resetExpiry=Date.now()+86400000;saveUsers(users);
-    se.textContent='📧 Link reset dikirim ke '+em;se.classList.add('show');
-}
-function handleLogout(){
-    var ss=getSession();if(!ss){showToast('⚠️ Belum login.','w');return;}
-    if(!confirm('Logout?'))return;
-    logSec('LOGOUT',{user:ss.username});clearSession();updateUI();renderApps();
-    document.getElementById('appPage').classList.add('hidden');document.getElementById('landingPage').classList.remove('hidden');
-    showToast('🚪 Logout!','s');
-}
+                <!-- TAB: LOG KEAMANAN -->
+                <div class="admin-tab-content hidden" id="adminTabSecurity">
+                    <h4 style="margin-bottom:12px;">Log Keamanan</h4>
+                    <div id="securityLogList" style="max-height:250px;overflow-y:auto;font-size:0.8rem;"></div>
+                    <div style="display:flex;gap:8px;margin-top:16px;flex-wrap:wrap;">
+                        <button onclick="clearAllSecurityLogs()" class="btn btn-warning btn-sm">Bersihkan Log</button>
+                        <button onclick="lockAllUsers()" class="btn btn-danger btn-sm">Kunci Semua User</button>
+                        <button onclick="unlockAllUsers()" class="btn btn-success btn-sm">Buka Semua User</button>
+                    </div>
+                </div>
 
-// ===== UI =====
-function updateUI(){
-    var ss=getSession();
-    var ub=document.getElementById('userBadge'),un=document.getElementById('userNameDisplay');
-    var ua=document.getElementById('userAvatar'),pb=document.getElementById('profilBtn');
-    var ab=document.getElementById('adminBtn'),lb=document.getElementById('logoutBtn');
-    var sp=document.getElementById('statPremium'),su=document.getElementById('statUsers');
-    if(ss){
-        if(ub)ub.style.display='flex';if(un)un.textContent=ss.nama||ss.username;
-        if(ua)ua.textContent=(ss.nama||ss.username).charAt(0).toUpperCase();
-        if(pb)pb.classList.remove('hidden');if(lb)lb.classList.remove('hidden');
-        if(ss.role==='superadmin'){if(ab)ab.classList.remove('hidden');if(sp){sp.textContent='👑 Admin';sp.style.color='var(--accent3)';}}
-        else{if(ab)ab.classList.add('hidden');if(sp){sp.textContent=ss.isPremium?'💎 Premium':'🆓 Free';sp.style.color=ss.isPremium?'var(--green)':'var(--text3)';}}
-    }else{
-        if(ub)ub.style.display='none';if(pb)pb.classList.add('hidden');
-        if(ab)ab.classList.add('hidden');if(lb)lb.classList.add('hidden');
-        if(sp){sp.textContent='🆓';sp.style.color='var(--text3)';}
-    }
-    if(su)su.textContent=getUsers().length;
-}
+                <!-- TAB: PENGATURAN -->
+                <div class="admin-tab-content hidden" id="adminTabSettings">
+                    <h4 style="margin-bottom:12px;">Pengaturan Super Admin</h4>
 
-// ===== PROFILE =====
-function showProfileModal(){
-    var ss=getSession();if(!ss){showToast('⚠️ Login dulu.','w');return;}
-    document.getElementById('profName').textContent=ss.nama||ss.username;
-    document.getElementById('profAvatar').textContent=(ss.nama||ss.username).charAt(0).toUpperCase();
-    document.getElementById('profRole').textContent=ss.role==='superadmin'?'⭐ Super Admin':(ss.isPremium?'💎 Premium':'👤 User');
-    document.getElementById('editNama').value=ss.nama||'';document.getElementById('editEmail').value=ss.email||'';document.getElementById('editHp').value=ss.hp||'';
-    document.getElementById('profErr').classList.remove('show');document.getElementById('profSuc').classList.remove('show');
-    openModal('profileModal');
-}
-function saveProfile(){
-    var ss=getSession();if(!ss)return;
-    var n=document.getElementById('editNama').value.trim(),em=document.getElementById('editEmail').value.trim(),hp=document.getElementById('editHp').value.trim();
-    if(!n||!em||!hp){document.getElementById('profErr').textContent='Lengkapi data.';document.getElementById('profErr').classList.add('show');return;}
-    if(ss.role==='superadmin'){SUPER_ADMIN.nama=n;SUPER_ADMIN.email=em;SUPER_ADMIN.hp=hp;}
-    else{var users=getUsers();var u=users.find(function(x){return x.username===ss.username;});if(u){u.nama=n;u.email=em;u.hp=hp;saveUsers(users);}}
-    ss.nama=n;ss.email=em;ss.hp=hp;saveSession(ss);updateUI();
-    document.getElementById('profSuc').textContent='✅ Disimpan!';document.getElementById('profSuc').classList.add('show');
-    showToast('✅ Profil diupdate!','s');
-}
+                    <div class="form-group">
+                        <label class="form-label">Nomor WhatsApp Admin</label>
+                        <div style="display:flex;gap:8px;">
+                            <input type="text" id="adminWhatsappInput" placeholder="081220285226">
+                            <button onclick="saveAdminWhatsapp()" class="btn btn-success btn-sm">Simpan</button>
+                        </div>
+                        <div class="form-hint">Masukkan tanpa +62, cukup 08xxx. Sistem akan otomatis mengubah ke format +62.</div>
+                    </div>
 
-// ===== SUPER ADMIN =====
-function showSuperAdminPanel(){
-    var ss=getSession();if(!ss||ss.role!=='superadmin'){showToast('⚠️ Akses ditolak.','w');return;}
-    document.getElementById('adminActUser').value='';document.getElementById('adminCodeResult').innerHTML='';
-    document.getElementById('adminWaInput').value=getWA();document.getElementById('adminNewPass').value='';
-    document.getElementById('adminNewName').value=SUPER_ADMIN.nama;
-    openModal('superAdminModal');switchAdminTab('codes');
-}
-function switchAdminTab(t){
-    ['codes','users','security','settings'].forEach(function(x){
-        var c=document.getElementById('adminTab'+x.charAt(0).toUpperCase()+x.slice(1));
-        var b=document.getElementById('tab'+x.charAt(0).toUpperCase()+x.slice(1));
-        if(c)c.classList.add('hidden');if(b){b.classList.remove('btnp');b.classList.add('btno');}
-    });
-    var ac=document.getElementById('adminTab'+t.charAt(0).toUpperCase()+t.slice(1));
-    var ab=document.getElementById('tab'+t.charAt(0).toUpperCase()+t.slice(1));
-    if(ac)ac.classList.remove('hidden');if(ab){ab.classList.add('btnp');ab.classList.remove('btno');}
-    if(t==='codes')renderActiveCodes();if(t==='users')renderUserListAdmin();if(t==='security')renderSecLogs();
-}
-function adminCreateCode(){
-    var ui=document.getElementById('adminActUser').value.trim(),pk=document.getElementById('adminActPackage').value;
-    var rs=document.getElementById('adminCodeResult');
-    if(!ui){rs.innerHTML='<p style="color:var(--red);">⚠️ Masukkan username/email.</p>';return;}
-    var users=getUsers();
-    var u=users.find(function(x){return x.username.toLowerCase()===ui.toLowerCase()||x.email.toLowerCase()===ui.toLowerCase();});
-    if(!u){rs.innerHTML='<p style="color:var(--red);">❌ User tidak ditemukan.</p>';return;}
-    var pks=getPackages(),pd=pks.find(function(x){return x.id===pk;})||{};
-    var code='NP3-'+Date.now().toString(36).toUpperCase();
-    u.activationCode=code;u.activationPackage=pk;saveUsers(users);
-    var vc=getValidCodes();vc[code]={package:pk,created:Date.now(),forUser:u.username,userName:u.nama};saveValidCodes(vc);
-    rs.innerHTML='<div style="background:var(--bg3);padding:16px;border-radius:var(--radius);border:2px solid var(--green);"><p style="color:var(--green);"><strong>✅ Kode Dibuat!</strong></p><p>User: <strong>'+esc(u.nama)+'</strong></p><p>Paket: <strong>'+esc(pd.name||pk)+'</strong></p><p>Kode: <code style="background:var(--bg);padding:6px 12px;border-radius:4px;font-size:1.1rem;">'+code+'</code></p><button onclick="copyText(\''+code+'\')" class="btn btnp btnsm">📋 Copy</button> <button onclick="shareCodeWA(\''+code+'\',\''+esc(u.nama)+'\',\''+esc(pd.name||pk)+'\')" class="btn btns btnsm">📱 Kirim WA</button></div>';
-    document.getElementById('adminActUser').value='';renderActiveCodes();logSec('CODE_CREATED',{user:u.username,pkg:pk});
-    showToast('🎫 Kode dibuat!','s');
-}
-function shareCodeWA(code,nama,paket){
-    var wa = getWALink();
-    var msg = 'Halo '+nama+'!%0A%0A'+
-              'Ini kode aktivasi Notepad+ Anda:%0A'+
-              '📝 Kode: *'+code+'*%0A'+
-              '💎 Paket: '+paket+'%0A%0A'+
-              'Cara aktivasi:%0A'+
-              '1. Login ke aplikasi%0A'+
-              '2. Masukkan kode di halaman login%0A'+
-              '3. Premium langsung aktif!%0A%0A'+
-              'Terima kasih! 🙏';
-    window.open('https://wa.me/'+wa+'?text='+msg,'_blank');
-}
-function renderActiveCodes(){
-    var vc=getValidCodes(),ks=Object.keys(vc),c=document.getElementById('activeCodesList');if(!c)return;
-    if(!ks.length){c.innerHTML='<p style="color:var(--text3);text-align:center;padding:20px;">📭 Belum ada kode.</p>';return;}
-    c.innerHTML=ks.map(function(k){return'<div style="display:flex;justify-content:space-between;padding:10px;background:var(--bg3);border-radius:6px;margin-bottom:4px;font-size:.8rem;"><div><code>'+k+'</code><br><span style="color:var(--text2);">'+vc[k].package+' | '+(vc[k].userName||vc[k].forUser||'-')+'</span></div><button onclick="delVC(\''+k+'\')" class="btn btnd" style="padding:2px 8px;min-height:0;font-size:.7rem;">🗑️</button></div>';}).join('');
-}
-function delVC(code){if(!confirm('Hapus?'))return;var vc=getValidCodes();delete vc[code];saveValidCodes(vc);renderActiveCodes();showToast('🗑️ Dihapus.','s');}
-function renderUserListAdmin(){
-    var users=getUsers(),c=document.getElementById('adminUserList');if(!c)return;
-    if(!users.length){c.innerHTML='<p style="color:var(--text3);text-align:center;padding:20px;">👥 Belum ada user.</p>';return;}
-    c.innerHTML=users.map(function(u){return'<div style="background:var(--bg3);padding:12px;border-radius:var(--radius);margin-bottom:8px;border:1px solid var(--border);"><div class="fbetween fwrap gap2" style="margin-bottom:8px;"><div><strong>'+esc(u.nama)+'</strong> (@'+esc(u.username)+')<br><span style="font-size:.8rem;color:var(--text2);">📧 '+esc(u.email)+' | 📱 '+esc(u.hp||'-')+'</span></div><div class="flex gap1 fwrap"><span class="badge '+(u.isActivated?'badges':'badgew')+'">'+(u.isActivated?'💎 Premium':'🆓 Free')+'</span><span class="badge '+(u.locked?'badged':'badges')+'">'+(u.locked?'🔒 Locked':'🔓 Active')+'</span></div></div>'+(u.role!=='superadmin'?'<div class="flex gap2 fwrap"><button onclick="toggleSuspend(\''+u.username+'\')" class="btn '+(u.locked?'btns':'btnd')+' btnsm">'+(u.locked?'🔓 Buka':'🔒 Suspend')+'</button><button onclick="givePrem(\''+u.username+'\')" class="btn btnw btnsm">💎 Premium</button><button onclick="delUser(\''+u.username+'\')" class="btn btnd btnsm">🗑️ Hapus</button></div>':'<span style="font-size:.8rem;color:var(--accent3);">👑 Super Admin</span>')+'</div>';}).join('');
-}
-function toggleSuspend(un){
-    var users=getUsers(),u=users.find(function(x){return x.username===un;});if(!u||u.role==='superadmin')return;
-    u.locked=!u.locked;u.lockedAt=u.locked?Date.now():null;saveUsers(users);
-    if(u.locked){var ss=getSession();if(ss&&ss.username===un){clearSession();updateUI();renderApps();document.getElementById('appPage').classList.add('hidden');document.getElementById('landingPage').classList.remove('hidden');}}
-    renderUserListAdmin();updateUI();renderApps();logSec(u.locked?'SUSPEND':'UNSUSPEND',{user:un});
-    showToast(u.locked?'🔒 Disuspend.':'🔓 Dibuka.','s');
-}
-function givePrem(un){
-    var users=getUsers(),u=users.find(function(x){return x.username===un;});if(!u||u.role==='superadmin')return;
-    var p=prompt('Pilih durasi:\n1 = 1 Bulan\n3 = 3 Bulan\n6 = 6 Bulan','3');var d=parseInt(p);
-    if(![1,3,6].includes(d)){showToast('⚠️ Tidak valid.','w');return;}
-    u.isActivated=true;u.activationExpiry=Date.now()+(d*30*86400000);u.activationPackage=d+'bulan';saveUsers(users);
-    var ss=getSession();if(ss&&ss.username===un){ss.isPremium=true;saveSession(ss);updateUI();}
-    renderUserListAdmin();logSec('PREMIUM_GIVEN',{user:un,dur:d});showToast('💎 Premium diberikan!','s');
-}
-function delUser(un){
-    var users=getUsers(),u=users.find(function(x){return x.username===un;});if(!u||u.role==='superadmin')return;
-    if(!confirm('⚠️ Hapus '+u.nama+'?'))return;
-    users=users.filter(function(x){return x.username!==un;});saveUsers(users);
-    var ss=getSession();if(ss&&ss.username===un){clearSession();updateUI();renderApps();}
-    renderUserListAdmin();updateUI();renderApps();logSec('USER_DELETED',{user:un});showToast('🗑️ Dihapus.','s');
-}
-function renderSecLogs(){
-    var l=getSecLogs(),c=document.getElementById('securityLog');if(!c)return;
-    if(!l.length){c.innerHTML='<p style="color:var(--text3);text-align:center;padding:20px;">📊 Log kosong.</p>';return;}
-    c.innerHTML=l.slice(-50).reverse().map(function(x){return'<div style="font-size:.75rem;padding:4px 0;border-bottom:1px solid var(--border);color:var(--text2);"><span style="color:var(--text3);">['+new Date(x.time).toLocaleString('id-ID')+']</span> <strong>'+esc(x.event)+'</strong></div>';}).join('');
-}
-function clearSecurityLogs(){if(!confirm('Bersihkan?'))return;saveSecLogs([]);renderSecLogs();showToast('🧹 Dibersihkan.','s');}
-function lockAllUsers(){
-    if(!confirm('🔒 Kunci semua user?'))return;
-    var users=getUsers();users.forEach(function(u){if(u.role!=='superadmin'){u.locked=true;u.lockedAt=Date.now();}});saveUsers(users);
-    clearSession();updateUI();renderApps();renderUserListAdmin();logSec('ALL_LOCKED',{});showToast('🔒 Semua dikunci!','w');
-}
-function unlockAllUsers(){
-    if(!confirm('🔓 Buka semua?'))return;
-    var users=getUsers();users.forEach(function(u){u.locked=false;u.lockedAt=null;});saveUsers(users);
-    renderUserListAdmin();logSec('ALL_UNLOCKED',{});showToast('🔓 Semua dibuka!','s');
-}
-function saveAdminWA(){
-    var n=document.getElementById('adminWaInput').value.replace(/[^0-9]/g,'');
-    if(n.length<10){showToast('⚠️ Nomor WA minimal 10 digit.','w');return;}
-    if(!n.startsWith('0')){showToast('⚠️ Masukkan dengan format 08xxx.','w');return;}
-    saveWA(n);updateWA();showToast('✅ WA disimpan!','s');
-}
-function changeAdminPass(){var np=document.getElementById('adminNewPass').value.trim();if(np.length<6){showToast('⚠️ Min 6 karakter.','w');return;}SUPER_ADMIN.password=np;document.getElementById('adminNewPass').value='';showToast('🔑 Password diubah!','s');}
-function changeAdminName(){var nn=document.getElementById('adminNewName').value.trim();if(!nn){showToast('⚠️ Tidak boleh kosong.','w');return;}SUPER_ADMIN.nama=nn;var ss=getSession();if(ss&&ss.role==='superadmin'){ss.nama=nn;saveSession(ss);}updateUI();showToast('✏️ Nama diubah!','s');}
-function resetAllData(){
-    if(!confirm('⚠️ HAPUS SEMUA DATA?\n\nIni tidak bisa dibatalkan!'))return;
-    ['users','apps','packages','vc','seclog','la','session','wa'].forEach(function(k){dl(k);});
-    closeModal('superAdminModal');clearSession();updateUI();renderApps();showToast('⚠️ Semua data direset!','w');
-    setTimeout(function(){location.reload();},1500);
-}
+                    <div class="form-group">
+                        <label class="form-label">Password Baru Super Admin</label>
+                        <div style="display:flex;gap:8px;">
+                            <input type="password" id="adminNewPassword" placeholder="Password baru">
+                            <button onclick="changeAdminPassword()" class="btn btn-warning btn-sm">Ganti Password</button>
+                        </div>
+                    </div>
 
-// ===== CRUD APPS =====
-function renderApps(){
-    var ss=getSession(),c=document.getElementById('appListContainer'),em=document.getElementById('emptyState'),st=document.getElementById('dashboardStats');
-    if(!ss){if(c)c.innerHTML='<div class="empty"><div class="icon">🔐</div><h3>Silakan Login</h3><button onclick="showLoginModal()" class="btn btnp">🔐 Login</button></div>';if(em)em.style.display='none';if(st)st.style.display='none';return;}
-    if(st)st.style.display='grid';
-    var apps=getApps(),ks=Object.keys(apps),tc=0;ks.forEach(function(k){tc+=(apps[k].codes||[]).length;});
-    document.getElementById('statApps').textContent=ks.length;document.getElementById('statCodes').textContent=tc;
-    document.getElementById('statStorage').textContent=(new Blob([JSON.stringify(apps)]).size/1024).toFixed(1)+' KB';
-    if(!ks.length){if(em)em.style.display='block';if(c)c.innerHTML='';return;}
-    if(em)em.style.display='none';
-    var h='<div class="applist">';ks.forEach(function(k){var a=apps[k];h+='<div class="appitem"><div class="apphead" onclick="toggleApp(\''+k+'\')"><div class="appname">📱 '+esc(a.name)+' <span class="appcount">'+(a.codes||[]).length+' code</span></div><div class="flex gap1 fwrap"><button class="btn btnp btnsm" onclick="event.stopPropagation();addCode(\''+k+'\')">+ Code</button><button class="btn btnw btnsm" onclick="event.stopPropagation();editApp(\''+k+'\')">✏️</button><button class="btn btnd btnsm" onclick="event.stopPropagation();deleteApp(\''+k+'\')">🗑️</button></div></div><div class="appcodes '+(a.isOpen?'open':'')+'" id="ac_'+k+'">'+renderCodes(k,a.codes||[])+'</div></div>';});h+='</div>';
-    if(c)c.innerHTML=h;
-}
-function renderCodes(aid,cds){
-    if(!cds.length)return'<p style="padding:12px;text-align:center;color:var(--text3);">Belum ada code.</p>';
-    return cds.map(function(c){var pv=(c.content||'').substring(0,80);return'<div class="codeitem"><div class="codehead"><div class="codename">📝 '+esc(c.name)+'</div><div class="flex gap1"><button class="btn btnsm" style="color:var(--green);" onclick="copySC(\''+aid+'\',\''+c.id+'\')">📋</button><button class="btn btnsm" onclick="toggleCode(\''+aid+'\',\''+c.id+'\')">'+(c.isOpen?'📄':'👁️')+'</button><button class="btn btnw btnsm" onclick="editCode(\''+aid+'\',\''+c.id+'\')">✏️</button><button class="btn btnd btnsm" onclick="deleteCodeItem(\''+aid+'\',\''+c.id+'\')">🗑️</button></div></div><div class="codecontent '+(c.isOpen?'show':'')+'"><pre>'+esc(c.content||'')+'</pre></div>'+(c.isOpen?'':'<div style="font-size:.8rem;color:var(--text3);">'+esc(pv)+'...</div>')+'</div>';}).join('');
-}
-function showAddAppModal(){document.getElementById('appModalTitle').textContent='➕ Tambah Aplikasi';document.getElementById('editAppId').value='';document.getElementById('appName').value='';document.getElementById('appDesc').value='';document.getElementById('appErr').classList.remove('show');openModal('appModal');}
-function saveApp(){
-    var id=document.getElementById('editAppId').value,n=document.getElementById('appName').value.trim(),d=document.getElementById('appDesc').value.trim();
-    if(!n){document.getElementById('appErr').textContent='Nama wajib diisi.';document.getElementById('appErr').classList.add('show');return;}
-    var apps=getApps();
-    if(id&&apps[id]){apps[id].name=n;apps[id].desc=d;apps[id].updatedAt=Date.now();}
-    else{apps['app_'+Date.now()]={name:n,desc:d,codes:[],createdAt:Date.now(),updatedAt:Date.now()};}
-    saveApps(apps);closeModal('appModal');renderApps();showToast('✅ Disimpan!','s');
-}
-function editApp(id){var a=getApps()[id];if(!a)return;document.getElementById('appModalTitle').textContent='✏️ Edit Aplikasi';document.getElementById('editAppId').value=id;document.getElementById('appName').value=a.name;document.getElementById('appDesc').value=a.desc||'';openModal('appModal');}
-function deleteApp(id){
-    var a=getApps()[id];if(!a)return;
-    window._cf=function(){var apps=getApps();delete apps[id];saveApps(apps);closeModal('confirmModal');renderApps();showToast('🗑️ Dihapus.','s');};
-    document.getElementById('confirmTitle').textContent='⚠️ Hapus?';document.getElementById('confirmMsg').textContent='Hapus "'+a.name+'"?';openModal('confirmModal');
-}
-function toggleApp(id){var apps=getApps();if(apps[id]){apps[id].isOpen=!apps[id].isOpen;saveApps(apps);renderApps();}}
-function addCode(aid){document.getElementById('codeModalTitle').textContent='➕ Tambah Code';document.getElementById('codeAppId').value=aid;document.getElementById('editCodeId').value='';document.getElementById('codeName').value='';document.getElementById('codeContent').value='';document.getElementById('codeErr').classList.remove('show');openModal('codeModal');}
-function saveCode(){
-    var aid=document.getElementById('codeAppId').value,cid=document.getElementById('editCodeId').value;
-    var n=document.getElementById('codeName').value.trim(),ct=document.getElementById('codeContent').value.trim();
-    if(!n||!ct){document.getElementById('codeErr').textContent='Lengkapi data.';document.getElementById('codeErr').classList.add('show');return;}
-    var apps=getApps();if(!apps[aid])return;if(!apps[aid].codes)apps[aid].codes=[];
-    if(cid){var c=apps[aid].codes.find(function(x){return x.id===cid;});if(c){c.name=n;c.content=ct;c.updatedAt=Date.now();}}
-    else{apps[aid].codes.push({id:'c_'+Date.now(),name:n,content:ct,createdAt:Date.now(),updatedAt:Date.now()});}
-    saveApps(apps);closeModal('codeModal');renderApps();showToast('✅ Code disimpan!','s');
-}
-function editCode(aid,cid){var a=getApps()[aid];if(!a)return;var c=a.codes.find(function(x){return x.id===cid;});if(!c)return;document.getElementById('codeModalTitle').textContent='✏️ Edit Code';document.getElementById('codeAppId').value=aid;document.getElementById('editCodeId').value=cid;document.getElementById('codeName').value=c.name;document.getElementById('codeContent').value=c.content;openModal('codeModal');}
-function deleteCodeItem(aid,cid){
-    var a=getApps()[aid];if(!a)return;var c=a.codes.find(function(x){return x.id===cid;});if(!c)return;
-    window._cf=function(){a.codes=a.codes.filter(function(x){return x.id!==cid;});saveApps(getApps());closeModal('confirmModal');renderApps();showToast('🗑️ Dihapus.','s');};
-    document.getElementById('confirmTitle').textContent='⚠️ Hapus?';document.getElementById('confirmMsg').textContent='Hapus "'+c.name+'"?';openModal('confirmModal');
-}
-function toggleCode(aid,cid){var apps=getApps();var c=apps[aid]&&apps[aid].codes?apps[aid].codes.find(function(x){return x.id===cid;}):null;if(c){c.isOpen=!c.isOpen;saveApps(apps);renderApps();}}
-function copySC(aid,cid){var c=getApps()[aid]&&getApps()[aid].codes?getApps()[aid].codes.find(function(x){return x.id===cid;}):null;if(!c||!c.content){showToast('⚠️ Kosong.','w');return;}copyText(c.content);showToast('✅ Dicopy!','s');}
+                    <div class="form-group">
+                        <label class="form-label">Nama Super Admin</label>
+                        <div style="display:flex;gap:8px;">
+                            <input type="text" id="adminNewName" placeholder="Nama baru">
+                            <button onclick="changeAdminName()" class="btn btn-primary btn-sm">Ganti Nama</button>
+                        </div>
+                    </div>
 
-// ===== SEARCH =====
-function toggleSearch(){var b=document.getElementById('searchBar');b.classList.toggle('hidden');if(!b.classList.contains('hidden'))document.getElementById('searchInput').focus();else renderApps();}
-function doSearch(){
-    var q=document.getElementById('searchInput').value.toLowerCase().trim();if(!q){renderApps();return;}
-    var apps=getApps(),c=document.getElementById('appListContainer'),h='<div class="applist">',f=false;
-    Object.keys(apps).forEach(function(k){var a=apps[k];if(a.name.toLowerCase().includes(q)||(a.codes||[]).some(function(x){return x.name.toLowerCase().includes(q)||(x.content||'').toLowerCase().includes(q);})){f=true;h+='<div class="appitem"><div class="apphead" onclick="toggleApp(\''+k+'\')"><div class="appname">📱 '+esc(a.name)+'</div></div><div class="appcodes open">'+renderCodes(k,a.codes||[])+'</div></div>';}});h+='</div>';
-    if(c)c.innerHTML=f?h:'<div class="empty"><div class="icon">🔍</div><h3>Tidak Ditemukan</h3></div>';
-    document.getElementById('emptyState').style.display='none';
-}
-function clearSearch(){document.getElementById('searchInput').value='';document.getElementById('searchBar').classList.add('hidden');renderApps();}
+                    <hr style="border-color:var(--border-color);margin:20px 0;">
 
-// ===== EXPORT/IMPORT =====
-function exportAll(){
-    var d={exportedAt:new Date().toISOString(),apps:getApps(),packages:getPackages(),wa:getWA(),version:'3.0'};
-    var b=new Blob([JSON.stringify(d,null,2)],{type:'application/json'});
-    var a=document.createElement('a');a.href=URL.createObjectURL(b);a.download='Notepad_Backup_'+new Date().toISOString().slice(0,10)+'.json';a.click();
-    showToast('📤 Diexport!','s');
-}
-function importAll(inp){
-    var f=inp.files[0];if(!f)return;var r=new FileReader();
-    r.onload=function(e){try{var d=JSON.parse(e.target.result);if(!d.apps){showToast('❌ Format salah.','e');return;}
-        window._cf=function(){saveApps(d.apps);if(d.packages)savePackages(d.packages);if(d.wa)saveWA(d.wa);closeModal('confirmModal');renderApps();updateWA();showToast('📥 Diimport!','s');};
-        document.getElementById('confirmTitle').textContent='📥 Import?';document.getElementById('confirmMsg').textContent='Data akan ditimpa.';openModal('confirmModal');
-    }catch(err){showToast('❌ Error.','e');}};r.readAsText(f);inp.value='';
-}
+                    <button onclick="resetAllApplicationData()" class="btn btn-danger btn-block">
+                        Reset Semua Data Aplikasi
+                    </button>
+                    <p style="font-size:0.75rem;color:var(--text-muted);margin-top:8px;text-align:center;">
+                        Perhatian: Semua data user, aplikasi, dan pengaturan akan dihapus permanen!
+                    </p>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button onclick="closeModal('superAdminModal')" class="btn btn-gray">Tutup</button>
+            </div>
+        </div>
+    </div>
 
-// ===== MERGE =====
-var sm=[];
-function showMergeModal(){
-    var ss=getSession();if(!ss){showToast('⚠️ Login dulu.','w');return;}if(!ss.isPremium&&ss.role!=='superadmin'){showToast('🔒 Premium only!','w');return;}
-    var apps=getApps(),ks=Object.keys(apps);if(!ks.length){showToast('⚠️ Belum ada aplikasi.','w');return;}
-    var c=document.getElementById('mergeAppList');c.innerHTML='';sm=[];
-    ks.forEach(function(k){var a=apps[k],n=(a.codes||[]).length;if(n>0)sm.push(k);
-        var l=document.createElement('label');l.style.cssText='display:flex;align-items:center;gap:6px;padding:6px 12px;background:var(--bg3);border-radius:6px;cursor:pointer;font-size:.9rem;';
-        l.innerHTML='<input type="checkbox" class="mc" value="'+k+'" '+(n>0?'checked':'')+'> 📱 '+esc(a.name)+' ('+n+' code)';c.appendChild(l);
-        l.querySelector('.mc').addEventListener('change',function(){if(this.checked){if(sm.indexOf(this.value)===-1)sm.push(this.value);}else{sm=sm.filter(function(x){return x!==this.value;});}});
-    });
-    document.getElementById('mergeResult').classList.add('hidden');openModal('mergeModal');
-}
-function doMerge(){
-    if(!sm.length){showToast('⚠️ Pilih aplikasi.','w');return;}
-    var apps=getApps(),ac=[];sm.forEach(function(k){(apps[k]&&apps[k].codes||[]).forEach(function(c){if(c.content&&c.content.trim())ac.push({app:apps[k].name,name:c.name,content:c.content});});});
-    if(!ac.length){showToast('⚠️ Tidak ada code.','w');return;}
-    var h='<!DOCTYPE html>\n<html lang="id">\n<head>\n<meta charset="UTF-8">\n<title>Gabungan Code</title>\n<style>body{font-family:monospace;padding:20px;background:#0a0a1a;color:#e8e8f0;}.b{margin-bottom:20px;border:1px solid #333;border-radius:8px;}.bh{background:#1a1a35;padding:12px 16px;border-bottom:1px solid #333;}pre{margin:0;padding:16px;overflow-x:auto;font-size:13px;}</style>\n</head>\n<body>\n<h1>📝 Gabungan Code</h1>\n';
-    ac.forEach(function(c){h+='<div class="b"><div class="bh">📱 '+esc(c.app)+' | 📝 '+esc(c.name)+'</div><pre>'+esc(c.content)+'</pre></div>\n';});
-    h+='</body>\n</html>';document.getElementById('mergeOutput').value=h;document.getElementById('mergeResult').classList.remove('hidden');
-    showToast('✅ '+ac.length+' code digabung!','s');
-}
-function copyMergeResult(){var t=document.getElementById('mergeOutput').value;if(!t)return;copyText(t);showToast('✅ Dicopy!','s');}
-function downloadMergeResult(){var t=document.getElementById('mergeOutput').value;if(!t)return;var b=new Blob([t],{type:'text/html'});var a=document.createElement('a');a.href=URL.createObjectURL(b);a.download='index.html';a.click();showToast('📥 Didownload!','s');}
+    <!-- ADD/EDIT APP MODAL -->
+    <div class="modal-overlay" id="appModal">
+        <div class="modal-content" style="max-width:500px;">
+            <div class="modal-header">
+                <h3 id="appModalTitle">Tambah Aplikasi</h3>
+                <button class="modal-close" onclick="closeModal('appModal')">✕</button>
+            </div>
+            <div class="modal-body">
+                <input type="hidden" id="editAppId">
+                <div class="form-group">
+                    <label class="form-label">Nama Aplikasi *</label>
+                    <input type="text" id="appNameInput" placeholder="Contoh: Aplikasi Toko Online">
+                </div>
+                <div class="form-group">
+                    <label class="form-label">Deskripsi (opsional)</label>
+                    <textarea id="appDescInput" rows="2" placeholder="Deskripsi singkat tentang aplikasi..."></textarea>
+                </div>
+                <div class="form-error" id="appError"></div>
+            </div>
+            <div class="modal-footer">
+                <button onclick="closeModal('appModal')" class="btn btn-gray">Batal</button>
+                <button onclick="saveApplication()" class="btn btn-success">Simpan</button>
+            </div>
+        </div>
+    </div>
 
-// ===== CONFIRM =====
-function execConfirm(){if(typeof window._cf==='function'){window._cf();window._cf=null;}closeModal('confirmModal');}
+    <!-- ADD/EDIT CODE MODAL -->
+    <div class="modal-overlay" id="codeModal">
+        <div class="modal-content" style="max-width:600px;">
+            <div class="modal-header">
+                <h3 id="codeModalTitle">Tambah Code</h3>
+                <button class="modal-close" onclick="closeModal('codeModal')">✕</button>
+            </div>
+            <div class="modal-body">
+                <input type="hidden" id="editCodeId">
+                <input type="hidden" id="codeAppId">
+                <div class="form-group">
+                    <label class="form-label">Nama Code *</label>
+                    <input type="text" id="codeNameInput" placeholder="Contoh: Code 1 - Header">
+                </div>
+                <div class="form-group">
+                    <label class="form-label">Kode HTML *</label>
+                    <textarea id="codeContentInput" rows="10" placeholder="Tempelkan kode HTML disini..."></textarea>
+                </div>
+                <div class="form-error" id="codeError"></div>
+            </div>
+            <div class="modal-footer">
+                <button onclick="closeModal('codeModal')" class="btn btn-gray">Batal</button>
+                <button onclick="saveCode()" class="btn btn-success">Simpan Code</button>
+            </div>
+        </div>
+    </div>
 
-// ===== MODAL =====
-function openModal(id){var m=document.getElementById(id);if(m){m.classList.add('show');m.style.display='flex';document.body.style.overflow='hidden';}}
-function closeModal(id){var m=document.getElementById(id);if(m){m.classList.remove('show');m.style.display='none';document.body.style.overflow='';}}
-document.addEventListener('click',function(e){if(e.target.classList.contains('modal')&&e.target.classList.contains('show')){e.target.classList.remove('show');e.target.style.display='none';document.body.style.overflow='';}});
-document.addEventListener('keydown',function(e){if(e.key==='Escape'){document.querySelectorAll('.modal.show').forEach(function(m){m.classList.remove('show');m.style.display='none';});document.body.style.overflow='';}});
+    <!-- MERGE MODAL -->
+    <div class="modal-overlay" id="mergeModal">
+        <div class="modal-content" style="max-width:650px;">
+            <div class="modal-header">
+                <h3>Gabung & Copy Semua Code</h3>
+                <button class="modal-close" onclick="closeModal('mergeModal')">✕</button>
+            </div>
+            <div class="modal-body">
+                <p style="color:var(--text-secondary);margin-bottom:12px;">
+                    Fitur ini khusus untuk pengguna <strong>Premium</strong>.
+                    Semua code yang dipilih akan digabung menjadi 1 file index.html.
+                </p>
+                <div id="mergeAppList" style="display:flex;flex-wrap:wrap;gap:8px;padding:8px 0;"></div>
+                <button onclick="performMerge()" class="btn btn-success btn-block">Gabung Semua Code</button>
+                <div id="mergeResult" class="hidden" style="margin-top:16px;">
+                    <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:8px;">
+                        <strong>Hasil Gabungan (index.html)</strong>
+                        <div style="display:flex;gap:4px;">
+                            <button onclick="copyMergeResult()" class="btn btn-primary btn-sm">Copy</button>
+                            <button onclick="downloadMergeResult()" class="btn btn-success btn-sm">Download</button>
+                        </div>
+                    </div>
+                    <textarea id="mergeOutput" readonly style="font-family:'Courier New',monospace;font-size:0.8rem;min-height:250px;background:var(--bg-primary);color:var(--text-primary);border:1px solid #7c3aed;"></textarea>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button onclick="closeModal('mergeModal')" class="btn btn-gray">Tutup</button>
+            </div>
+        </div>
+    </div>
 
-// ===== TOAST =====
-function showToast(msg,tp){
-    var c=document.getElementById('toastContainer');if(!c){c=document.createElement('div');c.id='toastContainer';c.className='toastc';document.body.appendChild(c);}
-    var t=document.createElement('div');t.className='toast '+(tp||'');t.textContent=msg;c.appendChild(t);
-    setTimeout(function(){t.classList.add('show');},10);
-    setTimeout(function(){t.classList.remove('show');setTimeout(function(){t.remove();},300);},3500);
-}
+    <!-- CONFIRM MODAL -->
+    <div class="modal-overlay" id="confirmModal">
+        <div class="modal-content" style="max-width:380px;">
+            <div class="modal-header">
+                <h3 id="confirmTitle">Konfirmasi</h3>
+                <button class="modal-close" onclick="closeModal('confirmModal')">✕</button>
+            </div>
+            <div class="modal-body">
+                <p id="confirmMessage">Apakah Anda yakin ingin melanjutkan?</p>
+            </div>
+            <div class="modal-footer">
+                <button onclick="closeModal('confirmModal')" class="btn btn-gray">Batal</button>
+                <button onclick="executeConfirmAction()" class="btn btn-danger" id="confirmButton">Ya, Lanjutkan</button>
+            </div>
+        </div>
+    </div>
 
-// ===== UTILS =====
-function esc(t){if(!t)return'';var d=document.createElement('div');d.textContent=t;return d.innerHTML;}
-function copyText(t){try{navigator.clipboard.writeText(t);}catch(e){var ta=document.createElement('textarea');ta.value=t;ta.style.position='fixed';ta.style.opacity='0';document.body.appendChild(ta);ta.select();document.execCommand('copy');document.body.removeChild(ta);}}
-function toggleTheme(){document.body.classList.toggle('light');var ic=document.body.classList.contains('light')?'☀️':'🌙';document.querySelectorAll('#themeBtn1,#themeBtn2').forEach(function(b){b.textContent=ic;});}
+    <!-- EDIT PACKAGE MODAL -->
+    <div class="modal-overlay" id="editPackageModal">
+        <div class="modal-content" style="max-width:420px;">
+            <div class="modal-header">
+                <h3 id="editPackageTitle">Edit Paket</h3>
+                <button class="modal-close" onclick="closeModal('editPackageModal')">✕</button>
+            </div>
+            <div class="modal-body">
+                <input type="hidden" id="editPackageId">
+                <div class="form-group">
+                    <label class="form-label">Nama Paket</label>
+                    <input type="text" id="editPackageName" placeholder="Contoh: Basic">
+                </div>
+                <div class="form-group">
+                    <label class="form-label">Harga (Rupiah)</label>
+                    <input type="number" id="editPackagePrice" placeholder="25000">
+                </div>
+                <div class="form-group">
+                    <label class="form-label">Durasi (hari)</label>
+                    <input type="number" id="editPackageDays" placeholder="30">
+                </div>
+                <div class="form-group">
+                    <label class="form-label">Label Durasi</label>
+                    <input type="text" id="editPackageLabel" placeholder="Contoh: 1 Bulan">
+                </div>
+                <div class="form-error" id="editPackageError"></div>
+            </div>
+            <div class="modal-footer">
+                <button onclick="closeModal('editPackageModal')" class="btn btn-gray">Batal</button>
+                <button onclick="savePackageChanges()" class="btn btn-success">Simpan Perubahan</button>
+            </div>
+        </div>
+    </div>
 
-// ===== INIT =====
-function init(){
-    updOnline();updateUI();renderApps();updateWA();
-    var ss=getSession();
-    if(ss){document.getElementById('landingPage').classList.add('hidden');document.getElementById('appPage').classList.remove('hidden');}
-    console.log('✅ Notepad+ v3.0 Ready!');
-    console.log('👑 Super Admin: superadmin / admin123');
-    console.log('📱 WA Admin: ' + getWADisplay());
-}
-document.addEventListener('DOMContentLoaded',init);
-</script>
+    <!-- TOAST CONTAINER -->
+    <div id="toastContainer"></div>
+
+    <!-- LOADING OVERLAY -->
+    <div id="loadingOverlay" class="hidden" style="position:fixed;top:0;left:0;width:100%;height:100%;background:rgba(0,0,0,0.6);z-index:9999;display:none;align-items:center;justify-content:center;">
+        <div style="text-align:center;">
+            <div style="width:40px;height:40px;border:4px solid rgba(255,255,255,0.1);border-top-color:#7c3aed;border-radius:50%;animation:spin 0.8s linear infinite;margin:0 auto;"></div>
+            <p style="color:#fff;margin-top:16px;" id="loadingText">Memproses...</p>
+        </div>
+    </div>
+
+    <!-- JAVASCRIPT -->
+    <script src="script.js"></script>
+
 </body>
 </html>
+/* ============================================================ */
+/* NOTEPAD+ CODE STORAGE v3.3 - STYLE.CSS                       */
+/* ============================================================ */
+
+/* ========== RESET & BASE ========== */
+*,
+*::before,
+*::after {
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+    border: 0;
+    font: inherit;
+    vertical-align: baseline;
+}
+
+html {
+    scroll-behavior: smooth;
+    -webkit-text-size-adjust: 100%;
+    font-size: 16px;
+    line-height: 1.5;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+}
+
+body {
+    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
+    background: var(--bg-primary);
+    color: var(--text-primary);
+    min-height: 100vh;
+    min-height: 100dvh;
+    overflow-x: hidden;
+    transition: background 0.3s ease, color 0.3s ease;
+}
+
+/* ========== CSS VARIABLES ========== */
+:root {
+    --bg-primary: #0a0a1a;
+    --bg-secondary: #12122a;
+    --bg-tertiary: #1a1a35;
+    --bg-hover: #222240;
+    --text-primary: #e8e8f0;
+    --text-secondary: #a0a0b8;
+    --text-muted: #6a6a80;
+    --accent-primary: #7c3aed;
+    --accent-hover: #6d28d9;
+    --accent-light: #8b5cf6;
+    --color-success: #10b981;
+    --color-success-hover: #059669;
+    --color-danger: #ef4444;
+    --color-danger-hover: #dc2626;
+    --color-warning: #f59e0b;
+    --color-warning-hover: #d97706;
+    --color-info: #3b82f6;
+    --color-info-hover: #2563eb;
+    --color-orange: #f97316;
+    --border-color: rgba(255, 255, 255, 0.06);
+    --border-color-strong: rgba(255, 255, 255, 0.1);
+    --shadow-sm: 0 2px 8px rgba(0, 0, 0, 0.4);
+    --shadow-md: 0 4px 20px rgba(0, 0, 0, 0.5);
+    --shadow-lg: 0 8px 32px rgba(0, 0, 0, 0.6);
+    --radius-sm: 8px;
+    --radius-md: 12px;
+    --radius-lg: 16px;
+    --radius-full: 9999px;
+    --spacing-xs: 4px;
+    --spacing-sm: 8px;
+    --spacing-md: 12px;
+    --spacing-lg: 16px;
+    --spacing-xl: 20px;
+    --spacing-2xl: 24px;
+    --spacing-3xl: 32px;
+    --spacing-4xl: 40px;
+    --transition-base: 200ms ease;
+    --transition-slow: 300ms ease;
+    --z-modal: 998;
+    --z-toast: 9999;
+}
+
+body.light-theme {
+    --bg-primary: #f5f5f8;
+    --bg-secondary: #ffffff;
+    --bg-tertiary: #f0f0f5;
+    --bg-hover: #e5e5ea;
+    --text-primary: #1a1a2e;
+    --text-secondary: #555570;
+    --text-muted: #8888a0;
+    --border-color: rgba(0, 0, 0, 0.08);
+    --border-color-strong: rgba(0, 0, 0, 0.12);
+}
+
+/* ========== SCROLLBAR ========== */
+::-webkit-scrollbar { width: 4px; height: 4px; }
+::-webkit-scrollbar-track { background: transparent; }
+::-webkit-scrollbar-thumb { background: var(--accent-primary); border-radius: var(--radius-full); }
+* { scrollbar-width: thin; scrollbar-color: var(--accent-primary) transparent; }
+
+/* ========== ANIMATIONS ========== */
+@keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
+@keyframes slideUp { from { opacity: 0; transform: translateY(20px); } to { opacity: 1; transform: translateY(0); } }
+@keyframes slideDown { from { opacity: 0; transform: translateY(-20px); } to { opacity: 1; transform: translateY(0); } }
+@keyframes spin { to { transform: rotate(360deg); } }
+@keyframes pulse { 0%, 100% { opacity: 1; } 50% { opacity: 0.5; } }
+@keyframes glow { 0%, 100% { box-shadow: 0 0 20px rgba(124, 58, 237, 0.2); } 50% { box-shadow: 0 0 40px rgba(124, 58, 237, 0.5); } }
+
+/* ========== UTILITY CLASSES ========== */
+.hidden { display: none !important; }
+.flex { display: flex; }
+.flex-center { display: flex; align-items: center; justify-content: center; }
+.flex-between { display: flex; align-items: center; justify-content: space-between; }
+.flex-col { flex-direction: column; }
+.flex-wrap { flex-wrap: wrap; }
+.gap-xs { gap: var(--spacing-xs); }
+.gap-sm { gap: var(--spacing-sm); }
+.gap-md { gap: var(--spacing-md); }
+.gap-lg { gap: var(--spacing-lg); }
+.gap-xl { gap: var(--spacing-xl); }
+.w-full { width: 100%; }
+.text-center { text-align: center; }
+.text-sm { font-size: 0.85rem; }
+.text-xs { font-size: 0.75rem; }
+.text-lg { font-size: 1.1rem; }
+.text-xl { font-size: 1.3rem; }
+.text-2xl { font-size: 1.8rem; }
+.font-bold { font-weight: 700; }
+.font-semibold { font-weight: 600; }
+.text-muted { color: var(--text-muted); }
+.text-secondary { color: var(--text-secondary); }
+.text-accent { color: var(--accent-light); }
+.text-success { color: var(--color-success); }
+.text-danger { color: var(--color-danger); }
+.text-warning { color: var(--color-warning); }
+.bg-secondary { background: var(--bg-secondary); }
+.bg-tertiary { background: var(--bg-tertiary); }
+.rounded-sm { border-radius: var(--radius-sm); }
+.rounded-md { border-radius: var(--radius-md); }
+.rounded-lg { border-radius: var(--radius-lg); }
+.rounded-full { border-radius: var(--radius-full); }
+.shadow { box-shadow: var(--shadow-sm); }
+.shadow-md { box-shadow: var(--shadow-md); }
+.border { border: 1px solid var(--border-color); }
+.cursor-pointer { cursor: pointer; }
+.overflow-hidden { overflow: hidden; }
+.overflow-auto { overflow-y: auto; }
+.truncate { overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+
+/* ========== BUTTONS ========== */
+.btn {
+    display: inline-flex; align-items: center; justify-content: center; gap: 6px;
+    padding: 10px 20px; border: none; border-radius: var(--radius-sm); font-weight: 600;
+    cursor: pointer; transition: all var(--transition-base); font-size: 0.9rem;
+    min-height: 40px; text-decoration: none; line-height: 1.2; font-family: inherit;
+}
+.btn:hover { transform: translateY(-1px); box-shadow: var(--shadow-md); }
+.btn:active { transform: translateY(0); }
+.btn:disabled { opacity: 0.5; cursor: not-allowed; transform: none !important; box-shadow: none !important; }
+.btn-primary { background: var(--accent-primary); color: #ffffff; }
+.btn-primary:hover { background: var(--accent-hover); }
+.btn-success { background: var(--color-success); color: #ffffff; }
+.btn-success:hover { background: var(--color-success-hover); }
+.btn-danger { background: var(--color-danger); color: #ffffff; }
+.btn-danger:hover { background: var(--color-danger-hover); }
+.btn-warning { background: var(--color-warning); color: #000000; }
+.btn-warning:hover { background: var(--color-warning-hover); }
+.btn-blue { background: var(--color-info); color: #ffffff; }
+.btn-blue:hover { background: var(--color-info-hover); }
+.btn-gray { background: var(--text-muted); color: #ffffff; }
+.btn-gray:hover { background: #7a7a8a; }
+.btn-orange { background: var(--color-orange); color: #ffffff; }
+.btn-orange:hover { background: #e0650f; }
+.btn-outline { background: transparent; border: 2px solid var(--accent-primary); color: var(--accent-light); }
+.btn-outline:hover { background: var(--accent-primary); color: #ffffff; }
+.btn-sm { padding: 6px 14px; font-size: 0.8rem; min-height: 30px; }
+.btn-lg { padding: 14px 28px; font-size: 1.05rem; min-height: 48px; }
+.btn-xl { padding: 18px 36px; font-size: 1.15rem; min-height: 56px; }
+.btn-block { width: 100%; display: flex; }
+
+/* ========== BADGES ========== */
+.badge {
+    display: inline-flex; align-items: center; gap: 4px; padding: 3px 10px;
+    border-radius: var(--radius-full); font-size: 0.7rem; font-weight: 600;
+    text-transform: uppercase; letter-spacing: 0.5px;
+}
+.badge-success { background: var(--color-success); color: #ffffff; }
+.badge-danger { background: var(--color-danger); color: #ffffff; }
+.badge-warning { background: var(--color-warning); color: #000000; }
+.badge-purple { background: var(--accent-primary); color: #ffffff; }
+
+/* ========== FORMS ========== */
+input, textarea, select {
+    width: 100%; padding: 10px 14px; border: 1px solid var(--border-color-strong);
+    border-radius: var(--radius-sm); font-size: 0.9rem; transition: all var(--transition-base);
+    background: var(--bg-tertiary); color: var(--text-primary); font-family: inherit;
+}
+input:focus, textarea:focus, select:focus { outline: none; border-color: var(--accent-primary); box-shadow: 0 0 0 3px rgba(124, 58, 237, 0.15); }
+input::placeholder, textarea::placeholder { color: var(--text-muted); }
+textarea { resize: vertical; min-height: 80px; font-family: 'Courier New', monospace; font-size: 0.85rem; line-height: 1.7; }
+select { appearance: none; background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' viewBox='0 0 12 12'%3E%3Cpath fill='%23a0a0b8' d='M6 8L1 3h10z'/%3E%3C/svg%3E"); background-repeat: no-repeat; background-position: right 12px center; padding-right: 36px; cursor: pointer; }
+.form-group { margin-bottom: var(--spacing-lg); }
+.form-label { display: block; margin-bottom: var(--spacing-sm); font-weight: 500; font-size: 0.85rem; color: var(--text-secondary); }
+.form-hint { font-size: 0.75rem; color: var(--text-muted); margin-top: var(--spacing-xs); }
+.form-error { color: var(--color-danger); font-size: 0.8rem; margin-top: var(--spacing-xs); display: none; }
+.form-error.show { display: block; }
+.form-success { color: var(--color-success); font-size: 0.8rem; margin-top: var(--spacing-xs); display: none; }
+.form-success.show { display: block; }
+.link-text { color: var(--accent-light); cursor: pointer; transition: color var(--transition-base); }
+.link-text:hover { color: var(--accent-primary); text-decoration: underline; }
+
+/* ========== TOAST ========== */
+.toast-container { position: fixed; bottom: 80px; left: 50%; transform: translateX(-50%); z-index: var(--z-toast); max-width: 90%; pointer-events: none; }
+.toast { background: var(--bg-secondary); color: var(--text-primary); padding: 12px 20px; border-radius: var(--radius-sm); border: 1px solid var(--border-color); box-shadow: var(--shadow-lg); font-size: 0.9rem; opacity: 0; transform: translateY(20px); transition: all var(--transition-base); pointer-events: auto; text-align: center; margin-bottom: 8px; border-left: 4px solid var(--accent-primary); }
+.toast.show { opacity: 1; transform: translateY(0); }
+.toast.toast-success { border-left-color: var(--color-success); }
+.toast.toast-error { border-left-color: var(--color-danger); }
+.toast.toast-warning { border-left-color: var(--color-warning); }
+
+/* ========== MODAL ========== */
+.modal-overlay { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0, 0, 0, 0.7); backdrop-filter: blur(8px); -webkit-backdrop-filter: blur(8px); display: none; align-items: center; justify-content: center; z-index: var(--z-modal); padding: var(--spacing-lg); }
+.modal-overlay.show { display: flex; }
+.modal-content { background: var(--bg-secondary); border-radius: var(--radius-lg); max-width: 600px; width: 100%; max-height: 85vh; overflow-y: auto; padding: var(--spacing-2xl); animation: slideUp 0.3s ease; border: 1px solid var(--border-color); box-shadow: var(--shadow-lg); }
+.modal-header { display: flex; align-items: center; justify-content: space-between; margin-bottom: var(--spacing-xl); padding-bottom: var(--spacing-lg); border-bottom: 1px solid var(--border-color); }
+.modal-header h3 { margin: 0; font-size: 1.2rem; font-weight: 700; }
+.modal-close { background: none; border: none; font-size: 1.5rem; color: var(--text-secondary); cursor: pointer; padding: 4px; transition: all var(--transition-base); line-height: 1; }
+.modal-close:hover { color: var(--color-danger); transform: rotate(90deg); }
+.modal-body { padding: var(--spacing-sm) 0; }
+.modal-footer { display: flex; gap: var(--spacing-md); padding-top: var(--spacing-xl); border-top: 1px solid var(--border-color); margin-top: var(--spacing-xl); justify-content: flex-end; }
+
+/* ========== LAYOUT ========== */
+.container { max-width: 1000px; margin: 0 auto; padding: var(--spacing-lg); min-height: 100vh; }
+
+/* ========== HEADER ========== */
+.header { display: flex; align-items: center; justify-content: space-between; padding: var(--spacing-md) var(--spacing-xl); background: var(--bg-secondary); border-radius: var(--radius-md); border: 1px solid var(--border-color); margin-bottom: var(--spacing-xl); flex-wrap: wrap; gap: var(--spacing-sm); }
+.logo { font-size: 1.2rem; font-weight: 700; display: flex; align-items: center; gap: var(--spacing-sm); }
+.logo-icon { font-size: 1.3rem; }
+.logo-text { background: linear-gradient(135deg, var(--accent-light), #c4b5fd); -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text; }
+.header-buttons { display: flex; gap: var(--spacing-sm); align-items: center; flex-wrap: wrap; }
+.user-badge { display: flex; align-items: center; gap: var(--spacing-sm); padding: 4px 12px 4px 8px; background: var(--bg-tertiary); border-radius: var(--radius-full); font-size: 0.85rem; }
+.user-avatar { width: 28px; height: 28px; border-radius: 50%; background: var(--accent-primary); display: flex; align-items: center; justify-content: center; font-size: 0.75rem; color: #ffffff; font-weight: 600; }
+.user-name { font-size: 0.85rem; font-weight: 500; }
+
+/* ========== HERO ========== */
+.hero { text-align: center; padding: var(--spacing-3xl) var(--spacing-xl); background: var(--bg-secondary); border-radius: var(--radius-lg); border: 1px solid var(--border-color); margin-bottom: var(--spacing-xl); }
+.hero-icon { font-size: 3rem; margin-bottom: var(--spacing-md); }
+.hero h1 { font-size: 2rem; font-weight: 800; margin-bottom: var(--spacing-sm); }
+.gradient-text { background: linear-gradient(135deg, var(--accent-light), #c4b5fd); -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text; }
+.hero-description { font-size: 1rem; color: var(--text-secondary); max-width: 600px; margin: 0 auto var(--spacing-xl); line-height: 1.6; }
+.hero-buttons { display: flex; gap: var(--spacing-md); justify-content: center; flex-wrap: wrap; }
+
+/* ========== WHATSAPP BANNER ========== */
+.whatsapp-banner { background: linear-gradient(135deg, #25D366, #128C7E); color: #ffffff; padding: var(--spacing-lg) var(--spacing-xl); border-radius: var(--radius-md); margin-bottom: var(--spacing-xl); display: flex; align-items: center; justify-content: space-between; flex-wrap: wrap; gap: var(--spacing-md); cursor: pointer; transition: all var(--transition-base); border: 2px solid transparent; }
+.whatsapp-banner:hover { transform: translateY(-2px); box-shadow: var(--shadow-md); border-color: rgba(255, 255, 255, 0.3); }
+.whatsapp-banner-left { display: flex; align-items: center; gap: var(--spacing-md); }
+.whatsapp-banner-icon { font-size: 1.5rem; }
+.whatsapp-banner-right { display: flex; align-items: center; gap: var(--spacing-sm); }
+
+/* ========== OFFLINE BANNER ========== */
+.offline-banner { background: var(--color-orange); color: #ffffff; padding: var(--spacing-md) var(--spacing-xl); border-radius: var(--radius-md); margin-bottom: var(--spacing-xl); display: none; align-items: center; justify-content: space-between; flex-wrap: wrap; gap: var(--spacing-md); }
+.offline-banner.show { display: flex; }
+
+/* ========== EXPIRY WARNING ========== */
+.expiry-warning { background: var(--color-danger); color: #ffffff; padding: var(--spacing-md) var(--spacing-xl); border-radius: var(--radius-md); margin-bottom: var(--spacing-xl); display: none; align-items: center; justify-content: space-between; flex-wrap: wrap; gap: var(--spacing-md); }
+.expiry-warning.show { display: flex; }
+
+/* ========== SECTION TITLE ========== */
+.section-title { text-align: center; font-size: 1.3rem; font-weight: 700; margin-bottom: var(--spacing-lg); margin-top: var(--spacing-sm); }
+
+/* ========== FEATURES ========== */
+.features-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(200px, 1fr)); gap: var(--spacing-lg); margin-bottom: var(--spacing-2xl); }
+.feature-card { background: var(--bg-secondary); border-radius: var(--radius-md); padding: var(--spacing-xl); border: 1px solid var(--border-color); text-align: center; transition: all var(--transition-base); }
+.feature-card:hover { border-color: var(--accent-primary); transform: translateY(-3px); box-shadow: var(--shadow-md); }
+.feature-icon { font-size: 2rem; margin-bottom: var(--spacing-sm); }
+.feature-card h4 { font-size: 1rem; font-weight: 600; margin-bottom: var(--spacing-xs); }
+.feature-card p { font-size: 0.85rem; color: var(--text-secondary); margin: 0; line-height: 1.5; }
+
+/* ========== PRICE GRID ========== */
+.price-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(240px, 1fr)); gap: var(--spacing-lg); margin-bottom: var(--spacing-2xl); }
+.price-card { background: var(--bg-secondary); border-radius: var(--radius-lg); padding: var(--spacing-2xl); border: 2px solid var(--border-color); text-align: center; transition: all var(--transition-base); position: relative; }
+.price-card:hover { border-color: var(--accent-primary); transform: translateY(-4px); box-shadow: var(--shadow-md); }
+.price-card.featured { border-color: var(--accent-primary); background: var(--bg-tertiary); }
+.price-card.featured .featured-badge { position: absolute; top: -12px; left: 50%; transform: translateX(-50%); background: var(--accent-primary); color: #ffffff; padding: 3px 16px; border-radius: var(--radius-full); font-size: 0.7rem; font-weight: 700; white-space: nowrap; }
+.price-icon { font-size: 2.5rem; margin-bottom: var(--spacing-sm); }
+.price-name { font-size: 1.2rem; font-weight: 700; }
+.price-value { font-size: 2rem; font-weight: 800; color: var(--color-success); margin: var(--spacing-sm) 0; }
+.price-duration { font-size: 0.85rem; color: var(--text-secondary); }
+
+/* ========== STATS ========== */
+.stats-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(130px, 1fr)); gap: var(--spacing-md); margin-bottom: var(--spacing-xl); }
+.stat-card { background: var(--bg-secondary); border-radius: var(--radius-sm); padding: var(--spacing-lg); border: 1px solid var(--border-color); text-align: center; }
+.stat-value { font-size: 1.5rem; font-weight: 700; color: var(--accent-light); }
+.stat-label { font-size: 0.78rem; color: var(--text-secondary); margin-top: var(--spacing-xs); }
+
+/* ========== TOOLBAR ========== */
+.toolbar { display: flex; gap: var(--spacing-md); flex-wrap: wrap; margin-bottom: var(--spacing-xl); }
+
+/* ========== APP LIST ========== */
+.app-list { display: grid; grid-template-columns: 1fr; gap: var(--spacing-md); }
+.app-item { background: var(--bg-secondary); border-radius: var(--radius-md); border: 1px solid var(--border-color); overflow: hidden; transition: all var(--transition-base); }
+.app-item:hover { border-color: var(--accent-primary); }
+.app-header { display: flex; align-items: center; justify-content: space-between; padding: var(--spacing-md) var(--spacing-lg); cursor: pointer; transition: all var(--transition-base); flex-wrap: wrap; gap: var(--spacing-sm); }
+.app-header:hover { background: var(--bg-hover); }
+.app-name { font-weight: 600; font-size: 1rem; display: flex; align-items: center; gap: var(--spacing-sm); }
+.app-code-count { font-size: 0.75rem; color: var(--text-muted); background: var(--bg-tertiary); padding: 2px 10px; border-radius: var(--radius-full); }
+.app-codes-container { padding: 0 var(--spacing-lg) var(--spacing-md); display: none; }
+.app-codes-container.open { display: block; }
+
+/* ========== CODE ITEM ========== */
+.code-item { background: var(--bg-tertiary); border-radius: var(--radius-sm); padding: var(--spacing-md); margin-bottom: var(--spacing-sm); border: 1px solid var(--border-color); transition: all var(--transition-base); }
+.code-item:hover { border-color: var(--accent-primary); }
+.code-header { display: flex; align-items: center; justify-content: space-between; margin-bottom: var(--spacing-sm); flex-wrap: wrap; gap: var(--spacing-sm); }
+.code-name { font-weight: 500; font-size: 0.9rem; }
+.code-content-preview { font-family: 'Courier New', monospace; font-size: 0.8rem; color: var(--text-secondary); white-space: pre-wrap; word-wrap: break-word; max-height: 180px; overflow-y: auto; padding: var(--spacing-sm); background: var(--bg-primary); border-radius: 6px; border: 1px solid var(--border-color); display: none; }
+.code-content-preview.show { display: block; }
+.code-content-preview pre { margin: 0; white-space: pre-wrap; word-wrap: break-word; }
+
+/* ========== EMPTY STATE ========== */
+.empty-state { text-align: center; padding: var(--spacing-3xl) var(--spacing-lg); color: var(--text-secondary); }
+.empty-state-icon { font-size: 3rem; margin-bottom: var(--spacing-md); }
+.empty-state h3 { font-size: 1.2rem; color: var(--text-primary); margin-bottom: var(--spacing-sm); }
+.empty-state p { color: var(--text-muted); margin-bottom: var(--spacing-lg); }
+
+/* ========== ADMIN TABS ========== */
+.admin-tabs { display: flex; gap: var(--spacing-sm); flex-wrap: wrap; margin-bottom: var(--spacing-lg); border-bottom: 1px solid var(--border-color); padding-bottom: var(--spacing-md); }
+.admin-tab { padding: 8px 16px; border: 2px solid var(--accent-primary); background: transparent; color: var(--accent-light); border-radius: var(--radius-sm); cursor: pointer; font-weight: 600; font-size: 0.85rem; transition: all var(--transition-base); }
+.admin-tab:hover { background: var(--accent-primary); color: #ffffff; }
+.admin-tab.active { background: var(--accent-primary); color: #ffffff; }
+.admin-tab-content { animation: fadeIn 0.3s ease; }
+
+/* ========== ADMIN TABLE ========== */
+.admin-table { width: 100%; border-collapse: collapse; font-size: 0.8rem; }
+.admin-table th, .admin-table td { padding: 8px 10px; border: 1px solid var(--border-color); text-align: left; vertical-align: middle; }
+.admin-table th { background: var(--bg-hover); font-weight: 600; font-size: 0.75rem; text-transform: uppercase; letter-spacing: 0.5px; }
+.admin-table tr:hover { background: var(--bg-tertiary); }
+
+/* ========== RESPONSIVE ========== */
+@media (max-width: 640px) {
+    .hero h1 { font-size: 1.5rem; }
+    .hero { padding: var(--spacing-2xl) var(--spacing-md); }
+    .price-grid { grid-template-columns: 1fr; }
+    .features-grid { grid-template-columns: 1fr; }
+    .header { flex-direction: column; align-items: stretch; }
+    .header-buttons { justify-content: center; }
+    .stats-grid { grid-template-columns: repeat(2, 1fr); }
+    .modal-content { padding: var(--spacing-lg); }
+    .hero-buttons { flex-direction: column; }
+    .hero-buttons .btn { width: 100%; }
+    .admin-table { font-size: 0.65rem; }
+    .admin-table th, .admin-table td { padding: 4px 6px; }
+}
+// ============================================================
+// NOTEPAD+ CODE STORAGE v3.3 - SCRIPT.JS
+// ============================================================
+
+// ============================================================
+// 1. SERVICE WORKER UNTUK OFFLINE SUPPORT
+// ============================================================
+if ('serviceWorker' in navigator) {
+    var serviceWorkerCode = `
+        var CACHE_NAME = 'notepad-v33';
+        var ASSETS_TO_CACHE = ['/', '/index.html', '/style.css', '/script.js'];
+        
+        self.addEventListener('install', function(event) {
+            event.waitUntil(
+                caches.open(CACHE_NAME).then(function(cache) {
+                    return cache.addAll(ASSETS_TO_CACHE);
+                })
+            );
+            self.skipWaiting();
+        });
+        
+        self.addEventListener('activate', function(event) {
+            event.waitUntil(
+                caches.keys().then(function(keys) {
+                    return Promise.all(
+                        keys.filter(function(key) {
+                            return key !== CACHE_NAME;
+                        }).map(function(key) {
+                            return caches.delete(key);
+                        })
+                    );
+                })
+            );
+            self.clients.claim();
+        });
+        
+        self.addEventListener('fetch', function(event) {
+            event.respondWith(
+                caches.match(event.request).then(function(response) {
+                    return response || fetch(event.request).then(function(fetchResponse) {
+                        return caches.open(CACHE_NAME).then(function(cache) {
+                            cache.put(event.request, fetchResponse.clone());
+                            return fetchResponse;
+                        });
+                    });
+                })
+            );
+        });
+    `;
+
+    var serviceWorkerBlob = new Blob([serviceWorkerCode], { type: 'application/javascript' });
+    var serviceWorkerUrl = URL.createObjectURL(serviceWorkerBlob);
+
+    navigator.serviceWorker.register(serviceWorkerUrl).catch(function(error) {
+        console.log('Service Worker registration failed:', error);
+    });
+}
+
+// ============================================================
+// 2. DATA DEFAULT
+// ============================================================
+var SUPER_ADMIN_DATA = {
+    username: 'superadmin',
+    password: 'admin123',
+    nama: 'Super Admin',
+    email: 'admin@notepad.com',
+    hp: '081220285226',
+    role: 'superadmin'
+};
+
+var DEFAULT_WHATSAPP_NUMBER = '081220285226';
+
+var DEFAULT_PACKAGES = [
+    { id: '1bulan', name: 'Basic', price: 25000, days: 30, label: '1 Bulan' },
+    { id: '3bulan', name: 'Premium', price: 50000, days: 90, label: '3 Bulan' },
+    { id: '6bulan', name: 'Enterprise', price: 75000, days: 180, label: '6 Bulan' }
+];
+
+// ============================================================
+// 3. LOCAL STORAGE FUNCTIONS
+// ============================================================
+function getStorageItem(key, defaultValue) {
+    try {
+        var value = localStorage.getItem('notepad_' + key);
+        if (value === null || value === undefined) { return defaultValue; }
+        return JSON.parse(value);
+    } catch (error) { return defaultValue; }
+}
+
+function setStorageItem(key, value) {
+    try { localStorage.setItem('notepad_' + key, JSON.stringify(value)); }
+    catch (error) { showToast('Penyimpanan penuh! Hapus beberapa data.', 'error'); }
+}
+
+function removeStorageItem(key) { localStorage.removeItem('notepad_' + key); }
+
+function getAllUsers() { return getStorageItem('users', []); }
+function saveAllUsers(users) { setStorageItem('users', users); }
+function getAllApplications() { return getStorageItem('applications', {}); }
+function saveAllApplications(apps) { setStorageItem('applications', apps); }
+function getCurrentSession() { return getStorageItem('session', null); }
+function saveCurrentSession(session) { setStorageItem('session', session); }
+function clearCurrentSession() { removeStorageItem('session'); }
+function getAllPackages() { return getStorageItem('packages', DEFAULT_PACKAGES); }
+function saveAllPackages(packages) { setStorageItem('packages', packages); refreshPackageDisplay(); }
+function getWhatsappNumber() { return getStorageItem('whatsapp', DEFAULT_WHATSAPP_NUMBER); }
+function saveWhatsappNumber(number) { setStorageItem('whatsapp', number); }
+function getAllValidCodes() { return getStorageItem('validCodes', {}); }
+function saveAllValidCodes(codes) { setStorageItem('validCodes', codes); }
+function getAllSecurityLogs() { return getStorageItem('securityLogs', []); }
+function saveAllSecurityLogs(logs) { setStorageItem('securityLogs', logs); }
+function getAllLoginAttempts() { return getStorageItem('loginAttempts', {}); }
+function saveAllLoginAttempts(attempts) { setStorageItem('loginAttempts', attempts); }
+
+// ============================================================
+// 4. WHATSAPP NUMBER FORMATTING
+// ============================================================
+function formatWhatsappNumber(rawNumber) {
+    var cleanNumber = rawNumber.replace(/[^0-9]/g, '');
+    if (cleanNumber.startsWith('0')) { cleanNumber = '62' + cleanNumber.substring(1); }
+    if (!cleanNumber.startsWith('62')) { cleanNumber = '62' + cleanNumber; }
+    return '+' + cleanNumber;
+}
+
+function getFormattedWhatsappNumber() { return formatWhatsappNumber(getWhatsappNumber()); }
+
+function getWhatsappLink() {
+    var rawNumber = getWhatsappNumber();
+    return rawNumber.replace(/[^0-9]/g, '');
+}
+
+function updateAllWhatsappDisplays() {
+    var formattedNumber = getFormattedWhatsappNumber();
+    var displayElements = ['whatsappNumberLanding', 'whatsappNumberApp'];
+    displayElements.forEach(function (elementId) {
+        var element = document.getElementById(elementId);
+        if (element) { element.textContent = formattedNumber; }
+    });
+}
+
+function openWhatsApp() {
+    var link = getWhatsappLink();
+    window.open('https://wa.me/' + link, '_blank');
+}
+
+// ============================================================
+// 5. OFFLINE / ONLINE STATUS
+// ============================================================
+function downloadForOffline() {
+    var htmlContent = document.documentElement.outerHTML;
+    var fullDocument = '<!DOCTYPE html>\n' + htmlContent;
+    var blob = new Blob([fullDocument], { type: 'text/html' });
+    var downloadUrl = URL.createObjectURL(blob);
+    var downloadLink = document.createElement('a');
+    downloadLink.href = downloadUrl;
+    downloadLink.download = 'NotepadPlus_v3.3_Offline.html';
+    document.body.appendChild(downloadLink);
+    downloadLink.click();
+    document.body.removeChild(downloadLink);
+    URL.revokeObjectURL(downloadUrl);
+    showToast('Aplikasi berhasil didownload! Buka file untuk mode offline.', 'success');
+}
+
+function updateOnlineStatus() {
+    var connectionBadge = document.getElementById('connectionBadge');
+    var offlineBanner = document.getElementById('offlineBanner');
+    if (navigator.onLine) {
+        connectionBadge.textContent = 'ONLINE';
+        connectionBadge.style.background = '#10b981';
+        if (offlineBanner) { offlineBanner.classList.remove('show'); }
+        checkAllExpiredActivations();
+    } else {
+        connectionBadge.textContent = 'OFFLINE';
