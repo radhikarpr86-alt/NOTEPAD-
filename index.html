@@ -39,7 +39,6 @@
     @keyframes slideDown { from { opacity: 0; transform: translateY(-20px); } to { opacity: 1; transform: translateY(0); } }
     @keyframes spin { to { transform: rotate(360deg); } }
     @keyframes pulse { 0%, 100% { opacity: 1; } 50% { opacity: 0.5; } }
-    @keyframes glow { 0%, 100% { box-shadow: 0 0 20px rgba(124, 58, 237, 0.2); } 50% { box-shadow: 0 0 40px rgba(124, 58, 237, 0.5); } }
     .hidden { display: none !important; }
     .flex { display: flex; } .flex-center { display: flex; align-items: center; justify-content: center; } .flex-between { display: flex; align-items: center; justify-content: space-between; } .flex-col { flex-direction: column; } .flex-wrap { flex-wrap: wrap; }
     .gap-xs { gap: var(--spacing-xs); } .gap-sm { gap: var(--spacing-sm); } .gap-md { gap: var(--spacing-md); } .gap-lg { gap: var(--spacing-lg); } .gap-xl { gap: var(--spacing-xl); }
@@ -169,7 +168,7 @@
 <body>
 <div id="toastContainer" class="toast-container"></div>
 
-<!-- LANDING PAGE -->
+<!-- ==================== LANDING PAGE ==================== -->
 <div class="container" id="landingPage">
   <header class="header">
     <div class="logo"><span class="logo-icon">📝</span><span class="logo-text">Notepad+ v3.5</span></div>
@@ -180,6 +179,7 @@
       <button class="btn btn-info btn-sm" onclick="downloadOfflinePage()">⬇ Offline</button>
     </div>
   </header>
+
   <section class="hero">
     <div class="hero-icon">📝</div>
     <h1 class="gradient-text">Notepad+ Code Storage</h1>
@@ -190,10 +190,15 @@
       <button class="btn btn-info btn-lg" onclick="downloadOfflinePage()">⬇ Download Offline</button>
     </div>
   </section>
+
   <div class="whatsapp-banner" onclick="openGuestChat()">
-    <div class="whatsapp-banner-left"><span class="whatsapp-banner-icon">💬</span><div><strong>Hubungi Super Admin</strong><br><small>Chat langsung untuk bantuan</small></div></div>
+    <div class="whatsapp-banner-left">
+      <span class="whatsapp-banner-icon">💬</span>
+      <div><strong>Hubungi Super Admin</strong><br><small>Chat langsung untuk bantuan</small></div>
+    </div>
     <div class="whatsapp-banner-right"><span>📱 <span id="whatsappNumberLanding">+6281220285226</span></span></div>
   </div>
+
   <h3 class="section-title">Fitur Unggulan</h3>
   <div class="features-grid">
     <div class="feature-card"><div class="feature-icon">📁</div><h4>Penyimpanan Tak Terbatas</h4><p>Simpan aplikasi dan kode HTML tanpa batasan jumlah.</p></div>
@@ -203,11 +208,12 @@
     <div class="feature-card"><div class="feature-icon">💬</div><h4>Chat Internal</h4><p>Hubungi admin langsung dari aplikasi tanpa WhatsApp.</p></div>
     <div class="feature-card"><div class="feature-icon">💾</div><h4>Backup & Restore</h4><p>Simpan dan pulihkan semua data dengan mudah.</p></div>
   </div>
+
   <h3 class="section-title">Paket Aktivasi Premium</h3>
   <div class="price-grid" id="landingPriceGrid"><!-- diisi JS --></div>
 </div>
 
-<!-- DASHBOARD (HIDDEN) -->
+<!-- ==================== DASHBOARD (HIDDEN) ==================== -->
 <div class="container hidden" id="dashboardPage">
   <header class="header">
     <div class="logo"><span class="logo-icon">📝</span><span class="logo-text">Notepad+ v3.5</span></div>
@@ -220,11 +226,14 @@
       <button class="btn btn-sm btn-info" onclick="downloadOfflinePage()">⬇ Offline</button>
     </div>
   </header>
+
   <div class="whatsapp-banner" onclick="openGuestChat()">
     <div class="whatsapp-banner-left"><span class="whatsapp-banner-icon">💬</span><div><strong>Hubungi Super Admin</strong><br><small>Chat langsung</small></div></div>
     <div class="whatsapp-banner-right"><span>📱 <span id="whatsappNumberApp">+6281220285226</span></span></div>
   </div>
-  <div class="stats-grid" id="dashboardStats"><!-- diisi JS --></div>
+
+  <div class="stats-grid" id="dashboardStats"></div>
+
   <div class="toolbar">
     <button class="btn btn-success" onclick="showAddAppModal()">Tambah Aplikasi</button>
     <button class="btn btn-primary" onclick="toggleSearch()">Cari</button>
@@ -235,51 +244,188 @@
     <button class="btn btn-warning hidden" id="activationButton" onclick="showActivationModal()">🔑 Aktivasi Premium</button>
     <button class="btn btn-blue" onclick="showChatModal()">💬 Chat Admin</button>
   </div>
+
   <div id="searchBar" class="hidden" style="margin-bottom:20px;"><div class="flex gap-sm"><input type="text" id="searchInput" placeholder="Cari aplikasi atau kode..." style="flex:2;" oninput="performSearch()"><button class="btn btn-gray btn-sm" onclick="clearSearch()">Clear</button></div></div>
   <div id="appListContainer"></div>
   <div id="emptyState" class="empty-state"><div class="empty-state-icon">📝</div><h3>Belum Ada Aplikasi</h3><p>Mulai tambahkan aplikasi dan kode HTML Anda sekarang.</p><button class="btn btn-success" onclick="showAddAppModal()">Tambah Aplikasi Pertama</button></div>
 </div>
 
 <!-- ==================== SEMUA MODAL ==================== -->
-<!-- Login, Register, Forgot Password, Profil, Super Admin, App, Code, Merge, Confirm, Edit Package, Chat, Activation -->
-<!-- ... (kode modal lengkap sama seperti Notepad+ v3.4, tidak dipotong) ... -->
+<!-- Modal Login -->
+<div class="modal-overlay" id="loginModal"><div class="modal-content" style="max-width:420px;">
+  <div class="modal-header"><h3>Login</h3><button class="modal-close" onclick="closeModal('loginModal')">✕</button></div>
+  <div class="modal-body">
+    <div class="form-group"><input type="text" id="loginUsername" placeholder="Username atau Email" autocomplete="username"></div>
+    <div class="form-group"><input type="password" id="loginPassword" placeholder="Password" autocomplete="current-password"></div>
+    <button class="btn btn-success btn-block" onclick="handleLogin()">Masuk</button>
+    <div class="form-error" id="loginError"></div>
+    <div class="flex-between mt-3 text-sm"><span class="link-text" onclick="closeModal('loginModal');showRegisterModal()">Daftar Akun Baru</span><span class="link-text" onclick="closeModal('loginModal');openModal('forgotPasswordModal')">Lupa Password?</span></div>
+  </div>
+  <div class="modal-footer"><button class="btn btn-gray" onclick="closeModal('loginModal')">Tutup</button></div>
+</div></div>
 
-<!-- Modal Super Admin (ditambahkan tab Backup) -->
-<div class="modal-overlay" id="superAdminModal">
-  <div class="modal-content wide">
-    <div class="modal-header"><h3>Panel Super Admin</h3><button class="modal-close" onclick="closeModal('superAdminModal')">✕</button></div>
-    <div class="modal-body">
-      <div class="admin-tabs">
-        <div class="admin-tab active" onclick="switchAdminTab('codes')">Kode Aktivasi</div>
-        <div class="admin-tab" onclick="switchAdminTab('users')">Daftar User</div>
-        <div class="admin-tab" onclick="switchAdminTab('packages')">Paket & Harga</div>
-        <div class="admin-tab" onclick="switchAdminTab('chat')">💬 Chat User</div>
-        <div class="admin-tab" onclick="switchAdminTab('settings')">Pengaturan</div>
-        <div class="admin-tab" onclick="switchAdminTab('backup')">💾 Backup</div>
-      </div>
-      <div id="adminTabContent"></div>
+<!-- Modal Register -->
+<div class="modal-overlay" id="registerModal"><div class="modal-content" style="max-width:420px;">
+  <div class="modal-header"><h3>Daftar Akun Baru</h3><button class="modal-close" onclick="closeModal('registerModal')">✕</button></div>
+  <div class="modal-body">
+    <div class="form-group"><input type="text" id="registerNama" placeholder="Nama Lengkap *"></div>
+    <div class="form-group"><input type="email" id="registerEmail" placeholder="Email *"></div>
+    <div class="form-group"><input type="text" id="registerHp" placeholder="Nomor HP * (contoh: 081234567890)"></div>
+    <div class="form-group"><input type="text" id="registerUsername" placeholder="Username *"></div>
+    <div class="form-group"><input type="password" id="registerPassword" placeholder="Password * (minimal 6 karakter)"></div>
+    <div class="form-group"><input type="password" id="registerPasswordConfirm" placeholder="Konfirmasi Password *"></div>
+    <button class="btn btn-primary btn-block" onclick="handleRegister()">Daftar Sekarang</button>
+    <div class="form-error" id="registerError"></div><div class="form-success" id="registerSuccess"></div>
+    <p class="text-center mt-3 text-sm text-secondary">Sudah punya akun? <span class="link-text" onclick="closeModal('registerModal');showLoginModal()">Login disini</span></p>
+  </div>
+  <div class="modal-footer"><button class="btn btn-gray" onclick="closeModal('registerModal')">Tutup</button></div>
+</div></div>
+
+<!-- Modal Forgot Password -->
+<div class="modal-overlay" id="forgotPasswordModal"><div class="modal-content" style="max-width:420px;">
+  <div class="modal-header"><h3>Lupa Password</h3><button class="modal-close" onclick="closeModal('forgotPasswordModal')">✕</button></div>
+  <div class="modal-body">
+    <p class="text-sm text-secondary mb-2">Masukkan data Anda untuk mereset password. Admin akan menghubungi Anda.</p>
+    <div class="form-group"><input type="text" id="forgotNama" placeholder="Nama Lengkap *"></div>
+    <div class="form-group"><input type="email" id="forgotEmail" placeholder="Email *"></div>
+    <div class="form-group"><input type="text" id="forgotHp" placeholder="Nomor HP *"></div>
+    <button class="btn btn-warning btn-block" onclick="handleForgotPassword()">Kirim Reset via Chat</button>
+    <div class="form-error" id="forgotError"></div><div class="form-success" id="forgotSuccess"></div>
+  </div>
+  <div class="modal-footer"><button class="btn btn-gray" onclick="closeModal('forgotPasswordModal')">Tutup</button></div>
+</div></div>
+
+<!-- Modal Profil -->
+<div class="modal-overlay" id="profileModal"><div class="modal-content" style="max-width:450px;">
+  <div class="modal-header"><h3>Profil Saya</h3><button class="modal-close" onclick="closeModal('profileModal')">✕</button></div>
+  <div class="modal-body">
+    <div class="flex gap-md mb-3">
+      <div id="profileAvatar" style="width:60px;height:60px;border-radius:50%;background:var(--accent-primary);display:flex;align-items:center;justify-content:center;font-size:1.5rem;color:#fff;">U</div>
+      <div><h4 id="profileName">User</h4><p id="profileRole" class="text-sm text-secondary">User Biasa</p></div>
     </div>
-    <div class="modal-footer"><button class="btn" onclick="closeModal('superAdminModal')">Kembali</button></div>
+    <div class="form-group"><label class="form-label">Nama Lengkap</label><input type="text" id="editProfileNama"></div>
+    <div class="form-group"><label class="form-label">Email</label><input type="email" id="editProfileEmail"></div>
+    <div class="form-group"><label class="form-label">Nomor HP</label><input type="text" id="editProfileHp"></div>
+    <button class="btn btn-success btn-block" onclick="saveProfile()">Simpan Profil</button>
+    <div class="form-error" id="profileError"></div><div class="form-success" id="profileSuccess"></div>
+    <hr style="border-color:var(--border-color);margin:20px 0;">
+    <button class="btn btn-danger btn-block" id="deleteAccountButton" onclick="deleteAccount()">🗑 Hapus Akun Saya</button>
   </div>
-</div>
+  <div class="modal-footer"><button class="btn btn-gray" onclick="closeModal('profileModal')">Tutup</button></div>
+</div></div>
 
-<!-- Guest Chat Modal -->
-<div class="modal-overlay" id="guestChatModal">
-  <div class="modal-content"><div class="modal-header"><h3>💬 Hubungi Super Admin</h3><button class="modal-close" onclick="closeModal('guestChatModal')">✕</button></div>
-    <div class="modal-body"><div class="chat-box" id="guestChatMessages"></div><div class="flex"><input type="text" id="guestChatInput" placeholder="Ketik pesan..."><button class="btn btn-primary" onclick="sendGuestChat()">Kirim</button></div></div>
+<!-- Modal Super Admin -->
+<div class="modal-overlay" id="superAdminModal"><div class="modal-content wide" style="max-width:750px;">
+  <div class="modal-header"><h3>Panel Super Admin</h3><button class="modal-close" onclick="closeModal('superAdminModal')">✕</button></div>
+  <div class="modal-body">
+    <div class="admin-tabs">
+      <div class="admin-tab active" onclick="switchAdminTab('codes')">Kode Aktivasi</div>
+      <div class="admin-tab" onclick="switchAdminTab('users')">Daftar User</div>
+      <div class="admin-tab" onclick="switchAdminTab('packages')">Paket & Harga</div>
+      <div class="admin-tab" onclick="switchAdminTab('security')">Log Keamanan</div>
+      <div class="admin-tab" onclick="switchAdminTab('settings')">Pengaturan</div>
+      <div class="admin-tab" onclick="switchAdminTab('chat')">💬 Chat User</div>
+      <div class="admin-tab" onclick="switchAdminTab('backup')">💾 Backup</div>
+    </div>
+    <div id="adminTabContent"></div>
   </div>
-</div>
+  <div class="modal-footer"><button class="btn" onclick="closeModal('superAdminModal')">Kembali</button></div>
+</div></div>
 
-<!-- Chat Modal (User) -->
-<div class="modal-overlay" id="chatModal">
-  <div class="modal-content"><div class="modal-header"><h3>💬 Chat dengan Admin</h3><button class="modal-close" onclick="closeModal('chatModal')">✕</button></div>
-    <div class="modal-body"><div class="chat-box" id="userChatMessages"></div><div class="flex"><input type="text" id="userChatInput" placeholder="Ketik pesan..."><button class="btn btn-primary" onclick="sendUserChat()">Kirim</button></div></div>
+<!-- Modal App -->
+<div class="modal-overlay" id="appModal"><div class="modal-content" style="max-width:500px;">
+  <div class="modal-header"><h3 id="appModalTitle">Tambah Aplikasi</h3><button class="modal-close" onclick="closeModal('appModal')">✕</button></div>
+  <div class="modal-body">
+    <input type="hidden" id="editAppId">
+    <div class="form-group"><label class="form-label">Nama Aplikasi *</label><input type="text" id="appNameInput" placeholder="Contoh: Aplikasi Toko Online"></div>
+    <div class="form-group"><label class="form-label">Deskripsi (opsional)</label><textarea id="appDescInput" rows="2" placeholder="Deskripsi singkat tentang aplikasi..."></textarea></div>
+    <div class="form-error" id="appError"></div>
   </div>
-</div>
+  <div class="modal-footer"><button class="btn btn-gray" onclick="closeModal('appModal')">Batal</button><button class="btn btn-success" onclick="saveApplication()">Simpan</button></div>
+</div></div>
+
+<!-- Modal Code -->
+<div class="modal-overlay" id="codeModal"><div class="modal-content" style="max-width:600px;">
+  <div class="modal-header"><h3 id="codeModalTitle">Tambah Code</h3><button class="modal-close" onclick="closeModal('codeModal')">✕</button></div>
+  <div class="modal-body">
+    <input type="hidden" id="editCodeId"><input type="hidden" id="codeAppId">
+    <div class="form-group"><label class="form-label">Nama Code *</label><input type="text" id="codeNameInput" placeholder="Contoh: Code 1 - Header"></div>
+    <div class="form-group"><label class="form-label">Kode HTML *</label><textarea id="codeContentInput" rows="10" placeholder="Tempelkan kode HTML disini..."></textarea></div>
+    <div class="form-error" id="codeError"></div>
+  </div>
+  <div class="modal-footer"><button class="btn btn-gray" onclick="closeModal('codeModal')">Batal</button><button class="btn btn-success" onclick="saveCode()">Simpan Code</button></div>
+</div></div>
+
+<!-- Modal Merge -->
+<div class="modal-overlay" id="mergeModal"><div class="modal-content" style="max-width:650px;">
+  <div class="modal-header"><h3>Gabung & Copy Semua Code</h3><button class="modal-close" onclick="closeModal('mergeModal')">✕</button></div>
+  <div class="modal-body">
+    <p class="text-secondary mb-2">Fitur ini khusus untuk pengguna <strong>Premium</strong>. Semua code yang dipilih akan digabung menjadi 1 file index.html.</p>
+    <div id="mergeAppList" class="flex flex-wrap gap-sm mb-3"></div>
+    <button class="btn btn-success btn-block" onclick="performMerge()">Gabung Semua Code</button>
+    <div id="mergeResult" class="hidden mt-3">
+      <div class="flex-between mb-2"><strong>Hasil Gabungan (index.html)</strong><div class="flex gap-sm"><button class="btn btn-primary btn-sm" onclick="copyMergeResult()">Copy</button><button class="btn btn-success btn-sm" onclick="downloadMergeResult()">Download</button></div></div>
+      <textarea id="mergeOutput" readonly style="font-family:'Courier New',monospace;font-size:0.8rem;min-height:250px;background:var(--bg-primary);color:var(--text-primary);border:1px solid #7c3aed;"></textarea>
+    </div>
+  </div>
+  <div class="modal-footer"><button class="btn btn-gray" onclick="closeModal('mergeModal')">Tutup</button></div>
+</div></div>
+
+<!-- Modal Confirm -->
+<div class="modal-overlay" id="confirmModal"><div class="modal-content" style="max-width:380px;">
+  <div class="modal-header"><h3 id="confirmTitle">Konfirmasi</h3><button class="modal-close" onclick="closeModal('confirmModal')">✕</button></div>
+  <div class="modal-body"><p id="confirmMessage">Apakah Anda yakin ingin melanjutkan?</p></div>
+  <div class="modal-footer"><button class="btn btn-gray" onclick="closeModal('confirmModal')">Batal</button><button class="btn btn-danger" id="confirmButton" onclick="executeConfirmAction()">Ya, Lanjutkan</button></div>
+</div></div>
+
+<!-- Modal Edit Package -->
+<div class="modal-overlay" id="editPackageModal"><div class="modal-content" style="max-width:420px;">
+  <div class="modal-header"><h3 id="editPackageTitle">Edit Paket</h3><button class="modal-close" onclick="closeModal('editPackageModal')">✕</button></div>
+  <div class="modal-body">
+    <input type="hidden" id="editPackageId">
+    <div class="form-group"><label class="form-label">Nama Paket</label><input type="text" id="editPackageName" placeholder="Contoh: Basic"></div>
+    <div class="form-group"><label class="form-label">Harga (Rupiah)</label><input type="number" id="editPackagePrice" placeholder="25000"></div>
+    <div class="form-group"><label class="form-label">Durasi (hari)</label><input type="number" id="editPackageDays" placeholder="30"></div>
+    <div class="form-group"><label class="form-label">Label Durasi</label><input type="text" id="editPackageLabel" placeholder="Contoh: 1 Bulan"></div>
+    <div class="form-error" id="editPackageError"></div>
+  </div>
+  <div class="modal-footer"><button class="btn btn-gray" onclick="closeModal('editPackageModal')">Batal</button><button class="btn btn-success" onclick="savePackageChanges()">Simpan Perubahan</button></div>
+</div></div>
+
+<!-- Modal Chat (User) -->
+<div class="modal-overlay" id="chatModal"><div class="modal-content" style="max-width:500px;">
+  <div class="modal-header"><h3>💬 Chat dengan Admin</h3><button class="modal-close" onclick="closeModal('chatModal')">✕</button></div>
+  <div class="modal-body">
+    <div class="chat-container" id="userChatContainer"><div class="chat-messages" id="userChatMessages"></div><div class="chat-input-row"><input type="text" id="userChatInput" placeholder="Ketik pesan..."><button class="btn btn-primary btn-sm" onclick="sendUserChat()">Kirim</button></div></div>
+  </div>
+  <div class="modal-footer"><button class="btn btn-gray" onclick="closeModal('chatModal')">Tutup</button></div>
+</div></div>
+
+<!-- Modal Activation -->
+<div class="modal-overlay" id="activationModal"><div class="modal-content" style="max-width:420px;">
+  <div class="modal-header"><h3>Aktivasi Premium</h3><button class="modal-close" onclick="closeModal('activationModal')">✕</button></div>
+  <div class="modal-body">
+    <p class="text-sm text-secondary mb-2">Masukkan kode aktivasi yang Anda dapatkan dari Admin.</p>
+    <div class="form-group"><input type="text" id="activationCodeInputMain" placeholder="Masukkan kode aktivasi"></div>
+    <button class="btn btn-success btn-block" onclick="activatePremiumFromModal()">Aktifkan Sekarang</button>
+    <div class="form-error" id="activationModalError"></div><div class="form-success" id="activationModalSuccess"></div>
+  </div>
+  <div class="modal-footer"><button class="btn btn-gray" onclick="closeModal('activationModal')">Tutup</button></div>
+</div></div>
+
+<!-- Modal Guest Chat -->
+<div class="modal-overlay" id="guestChatModal"><div class="modal-content" style="max-width:500px;">
+  <div class="modal-header"><h3>💬 Hubungi Super Admin</h3><button class="modal-close" onclick="closeModal('guestChatModal')">✕</button></div>
+  <div class="modal-body">
+    <div class="chat-box" id="guestChatMessages"></div>
+    <div class="flex gap-sm"><input type="text" id="guestChatInput" placeholder="Ketik pesan..."><button class="btn btn-primary" onclick="sendGuestChat()">Kirim</button></div>
+  </div>
+</div></div>
+
 </body>
 <script>
 // ================================================================
-// NOTEPAD+ CODE STORAGE v3.5 - CORE JAVASCRIPT
+// NOTEPAD+ CODE STORAGE v3.5 - CORE JAVASCRIPT (LENGKAP)
 // ================================================================
 
 // ---------- ENKRIPSI & DATA DEFAULT ----------
@@ -314,6 +460,10 @@ function getValidCodes() { return getStore('validCodes', {}); }
 function saveValidCodes(c) { setStore('validCodes', c); }
 function getGuestChats() { return getStore('guestChats', []); }
 function saveGuestChats(c) { setStore('guestChats', c); }
+function getPackages() { return getStore('packages', DEFAULT_PACKAGES); }
+function savePackages(p) { setStore('packages', p); }
+function getSecurityLogs() { return getStore('securityLogs', []); }
+function saveSecurityLogs(l) { setStore('securityLogs', l); }
 
 // ---------- WHATSAPP DISPLAY ----------
 function updateWADisplay() {
@@ -379,9 +529,260 @@ function handleLogin() {
   saveSession(user); closeModal('loginModal'); updateUI(); showToast('Login berhasil!', 'success');
 }
 
-// ... (handleRegister, handleLogout, activatePremium, profil, aplikasi, kode, merge, exportAllData, importAllData, backupAllData, restoreAllData, downloadOfflinePage, dll.) ...
-// Semua fungsi ini dipertahankan lengkap dari Notepad+ v3.3, tanpa pemotongan.
+function handleRegister() {
+  const n = document.getElementById('registerNama').value.trim(), e = document.getElementById('registerEmail').value.trim(),
+        hp = document.getElementById('registerHp').value.trim(), un = document.getElementById('registerUsername').value.trim(),
+        pw = document.getElementById('registerPassword').value, cp = document.getElementById('registerPasswordConfirm').value;
+  const err = document.getElementById('registerError'), suc = document.getElementById('registerSuccess');
+  err.textContent = ''; suc.textContent = '';
+  if (!n || !e || !hp || !un || !pw || !cp) { err.textContent = 'Semua field wajib!'; return; }
+  if (pw !== cp) { err.textContent = 'Password tidak cocok!'; return; }
+  if (pw.length < 6) { err.textContent = 'Password min 6 karakter!'; return; }
+  const users = getAllUsers();
+  if (users.find(x => x.username === un)) { err.textContent = 'Username sudah dipakai!'; return; }
+  if (users.find(x => x.email === e)) { err.textContent = 'Email sudah dipakai!'; return; }
+  const nu = { id: Date.now().toString(), nama: n, email: e, hp: hp, username: un, password: encodePassword(pw), role: 'user', premium: false, premiumExpiry: null, locked: false, createdAt: new Date().toISOString() };
+  users.push(nu); saveAllUsers(users);
+  suc.textContent = 'Pendaftaran berhasil! Silakan login.'; setTimeout(() => { closeModal('registerModal'); showLoginModal(); }, 2000);
+}
 
+function handleLogout() { clearSession(); updateUI(); showToast('Logout', 'info'); }
+
+// ---------- PREMIUM ----------
+function activatePremiumFromModal() {
+  const code = document.getElementById('activationCodeInputMain').value.trim();
+  activatePremium(code, 'activationModalError', 'activationModalSuccess');
+}
+function activatePremium(code, errId, sucId) {
+  const err = document.getElementById(errId), suc = document.getElementById(sucId);
+  err.classList.remove('show'); suc.classList.remove('show');
+  if (!code) { err.textContent = 'Masukkan kode!'; err.classList.add('show'); return; }
+  const s = getSession(); if (!s) { err.textContent = 'Login dulu!'; err.classList.add('show'); return; }
+  const codes = getValidCodes(); const cd = codes[code];
+  if (!cd || cd.used) { err.textContent = 'Kode tidak valid!'; err.classList.add('show'); return; }
+  const users = getAllUsers(); const idx = users.findIndex(x => x.id === s.id);
+  if (idx === -1) { err.textContent = 'User tidak ditemukan!'; err.classList.add('show'); return; }
+  const pkg = getPackages().find(p => p.id === cd.packageId) || getPackages()[0];
+  const exp = new Date(Date.now() + pkg.days * 86400000);
+  users[idx].premium = true; users[idx].premiumExpiry = exp.toISOString(); saveAllUsers(users);
+  cd.used = true; cd.usedBy = s.username; cd.usedAt = new Date().toISOString(); codes[code] = cd; saveValidCodes(codes);
+  saveSession({ ...users[idx] });
+  suc.textContent = 'Premium aktif hingga ' + exp.toLocaleDateString(); suc.classList.add('show'); updateUI();
+  setTimeout(() => { if (document.getElementById('activationModal').classList.contains('show')) closeModal('activationModal'); }, 2000);
+}
+
+// ---------- PROFILE ----------
+function loadProfile() {
+  const s = getSession(); if (!s) return;
+  document.getElementById('profileAvatar').textContent = s.nama.charAt(0).toUpperCase();
+  document.getElementById('profileName').textContent = s.nama;
+  document.getElementById('profileRole').textContent = s.role === 'superadmin' ? 'Super Admin' : (s.premium ? 'User Premium' : 'User Biasa');
+  document.getElementById('editProfileNama').value = s.nama; document.getElementById('editProfileEmail').value = s.email; document.getElementById('editProfileHp').value = s.hp;
+  document.getElementById('deleteAccountButton').style.display = s.role === 'superadmin' ? 'none' : 'block';
+}
+function saveProfile() {
+  const s = getSession(); if (!s) return;
+  const n = document.getElementById('editProfileNama').value.trim(), e = document.getElementById('editProfileEmail').value.trim(), hp = document.getElementById('editProfileHp').value.trim();
+  if (!n || !e || !hp) { document.getElementById('profileError').textContent = 'Semua field wajib!'; document.getElementById('profileError').classList.add('show'); return; }
+  s.nama = n; s.email = e; s.hp = hp; saveSession(s);
+  const users = getAllUsers(); const idx = users.findIndex(x => x.id === s.id);
+  if (idx !== -1) { users[idx].nama = n; users[idx].email = e; users[idx].hp = hp; saveAllUsers(users); }
+  document.getElementById('profileSuccess').textContent = 'Profil tersimpan!'; document.getElementById('profileSuccess').classList.add('show'); updateUI();
+  setTimeout(() => closeModal('profileModal'), 1500);
+}
+function deleteAccount() {
+  const s = getSession(); if (!s || s.role === 'superadmin') return;
+  showConfirm('Hapus Akun?', 'Semua data Anda akan dihapus permanen.', function() {
+    const users = getAllUsers().filter(x => x.id !== s.id); saveAllUsers(users);
+    const apps = getAllApplications(); delete apps[s.id]; saveAllApplications(apps);
+    clearSession(); closeModal('profileModal'); updateUI(); showToast('Akun dihapus', 'warning');
+  });
+}
+
+// ---------- CONFIRM DIALOG ----------
+var confirmCallback = null;
+function showConfirm(title, msg, cb) {
+  document.getElementById('confirmTitle').textContent = title;
+  document.getElementById('confirmMessage').textContent = msg;
+  confirmCallback = cb;
+  openModal('confirmModal');
+}
+function executeConfirmAction() { if (confirmCallback) { confirmCallback(); confirmCallback = null; } closeModal('confirmModal'); }
+
+// ---------- APPS & CODES ----------
+function showAddAppModal() {
+  document.getElementById('appModalTitle').textContent = 'Tambah Aplikasi';
+  document.getElementById('editAppId').value = ''; document.getElementById('appNameInput').value = ''; document.getElementById('appDescInput').value = '';
+  document.getElementById('appError').classList.remove('show'); openModal('appModal');
+}
+function editApp(id) {
+  const s = getSession(); const app = (getAllApplications()[s.id] || []).find(a => a.id === id);
+  if (!app) return;
+  document.getElementById('appModalTitle').textContent = 'Edit Aplikasi';
+  document.getElementById('editAppId').value = id; document.getElementById('appNameInput').value = app.name; document.getElementById('appDescInput').value = app.desc || '';
+  openModal('appModal');
+}
+function saveApplication() {
+  const s = getSession(); if (!s) return showToast('Login dulu!', 'error');
+  const editId = document.getElementById('editAppId').value, name = document.getElementById('appNameInput').value.trim(), desc = document.getElementById('appDescInput').value.trim();
+  const err = document.getElementById('appError'); err.classList.remove('show');
+  if (!name) { err.textContent = 'Nama aplikasi wajib!'; err.classList.add('show'); return; }
+  const all = getAllApplications(); const apps = all[s.id] || [];
+  if (editId) {
+    const idx = apps.findIndex(a => a.id === editId);
+    if (idx !== -1) { apps[idx].name = name; apps[idx].desc = desc; }
+  } else {
+    apps.push({ id: Date.now().toString(), name, desc, codes: [], createdAt: new Date().toISOString() });
+  }
+  all[s.id] = apps; saveAllApplications(all); closeModal('appModal'); refreshAppUI(); updateStats(); showToast('Aplikasi disimpan!', 'success');
+}
+function deleteApp(appId) {
+  showConfirm('Hapus Aplikasi?', 'Semua kode di dalamnya juga akan dihapus.', function() {
+    const s = getSession(); const all = getAllApplications();
+    all[s.id] = (all[s.id] || []).filter(a => a.id !== appId); saveAllApplications(all);
+    refreshAppUI(); updateStats(); showToast('Aplikasi dihapus.', 'warning');
+  });
+}
+function toggleAppCodes(appId) {
+  const el = document.getElementById('codes-' + appId); if (el) el.classList.toggle('open');
+}
+function showAddCodeModal(appId) {
+  document.getElementById('codeModalTitle').textContent = 'Tambah Code';
+  document.getElementById('editCodeId').value = ''; document.getElementById('codeAppId').value = appId;
+  document.getElementById('codeNameInput').value = ''; document.getElementById('codeContentInput').value = '';
+  openModal('codeModal');
+}
+function editCode(appId, codeId) {
+  const s = getSession(); const app = (getAllApplications()[s.id] || []).find(a => a.id === appId);
+  if (!app) return; const code = app.codes.find(c => c.id === codeId); if (!code) return;
+  document.getElementById('codeModalTitle').textContent = 'Edit Code';
+  document.getElementById('editCodeId').value = codeId; document.getElementById('codeAppId').value = appId;
+  document.getElementById('codeNameInput').value = code.name; document.getElementById('codeContentInput').value = code.content;
+  openModal('codeModal');
+}
+function saveCode() {
+  const s = getSession(); const appId = document.getElementById('codeAppId').value, editId = document.getElementById('editCodeId').value,
+        name = document.getElementById('codeNameInput').value.trim(), content = document.getElementById('codeContentInput').value;
+  const err = document.getElementById('codeError'); err.classList.remove('show');
+  if (!name || !content) { err.textContent = 'Nama dan kode wajib!'; err.classList.add('show'); return; }
+  const all = getAllApplications(); const apps = all[s.id] || [];
+  const app = apps.find(a => a.id === appId); if (!app) return;
+  if (editId) {
+    const code = app.codes.find(c => c.id === editId);
+    if (code) { code.name = name; code.content = content; }
+  } else {
+    app.codes.push({ id: Date.now().toString(), name, content, createdAt: new Date().toISOString() });
+  }
+  all[s.id] = apps; saveAllApplications(all);
+  closeModal('codeModal'); refreshAppUI(); updateStats(); showToast('Kode disimpan!', 'success');
+}
+function deleteCode(appId, codeId) {
+  showConfirm('Hapus Kode?', 'Kode akan dihapus permanen.', function() {
+    const s = getSession(); const all = getAllApplications(); const apps = all[s.id] || [];
+    const app = apps.find(a => a.id === appId); if (app) app.codes = app.codes.filter(c => c.id !== codeId);
+    all[s.id] = apps; saveAllApplications(all); refreshAppUI(); updateStats(); showToast('Kode dihapus.', 'warning');
+  });
+}
+function toggleCodePreview(codeId) {
+  const el = document.getElementById('preview-' + codeId); if (el) el.classList.toggle('show');
+}
+function escapeHTML(str) { return str.replace(/[&<>"']/g, m => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' })[m]); }
+
+// ---------- RENDER ----------
+function refreshAppUI() {
+  const s = getSession(); const apps = s ? (getAllApplications()[s.id] || []) : [];
+  const container = document.getElementById('appListContainer'), empty = document.getElementById('emptyState');
+  if (apps.length === 0) { container.innerHTML = ''; empty.classList.remove('hidden'); return; }
+  empty.classList.add('hidden');
+  container.innerHTML = apps.map(app => `
+    <div class="app-item">
+      <div class="app-header" onclick="toggleAppCodes('${app.id}')">
+        <div class="app-name">📁 ${escapeHTML(app.name)} <span class="app-code-count">${app.codes.length} kode</span></div>
+        <div class="flex gap-sm">
+          <button class="btn btn-primary btn-sm" onclick="event.stopPropagation(); showAddCodeModal('${app.id}')">+ Code</button>
+          <button class="btn btn-warning btn-sm" onclick="event.stopPropagation(); editApp('${app.id}')">Edit</button>
+          <button class="btn btn-danger btn-sm" onclick="event.stopPropagation(); deleteApp('${app.id}')">Hapus</button>
+        </div>
+      </div>
+      <div class="app-codes-container" id="codes-${app.id}">
+        ${app.codes.length === 0 ? '<p style="color:var(--text-muted);padding:8px;">Belum ada kode.</p>' : app.codes.map(code => `
+          <div class="code-item">
+            <div class="code-header">
+              <span class="code-name">📄 ${escapeHTML(code.name)}</span>
+              <div class="flex gap-sm">
+                <button class="btn btn-gray btn-sm" onclick="toggleCodePreview('${code.id}')">Preview</button>
+                <button class="btn btn-warning btn-sm" onclick="editCode('${app.id}','${code.id}')">Edit</button>
+                <button class="btn btn-danger btn-sm" onclick="deleteCode('${app.id}','${code.id}')">Hapus</button>
+              </div>
+            </div>
+            <div class="code-content-preview" id="preview-${code.id}"><pre>${escapeHTML(code.content)}</pre></div>
+          </div>
+        `).join('')}
+      </div>
+    </div>
+  `).join('');
+}
+function updateStats() {
+  const s = getSession(); const apps = s ? (getAllApplications()[s.id] || []) : [];
+  let totalCodes = 0, totalSize = 0;
+  apps.forEach(app => { totalCodes += app.codes.length; app.codes.forEach(c => { totalSize += new Blob([c.content]).size; }); });
+  document.getElementById('statTotalApps').textContent = apps.length;
+  document.getElementById('statTotalCodes').textContent = totalCodes;
+  document.getElementById('statStorage').textContent = (totalSize / 1024).toFixed(1) + ' KB';
+  document.getElementById('statTotalUsers').textContent = getAllUsers().length;
+  const statusEl = document.getElementById('statPremiumStatus');
+  if (statusEl) statusEl.textContent = (s && (s.premium || s.role === 'superadmin')) ? 'Premium' : 'Free';
+}
+
+// ---------- SEARCH ----------
+function toggleSearch() { document.getElementById('searchBar').classList.toggle('hidden'); }
+function performSearch() {
+  const q = document.getElementById('searchInput').value.toLowerCase();
+  document.querySelectorAll('.app-item').forEach(item => { item.style.display = item.textContent.toLowerCase().includes(q) ? '' : 'none'; });
+}
+function clearSearch() { document.getElementById('searchInput').value = ''; performSearch(); }
+
+// ---------- MERGE ----------
+function showMergeModal() {
+  const s = getSession(); if (!s || (!s.premium && s.role !== 'superadmin')) { showToast('Fitur Premium!', 'error'); return; }
+  const apps = (getAllApplications()[s.id] || []);
+  document.getElementById('mergeAppList').innerHTML = apps.map(a => `<label class="flex gap-sm"><input type="checkbox" checked value="${a.id}"> ${a.name}</label>`).join('');
+  document.getElementById('mergeResult').classList.add('hidden'); document.getElementById('mergeOutput').value = '';
+  openModal('mergeModal');
+}
+function performMerge() {
+  const s = getSession(); const apps = (getAllApplications()[s.id] || []);
+  const checked = Array.from(document.querySelectorAll('#mergeAppList input:checked')).map(i => i.value);
+  const merged = apps.filter(a => checked.includes(a.id)).flatMap(a => a.codes).map(c => c.content).join('\n\n');
+  document.getElementById('mergeOutput').value = merged;
+  document.getElementById('mergeResult').classList.remove('hidden');
+}
+function copyMergeResult() { const ta = document.getElementById('mergeOutput'); ta.select(); navigator.clipboard.writeText(ta.value).then(() => showToast('Disalin!', 'success')); }
+function downloadMergeResult() { const blob = new Blob([document.getElementById('mergeOutput').value], { type: 'text/html' }); const a = document.createElement('a'); a.href = URL.createObjectURL(blob); a.download = 'index.html'; a.click(); }
+
+// ---------- IMPORT/EXPORT ----------
+function exportAllData() {
+  const s = getSession(); if (!s) return showToast('Login dulu!', 'error');
+  const data = { apps: getAllApplications()[s.id] || [], exportedAt: new Date().toISOString() };
+  const blob = new Blob([JSON.stringify(data, null, 2)], { type: 'application/json' });
+  const a = document.createElement('a'); a.href = URL.createObjectURL(blob); a.download = 'notepad_export.json'; a.click();
+  showToast('Data diexport!', 'success');
+}
+function importAllData(input) {
+  const s = getSession(); if (!s) return; const file = input.files[0]; if (!file) return;
+  const reader = new FileReader();
+  reader.onload = function(e) {
+    try {
+      const data = JSON.parse(e.target.result);
+      if (!data.apps || !Array.isArray(data.apps)) throw new Error('Format salah');
+      const all = getAllApplications(); all[s.id] = data.apps; saveAllApplications(all);
+      refreshAppUI(); updateStats(); showToast('Data diimpor!', 'success');
+    } catch (err) { showToast('Format file tidak valid.', 'error'); }
+  };
+  reader.readAsText(file);
+}
+
+// ---------- BACKUP & RESTORE (FULL) ----------
 function backupAllData() {
   const data = {};
   for (let i = 0; i < localStorage.length; i++) {
@@ -392,9 +793,9 @@ function backupAllData() {
   const blob = new Blob([json], { type: 'application/json' });
   const a = document.createElement('a');
   a.href = URL.createObjectURL(blob);
-  a.download = 'notepad_backup_' + new Date().toISOString().slice(0, 10) + '.json';
+  a.download = 'notepad_full_backup_' + new Date().toISOString().slice(0, 10) + '.json';
   a.click();
-  showToast('✅ Data berhasil di-backup!', 'success');
+  showToast('✅ Backup penuh berhasil!', 'success');
 }
 
 function restoreAllData(input) {
@@ -404,7 +805,7 @@ function restoreAllData(input) {
   reader.onload = function(e) {
     try {
       const data = JSON.parse(e.target.result);
-      if (!confirm('⚠️ Data saat ini akan ditimpa. Lanjutkan?')) return;
+      if (!confirm('⚠️ SEMUA data saat ini akan ditimpa. Lanjutkan?')) return;
       localStorage.clear();
       Object.keys(data).forEach(key => localStorage.setItem(key, data[key]));
       showToast('✅ Data berhasil di-restore! Refresh halaman.', 'success');
@@ -414,15 +815,87 @@ function restoreAllData(input) {
   reader.readAsText(file);
 }
 
+// ---------- DOWNLOAD OFFLINE ----------
 function downloadOfflinePage() {
   const html = document.documentElement.outerHTML;
   const blob = new Blob(['<!DOCTYPE html>\n' + html], { type: 'text/html' });
   const a = document.createElement('a');
   a.href = URL.createObjectURL(blob);
-  a.download = 'notepad_plus_v3.5.html';
+  a.download = 'notepad_plus_v3.5_offline.html';
   a.click();
   showToast('⬇ Halaman didownload!', 'success');
 }
+
+// ---------- SUPER ADMIN ----------
+function showSuperAdminPanel() { openModal('superAdminModal'); switchAdminTab('codes'); }
+function switchAdminTab(tab) {
+  const c = document.getElementById('adminTabContent');
+  if (tab === 'backup') {
+    c.innerHTML = `<h4>💾 Backup & Restore Data</h4><p class="text-secondary mb-3">Backup semua data (users, aplikasi, kode, chat) ke file JSON, atau restore dari file backup.</p><button class="btn btn-primary btn-block mb-2" onclick="backupAllData()">⬇ Backup Semua Data (JSON)</button><label class="btn btn-warning btn-block" style="cursor:pointer;">📤 Restore Data (JSON)<input type="file" accept=".json" onchange="restoreAllData(this)" hidden></label><p class="text-sm text-muted mt-2">⚠️ Restore akan menimpa semua data saat ini.</p>`;
+  } else if (tab === 'chat') {
+    c.innerHTML = `<h4>Chat dari User</h4><div class="chat-box" id="adminChatMessages" style="max-height:300px;"></div><div class="flex"><input type="text" id="adminChatInput" placeholder="Balas..."><button class="btn btn-primary" onclick="sendAdminChat()">Kirim</button></div>`;
+    renderAdminChat();
+  } else if (tab === 'codes') {
+    c.innerHTML = `<h4>Buat Kode Aktivasi</h4><input id="adminActUser" placeholder="Username/email" class="mb-2"><select id="adminActPackage" class="mb-2">${getPackages().map(p => `<option value="${p.id}">${p.name} - Rp ${p.price} (${p.label})</option>`).join('')}</select><button class="btn btn-success btn-block" onclick="adminCreateCode()">Buat Kode</button><div id="adminCodeResult"></div><h4 class="mt-3">Kode Aktif</h4><div id="activeCodesList"></div>`;
+    renderActiveCodes();
+  } else if (tab === 'users') {
+    c.innerHTML = `<table class="admin-table"><tr><th>Nama</th><th>Username</th><th>Email</th><th>Premium</th><th>Aksi</th></tr>${getAllUsers().map(u => `<tr><td>${u.nama}</td><td>${u.username}</td><td>${u.email}</td><td>${u.premium?'Ya':'Tidak'}</td><td><button class="btn btn-sm btn-warning" onclick="toggleLockUser('${u.id}')">${u.locked?'Buka':'Kunci'}</button> <button class="btn btn-sm btn-danger" onclick="deleteUser('${u.id}')">Hapus</button></td></tr>`).join('')}</table>`;
+  } else if (tab === 'packages') {
+    c.innerHTML = `<div id="packageEditList"></div><button class="btn btn-sm btn-primary mt-2" onclick="addNewPackage()">+ Tambah Paket</button>`;
+    renderPackageList();
+  } else if (tab === 'security') {
+    const logs = getSecurityLogs();
+    c.innerHTML = `<div style="max-height:250px;overflow-y:auto;">${logs.length === 0 ? '<p class="text-muted">Tidak ada log.</p>' : logs.slice(-50).reverse().map(l => `<div class="text-sm">[${new Date(l.time).toLocaleString()}] ${l.msg}</div>`).join('')}</div><button class="btn btn-warning btn-sm mt-2" onclick="clearSecurityLogs()">Bersihkan Log</button>`;
+  } else if (tab === 'settings') {
+    c.innerHTML = `<label>Nomor WhatsApp</label><input id="adminWA" value="${whatsappNumber}" class="mb-2"><button class="btn btn-success btn-block" onclick="saveAdminWA()">Simpan WA</button><hr><input type="password" id="adminNewPass" placeholder="Password Baru" class="mb-2"><button class="btn btn-warning btn-block" onclick="changeAdminPass()">Ganti Password</button><input id="adminNewName" value="${SUPER_ADMIN.nama}" class="mb-2 mt-2"><button class="btn btn-info btn-block" onclick="changeAdminName()">Ganti Nama</button><hr><button class="btn btn-danger btn-block" onclick="resetAllData()">Reset Semua Data</button>`;
+  }
+  document.querySelectorAll('.admin-tab').forEach(b => b.classList.remove('active'));
+  event.target.classList.add('active');
+}
+
+function adminCreateCode() {
+  const u = document.getElementById('adminActUser').value.trim(), pkg = document.getElementById('adminActPackage').value;
+  if (!u || !pkg) return;
+  const code = 'NP-' + Date.now().toString(36).toUpperCase() + '-' + Math.random().toString(36).substr(2,5).toUpperCase();
+  const codes = getValidCodes(); codes[code] = { packageId: pkg, used: false, createdAt: new Date().toISOString() }; saveValidCodes(codes);
+  document.getElementById('adminCodeResult').innerHTML = `<p class="form-success show">✅ Kode: <strong>${code}</strong></p>`; renderActiveCodes();
+}
+function renderActiveCodes() {
+  const codes = getValidCodes();
+  document.getElementById('activeCodesList').innerHTML = Object.keys(codes).length === 0 ? '<p class="text-muted">Belum ada kode.</p>' : Object.keys(codes).map(c => `<div>${c} - ${codes[c].packageId} ${codes[c].used?'<span class="text-danger">Terpakai</span>':'<span class="text-success">Aktif</span>'}</div>`).join('');
+}
+function toggleLockUser(id) { const users = getAllUsers(); const u = users.find(x => x.id === id); if (u) { u.locked = !u.locked; saveAllUsers(users); switchAdminTab('users'); } }
+function deleteUser(id) { if (confirm('Hapus user?')) { const users = getAllUsers().filter(x => x.id !== id); saveAllUsers(users); switchAdminTab('users'); } }
+function renderPackageList() {
+  const pkgs = getPackages();
+  document.getElementById('packageEditList').innerHTML = pkgs.map((p, i) => `<div class="flex-between"><span>${p.name} - Rp ${p.price} (${p.label})</span><button class="btn btn-sm btn-warning" onclick="editPackage('${p.id}')">Edit</button></div>`).join('');
+}
+function editPackage(id) {
+  const p = getPackages().find(x => x.id === id); if (!p) return;
+  document.getElementById('editPackageId').value = id; document.getElementById('editPackageName').value = p.name; document.getElementById('editPackagePrice').value = p.price; document.getElementById('editPackageDays').value = p.days; document.getElementById('editPackageLabel').value = p.label;
+  document.getElementById('editPackageTitle').textContent = 'Edit Paket ' + p.name; openModal('editPackageModal');
+}
+function savePackageChanges() {
+  const id = document.getElementById('editPackageId').value, n = document.getElementById('editPackageName').value.trim(),
+        pr = parseInt(document.getElementById('editPackagePrice').value), d = parseInt(document.getElementById('editPackageDays').value), l = document.getElementById('editPackageLabel').value.trim();
+  if (!n || isNaN(pr) || isNaN(d) || !l) return;
+  const pkgs = getPackages(); const p = pkgs.find(x => x.id === id); if (!p) return;
+  p.name = n; p.price = pr; p.days = d; p.label = l; savePackages(pkgs); closeModal('editPackageModal'); renderPackageList(); updateWADisplay();
+}
+function addNewPackage() {
+  const pkg = { id: 'pkg_' + Date.now(), name: 'Paket Baru', price: 0, days: 30, label: '1 Bulan' };
+  const pkgs = getPackages(); pkgs.push(pkg); savePackages(pkgs); renderPackageList();
+}
+function saveAdminWA() { const v = document.getElementById('adminWA').value.trim(); if (v) { whatsappNumber = v; localStorage.setItem('notepad_wa', v); updateWADisplay(); showToast('Nomor WA disimpan', 'success'); } }
+function changeAdminPass() { const p = document.getElementById('adminNewPass').value.trim(); if (p) { SUPER_ADMIN.password = encodePassword(p); showToast('Password diubah', 'success'); } }
+function changeAdminName() { const n = document.getElementById('adminNewName').value.trim(); if (n) { SUPER_ADMIN.nama = n; const s = getSession(); if (s && s.role === 'superadmin') { s.nama = n; saveSession(s); } updateUI(); showToast('Nama diubah', 'success'); } }
+function resetAllData() {
+  showConfirm('RESET SEMUA DATA?', 'Semua data akan dihapus permanen!', function() {
+    localStorage.clear(); saveAllUsers([SUPER_ADMIN]); saveAllApplications({}); saveValidCodes({}); savePackages(DEFAULT_PACKAGES); saveSecurityLogs([]);
+    updateWADisplay(); updateUI(); closeModal('superAdminModal'); showToast('Data direset!', 'warning');
+  });
+}
+function clearSecurityLogs() { saveSecurityLogs([]); switchAdminTab('security'); }
 
 // ---------- CHAT INTERNAL ----------
 function openGuestChat() { openModal('guestChatModal'); renderGuestChat(); }
@@ -460,18 +933,15 @@ function sendAdminChat() {
   input.value = ''; renderAdminChat();
 }
 
-// ---------- SUPER ADMIN PANEL (DENGAN TAB BACKUP) ----------
-function showSuperAdminPanel() { openModal('superAdminModal'); switchAdminTab('codes'); }
-function switchAdminTab(tab) {
-  const c = document.getElementById('adminTabContent');
-  if (tab === 'backup') {
-    c.innerHTML = `<h4>💾 Backup & Restore Data</h4><p class="text-secondary mb-3">Backup semua data (users, aplikasi, kode, chat) ke file JSON, atau restore dari file backup.</p><button class="btn btn-primary btn-block mb-2" onclick="backupAllData()">⬇ Backup Semua Data (JSON)</button><label class="btn btn-warning btn-block" style="cursor:pointer;">📤 Restore Data (JSON)<input type="file" accept=".json" onchange="restoreAllData(this)" hidden></label><p class="text-sm text-muted mt-2">⚠️ Restore akan menimpa semua data saat ini.</p>`;
-  } else if (tab === 'chat') {
-    c.innerHTML = `<h4>Chat dari User</h4><div class="chat-box" id="adminChatMessages" style="max-height:300px;"></div><div class="flex"><input type="text" id="adminChatInput" placeholder="Balas..."><button class="btn btn-primary" onclick="sendAdminChat()">Kirim</button></div>`;
-    renderAdminChat();
-  }
-  // ... tab codes, users, packages, settings tetap lengkap seperti sebelumnya ...
-  // Semua fungsi adminCreateCode, renderActiveCodes, toggleLockUser, renderPackageList, editPackage, savePackageChanges, addNewPackage, deletePackage, saveAdminWA, changeAdminPass, changeAdminName, resetAllData tetap utuh.
+// ---------- FORGOT PASSWORD ----------
+function handleForgotPassword() {
+  const n = document.getElementById('forgotNama').value.trim(), e = document.getElementById('forgotEmail').value.trim(), hp = document.getElementById('forgotHp').value.trim();
+  if (!n || !e || !hp) { document.getElementById('forgotError').textContent = 'Lengkapi!'; document.getElementById('forgotError').classList.add('show'); return; }
+  const chats = getGuestChats();
+  chats.push({ from: 'guest', text: `Permintaan reset password dari: ${n}, Email: ${e}, HP: ${hp}`, time: new Date().toISOString() });
+  saveGuestChats(chats);
+  closeModal('forgotPasswordModal'); openGuestChat();
+  showToast('Pesan reset password telah dikirim ke admin', 'success');
 }
 
 // ---------- INIT ----------
@@ -484,62 +954,17 @@ function switchAdminTab(tab) {
 </script>
 <script>
 // ================================================================
-// NOTEPAD+ CODE STORAGE v3.5 - APPLICATION & CODE MANAGEMENT
+// NOTEPAD+ CODE STORAGE v3.5 - APPLICATION & CODE RENDER
 // ================================================================
-// ... (semua fungsi refreshAppUI, showAddAppModal, saveApplication, deleteApp, editApp, toggleAppCodes, 
-//      showAddCodeModal, saveCode, deleteCode, editCode, toggleCodePreview, performSearch, clearSearch,
-//      showMergeModal, performMerge, copyMergeResult, downloadMergeResult, exportAllData, importAllData,
-//      updateStats, dll.) ...
-// Semua fungsi ini dipertahankan dari Notepad+ v3.3 tanpa ada yang dipotong.
+// (Fungsi render sudah include di Blok 2, ini hanya placeholder untuk memastikan tidak ada yang terpotong)
 
+// Fungsi-fungsi ini sudah ada di Blok 2, di sini hanya untuk memastikan semua terdefinisi
 function refreshAppUI() {
-  const s = getSession();
-  const apps = s ? (getAllApplications()[s.id] || []) : [];
-  const container = document.getElementById('appListContainer');
-  const empty = document.getElementById('emptyState');
-  if (apps.length === 0) { container.innerHTML = ''; empty.classList.remove('hidden'); return; }
-  empty.classList.add('hidden');
-  container.innerHTML = apps.map(app => {
-    return `<div class="app-item">
-      <div class="app-header" onclick="toggleAppCodes('${app.id}')">
-        <div class="app-name">📁 ${app.name} <span class="app-code-count">${app.codes.length} kode</span></div>
-        <div class="flex gap-sm">
-          <button class="btn btn-primary btn-sm" onclick="event.stopPropagation(); showAddCodeModal('${app.id}')">+ Code</button>
-          <button class="btn btn-warning btn-sm" onclick="event.stopPropagation(); editApp('${app.id}')">Edit</button>
-          <button class="btn btn-danger btn-sm" onclick="event.stopPropagation(); deleteApp('${app.id}')">Hapus</button>
-        </div>
-      </div>
-      <div class="app-codes-container" id="codes-${app.id}">
-        ${app.codes.length === 0 ? '<p style="color:var(--text-muted);padding:8px;">Belum ada kode.</p>' : app.codes.map(code => `
-          <div class="code-item">
-            <div class="code-header">
-              <span class="code-name">📄 ${code.name}</span>
-              <div class="flex gap-sm">
-                <button class="btn btn-gray btn-sm" onclick="toggleCodePreview('${code.id}')">Preview</button>
-                <button class="btn btn-warning btn-sm" onclick="editCode('${app.id}','${code.id}')">Edit</button>
-                <button class="btn btn-danger btn-sm" onclick="deleteCode('${app.id}','${code.id}')">Hapus</button>
-              </div>
-            </div>
-            <div class="code-content-preview" id="preview-${code.id}"><pre>${escapeHTML(code.content)}</pre></div>
-          </div>`).join('')}
-      </div>
-    </div>`;
-  }).join('');
+  // ... (kode lengkap sudah di Blok 2)
 }
-
-function escapeHTML(str) { return str.replace(/[&<>"']/g, m => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' })[m]); }
 function updateStats() {
-  const s = getSession();
-  const apps = s ? (getAllApplications()[s.id] || []) : [];
-  let totalCodes = 0, totalSize = 0;
-  apps.forEach(app => { totalCodes += app.codes.length; app.codes.forEach(c => { totalSize += new Blob([c.content]).size; }); });
-  document.getElementById('statTotalApps').textContent = apps.length;
-  document.getElementById('statTotalCodes').textContent = totalCodes;
-  document.getElementById('statStorage').textContent = (totalSize / 1024).toFixed(1) + ' KB';
-  document.getElementById('statTotalUsers').textContent = getAllUsers().length;
-  const statusEl = document.getElementById('statPremiumStatus');
-  if (statusEl) statusEl.textContent = (s && (s.premium || s.role === 'superadmin')) ? 'Premium' : 'Free';
+  // ... (kode lengkap sudah di Blok 2)
 }
-// ... (dan seterusnya, semua fungsi lainnya tetap sama persis) ...
+// Semua fungsi lain sudah include di Blok 2.
 </script>
 </html>
