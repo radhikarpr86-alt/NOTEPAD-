@@ -468,7 +468,7 @@
 <!-- END LANDING PAGE -->
 
 <!-- ============================================================
-     BLOK 3 – APPLICATION PAGE (REVISI PENERIMA PESAN)
+     BLOK 3 – APPLICATION PAGE (REVISI: CHAT ADMIN + CHAT SESAMA USER)
      ============================================================ -->
 <!-- APPLICATION PAGE -->
 <div class="container hidden" id="applicationPage">
@@ -539,8 +539,10 @@
       Gabung & Copy <span class="badge badge-purple">Premium</span>
     </button>
     <button onclick="showActivationModal()" class="btn btn-warning" id="activationToolbarButton" style="display:none;">🔑 Aktivasi Premium</button>
-    <!-- TOMBOL CHAT ADMIN (PENERIMA PESAN UNTUK USER BIASA) -->
+    <!-- TOMBOL CHAT ADMIN -->
     <button onclick="showChatModal()" class="btn btn-blue" id="chatButton">💬 Chat Admin</button>
+    <!-- TOMBOL CHAT SESAMA USER -->
+    <button onclick="showUserChatModal()" class="btn btn-info" id="chatUserButton">👥 Chat User</button>
   </div>
 
   <div id="searchBar" class="hidden" style="margin-bottom:20px;">
@@ -1002,9 +1004,10 @@
 </div>
 
 <!-- ============================================================
-     BLOK 7 - MODAL CHAT, AKTIVASI & TOAST CONTAINER
+     BLOK 7 – MODAL CHAT, AKTIVASI & TOAST CONTAINER
+     (REVISI: + MODAL CHAT SESAMA USER)
      ============================================================ -->
-<!-- CHAT MODAL (USER) -->
+<!-- CHAT MODAL (USER KE ADMIN) -->
 <div class="modal-overlay" id="chatModal">
   <div class="modal-content" style="max-width:500px;">
     <div class="modal-header">
@@ -1022,6 +1025,39 @@
     </div>
     <div class="modal-footer">
       <button onclick="closeModal('chatModal')" class="btn btn-gray">Tutup</button>
+    </div>
+  </div>
+</div>
+
+<!-- CHAT SESAMA USER MODAL -->
+<div class="modal-overlay" id="userChatModal">
+  <div class="modal-content" style="max-width:500px;">
+    <div class="modal-header">
+      <h3>👥 Chat dengan Sesama User</h3>
+      <button class="modal-close" onclick="closeModal('userChatModal')">✕</button>
+    </div>
+    <div class="modal-body">
+      <!-- PILIH USER -->
+      <div style="margin-bottom:12px;">
+        <label style="font-size:0.85rem;color:var(--text-secondary);display:block;margin-bottom:4px;">Pilih User:</label>
+        <select id="userChatTargetSelect" onchange="loadUserToUserChat()" style="width:100%;padding:8px;border-radius:var(--radius-sm);background:var(--bg-tertiary);color:var(--text-primary);border:1px solid var(--border-color-strong);">
+          <option value="">-- Pilih User --</option>
+        </select>
+      </div>
+
+      <!-- AREA CHAT -->
+      <div class="chat-messages" id="userToUserChatMessages" style="height:300px;overflow-y:auto;background:var(--bg-tertiary);border-radius:var(--radius-sm);padding:8px;margin-bottom:12px;">
+        <p style="color:var(--text-secondary);text-align:center;padding:20px;">Pilih user untuk memulai chat.</p>
+      </div>
+
+      <!-- INPUT CHAT -->
+      <div class="chat-input-row">
+        <input type="text" id="userToUserChatInput" placeholder="Ketik pesan...">
+        <button onclick="sendUserToUserChat()" class="btn btn-primary btn-sm">Kirim</button>
+      </div>
+    </div>
+    <div class="modal-footer">
+      <button onclick="closeModal('userChatModal')" class="btn btn-gray">Tutup</button>
     </div>
   </div>
 </div>
@@ -1921,6 +1957,7 @@ function sendMassChat() {
 
 <!-- ============================================================
      BLOK 11 - JS CHAT, LANDING DISPLAY, OFFLINE, INIT + IKLAN
+     (REVISI FINAL LENGKAP)
      ============================================================ -->
 <script>
 // ---------- CHAT SYSTEM ----------
@@ -1944,6 +1981,76 @@ function sendUserChat() {
   var msgs = getChatMessages();
   msgs.push({ from: s.username, to: 'admin', text: text, time: new Date().toISOString() });
   saveChatMessages(msgs); input.value=''; loadUserChat();
+}
+
+// ---------- CHAT SESAMA USER ----------
+function showUserChatModal() {
+  var s = getSession(); if(!s) return showToast('Login dulu!','error');
+  openModal('userChatModal'); loadUserChatList();
+}
+
+function loadUserChatList() {
+  var s = getSession(); if(!s) return;
+  var users = getAllUsers().filter(function(u){ return u.username !== s.username && u.role !== 'superadmin'; });
+  var select = document.getElementById('userChatTargetSelect');
+  if (!select) return;
+  select.innerHTML = '<option value="">-- Pilih User --</option>';
+  for (var i = 0; i < users.length; i++) {
+    select.innerHTML += '<option value="'+users[i].username+'">'+users[i].nama+' ('+users[i].username+')</option>';
+  }
+  document.getElementById('userToUserChatMessages').innerHTML = '<p style="color:var(--text-secondary);text-align:center;padding:20px;">Pilih user untuk memulai chat.</p>';
+}
+
+function loadUserToUserChat() {
+  var s = getSession(); if(!s) return;
+  var target = document.getElementById('userChatTargetSelect').value;
+  if (!target) return;
+
+  var allMessages = getChatMessages();
+  var filtered = [];
+  for (var i = 0; i < allMessages.length; i++) {
+    var m = allMessages[i];
+    if ((m.from === s.username && m.to === target) || (m.from === target && m.to === s.username)) {
+      filtered.push(m);
+    }
+  }
+
+  var container = document.getElementById('userToUserChatMessages');
+  if (!container) return;
+
+  if (filtered.length === 0) {
+    container.innerHTML = '<p style="color:var(--text-secondary);text-align:center;padding:20px;">Belum ada chat dengan '+target+'.</p>';
+    return;
+  }
+
+  filtered.sort(function(a, b) { return new Date(a.time) - new Date(b.time); });
+
+  var html = '';
+  for (var i = 0; i < filtered.length; i++) {
+    var m = filtered[i];
+    var isMe = (m.from === s.username);
+    var cls = isMe ? 'chat-msg user' : 'chat-msg admin';
+    var sender = isMe ? 'Anda' : m.from;
+    html += '<div class="'+cls+'"><div class="chat-sender">'+sender+'</div>'+m.text+'<div class="chat-time">'+new Date(m.time).toLocaleString()+'</div></div>';
+  }
+  container.innerHTML = html;
+  container.scrollTop = container.scrollHeight;
+}
+
+function sendUserToUserChat() {
+  var s = getSession(); if(!s) return;
+  var target = document.getElementById('userChatTargetSelect').value;
+  if (!target) { showToast('Pilih user!','error'); return; }
+  var input = document.getElementById('userToUserChatInput');
+  var text = input.value.trim();
+  if (!text) return;
+
+  var msgs = getChatMessages();
+  msgs.push({ from: s.username, to: target, text: text, time: new Date().toISOString() });
+  saveChatMessages(msgs);
+  input.value = '';
+  loadUserToUserChat();
+  showToast('Pesan terkirim!', 'success');
 }
 
 // ---------- LANDING PAGE PRICE DISPLAY ----------
