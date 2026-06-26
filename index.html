@@ -656,7 +656,7 @@
 </div>
 
 <!-- ============================================================
-     BLOK 5 - MODAL PROFIL & SUPER ADMIN PANEL
+     BLOK 5 – MODAL PROFIL & SUPER ADMIN PANEL (REVISI + TAB BACKUP)
      ============================================================ -->
 <!-- PROFILE MODAL -->
 <div class="modal-overlay" id="profileModal">
@@ -712,6 +712,7 @@
         <button class="admin-tab" onclick="switchAdminTab('security')" id="tabSecurity">Log Keamanan</button>
         <button class="admin-tab" onclick="switchAdminTab('settings')" id="tabSettings">Pengaturan</button>
         <button class="admin-tab" onclick="switchAdminTab('chat')" id="tabChat">💬 Chat User</button>
+        <button class="admin-tab" onclick="switchAdminTab('backup')" id="tabBackup">💾 Backup</button>
       </div>
 
       <div class="admin-tab-content" id="adminTabCodes">
@@ -783,6 +784,25 @@
       <div class="admin-tab-content hidden" id="adminTabChat">
         <h4 style="margin-bottom:12px;">Chat dengan User</h4>
         <div id="adminChatContainer"></div>
+      </div>
+
+      <!-- TAB BARU: BACKUP & RESTORE -->
+      <div class="admin-tab-content hidden" id="adminTabBackup">
+        <h4 style="margin-bottom:12px;">💾 Backup & Restore Data</h4>
+        <p style="font-size:0.85rem;color:var(--text-secondary);margin-bottom:16px;">
+          Simpan dan pulihkan seluruh data aplikasi (JSON) atau halaman (HTML).
+        </p>
+        <button onclick="backupAllDataJSON()" class="btn btn-primary btn-block" style="margin-bottom:12px;">⬇ Backup Data (JSON)</button>
+        <label class="btn btn-warning btn-block" style="margin-bottom:12px;cursor:pointer;">
+          📤 Restore Data (JSON)
+          <input type="file" accept=".json" onchange="restoreAllDataJSON(this)" hidden>
+        </label>
+        <hr style="border-color:var(--border-color);margin:16px 0;">
+        <button onclick="downloadOfflineHTML()" class="btn btn-success btn-block" style="margin-bottom:12px;">⬇ Download HTML (Offline)</button>
+        <label class="btn btn-warning btn-block" style="cursor:pointer;">
+          📤 Restore HTML
+          <input type="file" accept=".html" onchange="restoreFromHTML(this)" hidden>
+        </label>
       </div>
     </div>
     <div class="modal-footer">
@@ -1546,7 +1566,7 @@ function checkAllExpiredActivations() {
 </script>
 
 <!-- ============================================================
-     BLOK 10 - JS ADMIN
+     BLOK 10 - JS ADMIN (DENGAN TAB BACKUP)
      ============================================================ -->
 <script>
 // ---------- SUPER ADMIN PANEL ----------
@@ -1569,6 +1589,7 @@ function switchAdminTab(tab) {
   if(tab==='security') renderSecurityLogs();
   if(tab==='chat') renderAdminChat();
   if(tab==='codes') renderActiveCodesList();
+  if(tab==='backup') { /* konten sudah statis di HTML, tidak perlu render */ }
 }
 
 function adminCreateActivationCode() {
