@@ -232,6 +232,7 @@
 
   <div class="stats-grid" id="dashboardStats"></div>
 
+  <!-- TOOLBAR TANPA BACKUP/RESTORE/DOWNLOAD HTML -->
   <div class="toolbar">
     <button class="btn btn-success" onclick="showAddAppModal()">Tambah Aplikasi</button>
     <button class="btn btn-primary" onclick="toggleSearch()">Cari</button>
@@ -240,10 +241,6 @@
     <input type="file" id="importFileInput" accept=".json" class="hidden" onchange="importAllData(this)">
     <button class="btn btn-primary" id="mergeButton" onclick="showMergeModal()">Gabung & Copy <span class="badge badge-purple">Premium</span></button>
     <button class="btn btn-warning hidden" id="activationButton" onclick="showActivationModal()">🔑 Aktivasi Premium</button>
-    <button class="btn btn-info" id="backupToolbarButton" onclick="backupAllData()">💾 Backup Data</button>
-    <button class="btn btn-warning" onclick="document.getElementById('restoreFileInput').click()">📤 Restore Data</button>
-    <input type="file" id="restoreFileInput" accept=".json" class="hidden" onchange="restoreAllData(this)">
-    <button class="btn btn-success" onclick="downloadOfflinePage()">⬇ Download HTML</button>
   </div>
 
   <div id="searchBar" class="hidden" style="margin-bottom:20px;"><div class="flex gap-sm"><input type="text" id="searchInput" placeholder="Cari aplikasi atau kode..." style="flex:2;" oninput="performSearch()"><button class="btn btn-gray btn-sm" onclick="clearSearch()">Clear</button></div></div>
@@ -681,39 +678,7 @@ function importAllData(input) {
   reader.readAsText(file);
 }
 
-// ---------- BACKUP & RESTORE (FULL) ----------
-function backupAllData() {
-  const data = {};
-  for (let i = 0; i < localStorage.length; i++) {
-    const key = localStorage.key(i);
-    data[key] = localStorage.getItem(key);
-  }
-  const json = JSON.stringify(data, null, 2);
-  const blob = new Blob([json], { type: 'application/json' });
-  const a = document.createElement('a');
-  a.href = URL.createObjectURL(blob);
-  a.download = 'notepad_full_backup_' + new Date().toISOString().slice(0, 10) + '.json';
-  a.click();
-  showToast('✅ Backup penuh berhasil!', 'success');
-}
-function restoreAllData(input) {
-  const file = input.files[0];
-  if (!file) return;
-  const reader = new FileReader();
-  reader.onload = function(e) {
-    try {
-      const data = JSON.parse(e.target.result);
-      if (!confirm('⚠️ SEMUA data saat ini akan ditimpa. Lanjutkan?')) return;
-      localStorage.clear();
-      Object.keys(data).forEach(key => localStorage.setItem(key, data[key]));
-      showToast('✅ Data berhasil di-restore! Refresh halaman.', 'success');
-      setTimeout(() => location.reload(), 2000);
-    } catch (err) { showToast('❌ File tidak valid.', 'error'); }
-  };
-  reader.readAsText(file);
-}
-
-// ---------- DOWNLOAD OFFLINE ----------
+// ---------- DOWNLOAD OFFLINE (HANYA UNTUK SUPER ADMIN, TAPI FUNGSI TETAP ADA) ----------
 function downloadOfflinePage() {
   const html = document.documentElement.outerHTML;
   const blob = new Blob(['<!DOCTYPE html>\n' + html], { type: 'text/html' });
@@ -724,7 +689,8 @@ function downloadOfflinePage() {
   showToast('⬇ Halaman didownload!', 'success');
 }
 </script>
-<script>
+  
+  <script>
 // ================================================================
 // NOTEPAD+ v3.5 – SUPER ADMIN, CHAT SYSTEM, PWA, INIT
 // ================================================================
@@ -734,7 +700,19 @@ function showSuperAdminPanel() { openModal('superAdminModal'); switchAdminTab('c
 function switchAdminTab(tab) {
   const c = document.getElementById('adminTabContent');
   if (tab === 'backup') {
-    c.innerHTML = `<h4>💾 Backup & Restore Data</h4><p class="text-secondary mb-3">Backup semua data (users, aplikasi, kode, chat) ke file JSON, atau restore dari file backup.</p><button class="btn btn-primary btn-block mb-2" onclick="backupAllData()">⬇ Backup Semua Data (JSON)</button><label class="btn btn-warning btn-block" style="cursor:pointer;">📤 Restore Data (JSON)<input type="file" accept=".json" onchange="restoreAllData(this)" hidden></label><p class="text-sm text-muted mt-2">⚠️ Restore akan menimpa semua data saat ini.</p>`;
+    c.innerHTML = `
+      <h4>💾 Backup & Restore Data</h4>
+      <p class="text-secondary mb-3">Backup semua data (users, aplikasi, kode, chat) ke file JSON, atau restore dari file backup.</p>
+      <button class="btn btn-primary btn-block mb-2" onclick="backupAllData()">⬇ Backup Semua Data (JSON)</button>
+      <label class="btn btn-warning btn-block" style="cursor:pointer;">
+        📤 Restore Data (JSON)
+        <input type="file" accept=".json" onchange="restoreAllData(this)" hidden>
+      </label>
+      <p class="text-sm text-muted mt-2">⚠️ Restore akan menimpa semua data saat ini.</p>
+      <hr class="mt-3 mb-3">
+      <h4>⬇ Download Aplikasi Offline</h4>
+      <button class="btn btn-success btn-block" onclick="downloadOfflinePage()">⬇ Download Notepad+ (index.html)</button>
+    `;
   } else if (tab === 'chat') {
     const users = getAllUsers().filter(u => u.role !== 'superadmin');
     c.innerHTML = `<h4>Chat User</h4><div class="flex gap-sm mb-2"><select id="adminChatUserSelect"><option value="all">Semua User</option>${users.map(u => `<option value="${u.id}">${u.username} (${u.nama})</option>`).join('')}</select><button class="btn btn-sm" onclick="loadAdminChatForUser()">Muat</button></div><div class="chat-box" id="adminChatMessages"></div><div class="flex"><input type="text" id="adminChatInput" placeholder="Balas..."><button class="btn btn-primary" onclick="sendAdminChat()">Kirim</button></div>`;
@@ -767,6 +745,38 @@ function saveAdminWA(){const v=document.getElementById('adminWA').value.trim();i
 function changeAdminPass(){const p=document.getElementById('adminNewPass').value.trim();if(p){SUPER_ADMIN.password=encodePassword(p);showToast('Password diubah','success')}}
 function changeAdminName(){const n=document.getElementById('adminNewName').value.trim();if(n){SUPER_ADMIN.nama=n;const s=getSession();if(s&&s.role==='superadmin'){s.nama=n;saveSession(s)}updateUI();showToast('Nama diubah','success')}}
 function resetAllData(){showConfirm('RESET SEMUA DATA?','Semua data akan dihapus permanen!',()=>{localStorage.clear();saveAllUsers([SUPER_ADMIN]);saveAllApplications({});saveValidCodes({});savePackages(DEFAULT_PACKAGES);saveSecurityLogs([]);updateUI();closeModal('superAdminModal');showToast('Data direset!','warning')})}
+
+// ---------- BACKUP & RESTORE (FULL) ----------
+function backupAllData() {
+  const data = {};
+  for (let i = 0; i < localStorage.length; i++) {
+    const key = localStorage.key(i);
+    data[key] = localStorage.getItem(key);
+  }
+  const json = JSON.stringify(data, null, 2);
+  const blob = new Blob([json], { type: 'application/json' });
+  const a = document.createElement('a');
+  a.href = URL.createObjectURL(blob);
+  a.download = 'notepad_full_backup_' + new Date().toISOString().slice(0, 10) + '.json';
+  a.click();
+  showToast('✅ Backup penuh berhasil!', 'success');
+}
+function restoreAllData(input) {
+  const file = input.files[0];
+  if (!file) return;
+  const reader = new FileReader();
+  reader.onload = function(e) {
+    try {
+      const data = JSON.parse(e.target.result);
+      if (!confirm('⚠️ SEMUA data saat ini akan ditimpa. Lanjutkan?')) return;
+      localStorage.clear();
+      Object.keys(data).forEach(key => localStorage.setItem(key, data[key]));
+      showToast('✅ Data berhasil di-restore! Refresh halaman.', 'success');
+      setTimeout(() => location.reload(), 2000);
+    } catch (err) { showToast('❌ File tidak valid.', 'error'); }
+  };
+  reader.readAsText(file);
+}
 
 // ---------- CHAT SYSTEM ----------
 function openGuestChat() { openModal('guestChatModal'); renderGuestChat(); }
