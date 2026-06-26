@@ -419,7 +419,7 @@
   </div>
 
 <!-- ============================================================
-     BLOK 2 - FITUR & PAKET LANDING
+     BLOK 2 - FITUR & PAKET LANDING (REVISI + IKLAN)
      ============================================================ -->
   <h3 class="section-title">Fitur Unggulan</h3>
   <div class="features-grid">
@@ -458,6 +458,11 @@
   <h3 class="section-title">Paket Aktivasi Premium</h3>
   <div class="price-grid" id="landingPriceGrid">
     <!-- Diisi oleh JavaScript -->
+  </div>
+
+  <!-- ========== IKLAN LANDING PAGE ========== -->
+  <div id="landingAdContainer" style="max-width:1000px;margin:0 auto 30px auto;padding:0 var(--spacing-lg);">
+    <!-- Diisi oleh renderLandingAd() -->
   </div>
 </div>
 <!-- END LANDING PAGE -->
@@ -656,7 +661,8 @@
 </div>
 
 <!-- ============================================================
-     BLOK 5 – MODAL PROFIL & SUPER ADMIN PANEL (REVISI FINAL)
+     BLOK 5 – MODAL PROFIL & SUPER ADMIN PANEL
+     (REVISI FINAL: CHAT USER, CHAT MASSAL, RESTART, IKLAN)
      ============================================================ -->
 <!-- PROFILE MODAL -->
 <div class="modal-overlay" id="profileModal">
@@ -712,6 +718,7 @@
         <button class="admin-tab" onclick="switchAdminTab('security')" id="tabSecurity">Log Keamanan</button>
         <button class="admin-tab" onclick="switchAdminTab('settings')" id="tabSettings">Pengaturan</button>
         <button class="admin-tab" onclick="switchAdminTab('chat')" id="tabChat">💬 Chat User</button>
+        <button class="admin-tab" onclick="switchAdminTab('iklan')" id="tabIklan">📢 Iklan</button>
         <button class="admin-tab" onclick="switchAdminTab('backup')" id="tabBackup">💾 Backup</button>
       </div>
 
@@ -777,6 +784,7 @@
           </div>
         </div>
         <hr style="border-color:var(--border-color);margin:20px 0;">
+        <button onclick="restartApplication()" class="btn btn-warning btn-block" style="margin-bottom:12px;">🔄 Restart Aplikasi</button>
         <button onclick="resetAllApplicationData()" class="btn btn-danger btn-block">Reset Semua Data Aplikasi</button>
         <p style="font-size:0.75rem;color:var(--text-muted);margin-top:8px;text-align:center;">Perhatian: Semua data user, aplikasi, dan pengaturan akan dihapus permanen!</p>
       </div>
@@ -808,6 +816,28 @@
         <h4 style="margin-bottom:8px;">📢 Chat Massal ke Semua User</h4>
         <textarea id="massChatMessage" rows="3" placeholder="Tulis pesan untuk semua user..." style="margin-bottom:8px;"></textarea>
         <button onclick="sendMassChat()" class="btn btn-warning btn-block">Kirim ke Semua User</button>
+      </div>
+
+      <!-- TAB EDIT IKLAN -->
+      <div class="admin-tab-content hidden" id="adminTabIklan">
+        <h4 style="margin-bottom:12px;">📢 Edit Iklan Halaman Depan</h4>
+        <div class="form-group">
+          <label class="form-label">Judul Iklan</label>
+          <input type="text" id="adTitle" placeholder="Contoh: 🚀 Notepad+ Code Storage">
+        </div>
+        <div class="form-group">
+          <label class="form-label">Deskripsi Iklan</label>
+          <textarea id="adDescription" rows="3" placeholder="Tulis deskripsi iklan..."></textarea>
+        </div>
+        <div class="form-group">
+          <label class="form-label">Teks Tombol</label>
+          <input type="text" id="adButtonText" placeholder="Contoh: 🔐 Daftar Sekarang">
+        </div>
+        <div style="display:flex;gap:8px;">
+          <button onclick="saveAdSettings()" class="btn btn-success btn-block">💾 Simpan Iklan</button>
+          <button onclick="resetAdSettings()" class="btn btn-warning btn-block">🔄 Reset ke Default</button>
+        </div>
+        <div id="adSaveResult" style="margin-top:12px;"></div>
       </div>
 
       <!-- TAB BACKUP & RESTORE -->
@@ -1590,7 +1620,7 @@ function checkAllExpiredActivations() {
 </script>
 
 <!-- ============================================================
-     BLOK 10 - JS ADMIN (REVISI LENGKAP + CHAT ADMIN & MASSAL)
+     BLOK 10 - JS ADMIN (REVISI LENGKAP + EDIT IKLAN)
      ============================================================ -->
 <script>
 // ---------- SUPER ADMIN PANEL ----------
@@ -1614,6 +1644,7 @@ function switchAdminTab(tab) {
   if(tab==='chat') renderAdminChat();
   if(tab==='codes') renderActiveCodesList();
   if(tab==='backup') { /* konten sudah statis di HTML, tidak perlu render */ }
+  if(tab==='iklan') loadAdSettings();
 }
 
 function adminCreateActivationCode() {
@@ -1754,6 +1785,47 @@ function resetAllApplicationData() {
   });
 }
 
+// ========== RESTART APLIKASI ==========
+function restartApplication() {
+  if (confirm('🔄 Restart aplikasi? Halaman akan dimuat ulang.')) {
+    location.reload();
+  }
+}
+
+// ========== EDIT IKLAN ==========
+function loadAdSettings() {
+  var ad = JSON.parse(localStorage.getItem('np_adSettings') || '{"title":"🚀 Notepad+ Code Storage","description":"Simpan, kelola, dan gabungkan semua kode HTML Anda. Multi-user, aktivasi premium, keamanan terjamin.","buttonText":"🔐 Daftar Sekarang - Gratis!"}');
+  document.getElementById('adTitle').value = ad.title || '';
+  document.getElementById('adDescription').value = ad.description || '';
+  document.getElementById('adButtonText').value = ad.buttonText || '';
+}
+
+function saveAdSettings() {
+  var ad = {
+    title: document.getElementById('adTitle').value.trim(),
+    description: document.getElementById('adDescription').value.trim(),
+    buttonText: document.getElementById('adButtonText').value.trim()
+  };
+  if (!ad.title || !ad.description || !ad.buttonText) {
+    document.getElementById('adSaveResult').innerHTML = '<p class="form-error show">Semua field wajib diisi!</p>';
+    return;
+  }
+  localStorage.setItem('np_adSettings', JSON.stringify(ad));
+  document.getElementById('adSaveResult').innerHTML = '<p class="form-success show">✅ Iklan berhasil disimpan!</p>';
+  renderLandingAd();
+  showToast('Iklan diperbarui!', 'success');
+}
+
+function resetAdSettings() {
+  if (confirm('Reset iklan ke default?')) {
+    localStorage.removeItem('np_adSettings');
+    document.getElementById('adSaveResult').innerHTML = '<p class="form-success show">✅ Iklan direset ke default!</p>';
+    loadAdSettings();
+    renderLandingAd();
+    showToast('Iklan direset.', 'warning');
+  }
+}
+
 // ========== CHAT ADMIN ==========
 function renderAdminChat() {
   var allMessages = getChatMessages();
@@ -1780,7 +1852,6 @@ function renderAdminChat() {
 
 function setAdminChatTarget(username) {
   if (!username) return;
-  document.getElementById('adminChatMessages').innerHTML = '<p style="color:var(--text-secondary);text-align:center;padding:20px;">Memuat chat dengan '+username+'...</p>';
   loadAdminChat(username);
 }
 
@@ -1793,17 +1864,13 @@ function loadAdminChat(username) {
       filtered.push(m);
     }
   }
-
   var container = document.getElementById('adminChatMessages');
   if (!container) return;
-
   if (filtered.length === 0) {
     container.innerHTML = '<p style="color:var(--text-secondary);text-align:center;padding:20px;">Belum ada chat dengan '+username+'.</p>';
     return;
   }
-
   filtered.sort(function(a, b) { return new Date(a.time) - new Date(b.time); });
-
   var html = '';
   for (var i = 0; i < filtered.length; i++) {
     var m = filtered[i];
@@ -1819,14 +1886,10 @@ function loadAdminChat(username) {
 function sendAdminChat() {
   var select = document.getElementById('adminChatUserSelect');
   var target = select ? select.value : '';
-  if (!target) {
-    showToast('Pilih user terlebih dahulu!', 'error');
-    return;
-  }
+  if (!target) { showToast('Pilih user!','error'); return; }
   var input = document.getElementById('adminChatInput');
   var text = input.value.trim();
   if (!text) return;
-
   var msgs = getChatMessages();
   msgs.push({ from: 'admin', to: target, text: text, time: new Date().toISOString() });
   saveChatMessages(msgs);
@@ -1838,25 +1901,17 @@ function sendAdminChat() {
 function sendMassChat() {
   var textarea = document.getElementById('massChatMessage');
   var text = textarea.value.trim();
-  if (!text) {
-    showToast('Tulis pesan terlebih dahulu!', 'error');
-    return;
-  }
-
+  if (!text) { showToast('Tulis pesan!','error'); return; }
   var users = getAllUsers();
   var msgs = getChatMessages();
   var count = 0;
-
   for (var i = 0; i < users.length; i++) {
     if (users[i].role !== 'superadmin') {
       msgs.push({ from: 'admin', to: users[i].username, text: text, time: new Date().toISOString() });
       count++;
     }
   }
-
-  // Tandai juga sebagai chat massal
   msgs.push({ from: 'admin', to: 'all', text: text, time: new Date().toISOString() });
-
   saveChatMessages(msgs);
   textarea.value = '';
   showToast('Pesan massal terkirim ke '+count+' user!', 'success');
@@ -1864,7 +1919,7 @@ function sendMassChat() {
 </script>
 
 <!-- ============================================================
-     BLOK 11 - JS CHAT, LANDING DISPLAY, OFFLINE, INIT
+     BLOK 11 - JS CHAT, LANDING DISPLAY, OFFLINE, INIT + IKLAN
      ============================================================ -->
 <script>
 // ---------- CHAT SYSTEM ----------
@@ -1905,6 +1960,18 @@ function refreshPackageDisplay() {
   }).join('');
 }
 
+// ---------- LANDING PAGE AD ----------
+function renderLandingAd() {
+  var container = document.getElementById('landingAdContainer');
+  if (!container) return;
+  var ad = JSON.parse(localStorage.getItem('np_adSettings') || '{"title":"🚀 Notepad+ Code Storage","description":"Simpan, kelola, dan gabungkan semua kode HTML Anda. Multi-user, aktivasi premium, keamanan terjamin.","buttonText":"🔐 Daftar Sekarang - Gratis!"}');
+  container.innerHTML = '<div style="background:linear-gradient(135deg,#7c3aed,#a78bfa);color:#fff;padding:20px 24px;border-radius:var(--radius-lg);text-align:center;margin-bottom:20px;border:2px solid rgba(255,255,255,0.2);">'+
+    '<h3 style="font-size:1.3rem;font-weight:700;margin-bottom:8px;">'+ad.title+'</h3>'+
+    '<p style="margin-bottom:12px;opacity:0.9;">'+ad.description+'</p>'+
+    '<button onclick="showRegisterModal()" class="btn btn-lg" style="background:#fff;color:#7c3aed;font-weight:700;">'+ad.buttonText+'</button>'+
+  '</div>';
+}
+
 // ---------- OFFLINE / INSTALL ----------
 function downloadForOffline() {
   var html = document.documentElement.outerHTML;
@@ -1929,6 +1996,7 @@ window.addEventListener('online',updateOnlineStatus); window.addEventListener('o
   updateOnlineStatus();
   updateAllWaDisplays();
   refreshPackageDisplay();
+  renderLandingAd();
   updateHeaderUser();
 })();
 </script>
