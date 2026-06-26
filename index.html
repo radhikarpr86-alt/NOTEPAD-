@@ -656,7 +656,7 @@
 </div>
 
 <!-- ============================================================
-     BLOK 5 – MODAL PROFIL & SUPER ADMIN PANEL (REVISI + TAB BACKUP)
+     BLOK 5 – MODAL PROFIL & SUPER ADMIN PANEL (REVISI FINAL)
      ============================================================ -->
 <!-- PROFILE MODAL -->
 <div class="modal-overlay" id="profileModal">
@@ -782,11 +782,35 @@
       </div>
 
       <div class="admin-tab-content hidden" id="adminTabChat">
-        <h4 style="margin-bottom:12px;">Chat dengan User</h4>
-        <div id="adminChatContainer"></div>
+        <h4 style="margin-bottom:12px;">💬 Chat dengan User</h4>
+        
+        <!-- PILIH USER -->
+        <div style="margin-bottom:12px;">
+          <label style="font-size:0.85rem;color:var(--text-secondary);display:block;margin-bottom:4px;">Pilih User:</label>
+          <select id="adminChatUserSelect" onchange="setAdminChatTarget(this.value)" style="width:100%;padding:8px;border-radius:var(--radius-sm);background:var(--bg-tertiary);color:var(--text-primary);border:1px solid var(--border-color-strong);">
+            <option value="">-- Pilih User --</option>
+          </select>
+        </div>
+
+        <!-- AREA CHAT -->
+        <div class="chat-messages" id="adminChatMessages" style="height:250px;overflow-y:auto;background:var(--bg-tertiary);border-radius:var(--radius-sm);padding:8px;margin-bottom:12px;">
+          <p style="color:var(--text-secondary);text-align:center;padding:20px;">Pilih user untuk memulai chat.</p>
+        </div>
+
+        <!-- INPUT CHAT -->
+        <div style="display:flex;gap:8px;margin-bottom:8px;">
+          <input type="text" id="adminChatInput" placeholder="Ketik balasan..." style="flex:1;">
+          <button onclick="sendAdminChat()" class="btn btn-primary btn-sm">Kirim</button>
+        </div>
+
+        <!-- CHAT MASSAL -->
+        <hr style="border-color:var(--border-color);margin:16px 0;">
+        <h4 style="margin-bottom:8px;">📢 Chat Massal ke Semua User</h4>
+        <textarea id="massChatMessage" rows="3" placeholder="Tulis pesan untuk semua user..." style="margin-bottom:8px;"></textarea>
+        <button onclick="sendMassChat()" class="btn btn-warning btn-block">Kirim ke Semua User</button>
       </div>
 
-      <!-- TAB BARU: BACKUP & RESTORE -->
+      <!-- TAB BACKUP & RESTORE -->
       <div class="admin-tab-content hidden" id="adminTabBackup">
         <h4 style="margin-bottom:12px;">💾 Backup & Restore Data</h4>
         <p style="font-size:0.85rem;color:var(--text-secondary);margin-bottom:16px;">
@@ -1566,7 +1590,7 @@ function checkAllExpiredActivations() {
 </script>
 
 <!-- ============================================================
-     BLOK 10 - JS ADMIN (DENGAN TAB BACKUP)
+     BLOK 10 - JS ADMIN (REVISI LENGKAP + CHAT ADMIN & MASSAL)
      ============================================================ -->
 <script>
 // ---------- SUPER ADMIN PANEL ----------
@@ -1729,6 +1753,114 @@ function resetAllApplicationData() {
     closeModal('superAdminModal'); refreshAppUI(); updateStats(); updateHeaderUser();
   });
 }
+
+// ========== CHAT ADMIN ==========
+function renderAdminChat() {
+  var allMessages = getChatMessages();
+  var userList = [];
+  for (var i = 0; i < allMessages.length; i++) {
+    var m = allMessages[i];
+    var other = (m.from === 'admin') ? m.to : m.from;
+    if (other !== 'admin' && other !== 'all' && userList.indexOf(other) === -1) {
+      userList.push(other);
+    }
+  }
+  var select = document.getElementById('adminChatUserSelect');
+  if (select) {
+    select.innerHTML = '<option value="">-- Pilih User --</option>';
+    var users = getAllUsers();
+    for (var i = 0; i < users.length; i++) {
+      if (userList.indexOf(users[i].username) !== -1 && users[i].role !== 'superadmin') {
+        select.innerHTML += '<option value="'+users[i].username+'">'+users[i].nama+' ('+users[i].username+')</option>';
+      }
+    }
+  }
+  document.getElementById('adminChatMessages').innerHTML = '<p style="color:var(--text-secondary);text-align:center;padding:20px;">Pilih user untuk melihat chat.</p>';
+}
+
+function setAdminChatTarget(username) {
+  if (!username) return;
+  document.getElementById('adminChatMessages').innerHTML = '<p style="color:var(--text-secondary);text-align:center;padding:20px;">Memuat chat dengan '+username+'...</p>';
+  loadAdminChat(username);
+}
+
+function loadAdminChat(username) {
+  var allMessages = getChatMessages();
+  var filtered = [];
+  for (var i = 0; i < allMessages.length; i++) {
+    var m = allMessages[i];
+    if ((m.from === 'admin' && m.to === username) || (m.from === username && m.to === 'admin')) {
+      filtered.push(m);
+    }
+  }
+
+  var container = document.getElementById('adminChatMessages');
+  if (!container) return;
+
+  if (filtered.length === 0) {
+    container.innerHTML = '<p style="color:var(--text-secondary);text-align:center;padding:20px;">Belum ada chat dengan '+username+'.</p>';
+    return;
+  }
+
+  filtered.sort(function(a, b) { return new Date(a.time) - new Date(b.time); });
+
+  var html = '';
+  for (var i = 0; i < filtered.length; i++) {
+    var m = filtered[i];
+    var isAdmin = (m.from === 'admin');
+    var cls = isAdmin ? 'chat-msg admin' : 'chat-msg user';
+    var sender = isAdmin ? 'Admin' : m.from;
+    html += '<div class="'+cls+'"><div class="chat-sender">'+sender+'</div>'+m.text+'<div class="chat-time">'+new Date(m.time).toLocaleString()+'</div></div>';
+  }
+  container.innerHTML = html;
+  container.scrollTop = container.scrollHeight;
+}
+
+function sendAdminChat() {
+  var select = document.getElementById('adminChatUserSelect');
+  var target = select ? select.value : '';
+  if (!target) {
+    showToast('Pilih user terlebih dahulu!', 'error');
+    return;
+  }
+  var input = document.getElementById('adminChatInput');
+  var text = input.value.trim();
+  if (!text) return;
+
+  var msgs = getChatMessages();
+  msgs.push({ from: 'admin', to: target, text: text, time: new Date().toISOString() });
+  saveChatMessages(msgs);
+  input.value = '';
+  loadAdminChat(target);
+  showToast('Balasan terkirim ke '+target, 'success');
+}
+
+function sendMassChat() {
+  var textarea = document.getElementById('massChatMessage');
+  var text = textarea.value.trim();
+  if (!text) {
+    showToast('Tulis pesan terlebih dahulu!', 'error');
+    return;
+  }
+
+  var users = getAllUsers();
+  var msgs = getChatMessages();
+  var count = 0;
+
+  for (var i = 0; i < users.length; i++) {
+    if (users[i].role !== 'superadmin') {
+      msgs.push({ from: 'admin', to: users[i].username, text: text, time: new Date().toISOString() });
+      count++;
+    }
+  }
+
+  // Tandai juga sebagai chat massal
+  msgs.push({ from: 'admin', to: 'all', text: text, time: new Date().toISOString() });
+
+  saveChatMessages(msgs);
+  textarea.value = '';
+  showToast('Pesan massal terkirim ke '+count+' user!', 'success');
+}
 </script>
 
 <!-- ============================================================
@@ -1756,38 +1888,6 @@ function sendUserChat() {
   var msgs = getChatMessages();
   msgs.push({ from: s.username, to: 'admin', text: text, time: new Date().toISOString() });
   saveChatMessages(msgs); input.value=''; loadUserChat();
-}
-
-var adminChatTarget = null;
-function renderAdminChat() {
-  var users = getAllUsers(); var html='<div class="admin-chat-user-list">';
-  users.forEach(function(u){
-    html += '<div class="admin-chat-user-item" onclick="setAdminChatTarget(\''+u.username+'\')">'+u.nama+' ('+u.username+')</div>';
-  });
-  html += '</div><div id="adminChatWindow" style="display:none;"><div class="chat-messages" id="adminChatMessages"></div><div class="chat-input-row"><input type="text" id="adminChatInput" placeholder="Balas..."><button onclick="sendAdminChat()" class="btn btn-sm btn-primary">Kirim</button></div></div>';
-  document.getElementById('adminChatContainer').innerHTML = html;
-}
-function setAdminChatTarget(username) {
-  adminChatTarget = username;
-  document.getElementById('adminChatWindow').style.display='block';
-  loadAdminChat();
-}
-function loadAdminChat() {
-  if(!adminChatTarget) return;
-  var msgs = getChatMessages().filter(function(m){ return (m.from===adminChatTarget&&m.to==='admin')||(m.from==='admin'&&m.to===adminChatTarget); });
-  var container = document.getElementById('adminChatMessages'); container.innerHTML='';
-  msgs.forEach(function(m){
-    var cls = m.from==='admin'?'admin':'user';
-    container.innerHTML += '<div class="chat-msg '+cls+'"><div class="chat-sender">'+(cls==='admin'?'Admin':adminChatTarget)+'</div>'+m.text+'<div class="chat-time">'+new Date(m.time).toLocaleString()+'</div></div>';
-  });
-  container.scrollTop = container.scrollHeight;
-}
-function sendAdminChat() {
-  if(!adminChatTarget) return;
-  var input = document.getElementById('adminChatInput'); var text = input.value.trim(); if(!text) return;
-  var msgs = getChatMessages();
-  msgs.push({ from: 'admin', to: adminChatTarget, text: text, time: new Date().toISOString() });
-  saveChatMessages(msgs); input.value=''; loadAdminChat();
 }
 
 // ---------- LANDING PAGE PRICE DISPLAY ----------
@@ -1832,4 +1932,16 @@ window.addEventListener('online',updateOnlineStatus); window.addEventListener('o
   updateHeaderUser();
 })();
 </script>
+
+<!-- ========== TOMBOL COPY HTML (DOWNLOAD HALAMAN) ========== -->
+<div style="text-align:center;margin:30px 0;">
+  <button class="btn btn-lg" style="background:var(--accent-primary);color:#fff;" onclick="downloadForOffline()">
+    ⬇️ Copy HTML (Download Halaman)
+  </button>
+  <p style="font-size:0.8rem;color:var(--text-muted);margin-top:8px;">
+    Simpan halaman ini sebagai file .html untuk offline.
+  </p>
+</div>
+
+</body>
 </html>
