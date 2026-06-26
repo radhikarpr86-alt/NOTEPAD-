@@ -22,7 +22,8 @@
       --accent-primary: #7c3aed; --accent-hover: #6d28d9; --accent-light: #8b5cf6;
       --color-success: #10b981; --color-success-hover: #059669; --color-danger: #ef4444; --color-danger-hover: #dc2626;
       --color-warning: #f59e0b; --color-warning-hover: #d97706; --color-info: #3b82f6; --color-info-hover: #2563eb;
-      --color-orange: #f97316; --border-color: rgba(255, 255, 255, 0.06); --border-color-strong: rgba(255, 255, 255, 0.1);
+      --color-orange: #f97316; --color-pink: #ec4899; --color-cyan: #06b6d4;
+      --border-color: rgba(255, 255, 255, 0.06); --border-color-strong: rgba(255, 255, 255, 0.1);
       --shadow-sm: 0 2px 8px rgba(0, 0, 0, 0.4); --shadow-md: 0 4px 20px rgba(0, 0, 0, 0.5); --shadow-lg: 0 8px 32px rgba(0, 0, 0, 0.6);
       --radius-sm: 8px; --radius-md: 12px; --radius-lg: 16px; --radius-full: 9999px;
       --spacing-xs: 4px; --spacing-sm: 8px; --spacing-md: 12px; --spacing-lg: 16px; --spacing-xl: 20px; --spacing-2xl: 24px; --spacing-3xl: 32px; --spacing-4xl: 40px;
@@ -30,17 +31,21 @@
     }
     body.light-theme {
       --bg-primary: #f5f5f8; --bg-secondary: #ffffff; --bg-tertiary: #f0f0f5; --bg-hover: #e5e5ea;
-      --text-primary: #1a1a2e; --text-secondary: #555570; --text-muted: #8888a0;
+      --text-primary: #1e293b; --text-secondary: #64748b; --text-muted: #94a3b8;
       --border-color: rgba(0, 0, 0, 0.08); --border-color-strong: rgba(0, 0, 0, 0.12);
     }
     ::-webkit-scrollbar { width: 4px; height: 4px; } ::-webkit-scrollbar-track { background: transparent; } ::-webkit-scrollbar-thumb { background: var(--accent-primary); border-radius: var(--radius-full); }
     * { scrollbar-width: thin; scrollbar-color: var(--accent-primary) transparent; }
     @keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
     @keyframes slideUp { from { opacity: 0; transform: translateY(20px); } to { opacity: 1; transform: translateY(0); } }
+    @keyframes pulse { 0%, 100% { transform: scale(1); } 50% { transform: scale(1.05); } }
+    @keyframes gradientShift { 0% { background-position: 0% 50%; } 50% { background-position: 100% 50%; } 100% { background-position: 0% 50%; } }
+    @keyframes glowPulse { 0%, 100% { box-shadow: 0 0 20px rgba(124, 58, 237, 0.4); } 50% { box-shadow: 0 0 40px rgba(236, 72, 153, 0.6), 0 0 60px rgba(6, 182, 212, 0.4); } }
+    @keyframes floatUp { 0%, 100% { transform: translateY(0px); } 50% { transform: translateY(-8px); } }
     .hidden { display: none !important; }
     .flex { display: flex; } .flex-center { display: flex; align-items: center; justify-content: center; } .flex-between { display: flex; align-items: center; justify-content: space-between; } .flex-col { flex-direction: column; } .flex-wrap { flex-wrap: wrap; }
     .gap-xs { gap: var(--spacing-xs); } .gap-sm { gap: var(--spacing-sm); } .gap-md { gap: var(--spacing-md); } .gap-lg { gap: var(--spacing-lg); } .gap-xl { gap: var(--spacing-xl); }
-    .w-full { width: 100%; } .text-center { text-align: center; } .text-sm { font-size: 0.85rem; } .text-xs { font-size: 0.75rem; } .text-lg { font-size: 1.1rem; } .text-xl { font-size: 1.3rem; } .text-2xl { font-size: 1.8rem; }
+    .w-full { width: 100%; } .text-center { text-align: center; } .text-sm { font-size: 0.85rem; } .text-xs { font-size: 0.75rem; } .text-lg { font-size: 1.1rem; } .text-xl { font-size: 1.3rem; } .text-2xl { font-size: 1.8rem; } .text-3xl { font-size: 2.2rem; }
     .font-bold { font-weight: 700; } .font-semibold { font-weight: 600; } .text-muted { color: var(--text-muted); } .text-secondary { color: var(--text-secondary); } .text-accent { color: var(--accent-light); }
     .text-success { color: var(--color-success); } .text-danger { color: var(--color-danger); } .text-warning { color: var(--color-warning); }
     .bg-secondary { background: var(--bg-secondary); } .bg-tertiary { background: var(--bg-tertiary); }
@@ -59,6 +64,8 @@
     .btn-danger { background: var(--color-danger); color: #ffffff; } .btn-danger:hover { background: var(--color-danger-hover); }
     .btn-warning { background: var(--color-warning); color: #000000; } .btn-warning:hover { background: var(--color-warning-hover); }
     .btn-blue { background: var(--color-info); color: #ffffff; } .btn-blue:hover { background: var(--color-info-hover); }
+    .btn-pink { background: var(--color-pink); color: #ffffff; } .btn-pink:hover { background: #db2777; }
+    .btn-cyan { background: var(--color-cyan); color: #ffffff; } .btn-cyan:hover { background: #0891b2; }
     .btn-gray { background: var(--text-muted); color: #ffffff; } .btn-gray:hover { background: #7a7a8a; }
     .btn-orange { background: var(--color-orange); color: #ffffff; } .btn-orange:hover { background: #e0650f; }
     .btn-outline { background: transparent; border: 2px solid var(--accent-primary); color: var(--accent-light); } .btn-outline:hover { background: var(--accent-primary); color: #ffffff; }
@@ -159,12 +166,84 @@
     .user-chat-list { max-height: 300px; overflow-y: auto; border: 1px solid var(--border-color); border-radius: var(--radius-sm); margin-bottom: var(--spacing-md); }
     .user-chat-item { padding: var(--spacing-sm) var(--spacing-md); border-bottom: 1px solid var(--border-color); cursor: pointer; display: flex; justify-content: space-between; align-items: center; } .user-chat-item:hover { background: var(--bg-hover); }
     .chat-notif-badge { background: var(--color-danger); color: #fff; border-radius: 50%; width: 20px; height: 20px; display: inline-flex; align-items: center; justify-content: center; font-size: 0.7rem; margin-left: 6px; }
+    /* ---------- IKLAN MENCILOK ---------- */
+    .premium-ad {
+      background: linear-gradient(135deg, #7c3aed, #ec4899, #06b6d4);
+      background-size: 200% 200%;
+      animation: gradientShift 4s ease infinite, glowPulse 3s ease infinite;
+      color: #ffffff;
+      padding: var(--spacing-2xl) var(--spacing-xl);
+      border-radius: var(--radius-lg);
+      margin-bottom: var(--spacing-xl);
+      text-align: center;
+      position: relative;
+      overflow: hidden;
+      border: 3px solid rgba(255, 255, 255, 0.2);
+    }
+    .premium-ad::before {
+      content: '';
+      position: absolute;
+      top: -50%;
+      left: -50%;
+      width: 200%;
+      height: 200%;
+      background: radial-gradient(circle, rgba(255,255,255,0.1) 0%, transparent 70%);
+      animation: floatUp 6s ease-in-out infinite;
+    }
+    .premium-ad h2 {
+      font-size: 1.8rem;
+      font-weight: 800;
+      margin-bottom: var(--spacing-sm);
+      text-shadow: 0 2px 10px rgba(0,0,0,0.3);
+      position: relative;
+      z-index: 1;
+    }
+    .premium-ad p {
+      font-size: 1.1rem;
+      margin-bottom: var(--spacing-lg);
+      opacity: 0.95;
+      position: relative;
+      z-index: 1;
+    }
+    .premium-ad .btn-ad {
+      background: #ffffff;
+      color: #7c3aed;
+      font-weight: 700;
+      font-size: 1rem;
+      padding: 14px 32px;
+      border-radius: var(--radius-full);
+      animation: pulse 2s ease infinite;
+      position: relative;
+      z-index: 1;
+    }
+    .premium-ad .btn-ad:hover {
+      background: #f5f5f5;
+      transform: scale(1.05);
+      box-shadow: 0 8px 24px rgba(0,0,0,0.3);
+    }
+    .premium-features {
+      display: flex;
+      justify-content: center;
+      gap: var(--spacing-xl);
+      margin-top: var(--spacing-lg);
+      flex-wrap: wrap;
+      position: relative;
+      z-index: 1;
+    }
+    .premium-feature-item {
+      display: flex;
+      align-items: center;
+      gap: var(--spacing-sm);
+      font-size: 0.95rem;
+      font-weight: 500;
+    }
     /* ---------- RESPONSIVE ---------- */
     @media (max-width: 640px) {
       .hero h1 { font-size: 1.5rem; } .hero { padding: var(--spacing-2xl) var(--spacing-md); } .price-grid { grid-template-columns: 1fr; } .features-grid { grid-template-columns: 1fr; }
       .header { flex-direction: column; align-items: stretch; } .header-buttons { justify-content: center; } .stats-grid { grid-template-columns: repeat(2, 1fr); }
       .modal-content { padding: var(--spacing-lg); } .hero-buttons { flex-direction: column; } .hero-buttons .btn { width: 100%; }
       .admin-table { font-size: 0.65rem; } .admin-table th, .admin-table td { padding: 4px 6px; }
+      .premium-ad h2 { font-size: 1.4rem; }
     }
   </style>
 </head>
@@ -182,6 +261,19 @@
       <button class="btn btn-success btn-sm hidden" id="installButton" onclick="installPWA()">📲 Install</button>
     </div>
   </header>
+
+  <!-- ==================== IKLAN MENCILOK ==================== -->
+  <div class="premium-ad">
+    <h2>🚀 Notepad+ Plus dengan Fitur Chat</h2>
+    <p>Simpan kode, gabung jadi satu file, dan sekarang bisa <strong>chat langsung</strong> dengan admin & sesama pengguna!</p>
+    <button class="btn btn-ad" onclick="showRegisterModal()">🔐 Daftar Sekarang - Gratis!</button>
+    <div class="premium-features">
+      <div class="premium-feature-item">💬 Chat Internal</div>
+      <div class="premium-feature-item">📁 Simpan Kode</div>
+      <div class="premium-feature-item">🔄 Gabung HTML</div>
+      <div class="premium-feature-item">💾 Backup Data</div>
+    </div>
+  </div>
 
   <section class="hero">
     <div class="hero-icon">📝</div>
@@ -276,7 +368,7 @@
   </div>
 </div>
 
-<!-- ==================== MODAL CHAT USER (DENGAN TOMBOL HAPUS) ==================== -->
+<!-- ==================== MODAL CHAT USER ==================== -->
 <div class="modal-overlay" id="userChatModal">
   <div class="modal-content wide">
     <div class="modal-header">
@@ -307,7 +399,7 @@
   </div>
 </div>
 
-<!-- ==================== MODAL SUPER ADMIN (DENGAN RESTART APP) ==================== -->
+<!-- ==================== MODAL SUPER ADMIN ==================== -->
 <div class="modal-overlay" id="superAdminModal"><div class="modal-content wide">
   <div class="modal-header"><h3>👑 Panel Super Admin</h3><button class="modal-close" onclick="closeModal('superAdminModal')">✕</button></div>
   <div class="modal-body">
@@ -325,8 +417,170 @@
   </div>
 </div></div>
 
-<!-- ==================== SEMUA MODAL LAINNYA (TETAP SAMA) ==================== -->
-<!-- Login, Register, Profile, Activation, App, Code, Merge, Confirm, Edit Package, Chat Admin, Forgot Password, Guest Chat -->
+<!-- ==================== SEMUA MODAL LAINNYA ==================== -->
+<!-- Login Modal -->
+<div class="modal-overlay" id="loginModal"><div class="modal-content" style="max-width:420px;">
+  <div class="modal-header"><h3>🔐 Login</h3><button class="modal-close" onclick="closeModal('loginModal')">✕</button></div>
+  <div class="modal-body">
+    <input type="text" id="loginUsername" placeholder="Username atau Email" class="mb-2">
+    <input type="password" id="loginPassword" placeholder="Password" class="mb-2">
+    <button class="btn btn-success btn-block" onclick="handleLogin()">Masuk</button>
+    <div class="form-error" id="loginError"></div>
+    <div class="flex-between mt-2 text-sm">
+      <span class="link-text" onclick="closeModal('loginModal');showRegisterModal()">Daftar Akun Baru</span>
+      <span class="link-text" onclick="closeModal('loginModal');openModal('forgotPasswordModal')">Lupa Password?</span>
+    </div>
+  </div>
+</div></div>
+
+<!-- Register Modal -->
+<div class="modal-overlay" id="registerModal"><div class="modal-content" style="max-width:420px;">
+  <div class="modal-header"><h3>📝 Daftar Akun Baru</h3><button class="modal-close" onclick="closeModal('registerModal')">✕</button></div>
+  <div class="modal-body">
+    <input type="text" id="registerNama" placeholder="Nama Lengkap" class="mb-2">
+    <input type="email" id="registerEmail" placeholder="Email" class="mb-2">
+    <input type="text" id="registerHp" placeholder="No HP (08xxx)" class="mb-2">
+    <input type="text" id="registerUsername" placeholder="Username" class="mb-2">
+    <input type="password" id="registerPassword" placeholder="Password (min 6)" class="mb-2">
+    <input type="password" id="registerPasswordConfirm" placeholder="Konfirmasi Password" class="mb-2">
+    <button class="btn btn-primary btn-block" onclick="handleRegister()">Daftar</button>
+    <div class="form-error" id="registerError"></div>
+    <div class="form-success" id="registerSuccess"></div>
+  </div>
+</div></div>
+
+<!-- Profile Modal -->
+<div class="modal-overlay" id="profileModal"><div class="modal-content" style="max-width:450px;">
+  <div class="modal-header"><h3>👤 Profil Saya</h3><button class="modal-close" onclick="closeModal('profileModal')">✕</button></div>
+  <div class="modal-body">
+    <div class="flex gap-md mb-3">
+      <div id="profileAvatarBig" style="width:60px;height:60px;border-radius:50%;background:var(--accent-primary);display:flex;align-items:center;justify-content:center;font-size:1.5rem;color:#fff;">U</div>
+      <div><h4 id="profileName">User</h4><p id="profileRole" style="color:var(--text-secondary);">User Biasa</p></div>
+    </div>
+    <input type="text" id="editProfileNama" placeholder="Nama Lengkap" class="mb-2">
+    <input type="email" id="editProfileEmail" placeholder="Email" class="mb-2">
+    <input type="text" id="editProfileHp" placeholder="No HP" class="mb-2">
+    <button class="btn btn-success btn-block" onclick="saveProfile()">Simpan Profil</button>
+    <div class="form-error" id="profileError"></div><div class="form-success" id="profileSuccess"></div>
+    <hr style="border-color:var(--border-color);margin:16px 0;">
+    <button class="btn btn-danger btn-block" id="deleteAccountButton" onclick="deleteAccount()">🗑 Hapus Akun Saya</button>
+  </div>
+</div></div>
+
+<!-- Activation Modal -->
+<div class="modal-overlay" id="activationModal"><div class="modal-content" style="max-width:420px;">
+  <div class="modal-header"><h3>🔑 Aktivasi Premium</h3><button class="modal-close" onclick="closeModal('activationModal')">✕</button></div>
+  <div class="modal-body">
+    <input type="text" id="activationCodeInputMain" placeholder="Kode Aktivasi" class="mb-2">
+    <button class="btn btn-success btn-block" onclick="activatePremiumFromModal()">Aktifkan</button>
+    <div class="form-error" id="activationModalError"></div><div class="form-success" id="activationModalSuccess"></div>
+  </div>
+</div></div>
+
+<!-- App Modal -->
+<div class="modal-overlay" id="appModal"><div class="modal-content">
+  <div class="modal-header"><h3 id="appModalTitle">Tambah Aplikasi</h3><button class="modal-close" onclick="closeModal('appModal')">✕</button></div>
+  <div class="modal-body">
+    <input type="hidden" id="editAppId">
+    <input type="text" id="appNameInput" placeholder="Nama Aplikasi" class="mb-2">
+    <textarea id="appDescInput" rows="2" placeholder="Deskripsi"></textarea>
+    <div class="form-error" id="appError"></div>
+  </div>
+  <div class="modal-footer">
+    <button class="btn btn-gray" onclick="closeModal('appModal')">Batal</button>
+    <button class="btn btn-success" onclick="saveApplication()">Simpan</button>
+  </div>
+</div></div>
+
+<!-- Code Modal -->
+<div class="modal-overlay" id="codeModal"><div class="modal-content">
+  <div class="modal-header"><h3 id="codeModalTitle">Tambah Code</h3><button class="modal-close" onclick="closeModal('codeModal')">✕</button></div>
+  <div class="modal-body">
+    <input type="hidden" id="editCodeId"><input type="hidden" id="codeAppId">
+    <input type="text" id="codeNameInput" placeholder="Nama Code" class="mb-2">
+    <textarea id="codeContentInput" rows="10" placeholder="Kode HTML"></textarea>
+    <div class="form-error" id="codeError"></div>
+  </div>
+  <div class="modal-footer">
+    <button class="btn btn-gray" onclick="closeModal('codeModal')">Batal</button>
+    <button class="btn btn-success" onclick="saveCode()">Simpan Code</button>
+  </div>
+</div></div>
+
+<!-- Merge Modal -->
+<div class="modal-overlay" id="mergeModal"><div class="modal-content">
+  <div class="modal-header"><h3>Gabung & Copy Semua Code</h3><button class="modal-close" onclick="closeModal('mergeModal')">✕</button></div>
+  <div class="modal-body">
+    <p class="text-secondary mb-2">Fitur ini khusus untuk pengguna <strong>Premium</strong>. Semua code yang dipilih akan digabung menjadi 1 file index.html.</p>
+    <div id="mergeAppList" class="flex flex-wrap gap-sm mb-3"></div>
+    <button class="btn btn-success btn-block" onclick="performMerge()">Gabung Semua Code</button>
+    <div id="mergeResult" class="hidden mt-3">
+      <div class="flex-between mb-2">
+        <strong>Hasil Gabungan (index.html)</strong>
+        <div class="flex gap-sm">
+          <button class="btn btn-primary btn-sm" onclick="copyMergeResult()">Copy</button>
+          <button class="btn btn-success btn-sm" onclick="downloadMergeResult()">Download</button>
+        </div>
+      </div>
+      <textarea id="mergeOutput" readonly style="font-family:'Courier New',monospace;font-size:0.8rem;min-height:250px;background:var(--bg-primary);color:var(--text-primary);border:1px solid #7c3aed;"></textarea>
+    </div>
+  </div>
+</div></div>
+
+<!-- Confirm Modal -->
+<div class="modal-overlay" id="confirmModal"><div class="modal-content" style="max-width:380px;">
+  <div class="modal-header"><h3 id="confirmTitle">Konfirmasi</h3><button class="modal-close" onclick="closeModal('confirmModal')">✕</button></div>
+  <div class="modal-body"><p id="confirmMessage"></p></div>
+  <div class="modal-footer">
+    <button class="btn btn-gray" onclick="closeModal('confirmModal')">Batal</button>
+    <button class="btn btn-danger" onclick="executeConfirmAction()">Ya</button>
+  </div>
+</div></div>
+
+<!-- Edit Package Modal -->
+<div class="modal-overlay" id="editPackageModal"><div class="modal-content">
+  <div class="modal-header"><h3 id="editPackageTitle">Edit Paket</h3><button class="modal-close" onclick="closeModal('editPackageModal')">✕</button></div>
+  <div class="modal-body">
+    <input type="hidden" id="editPackageId">
+    <input type="text" id="editPackageName" placeholder="Nama" class="mb-2">
+    <input type="number" id="editPackagePrice" placeholder="Harga" class="mb-2">
+    <input type="number" id="editPackageDays" placeholder="Hari" class="mb-2">
+    <input type="text" id="editPackageLabel" placeholder="Label" class="mb-2">
+  </div>
+  <div class="modal-footer">
+    <button class="btn btn-gray" onclick="closeModal('editPackageModal')">Batal</button>
+    <button class="btn btn-success" onclick="savePackageChanges()">Simpan</button>
+  </div>
+</div></div>
+
+<!-- Chat Admin Modal (lama) -->
+<div class="modal-overlay" id="chatModal"><div class="modal-content">
+  <div class="modal-header"><h3>💬 Chat Admin</h3><button class="modal-close" onclick="closeModal('chatModal')">✕</button></div>
+  <div class="modal-body">
+    <div class="chat-box" id="userChatMessagesOld"></div>
+    <div class="flex"><input type="text" id="userChatInputOld" placeholder="Ketik..."><button class="btn btn-primary" onclick="sendUserChatOld()">Kirim</button></div>
+  </div>
+</div></div>
+
+<!-- Forgot Password Modal -->
+<div class="modal-overlay" id="forgotPasswordModal"><div class="modal-content">
+  <div class="modal-header"><h3>Lupa Password</h3><button class="modal-close" onclick="closeModal('forgotPasswordModal')">✕</button></div>
+  <div class="modal-body">
+    <input type="text" id="forgotNama" placeholder="Nama" class="mb-2">
+    <input type="email" id="forgotEmail" placeholder="Email" class="mb-2">
+    <input type="text" id="forgotHp" placeholder="No HP" class="mb-2">
+    <button class="btn btn-warning btn-block" onclick="handleForgotPassword()">Reset via Chat</button>
+  </div>
+</div></div>
+
+<!-- Guest Chat Modal -->
+<div class="modal-overlay" id="guestChatModal"><div class="modal-content">
+  <div class="modal-header"><h3>💬 Hubungi Super Admin</h3><button class="modal-close" onclick="closeModal('guestChatModal')">✕</button></div>
+  <div class="modal-body">
+    <div class="chat-box" id="guestChatMessages"></div>
+    <div class="flex"><input type="text" id="guestChatInput" placeholder="Ketik..."><button class="btn btn-primary" onclick="sendGuestChat()">Kirim</button></div>
+  </div>
+</div></div>
 </body>
 <script>
 // ================================================================
