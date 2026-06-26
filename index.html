@@ -1272,7 +1272,7 @@ function base64ToBuffer(base64) {
 }
 
 <!-- ============================================================
-     BLOK 9 - JS CORE 2 (VERSI AMAN – HANYA FUNGSI PENDUKUNG)
+     BLOK 9 - JS CORE 2 (VERSI MINIMAL)
      ============================================================ -->
 <script>
 // ---------- FORGOT PASSWORD ----------
@@ -1442,7 +1442,7 @@ function escapeHTML(str) {
   return str.replace(/[&<>"']/g,function(m){ return ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'})[m]; });
 }
 
-// ---------- RENDER APP LIST (DENGAN SORTING OTOMATIS) ----------
+// ---------- RENDER APP LIST ----------
 function refreshAppUI() {
   var s = getSession();
   var cont = document.getElementById('appListContainer');
@@ -1450,26 +1450,8 @@ function refreshAppUI() {
   var apps = s ? (getAllApps()[s.id] || []) : [];
   if (apps.length === 0) { cont.innerHTML = ''; empty.classList.remove('hidden'); return; }
   empty.classList.add('hidden');
-  // Urutkan aplikasi berdasarkan nomor di awal nama
-  apps.sort(function(a, b) {
-    var numA = parseInt(a.name.match(/^(\d+)/));
-    var numB = parseInt(b.name.match(/^(\d+)/));
-    if (numA && numB) return numA - numB;
-    if (numA) return -1;
-    if (numB) return 1;
-    return a.name.localeCompare(b.name);
-  });
   cont.innerHTML = apps.map(function(app) {
     var codes = app.codes || [];
-    // Urutkan code di dalam aplikasi
-    codes.sort(function(c, d) {
-      var numC = parseInt(c.name.match(/^(\d+)/));
-      var numD = parseInt(d.name.match(/^(\d+)/));
-      if (numC && numD) return numC - numD;
-      if (numC) return -1;
-      if (numD) return 1;
-      return c.name.localeCompare(d.name);
-    });
     return '<div class="app-item">'+
       '<div class="app-header" onclick="toggleAppCodes(\''+app.id+'\')">'+
         '<div class="app-name">📁 '+escapeHTML(app.name)+' <span class="app-code-count">'+codes.length+' kode</span></div>'+
