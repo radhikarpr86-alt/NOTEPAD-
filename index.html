@@ -120,7 +120,7 @@
     .feature-card { background: var(--bg-secondary); border-radius: var(--radius-md); padding: var(--spacing-xl); border: 1px solid var(--border-color); text-align: center; transition: all var(--transition-base); }
     .feature-card:hover { border-color: var(--accent-primary); transform: translateY(-3px); box-shadow: var(--shadow-md); }
     .feature-icon { font-size: 2rem; margin-bottom: var(--spacing-sm); } .feature-card h4 { font-size: 1rem; font-weight: 600; margin-bottom: var(--spacing-xs); } .feature-card p { font-size: 0.85rem; color: var(--text-secondary); margin: 0; line-height: 1.5; }
-    /* ---------- PRICE GRID ---------- */
+    /* ---------- PRICE GRID (IKLAN BERLANGGANAN) ---------- */
     .price-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(240px, 1fr)); gap: var(--spacing-lg); margin-bottom: var(--spacing-2xl); }
     .price-card { background: var(--bg-secondary); border-radius: var(--radius-lg); padding: var(--spacing-2xl); border: 2px solid var(--border-color); text-align: center; transition: all var(--transition-base); position: relative; cursor: pointer; }
     .price-card:hover { border-color: var(--accent-primary); transform: translateY(-4px); box-shadow: var(--shadow-md); } .price-card.featured { border-color: var(--accent-primary); background: var(--bg-tertiary); }
@@ -183,7 +183,7 @@
   <section class="hero">
     <div class="hero-icon">📝</div>
     <h1 class="gradient-text">Notepad+ Code Storage</h1>
-    <p class="hero-description">Simpan, kelola, dan gabungkan semua kode HTML Anda dalam satu tempat. Multi-user, aktivasi premium, keamanan terjamin, chat internal, backup & restore data.</p>
+    <p class="hero-description">Simpan, kelola, dan gabungkan semua kode HTML Anda dalam satu tempat. Multi‑user, aktivasi premium, chat internal, backup & restore data.</p>
     <div class="hero-buttons">
       <button class="btn btn-primary btn-lg" onclick="showLoginModal()">Mulai</button>
       <button class="btn btn-outline btn-lg" onclick="showRegisterModal()">Daftar</button>
@@ -191,11 +191,9 @@
     </div>
   </section>
 
-  <div class="whatsapp-banner" onclick="openGuestChat()">
-    <div class="whatsapp-banner-left">
-      <span class="whatsapp-banner-icon">💬</span>
-      <div><strong>Hubungi Super Admin</strong><br><small>Chat langsung untuk bantuan</small></div>
-    </div>
+  <!-- Banner Chat (Hubungi Super Admin) – hanya untuk user biasa, Super Admin tidak perlu -->
+  <div class="whatsapp-banner" id="contactBanner" onclick="openGuestChat()">
+    <div class="whatsapp-banner-left"><span class="whatsapp-banner-icon">💬</span><div><strong>Hubungi Super Admin</strong><br><small>Chat langsung untuk bantuan</small></div></div>
     <div class="whatsapp-banner-right"><span>📱 <span id="whatsappNumberLanding">+6281220285226</span></span></div>
   </div>
 
@@ -204,11 +202,12 @@
     <div class="feature-card"><div class="feature-icon">📁</div><h4>Penyimpanan Tak Terbatas</h4><p>Simpan aplikasi dan kode HTML tanpa batasan jumlah.</p></div>
     <div class="feature-card"><div class="feature-icon">🔄</div><h4>Gabung Otomatis</h4><p>Gabungkan semua kode menjadi 1 file index.html siap pakai.</p></div>
     <div class="feature-card"><div class="feature-icon">🔐</div><h4>Aktivasi Premium</h4><p>Sistem kode aktivasi yang dikelola oleh Super Admin.</p></div>
-    <div class="feature-card"><div class="feature-icon">👥</div><h4>Multi User</h4><p>Setiap pengguna memiliki akun dan data masing-masing.</p></div>
+    <div class="feature-card"><div class="feature-icon">👥</div><h4>Multi User</h4><p>Setiap pengguna memiliki akun dan data masing‑masing.</p></div>
     <div class="feature-card"><div class="feature-icon">💬</div><h4>Chat Internal</h4><p>Hubungi admin langsung dari aplikasi tanpa WhatsApp.</p></div>
     <div class="feature-card"><div class="feature-icon">💾</div><h4>Backup & Restore</h4><p>Simpan dan pulihkan semua data dengan mudah.</p></div>
   </div>
 
+  <!-- Iklan Berlangganan (Paket Harga) -->
   <h3 class="section-title">Paket Aktivasi Premium</h3>
   <div class="price-grid" id="landingPriceGrid"><!-- diisi JS --></div>
 </div>
@@ -224,12 +223,17 @@
       <div class="user-badge hidden" id="userBadge"><span class="user-avatar" id="userAvatar">U</span><span class="user-name" id="userNameDisplay">User</span></div>
       <button class="btn btn-sm btn-danger hidden" id="logoutButton" onclick="handleLogout()">Logout</button>
       <button class="btn btn-sm btn-info" onclick="downloadOfflinePage()">⬇ Offline</button>
+      <!-- Tombol Chat Admin (hanya untuk user biasa) -->
+      <button class="btn btn-sm btn-blue hidden" id="chatButton" onclick="showChatModal()">💬 Chat Admin</button>
+      <!-- Tombol Chat Pelanggan (khusus Super Admin) -->
+      <button class="btn btn-sm btn-blue hidden" id="superChatButton" onclick="openSuperChat()">💬 Chat Pelanggan</button>
     </div>
   </header>
 
-  <div class="whatsapp-banner" onclick="openGuestChat()">
-    <div class="whatsapp-banner-left"><span class="whatsapp-banner-icon">💬</span><div><strong>Hubungi Super Admin</strong><br><small>Chat langsung</small></div></div>
-    <div class="whatsapp-banner-right"><span>📱 <span id="whatsappNumberApp">+6281220285226</span></span></div>
+  <!-- Banner Premium untuk user free -->
+  <div class="whatsapp-banner hidden" id="premiumBanner" style="background: linear-gradient(135deg, #f59e0b, #e67e22);">
+    <div><strong>🔓 Upgrade ke Premium</strong> – Dapatkan fitur Gabung Kode dan lainnya.</div>
+    <button class="btn btn-warning btn-sm" onclick="showActivationModal()">Upgrade</button>
   </div>
 
   <div class="stats-grid" id="dashboardStats"></div>
@@ -242,7 +246,6 @@
     <input type="file" id="importFileInput" accept=".json" class="hidden" onchange="importAllData(this)">
     <button class="btn btn-primary" id="mergeButton" onclick="showMergeModal()">Gabung & Copy <span class="badge badge-purple">Premium</span></button>
     <button class="btn btn-warning hidden" id="activationButton" onclick="showActivationModal()">🔑 Aktivasi Premium</button>
-    <button class="btn btn-blue" onclick="showChatModal()">💬 Chat Admin</button>
   </div>
 
   <div id="searchBar" class="hidden" style="margin-bottom:20px;"><div class="flex gap-sm"><input type="text" id="searchInput" placeholder="Cari aplikasi atau kode..." style="flex:2;" oninput="performSearch()"><button class="btn btn-gray btn-sm" onclick="clearSearch()">Clear</button></div></div>
@@ -425,12 +428,12 @@
 </body>
 <script>
 // ================================================================
-// NOTEPAD+ CODE STORAGE v3.5 - CORE JAVASCRIPT (LENGKAP)
+// NOTEPAD+ CODE STORAGE v3.5 - CORE JAVASCRIPT
 // ================================================================
 
 // ---------- ENKRIPSI & DATA DEFAULT ----------
-function encodePassword(pw) { return btoa(pw); }
-function decodePassword(h) { return atob(h); }
+function encodePassword(password) { return btoa(password); }
+function decodePassword(hash) { return atob(hash); }
 
 const SUPER_ADMIN = {
   id: 'sa', username: 'superadmin', password: encodePassword('admin123'),
@@ -444,56 +447,51 @@ const DEFAULT_PACKAGES = [
   { id: '6bulan', name: 'Enterprise', price: 75000, days: 180, label: '6 Bulan' }
 ];
 
-// ---------- LOCAL STORAGE ----------
-function getStore(key, def) { try { const v = localStorage.getItem('np_' + key); return v ? JSON.parse(v) : def; } catch (e) { return def; } }
-function setStore(key, val) { localStorage.setItem('np_' + key, JSON.stringify(val)); }
-function removeStore(key) { localStorage.removeItem('np_' + key); }
+// ---------- LOCAL STORAGE HELPERS ----------
+function getStorageItem(key, defaultValue) { try { const v = localStorage.getItem('np_' + key); return v ? JSON.parse(v) : defaultValue; } catch (e) { return defaultValue; } }
+function setStorageItem(key, value) { localStorage.setItem('np_' + key, JSON.stringify(value)); }
+function removeStorageItem(key) { localStorage.removeItem('np_' + key); }
 
-function getAllUsers() { return getStore('users', []); }
-function saveAllUsers(u) { setStore('users', u); }
-function getAllApplications() { return getStore('applications', {}); }
-function saveAllApplications(a) { setStore('applications', a); }
-function getSession() { return getStore('session', null); }
-function saveSession(s) { setStore('session', s); }
-function clearSession() { removeStore('session'); }
-function getValidCodes() { return getStore('validCodes', {}); }
-function saveValidCodes(c) { setStore('validCodes', c); }
-function getGuestChats() { return getStore('guestChats', []); }
-function saveGuestChats(c) { setStore('guestChats', c); }
-function getPackages() { return getStore('packages', DEFAULT_PACKAGES); }
-function savePackages(p) { setStore('packages', p); }
-function getSecurityLogs() { return getStore('securityLogs', []); }
-function saveSecurityLogs(l) { setStore('securityLogs', l); }
+function getAllUsers() { return getStorageItem('users', []); }
+function saveAllUsers(users) { setStorageItem('users', users); }
+function getAllApplications() { return getStorageItem('applications', {}); }
+function saveAllApplications(apps) { setStorageItem('applications', apps); }
+function getSession() { return getStorageItem('session', null); }
+function saveSession(session) { setStorageItem('session', session); }
+function clearSession() { removeStorageItem('session'); }
+function getValidCodes() { return getStorageItem('validCodes', {}); }
+function saveValidCodes(codes) { setStorageItem('validCodes', codes); }
+function getGuestChats() { return getStorageItem('guestChats', []); }
+function saveGuestChats(chats) { setStorageItem('guestChats', chats); }
+function getPackages() { return getStorageItem('packages', DEFAULT_PACKAGES); }
+function savePackages(packages) { setStorageItem('packages', packages); }
+function getSecurityLogs() { return getStorageItem('securityLogs', []); }
+function saveSecurityLogs(logs) { setStorageItem('securityLogs', logs); }
 
-// ---------- WHATSAPP DISPLAY ----------
-function updateWADisplay() {
+// ---------- UI HELPERS ----------
+function updateWhatsappDisplay() {
   const n = whatsappNumber;
   const formatted = n.startsWith('0') ? '+62' + n.substring(1) : (n.startsWith('62') ? '+' + n : '+62' + n);
   document.getElementById('whatsappNumberLanding').textContent = formatted;
-  document.getElementById('whatsappNumberApp').textContent = formatted;
 }
 
-// ---------- TOAST ----------
-function showToast(msg, type) {
-  const c = document.getElementById('toastContainer'), t = document.createElement('div');
-  t.className = 'toast toast-' + (type || 'info'); t.textContent = msg; c.appendChild(t);
-  requestAnimationFrame(() => t.classList.add('show'));
-  setTimeout(() => { t.classList.remove('show'); setTimeout(() => t.remove(), 300); }, 3000);
+function showToast(message, type) {
+  const container = document.getElementById('toastContainer'), toast = document.createElement('div');
+  toast.className = 'toast toast-' + (type || 'info'); toast.textContent = message; container.appendChild(toast);
+  requestAnimationFrame(() => toast.classList.add('show'));
+  setTimeout(() => { toast.classList.remove('show'); setTimeout(() => toast.remove(), 300); }, 3000);
 }
 
-// ---------- MODAL ----------
 function openModal(id) { document.getElementById(id).classList.add('show'); }
 function closeModal(id) { document.getElementById(id).classList.remove('show'); }
 function clearModalErrors() { document.querySelectorAll('.form-error, .form-success').forEach(el => { el.textContent = ''; el.classList.remove('show'); }); }
 
-// ---------- THEME ----------
 function toggleTheme() {
   document.body.classList.toggle('light-theme');
   localStorage.setItem('np_theme', document.body.classList.contains('light-theme') ? 'light' : 'dark');
 }
 (function() { if (localStorage.getItem('np_theme') === 'light') document.body.classList.add('light-theme'); })();
 
-// ---------- UI ----------
 function updateUI() {
   const s = getSession();
   document.getElementById('landingPage').classList.toggle('hidden', !!s);
@@ -507,6 +505,12 @@ function updateUI() {
   document.getElementById('userNameDisplay').textContent = s.nama;
   document.getElementById('mergeButton').classList.toggle('hidden', !(s.premium || s.role === 'superadmin'));
   document.getElementById('activationButton').classList.toggle('hidden', s.premium || s.role === 'superadmin');
+  document.getElementById('premiumBanner').classList.toggle('hidden', s.premium || s.role === 'superadmin');
+  // Sembunyikan tombol chat user jika Super Admin, tampilkan tombol chat pelanggan khusus Super Admin
+  document.getElementById('chatButton').classList.toggle('hidden', s.role === 'superadmin');
+  document.getElementById('superChatButton').classList.toggle('hidden', s.role !== 'superadmin');
+  // Sembunyikan banner kontak jika Super Admin
+  document.getElementById('contactBanner').classList.toggle('hidden', s.role === 'superadmin');
   refreshAppUI(); updateStats();
 }
 
@@ -571,7 +575,7 @@ function activatePremium(code, errId, sucId) {
   setTimeout(() => { if (document.getElementById('activationModal').classList.contains('show')) closeModal('activationModal'); }, 2000);
 }
 
-// ---------- PROFILE ----------
+// ---------- PROFIL ----------
 function loadProfile() {
   const s = getSession(); if (!s) return;
   document.getElementById('profileAvatar').textContent = s.nama.charAt(0).toUpperCase();
@@ -782,7 +786,7 @@ function importAllData(input) {
   reader.readAsText(file);
 }
 
-// ---------- BACKUP & RESTORE (FULL) ----------
+// ---------- BACKUP & RESTORE (FULL - HANYA DI SUPER ADMIN) ----------
 function backupAllData() {
   const data = {};
   for (let i = 0; i < localStorage.length; i++) {
@@ -826,7 +830,21 @@ function downloadOfflinePage() {
   showToast('⬇ Halaman didownload!', 'success');
 }
 
-// ---------- SUPER ADMIN ----------
+// ---------- INIT ----------
+(function() {
+  const users = getAllUsers(); if (!users.find(u => u.role === 'superadmin')) users.push(SUPER_ADMIN); saveAllUsers(users);
+  updateWhatsappDisplay();
+  updateUI();
+  const s = getSession();
+  if (s) { refreshAppUI(); updateStats(); }
+})();
+</script>
+<script>
+// ================================================================
+// NOTEPAD+ CODE STORAGE v3.5 - SUPER ADMIN & CHAT SYSTEM
+// ================================================================
+
+// ---------- SUPER ADMIN PANEL ----------
 function showSuperAdminPanel() { openModal('superAdminModal'); switchAdminTab('codes'); }
 function switchAdminTab(tab) {
   const c = document.getElementById('adminTabContent');
@@ -880,24 +898,24 @@ function savePackageChanges() {
         pr = parseInt(document.getElementById('editPackagePrice').value), d = parseInt(document.getElementById('editPackageDays').value), l = document.getElementById('editPackageLabel').value.trim();
   if (!n || isNaN(pr) || isNaN(d) || !l) return;
   const pkgs = getPackages(); const p = pkgs.find(x => x.id === id); if (!p) return;
-  p.name = n; p.price = pr; p.days = d; p.label = l; savePackages(pkgs); closeModal('editPackageModal'); renderPackageList(); updateWADisplay();
+  p.name = n; p.price = pr; p.days = d; p.label = l; savePackages(pkgs); closeModal('editPackageModal'); renderPackageList();
 }
 function addNewPackage() {
   const pkg = { id: 'pkg_' + Date.now(), name: 'Paket Baru', price: 0, days: 30, label: '1 Bulan' };
   const pkgs = getPackages(); pkgs.push(pkg); savePackages(pkgs); renderPackageList();
 }
-function saveAdminWA() { const v = document.getElementById('adminWA').value.trim(); if (v) { whatsappNumber = v; localStorage.setItem('notepad_wa', v); updateWADisplay(); showToast('Nomor WA disimpan', 'success'); } }
+function saveAdminWA() { const v = document.getElementById('adminWA').value.trim(); if (v) { whatsappNumber = v; localStorage.setItem('notepad_wa', v); updateWhatsappDisplay(); showToast('Nomor WA disimpan', 'success'); } }
 function changeAdminPass() { const p = document.getElementById('adminNewPass').value.trim(); if (p) { SUPER_ADMIN.password = encodePassword(p); showToast('Password diubah', 'success'); } }
 function changeAdminName() { const n = document.getElementById('adminNewName').value.trim(); if (n) { SUPER_ADMIN.nama = n; const s = getSession(); if (s && s.role === 'superadmin') { s.nama = n; saveSession(s); } updateUI(); showToast('Nama diubah', 'success'); } }
 function resetAllData() {
   showConfirm('RESET SEMUA DATA?', 'Semua data akan dihapus permanen!', function() {
     localStorage.clear(); saveAllUsers([SUPER_ADMIN]); saveAllApplications({}); saveValidCodes({}); savePackages(DEFAULT_PACKAGES); saveSecurityLogs([]);
-    updateWADisplay(); updateUI(); closeModal('superAdminModal'); showToast('Data direset!', 'warning');
+    updateWhatsappDisplay(); updateUI(); closeModal('superAdminModal'); showToast('Data direset!', 'warning');
   });
 }
 function clearSecurityLogs() { saveSecurityLogs([]); switchAdminTab('security'); }
 
-// ---------- CHAT INTERNAL ----------
+// ---------- CHAT SYSTEM ----------
 function openGuestChat() { openModal('guestChatModal'); renderGuestChat(); }
 function renderGuestChat() {
   const chats = getGuestChats(), box = document.getElementById('guestChatMessages');
@@ -910,6 +928,7 @@ function sendGuestChat() {
   const chats = getGuestChats(); chats.push({ from: 'guest', text: msg, time: new Date().toISOString() }); saveGuestChats(chats);
   input.value = ''; renderGuestChat();
 }
+
 function showChatModal() { openModal('chatModal'); renderUserChat(); }
 function renderUserChat() {
   const chats = getGuestChats(), box = document.getElementById('userChatMessages');
@@ -921,6 +940,8 @@ function sendUserChat() {
   const chats = getGuestChats(); chats.push({ from: 'guest', text: msg, time: new Date().toISOString() }); saveGuestChats(chats);
   input.value = ''; renderUserChat();
 }
+
+function openSuperChat() { openModal('superAdminModal'); switchAdminTab('chat'); }
 function renderAdminChat() {
   const chats = getGuestChats(), box = document.getElementById('adminChatMessages');
   if (!box) return;
@@ -933,7 +954,7 @@ function sendAdminChat() {
   input.value = ''; renderAdminChat();
 }
 
-// ---------- FORGOT PASSWORD ----------
+// ---------- FORGOT PASSWORD (VIA CHAT) ----------
 function handleForgotPassword() {
   const n = document.getElementById('forgotNama').value.trim(), e = document.getElementById('forgotEmail').value.trim(), hp = document.getElementById('forgotHp').value.trim();
   if (!n || !e || !hp) { document.getElementById('forgotError').textContent = 'Lengkapi!'; document.getElementById('forgotError').classList.add('show'); return; }
@@ -943,28 +964,29 @@ function handleForgotPassword() {
   closeModal('forgotPasswordModal'); openGuestChat();
   showToast('Pesan reset password telah dikirim ke admin', 'success');
 }
-
-// ---------- INIT ----------
-(function() {
-  const users = getAllUsers(); if (!users.find(u => u.role === 'superadmin')) users.push(SUPER_ADMIN); saveAllUsers(users);
-  updateWADisplay(); updateUI();
-  const s = getSession();
-  if (s) { refreshAppUI(); updateStats(); }
-})();
 </script>
 <script>
 // ================================================================
-// NOTEPAD+ CODE STORAGE v3.5 - APPLICATION & CODE RENDER
+// NOTEPAD+ CODE STORAGE v3.5 - FINAL INIT
 // ================================================================
-// (Fungsi render sudah include di Blok 2, ini hanya placeholder untuk memastikan tidak ada yang terpotong)
 
-// Fungsi-fungsi ini sudah ada di Blok 2, di sini hanya untuk memastikan semua terdefinisi
-function refreshAppUI() {
-  // ... (kode lengkap sudah di Blok 2)
-}
-function updateStats() {
-  // ... (kode lengkap sudah di Blok 2)
-}
-// Semua fungsi lain sudah include di Blok 2.
+(function finalInit() {
+  // Pastikan Super Admin selalu ada
+  const users = getAllUsers();
+  if (!users.find(u => u.role === 'superadmin')) {
+    users.push(SUPER_ADMIN);
+    saveAllUsers(users);
+  }
+  // Perbarui tampilan nomor WhatsApp
+  updateWhatsappDisplay();
+  // Set state UI awal
+  updateUI();
+  // Jika sudah login, render data
+  const s = getSession();
+  if (s) {
+    refreshAppUI();
+    updateStats();
+  }
+})();
 </script>
 </html>
