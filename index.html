@@ -1272,7 +1272,7 @@ function base64ToBuffer(base64) {
 }
 
 <!-- ============================================================
-     BLOK 9 - JS CORE 2 (REVISI LENGKAP + E2EE)
+     BLOK 9 - JS CORE 2 (REVISI FINAL + SORTING + E2EE CALL)
      ============================================================ -->
 <script>
 // ---------- FORGOT PASSWORD ----------
@@ -1450,18 +1450,24 @@ function refreshAppUI() {
   var apps = s ? (getAllApps()[s.id] || []) : [];
   if (apps.length === 0) { cont.innerHTML = ''; empty.classList.remove('hidden'); return; }
   empty.classList.add('hidden');
+  // Urutkan aplikasi berdasarkan nomor di awal nama
   apps.sort(function(a, b) {
-    var numA = parseInt(a.name.match(/^(\d+)/)); var numB = parseInt(b.name.match(/^(\d+)/));
+    var numA = parseInt(a.name.match(/^(\d+)/));
+    var numB = parseInt(b.name.match(/^(\d+)/));
     if (numA && numB) return numA - numB;
-    if (numA) return -1; if (numB) return 1;
+    if (numA) return -1;
+    if (numB) return 1;
     return a.name.localeCompare(b.name);
   });
   cont.innerHTML = apps.map(function(app) {
     var codes = app.codes || [];
+    // Urutkan code di dalam aplikasi
     codes.sort(function(c, d) {
-      var numC = parseInt(c.name.match(/^(\d+)/)); var numD = parseInt(d.name.match(/^(\d+)/));
+      var numC = parseInt(c.name.match(/^(\d+)/));
+      var numD = parseInt(d.name.match(/^(\d+)/));
       if (numC && numD) return numC - numD;
-      if (numC) return -1; if (numD) return 1;
+      if (numC) return -1;
+      if (numD) return 1;
       return c.name.localeCompare(d.name);
     });
     return '<div class="app-item">'+
@@ -1573,6 +1579,9 @@ function checkAllExpiredActivations() {
     warn.classList.add('show');
   }else{ warn.classList.remove('show'); }
 }
+
+// ---------- E2EE KEY GENERATION (DIPANGGIL SAAT REGISTRASI) ----------
+// Fungsi generateUserKeys ada di Blok 8, dipanggil setelah user terdaftar
 </script>
 
 <!-- ============================================================
