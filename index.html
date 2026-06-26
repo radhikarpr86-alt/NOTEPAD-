@@ -695,7 +695,7 @@
 <div id="toastContainer" class="toast-container"></div>
 
 <!-- ============================================================
-     BLOK 8 - JS CORE 1
+     BLOK 8 - JS CORE 1 (PWA, Storage, Auth, Theme, Modal, Premium)
      ============================================================ -->
 </body>
 <script>
@@ -840,23 +840,65 @@ function showRegisterModal() { openModal('registerModal'); }
 function showProfileModal() { openModal('profileModal'); loadProfileData(); }
 function showActivationModal() { if(!getSession()) return showLoginModal(); openModal('activationModal'); }
 
-// ---------- AUTH ----------
+// ---------- AUTH (DIPERBAIKI) ----------
 function handleLogin() {
-  var u = document.getElementById('loginUsername').value.trim();
-  var p = document.getElementById('loginPassword').value;
-  var err = document.getElementById('loginError'); err.classList.remove('show');
-  if(!u||!p) { err.textContent='Isi semua field!'; err.classList.add('show'); return; }
-  if (u === SUPER_ADMIN_DATA.username && p === decodePassword(SUPER_ADMIN_DATA.password)) {
-    saveSession(SUPER_ADMIN_DATA);
-    closeModal('loginModal'); showToast('Login Super Admin berhasil!','success');
-    openApplication(); return;
+  var u = document.getElementById('loginUsername');
+  var p = document.getElementById('loginPassword');
+  var err = document.getElementById('loginError');
+  
+  // Validasi elemen
+  if (!u || !p) {
+    showToast('Form login tidak ditemukan. Refresh halaman.', 'error');
+    return;
   }
+  
+  var username = u.value.trim();
+  var password = p.value;
+  
+  err.classList.remove('show');
+  err.textContent = '';
+  
+  if (!username || !password) {
+    err.textContent = 'Isi semua field!';
+    err.classList.add('show');
+    return;
+  }
+
+  // Super admin login
+  if (username === SUPER_ADMIN_DATA.username && password === decodePassword(SUPER_ADMIN_DATA.password)) {
+    saveSession(SUPER_ADMIN_DATA);
+    closeModal('loginModal');
+    showToast('Login Super Admin berhasil!', 'success');
+    openApplication();
+    return;
+  }
+
+  // Cek user biasa
   var users = getAllUsers();
-  var user = users.find(function(x){ return (x.username===u||x.email===u) && p === decodePassword(x.password); });
-  if (!user) { err.textContent='Username/password salah!'; err.classList.add('show'); return; }
-  if (user.locked) { err.textContent='Akun terkunci! Hubungi admin.'; err.classList.add('show'); return; }
+  var user = null;
+  for (var i = 0; i < users.length; i++) {
+    if ((users[i].username === username || users[i].email === username) && 
+        password === decodePassword(users[i].password)) {
+      user = users[i];
+      break;
+    }
+  }
+  
+  if (!user) {
+    err.textContent = 'Username/password salah!';
+    err.classList.add('show');
+    return;
+  }
+  
+  if (user.locked) {
+    err.textContent = 'Akun terkunci! Hubungi admin.';
+    err.classList.add('show');
+    return;
+  }
+  
   saveSession(user);
-  closeModal('loginModal'); showToast('Login berhasil!','success');
+  closeModal('loginModal');
+  showToast('Login berhasil!', 'success');
   openApplication();
 }
 
@@ -915,6 +957,7 @@ function activatePremium(code, errId, sucId) {
   if (!document.getElementById('applicationPage').classList.contains('hidden')) { refreshAppUI(); updateStats(); }
   setTimeout(function(){ if(document.getElementById('activationModal').classList.contains('show')) closeModal('activationModal'); },2000);
 }
+</script>
 
 // ---------- RENDER APP LIST (DENGAN SORTING OTOMATIS) ----------
 function refreshAppUI() {
