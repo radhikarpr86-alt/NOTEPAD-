@@ -45,7 +45,7 @@
     .hidden { display: none !important; }
     .flex { display: flex; } .flex-center { display: flex; align-items: center; justify-content: center; } .flex-between { display: flex; align-items: center; justify-content: space-between; } .flex-col { flex-direction: column; } .flex-wrap { flex-wrap: wrap; }
     .gap-xs { gap: var(--spacing-xs); } .gap-sm { gap: var(--spacing-sm); } .gap-md { gap: var(--spacing-md); } .gap-lg { gap: var(--spacing-lg); } .gap-xl { gap: var(--spacing-xl); }
-    .w-full { width: 100%; } .text-center { text-align: center; } .text-sm { font-size: 0.85rem; } .text-xs { font-size: 0.75rem; } .text-lg { font-size: 1.1rem; } .text-xl { font-size: 1.3rem; } .text-2xl { font-size: 1.8rem; } .text-3xl { font-size: 2.2rem; }
+    .w-full { width: 100%; } .text-center { text-align: center; } .text-sm { font-size: 0.85rem; } .text-xs { font-size: 0.75rem; } .text-lg { font-size: 1.1rem; } .text-xl { font-size: 1.3rem; } .text-2xl { font-size: 1.8rem; }
     .font-bold { font-weight: 700; } .font-semibold { font-weight: 600; } .text-muted { color: var(--text-muted); } .text-secondary { color: var(--text-secondary); } .text-accent { color: var(--accent-light); }
     .text-success { color: var(--color-success); } .text-danger { color: var(--color-danger); } .text-warning { color: var(--color-warning); }
     .bg-secondary { background: var(--bg-secondary); } .bg-tertiary { background: var(--bg-tertiary); }
@@ -64,8 +64,6 @@
     .btn-danger { background: var(--color-danger); color: #ffffff; } .btn-danger:hover { background: var(--color-danger-hover); }
     .btn-warning { background: var(--color-warning); color: #000000; } .btn-warning:hover { background: var(--color-warning-hover); }
     .btn-blue { background: var(--color-info); color: #ffffff; } .btn-blue:hover { background: var(--color-info-hover); }
-    .btn-pink { background: var(--color-pink); color: #ffffff; } .btn-pink:hover { background: #db2777; }
-    .btn-cyan { background: var(--color-cyan); color: #ffffff; } .btn-cyan:hover { background: #0891b2; }
     .btn-gray { background: var(--text-muted); color: #ffffff; } .btn-gray:hover { background: #7a7a8a; }
     .btn-orange { background: var(--color-orange); color: #ffffff; } .btn-orange:hover { background: #e0650f; }
     .btn-outline { background: transparent; border: 2px solid var(--accent-primary); color: var(--accent-light); } .btn-outline:hover { background: var(--accent-primary); color: #ffffff; }
@@ -263,16 +261,8 @@
   </header>
 
   <!-- ==================== IKLAN MENCILOK ==================== -->
-  <div class="premium-ad">
-    <h2>🚀 Notepad+ Plus dengan Fitur Chat</h2>
-    <p>Simpan kode, gabung jadi satu file, dan sekarang bisa <strong>chat langsung</strong> dengan admin & sesama pengguna!</p>
-    <button class="btn btn-ad" onclick="showRegisterModal()">🔐 Daftar Sekarang - Gratis!</button>
-    <div class="premium-features">
-      <div class="premium-feature-item">💬 Chat Internal</div>
-      <div class="premium-feature-item">📁 Simpan Kode</div>
-      <div class="premium-feature-item">🔄 Gabung HTML</div>
-      <div class="premium-feature-item">💾 Backup Data</div>
-    </div>
+  <div class="premium-ad" id="landingAd">
+    <!-- Konten iklan akan diisi oleh JavaScript -->
   </div>
 
   <section class="hero">
@@ -327,7 +317,7 @@
         <span class="user-name" id="userNameDisplay">User</span>
       </div>
       <button class="btn btn-sm btn-danger hidden" id="logoutButton" onclick="handleLogout()">Logout</button>
-      <button class="btn btn-sm btn-info" onclick="downloadOfflinePage()">⬇ Download HTML</button>
+      <button class="btn btn-sm btn-info hidden" id="downloadHTMLButton" onclick="downloadOfflinePage()">⬇ Download HTML</button>
       <button class="btn btn-sm btn-success hidden" id="installButton2" onclick="installPWA()">📲 Install</button>
     </div>
   </header>
@@ -339,7 +329,7 @@
 
   <div class="stats-grid" id="dashboardStats"></div>
 
-  <!-- TOOLBAR -->
+  <!-- TOOLBAR (BACKUP, RESTORE, DOWNLOAD HTML HANYA UNTUK SUPER ADMIN) -->
   <div class="toolbar">
     <button class="btn btn-success" onclick="showAddAppModal()">➕ Tambah Aplikasi</button>
     <button class="btn btn-primary" onclick="toggleSearch()">🔍 Cari</button>
@@ -349,8 +339,8 @@
     <button class="btn btn-primary" id="mergeButton" onclick="showMergeModal()">🧩 Gabung & Copy <span class="badge badge-purple">Premium</span></button>
     <button class="btn btn-warning hidden" id="activationButton" onclick="showActivationModal()">🔑 Aktivasi Premium</button>
     <button class="btn btn-info" onclick="showUserChatModal()">💬 Chat</button>
-    <button class="btn btn-success" onclick="backupAllData()">💾 Backup JSON</button>
-    <label class="btn btn-warning" style="cursor:pointer;">📤 Restore JSON<input type="file" accept=".json" onchange="restoreAllData(this)" hidden></label>
+    <button class="btn btn-success hidden" id="backupJSONButton" onclick="backupAllData()">💾 Backup JSON</button>
+    <label class="btn btn-warning hidden" id="restoreJSONButton" style="cursor:pointer;">📤 Restore JSON<input type="file" accept=".json" onchange="restoreAllData(this)" hidden></label>
   </div>
 
   <div id="searchBar" class="hidden" style="margin-bottom:20px;">
@@ -412,6 +402,7 @@
       <div class="admin-tab" onclick="switchAdminTab('settings')">Setelan</div>
       <div class="admin-tab" onclick="switchAdminTab('backup')">💾 Backup</div>
       <div class="admin-tab" onclick="switchAdminTab('restart')">🔄 Restart</div>
+      <div class="admin-tab" onclick="switchAdminTab('iklan')">📢 Iklan</div>
     </div>
     <div id="adminTabContent"></div>
   </div>
@@ -584,7 +575,7 @@
 </body>
 <script>
 // ================================================================
-// NOTEPAD+ v3.5 – CORE JAVASCRIPT (BLOK 2) – LENGKAP
+// NOTEPAD+ v3.5 – CORE JAVASCRIPT (BLOK 2)
 // ================================================================
 
 // ---------- ENKRIPSI & DATA DEFAULT ----------
@@ -669,6 +660,11 @@ function updateUI() {
   document.getElementById('activationButton').classList.toggle('hidden', s.premium || s.role === 'superadmin');
   document.getElementById('premiumBanner').classList.toggle('hidden', s.premium || s.role === 'superadmin');
   document.getElementById('contactBanner').classList.toggle('hidden', s.role === 'superadmin');
+  // Hanya Super Admin yang bisa akses Backup, Restore, Download HTML
+  const isSuperAdmin = (s.role === 'superadmin');
+  document.getElementById('downloadHTMLButton').classList.toggle('hidden', !isSuperAdmin);
+  document.getElementById('backupJSONButton').classList.toggle('hidden', !isSuperAdmin);
+  document.getElementById('restoreJSONButton').classList.toggle('hidden', !isSuperAdmin);
   refreshAppUI(); updateStats();
 }
 
@@ -984,7 +980,7 @@ function restoreAllData(input) {
   reader.readAsText(file);
 }
 
-// ---------- DOWNLOAD & RESTORE HTML (HANYA DI SUPER ADMIN) ----------
+// ---------- DOWNLOAD & RESTORE HTML ----------
 function downloadOfflinePage() {
   var html = document.documentElement.outerHTML;
   var blob = new Blob(['<!DOCTYPE html>\n' + html], { type: 'text/html' });
@@ -992,7 +988,6 @@ function downloadOfflinePage() {
   a.download = 'notepad_plus_v3.5_offline.html'; a.click();
   showToast('⬇ HTML berhasil didownload!', 'success');
 }
-
 function restoreFromHTML(input) {
   var file = input.files[0];
   if (!file) return;
@@ -1253,6 +1248,16 @@ function switchAdminTab(tab) {
       '<p class="text-secondary mb-2">Membersihkan sampah localStorage, menghapus semua chat, mengembalikan pengaturan default. <strong>Data user & aplikasi tetap aman.</strong></p>' +
       '<button class="btn btn-warning btn-block mb-2" onclick="restartApplication()">🔄 Restart & Bersihkan</button>' +
       '<p class="text-sm text-muted">Tindakan ini akan menghapus: chat, log keamanan, preferensi tema, dan data sampah lainnya.</p>';
+  } else if (tab === 'iklan') {
+    var adData = JSON.parse(localStorage.getItem('np_adSettings') || '{"title":"🚀 Notepad+ Plus dengan Fitur Chat","description":"Simpan kode, gabung jadi satu file, dan sekarang bisa <strong>chat langsung</strong> dengan admin & sesama pengguna!","buttonText":"🔐 Daftar Sekarang - Gratis!","features":["💬 Chat Internal","📁 Simpan Kode","🔄 Gabung HTML","💾 Backup Data"]}');
+    content.innerHTML = '<h4>📢 Edit Iklan Halaman Depan</h4>' +
+      '<label>Judul Iklan</label><input id="adTitle" value="' + adData.title + '" class="mb-2">' +
+      '<label>Deskripsi</label><textarea id="adDescription" rows="3" class="mb-2">' + adData.description + '</textarea>' +
+      '<label>Tombol Teks</label><input id="adButtonText" value="' + adData.buttonText + '" class="mb-2">' +
+      '<label>Fitur (pisahkan dengan koma)</label><input id="adFeatures" value="' + adData.features.join(',') + '" class="mb-2">' +
+      '<button class="btn btn-success btn-block" onclick="saveAdSettings()">💾 Simpan Iklan</button>' +
+      '<button class="btn btn-warning btn-block mt-2" onclick="resetAdSettings()">🔄 Reset ke Default</button>' +
+      '<div id="adSaveResult" class="mt-2"></div>';
   }
 
   var tabs = document.querySelectorAll('.admin-tab');
@@ -1478,24 +1483,20 @@ function resetAllData() {
 // ========== RESTART APLIKASI (BERSIHKAN SAMPAH) ==========
 function restartApplication() {
   showConfirm('🔄 Restart Aplikasi?', 'Semua chat, log keamanan, preferensi tema, dan data sampah akan dihapus. Data user & aplikasi tetap aman.', function() {
-    // Simpan data penting
     var users = getAllUsers();
     var applications = getAllApplications();
     var validCodes = getValidCodes();
     var packages = getPackages();
     var whatsapp = whatsappNumber;
     
-    // Bersihkan localStorage
     localStorage.clear();
     
-    // Kembalikan data penting
     saveAllUsers(users);
     saveAllApplications(applications);
     saveValidCodes(validCodes);
     savePackages(packages);
     localStorage.setItem('notepad_wa', whatsapp);
     
-    // Reset preferensi
     saveChatMessages([]);
     saveSecurityLogs([]);
     localStorage.setItem('np_theme', 'dark');
@@ -1505,6 +1506,57 @@ function restartApplication() {
     closeModal('superAdminModal');
     showToast('✅ Aplikasi berhasil direstart! Semua sampah dibersihkan.', 'success');
   });
+}
+
+// ========== EDIT IKLAN HALAMAN DEPAN ==========
+function saveAdSettings() {
+  var title = document.getElementById('adTitle').value.trim();
+  var description = document.getElementById('adDescription').value.trim();
+  var buttonText = document.getElementById('adButtonText').value.trim();
+  var featuresText = document.getElementById('adFeatures').value.trim();
+  var features = featuresText.split(',').map(function(f) { return f.trim(); });
+  
+  if (!title || !description || !buttonText || features.length === 0) {
+    document.getElementById('adSaveResult').innerHTML = '<p class="form-error show">Semua field harus diisi!</p>';
+    return;
+  }
+  
+  var adData = {
+    title: title,
+    description: description,
+    buttonText: buttonText,
+    features: features
+  };
+  
+  localStorage.setItem('np_adSettings', JSON.stringify(adData));
+  renderLandingAd();
+  document.getElementById('adSaveResult').innerHTML = '<p class="form-success show">✅ Iklan berhasil disimpan! Lihat halaman depan.</p>';
+  showToast('Iklan berhasil diperbarui!', 'success');
+}
+
+function resetAdSettings() {
+  if (confirm('Reset iklan ke pengaturan default?')) {
+    localStorage.removeItem('np_adSettings');
+    renderLandingAd();
+    switchAdminTab('iklan');
+    showToast('Iklan direset ke default.', 'warning');
+  }
+}
+
+function renderLandingAd() {
+  var adData = JSON.parse(localStorage.getItem('np_adSettings') || '{"title":"🚀 Notepad+ Plus dengan Fitur Chat","description":"Simpan kode, gabung jadi satu file, dan sekarang bisa <strong>chat langsung</strong> dengan admin & sesama pengguna!","buttonText":"🔐 Daftar Sekarang - Gratis!","features":["💬 Chat Internal","📁 Simpan Kode","🔄 Gabung HTML","💾 Backup Data"]}');
+  
+  var adElement = document.getElementById('landingAd');
+  if (!adElement) return;
+  
+  var adHTML = '<h2>' + adData.title + '</h2>' +
+    '<p>' + adData.description + '</p>' +
+    '<button class="btn btn-ad" onclick="showRegisterModal()">' + adData.buttonText + '</button>' +
+    '<div class="premium-features">' +
+      adData.features.map(function(f) { return '<div class="premium-feature-item">' + f + '</div>'; }).join('') +
+    '</div>';
+  
+  adElement.innerHTML = adHTML;
 }
 
 // ========== GUEST CHAT ==========
@@ -1608,6 +1660,9 @@ if ('serviceWorker' in navigator) {
       '</div>';
     }).join('');
   }
+  // Render iklan
+  renderLandingAd();
 })();
 </script>
+</body>
 </html>
